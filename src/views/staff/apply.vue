@@ -72,6 +72,8 @@
                 <div style="margin: 6rem auto;width: 100px" v-if="data.length === 0">
                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
                 </div>
+                <pagination :current_page="currentPage" :method="getApplyList" :total_pages="totalPages"
+                                        :total="total"></pagination>
             </div>
         </div>
 
@@ -90,6 +92,9 @@ export default {
         return {
             status: 1,
             data: [],
+            currentPage: 1, //
+            total: 0,
+            totalPages: 0,
         };
     },
 
@@ -102,9 +107,16 @@ export default {
             'getDepartment'
         ]),
         // 获取申请列表
-        getApplyList () {
-            fetch('get', `/entry?entry_status=${this.status}`).then(res => {
+        getApplyList (page = 1) {
+            const params = {
+                page: page
+            }
+            fetch('get', `/entry?entry_status=${this.status}`, params).then(res => {
                 this.data = res.data
+                const meta = res.meta
+                this.currentPage = meta.pagination.current_page || 1;
+                this.totalPages = meta.pagination.total_pages || 1;
+                this.total = meta.pagination.total || 1;
             })
         },
         // 同意申请
@@ -113,7 +125,7 @@ export default {
                entry_status: status
             } 
             fetch('put', `/audit/${userId}`, params).then(res => {
-                toastr.success('已同意！')
+                toastr.success(status == 2 ? '已删除！':'已同意！')
                 this.getApplyList()
                 this.getDepartment()
             })

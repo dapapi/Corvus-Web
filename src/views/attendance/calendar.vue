@@ -155,16 +155,18 @@
                                 <datepicker @change="changeStartTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker :default="startMinutes" @change="changeStartMinutes"></timepicker>
+                                <!-- <timepicker :default="startMinutes" @change="changeStartMinutes"></timepicker> -->
+                                <TimeChoice @change="changeStartMinutes"></TimeChoice>
                             </div>
                         </div>
                         <div class="clearfix">
                             <div class="col-md-2 text-right float-left">结束时间</div>
                             <div class="col-md-5 float-left pl-0">
-                                <datepicker @change="changeEndTime"></datepicker>
+                                <datepicker @change="changeEndTime" :startDate="startTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker :default="endMinutes" @change="changeEndMinutes"></timepicker>
+                                <!-- <timepicker :default="endMinutes" @change="changeEndMinutes"></timepicker> -->
+                                <TimeChoice @change="changeEndMinutes"></TimeChoice>
                             </div>
                         </div>
                         <div class="clearfix">

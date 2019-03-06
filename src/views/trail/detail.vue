@@ -168,6 +168,7 @@
                                     </div>
                                 </div>
                                 <div class="card-block px-0" v-if="trailInfo.title">
+                                    <h5 class="pl-15">基本资料</h5>
                                     <div class="clearfix">
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                             <div class="col-md-3 float-left text-right pl-0">线索名称</div>
@@ -181,7 +182,7 @@
                                         <div class="py-10 px-0 clearfix col-md-6 float-left ">
                                             <TrailOrigin :trailType='trailType'
                                                          typeName='线索' :isEdit='isEdit'
-                                                         :content='trailInfo.resource'
+                                                         :content='trailInfo.resource || oldInfo.resource'
                                                          @changeTrailOrigin='changeTrailOrigin'
                                                          :contentType='trailInfo.resource_type'
                                                          @changeEmail='changeEmail' detailPage='true'
@@ -269,6 +270,7 @@
                                                               :content='trailInfo.cooperation_type'></EditSelector>
                                             </div>
                                         </div>
+                                        <h5 class="pl-15 pt-10 clearfix col-md-12 float-left">客户资料</h5>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-3 float-left text-right pl-0">品牌名称</div>
                                             <div class="col-md-9 float-left font-weight-bold">
@@ -323,7 +325,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="segmentation-line example"></div>
+                                    <h5 class="pl-15 pt-10">更新信息</h5>
                                     <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                         <div class="col-md-3 float-left text-right pl-0">录入人</div>
                                         <div class="col-md-9 float-left font-weight-bold">{{trailInfo.creator}}
@@ -358,6 +360,12 @@
                                             <div class="col-md-3 float-left text-right pl-0">拒绝日期</div>
                                             <div class="col-md-9 float-left font-weight-bold">
                                                 {{trailInfo.refused_at}}
+                                            </div>
+                                        </div>
+                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                            <div class="col-md-3 float-left text-right pl-0">拒绝原因</div>
+                                            <div class="col-md-9 float-left font-weight-bold">
+                                                {{trailInfo.refused_detail}}
                                             </div>
                                         </div>
                                     </div>
@@ -511,7 +519,7 @@
                             </div>
                             <div class="col-md-2 text-right float-left require">截止时间</div>
                             <div class="col-md-4 float-left pl-0">
-                                <datepicker @change="changeEndTime"></datepicker>
+                                <datepicker @change="changeEndTime" :startDate="startTime"></datepicker>
                             </div>
                         </div>
                         <div class="example">
@@ -1218,7 +1226,7 @@
                         $('#refuseTrail').modal('hide');
                         _this.getTrail()
                     })
-                    this.trailInfo.progress_status = 0
+                    // this.trailInfo.progress_status = 0
                 }
             },
             goTask(id) {

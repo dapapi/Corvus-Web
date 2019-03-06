@@ -3,6 +3,11 @@
         <Loading :is-loading="isLoading"></Loading>
         <div class="page-header page-header-bordered">
             <h1 class="page-title">项目管理</h1>
+            <div class="page-header-actions">
+                <import-and-export class="float-left" :type="'export'" :moduleName="'projects'" :params="exportParams">
+                    <i class="iconfont icon-daochu px-5 font-size-20 pr-20" aria-hidden="true"></i>
+                </import-and-export>
+            </div>
         </div>
 
         <div class="page-content container-fluid">
@@ -128,6 +133,7 @@
     import config from '../../assets/js/config'
     import {mapState} from 'vuex'
     import Cookies from 'js-cookie'
+    import ImportAndExport from '../../components/ImportAndExport.vue'
 
     const projectStatusArr = [{name: '全部', value: ''}, ...config.projectStatusArr];
     const projectTypeArr = [{name: '全部', value: ''}, ...config.projectTypeArr];
@@ -160,15 +166,17 @@
                 status: '',
                 isLoading: true,
                 projectSearchType: '',
-                getProjectStatus: 'principal_id',
+                getProjectStatus: 'my_principal',
                 cleanUp: false,
+                exportParams: {},//导出参数
             }
         },
 
         mounted() {
             this.getField()
             this.getClients();
-            this.getFilterProjects();
+            // this.getFilterProjects();
+            this.getMyProjects('my_principal')
             if (this.userList.length > 0) {
                 for (let i = 0; i < this.userList.length; i++) {
                     this.allUsers.push({
@@ -187,7 +195,9 @@
                 return this.userList
             }
         },
-
+        components: {
+            ImportAndExport
+        },
         watch: {
             _userList() {
                 for (let i = 0; i < this.userList.length; i++) {
@@ -232,7 +242,7 @@
                     if (this.projectSearchType == 3) {
                         this.projectSearchType = '3,4'
                     }
-                    data.type = this.projectSearchType
+                    data.project_type = this.projectSearchType
                 }
                 if (this.projectKeyword) {
                     data.keyword = this.projectKeyword
@@ -240,6 +250,8 @@
                 if (this.principal_ids.length > 0) {
                     data.principal_ids = this.principal_ids;
                 }
+                //导出参数
+                this.exportParams = data;
                 fetch('get', '/projects', data).then(response => {
                     this.projectsInfo = response.data;
                     this.total = response.meta.pagination.total;

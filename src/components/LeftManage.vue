@@ -15,12 +15,7 @@
                     <template v-if="!menu.data">
                         <router-link :to="'/' + menu.code" class="animsition-link py-20">
                             <div>
-                                <span class="base-icon">
-                                    <img :src="menu.image" alt="">
-                                </span>
-                                <span class="hover-icon">
-                                    <img :src="menu.hoverImage" alt="">
-                                </span>
+                                <i class="iconfont" :class="menu.icon" aria-hidden="true"></i>
                             </div>
                             <span class="site-menu-title">{{ menu.name }}</span>
                         </router-link>
@@ -28,12 +23,7 @@
                     <template v-else>
                         <a class="animsition-link" >
                             <div>
-                                <span class="base-icon">
-                                    <img :src="menu.image" alt="">
-                                </span>
-                                <span class="hover-icon">
-                                    <img :src="menu.hoverImage" alt="">
-                                </span>
+                                <i class="iconfont" :class="menu.icon" aria-hidden="true"></i>
                             </div>
                             <span class="site-menu-title">{{ menu.name }}</span>
                         </a>
@@ -63,26 +53,27 @@
                     {
                         name: '应用管理',
                         code: 'apps',
-                        image: 'https://res.papitube.com/corvus/images/xiaoxi.png',
-                        hoverImage: 'https://res.papitube.com/corvus/images/select-xiaoxi.png'
+                        icon: 'icon-yingyong'
                     },
                     {
                         name: '角色管理',
                         code: 'rolemanagement',
-                        image: 'https://res.papitube.com/corvus/images/rili.png',
-                        hoverImage: 'https://res.papitube.com/corvus/images/select-rili.png'
+                        icon: 'icon-yonghushezhi'
                     },
                     {
                         name: '组织架构',
                         code: 'organization',
-                        image: 'https://res.papitube.com/corvus/images/talent.png',
-                        hoverImage: 'https://res.papitube.com/corvus/images/select-talent.png',
+                        icon: 'icon-hierarchy'
                     },
                     {
                         name: '员工档案',
                         code: 'staff',
-                        image: 'https://res.papitube.com/corvus/images/baobiao.png',
-                        hoverImage: 'https://res.papitube.com/corvus/images/select-baobiao.png',
+                        icon: 'icon-yuangongdangan'
+                    },
+                    {
+                        name: '账号设置',
+                        code: 'setting',
+                        icon: 'icon-shezhi'
                     }
                 ],
                 pageRoute: '',
@@ -102,9 +93,11 @@
 </script>
 
 <style scoped>
-    .site-menu-item a img {
-        width: 30%;
-        height: auto;
+
+    .site-menu-item a i {
+        position: relative;
+        top: 4px;
+        right: 10px;
     }
 
     .site-menu-item a span {
@@ -116,12 +109,8 @@
         display: none !important;
     }
 
-    .site-menu > .site-menu-item:hover .hover-icon {
-        display: block !important;
-    }
-
-    .site-menu > .site-menu-item:hover .base-icon {
-        display: none !important;
+    .site-menu > .site-menu-item:hover i {
+        color: #3f51b5;
     }
 
     .menu-icon img {
@@ -193,5 +182,9 @@
     }
      .console ul li a {
         color: rgba(117, 117, 117, 0.9);
+     }
+     .site-menu>.site-menu-item>a {
+        justify-content: center;
+        padding-left: 0;
      }
 </style>

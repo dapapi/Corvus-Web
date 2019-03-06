@@ -120,13 +120,13 @@
                             <li class="nav-item" role="presentation" v-if="artistInfo.sign_contract_status == 2">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-projects"
                                    aria-controls="forum-present"
-                                   aria-expanded="false" role="tab" @click="getProject">项目</a>
+                                   aria-expanded="false" role="tab" @click="getProject()">项目</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link"
                                    data-toggle="tab" href="#forum-artist-tasks"
                                    aria-controls="forum-present"
-                                   aria-expanded="true" role="tab" @click="getTaskList">
+                                   aria-expanded="true" role="tab" @click="getTaskList()">
                                     <template v-if="allTaskList.length > 0">
                                         <ToolTips :title="`已完成数量${doneTaskNum}`">
                                             任务 ({{taskNum}})
@@ -140,14 +140,14 @@
                             <li class="nav-item" role="presentation" v-if="artistInfo.sign_contract_status == 2">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-work"
                                    aria-controls="forum-present"
-                                   aria-expanded="false" role="tab" @click="getWoks">作品库</a>
+                                   aria-expanded="false" role="tab" @click="getWoks()">作品库</a>
                             </li>
                             <!--<li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">-->
                             <!--<a class="nav-link" data-toggle="tab" href="#forum-artist-fans"-->
                             <!--aria-controls="forum-present"-->
                             <!--aria-expanded="false" role="tab">粉丝数据</a>-->
                             <!--</li>-->
-                            <li class="nav-item" role="presentation" @click="getArtistsBill"
+                            <li class="nav-item" role="presentation" @click="getArtistsBill()"
                                 v-if="artistInfo.sign_contract_status == 2">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-bill"
                                    aria-controls="forum-present"
@@ -187,7 +187,7 @@
                                         <th class="cell-300" scope="col">艺人分成</th>
                                     </tr>
                                     <tr v-for="(item,index) in artistProjectsInfo" :key="index"
-                                        @click="toProject(item.id)" style="cursor: pointer;">
+                                        @click="toProject(item.id)" style="cursor: pointer;" class="projectcontent">
                                         <td>
                                             {{item.title}}
                                         </td>
@@ -195,7 +195,7 @@
                                         <td v-if="item.principal">{{item.principal.data.name}}</td>
                                         <td v-if="!item.principal"></td>
                                         <td>{{item.company}}</td>
-                                        <td>{{item.created_at.date}}</td>
+                                        <td>{{item.created_at}}</td>
                                         <td>
                                             <template v-if="item.relate_project_bills_resource">
                                                 {{item.relate_project_bills_resource}}
@@ -226,7 +226,7 @@
                                         <th class="cell-300" scope="col">截止时间</th>
                                     </tr>
                                     <tr v-for="(task,index) in allTaskList" :key="index" @click="toTask(task.id)"
-                                        style="cursor: pointer;">
+                                        style="cursor: pointer;" class="taskcontent">
                                         <td>
                                             {{task.title}}
                                         </td>
@@ -392,6 +392,7 @@
                                         </div>
                                     </div>
                                     <div class="card-block px-0" v-if="artistInfo.name">
+                                        <h5 class="pl-15">基本资料</h5>
                                         <div class="clearfix">
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                                 <div class="col-md-3 float-left text-right pl-0">姓名</div>
@@ -414,6 +415,12 @@
                                                     <EditDatepicker :content="artistInfo.birthday"
                                                                     :is-edit="isEdit"
                                                                     @change="(value) => changeArtistBaseInfo(value, 'birthday')"></EditDatepicker>
+                                                </div>
+                                            </div>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                                <div class="col-md-3 float-left text-right pl-0">年龄</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    {{artistInfo.birthday|jsGetAge}}
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
@@ -468,6 +475,7 @@
                                                                @change="(value) => changeArtistBaseInfo(value, 'star_location')"></EditInput>
                                                 </div>
                                             </div>
+                                            <h5 class="pl-15 pt-10 clearfix col-md-12 float-left">联系信息</h5>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                                 <div class="col-md-3 float-left text-right pl-0">手机号</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
@@ -534,6 +542,7 @@
                                                                   @change="(value) => changeArtistBaseInfo(value, 'desc')"></editTextarea>
                                                 </div>
                                             </div>
+                                            
                                             <div v-show="isEdit"
                                                  class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                                 <div class="col-md-3 float-left text-right pl-0">附件类型</div>
@@ -556,8 +565,7 @@
                                                  style="min-height:57px">
                                                 <div class="col-md-3 float-left text-right pl-0">附件</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
-                                                        <span v-show="isEdit"
-                                                              style="color:#01BCD4;cursor:pointer">上传附件</span>
+                                                    <span v-show="isEdit" style="color:#01BCD4;cursor:pointer">上传附件</span>
                                                     <FileUploader v-show="isEdit" class="uploadAttach"
                                                                   @change="uploadAttachment" mulId="aff"></FileUploader>
                                                     <div class="mt-5" >
@@ -580,7 +588,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="segmentation-line example"></div>
+                                        <h5 class="pl-15 pt-10">更新信息</h5>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-3 float-left text-right pl-0">录入人</div>
                                             <div class="col-md-9 float-left font-weight-bold">
@@ -703,19 +711,17 @@
                                             ref="taskStartDate"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker :default="startMinutes" @change="changeStartMinutes"
-                                            ref="taskStartTime"></timepicker>
+                                <TimeChoice @change="changeStartMinutes" ref="taskStartTime"></TimeChoice>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left require">截止时间</div>
                             <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="changeEndTime" :placeholder="'请输入结束时间'"
-                                            ref="taskEndDate"></datepicker>
+                                            ref="taskEndDate" :startDate="startTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker :default="endMinutes" @change="changeEndMinutes"
-                                            ref="taskEndTime"></timepicker>
+                                <TimeChoice @change="changeEndMinutes" ref="taskEndTime"></TimeChoice>
                             </div>
                         </div>
                         <div class="example">
@@ -871,18 +877,20 @@
                                 <datepicker @change="changeStartTime" ref="scheduleStartDate"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-show="!isAllday">
-                                <timepicker :default="startMinutes" @change="changeStartMinutes"
-                                            ref="scheduleStartMinute"></timepicker>
+                                <!-- <timepicker :default="startMinutes" @change="changeStartMinutes"
+                                            ref="scheduleStartMinute"></timepicker> -->
+                                <TimeChoice @change="changeStartMinutes" ref="scheduleStartMinute"></TimeChoice>
                             </div>
                         </div>
                         <div class="clearfix">
                             <div class="col-md-2 text-right float-left line-fixed-height">结束时间</div>
                             <div class="col-md-5 float-left pl-0">
-                                <datepicker @change="changeEndTime" ref="scheduleEndDate"></datepicker>
+                                <datepicker @change="changeEndTime" ref="scheduleEndDate" :startDate="startTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-show="!isAllday">
-                                <timepicker :default="endMinutes" @change="changeEndMinutes"
-                                            ref="scheduleEndMinute"></timepicker>
+                                <!-- <timepicker :default="endMinutes" @change="changeEndMinutes"
+                                            ref="scheduleEndMinute"></timepicker> -->
+                                <TimeChoice @change="changeEndMinutes" ref="scheduleEndMinute"></TimeChoice>
                             </div>
                         </div>
                         <div class="clearfix">
@@ -1328,6 +1336,12 @@
                 toastX: 0,
                 toastY: 0,
                 projectContractDefault:'',
+                taskDate:{},
+                scheduleRemind:'',
+                conditionLength: 0,
+                selectorHidden: [],
+                isCancel:false,
+                scheduleRemindDate:[]
             }
         },
 
@@ -1391,17 +1405,17 @@
                 })
 
             },
-            getProject() {
+            getProject(page = 1) {
                 let _this = this;
-                fetch('get', '/stars/' + this.artistId + '/project').then(function (response) {
-
+                fetch('get', '/stars/' + this.artistId + '/project',{page:page}).then(function (response) {
+                   
                     _this.artistProjectsInfo = response.data
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
                 })
             },
-            getWoks() {
+            getWoks(page = 1) {
                 let _this = this;
                 fetch('get', '/stars/' + this.artistId + '/works').then(function (response) {
                     _this.artistWorksInfo = response.data
@@ -1486,6 +1500,9 @@
                         }
                     }
                 }
+                for (let key in this.scheduleRemind ){
+                    this.scheduleRemindDate.push(this.scheduleRemind[key])
+                }
                 let data = {
                     title: this.scheduleName,
                     calendar_id: this.calendarId[0],
@@ -1494,7 +1511,8 @@
                     start_at: startTime,
                     end_at: endTime,
                     repeat: this.scheduleRepeat,
-                    desc: this.eventDesc
+                    desc: this.eventDesc,
+                    remind: this.scheduleRemindDate
                 };
                 if (this.eventPlace) {
                     data.position = this.eventPlace;
@@ -1585,7 +1603,24 @@
             }
             ,
             taskcancel: function () {
+                this.getTaskList()
+                this.getArtist()
+                this.setDefaultPrincipal()
                 this.$store.state.newParticipantsInfo = []
+                this.taskType = ''
+                this.taskName = ''
+                this.taskLevel = ''
+                this.startTime = ''
+                this.endTime = ''
+                this.startMinutes = ''
+                this.endMinutes = ''
+                this.taskIntroduce = ''
+                this.$refs.taskType.setValue('')
+                this.$refs.taskStartTime.setValue('0')
+                this.$refs.taskStartDate.setValue('')
+                this.$refs.taskEndDate.setValue('')
+                this.$refs.taskEndTime.setValue('0')
+                this.$refs.taskLevel.setValue('')
             }
             ,
             selectScheduleCalendar: function (value) {
@@ -1781,6 +1816,10 @@
                     toastr.success('删除成功');
                     this.$refs.calendar.refresh()
                 })
+            },
+            changeScheduleRemind: function (value) {
+                
+                this.scheduleRemind = value
             }
             ,
             initAddScheduleModal: function () {
@@ -1807,18 +1846,19 @@
                 };
                 this.$refs.scheduleStartDate.setValue('');
                 this.$refs.scheduleEndDate.setValue('');
-                this.$refs.scheduleStartMinute.setValue('00:00');
-                this.$refs.scheduleEndMinute.setValue('00:00');
+                this.$refs.scheduleStartMinute.setValue('0');
+                this.$refs.scheduleEndMinute.setValue('0');
                 this.$refs.scheduleResource.setValue('');
                 this.$refs.scheduleRepeat.setValue('0');
                 this.$refs.scheduleNotice.setValue('0');
+                this.this.scheduleRemindDate = []
             }
             ,
             /*查看日历详情 --添加日历 -- 修改日历 --结束*/
 
             //获取账单
             getArtistsBill: function (page = 1, expense_type) {
-
+              
                 let _this = this
                 if (expense_type) {
                     _this.expense_type = expense_type
@@ -1826,7 +1866,7 @@
                     _this.expense_type = 0
                 }
                 fetch('get', `/stars/${this.$route.params.id}/bill`, {
-                    page: page,
+                    page:page,
                     expense_type: _this.expense_type
                 }).then(response => {
                     _this.artistBillsInfo = response.data
@@ -1856,10 +1896,14 @@
             }
             ,
             //获取任务列表
-            getTaskList: function () {
+            getTaskList: function (page = 1) {
+               
                 let _this = this
-                fetch('get', `/stars/${this.$route.params.id}/tasks`).then(response => {
+                fetch('get', `/stars/${this.$route.params.id}/tasks/`,{
+                    page:page
+                }).then(response => {
                     _this.allTaskList = response.data
+                   
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
@@ -1882,7 +1926,7 @@
 
                         }
                     }
-                    _this.taskNum = `${_this.doneTaskNum}/${_this.allTaskList.length}`
+                    _this.taskNum = `${_this.doneTaskNum}/${response.meta.pagination.total}`
                 })
             },
             selectDate: function (value) {
@@ -2122,10 +2166,10 @@
                     _this.endMinutes = ''
                     _this.taskIntroduce = ''
                     _this.$refs.taskType.setValue('')
-                    _this.$refs.taskStartTime.setValue('')
+                    _this.$refs.taskStartTime.setValue('0')
                     _this.$refs.taskStartDate.setValue('')
                     _this.$refs.taskEndDate.setValue('')
-                    _this.$refs.taskEndTime.setValue('')
+                    _this.$refs.taskEndTime.setValue('0')
                     _this.$refs.taskLevel.setValue('')
                 })
             }
@@ -2465,7 +2509,56 @@
                         break;
                 }
                 return value;
-            }
+            },
+            jsGetAge: function (strBirthday) {
+                if (strBirthday) {
+                    var returnAge;
+                    // 根据生日计算年龄（"1995-09-25"）
+                    //以下五行是为了获取出生年月日，如果是从身份证上获取需要稍微改变一下
+                    var strBirthdayArr = strBirthday.split("-");
+                    var birthYear = strBirthdayArr[0];
+                    var birthMonth = strBirthdayArr[1];
+                    var birthDay = strBirthdayArr[2];
+
+                    var d = new Date();
+                    var nowYear = d.getFullYear();
+                    var nowMonth = d.getMonth() + 1;
+                    var nowDay = d.getDate();
+
+                    if (nowYear == birthYear) {
+                        returnAge = 0;//同年 则为0岁
+                    }
+                    else {
+                        var ageDiff = nowYear - birthYear; //年之差
+                        if (ageDiff > 0) {
+                            if (nowMonth == birthMonth) {
+                                var dayDiff = nowDay - birthDay;//日之差
+                                if (dayDiff < 0) {
+                                    returnAge = ageDiff - 1;
+                                }
+                                else {
+                                    returnAge = ageDiff;
+                                }
+                            }
+                            else {
+                                var monthDiff = nowMonth - birthMonth;//月之差
+                                if (monthDiff < 0) {
+                                    returnAge = ageDiff - 1;
+                                }
+                                else {
+                                    returnAge = ageDiff;
+                                }
+                            }
+                        }
+                        else {
+                            returnAge = -1;//返回-1 表示出生日期输入错误 晚于今天
+                        }
+                    }
+                    return returnAge;//返回周岁年龄
+                } else {
+                    return strBirthday
+                }
+            },
         },
     }
 
@@ -2487,10 +2580,10 @@
         left: 0;
         will-change: transform;
     }
-
+/* 
     . {
         height: 57px;
-    }
+    } */
 
     .uploadContent {
         position: relative;
@@ -2642,6 +2735,8 @@
         text-overflow:ellipsis;/* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用。*/
         white-space:nowrap;
     }
-
+    .projectcontent:hover,.taskcontent:hover{
+        background: #eee
+    }
 </style>
 

@@ -2,6 +2,12 @@
     <div class="page-main" style="background-color:#f3f4f5">
         <div class="page-header page-header-bordered">
             <h1 class="page-title">艺人报表</h1>
+
+            <div class="page-header-actions">
+                <ImportAndExport class="float-left" :type="'export'" :moduleName="'reportfrom/starreport'" :params="exportParams">
+                    <i class="iconfont icon-daochu font-size-20" aria-hidden="true"></i>
+                </ImportAndExport>
+            </div>
         </div>
         <div class="page-content container-fluid">
             <div class="bg-white">
@@ -11,22 +17,26 @@
                     </div>
                     <div class="col-md-7 p-20 clearfix float-left" style="z-index: 0;">
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic"
+                            <button type="button"
+                                    class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'day'" @click="selectDate('day')">7天
                             </button>
                         </div>
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic"
+                            <button type="button"
+                                    class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'month'" @click="selectDate('month')">30天
                             </button>
                         </div>
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic"
+                            <button type="button"
+                                    class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'quarter'" @click="selectDate('quarter')">季度
                             </button>
                         </div>
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic"
+                            <button type="button"
+                                    class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'year'" @click="selectDate('year')">年度
                             </button>
                         </div>
@@ -34,21 +44,23 @@
                 </div>
 
                 <div class="col-md-12 clearfix my-10 px-0">
-                    <div class="col-md-3 float-left">
+                    <div class="col-md-3 float-left px-0">
                         <div class="col-md-7 float-left text-right">艺人数量合计</div>
-                        <div class="col-md-5 float-left pl-0">{{ tableData.total }}个</div>
+                        <div class="col-md-5 float-left px-0">{{ tableData.total }}个</div>
                     </div>
-                    <div class="col-md-3 float-left">
+                    <div class="col-md-3 float-left px-0">
                         <div class="col-md-7 float-left text-right pl-0">预计订单收入总额</div>
-                        <div class="col-md-5 float-left pl-0">{{ tableData.total_fee }}元</div>
+                        <div class="col-md-5 float-left px-0">{{ tableData.total_fee }}元</div>
                     </div>
-                    <div class="col-md-3 float-left">
+                    <div class="col-md-3 float-left px-0">
                         <div class="col-md-7 float-left text-right">合同金额总额</div>
-                        <div class="col-md-5 float-left pl-0">666元</div>
+                        <div class="col-md-5 float-left px-0">{{ tableData.total_contract_amount }}元</div>
                     </div>
-                    <div class="col-md-3 float-left">
+                    <div class="col-md-3 float-left px-0">
                         <div class="col-md-7 float-left text-right">花费金额总额</div>
-                        <div class="col-md-5 float-left pl-0">666元</div>
+                        <div class="col-md-5 float-left px-0">{{ tableData.total_expenditure ?
+                            tableData.total_expenditure : 0 }}元
+                        </div>
                     </div>
                 </div>
 
@@ -114,7 +126,8 @@
                                         </template>
                                     </td>
                                     <td>{{ taiyangCommunicationStatusArr.find(item => item.value ==
-                                        data.communication_status) ? taiyangCommunicationStatusArr.find(item => item.value ==
+                                        data.communication_status) ? taiyangCommunicationStatusArr.find(item =>
+                                        item.value ==
                                         data.communication_status).name : '' }}
                                     </td>
                                     <td>{{ data.created_at }}</td>
@@ -123,7 +136,9 @@
                                 <template v-else>
                                     <td>{{ data.department_name }}</td>
                                     <td>{{ data.name}}</td>
-                                    <td>{{ data.total_fee }}</td>
+                                    <td>{{ data.total_fee ? data.total_fee : 0}}元</td>
+                                    <td>{{ data.total_contract_money ? data.total_contract_money : 0 }}元</td>
+                                    <td>{{ data.total_expenditure_money ? data.total_expenditure_money : 0 }}元</td>
                                 </template>
 
                             </tr>
@@ -239,6 +254,7 @@
                 ],
                 departmentId: '',
                 departmentAnalysisId: '',
+                exportParams: {},
             }
         },
         mounted() {
@@ -291,6 +307,7 @@
                 if (this.trailsNum) {
                     data.type = this.trailsNum
                 }
+                this.exportParams = data;
                 this.$refs.timeInterval.setValue(start_time, end_time);
                 let _this = this;
                 fetch('get', '/reportfrom/starreport', data).then(function (response) {

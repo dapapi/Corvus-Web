@@ -2,6 +2,12 @@
     <div class="page-main" style="background-color:#f3f4f5">
         <div class="page-header page-header-bordered">
             <h1 class="page-title">博主报表</h1>
+
+            <div class="page-header-actions">
+                <ImportAndExport class="float-left" :type="'export'" :moduleName="'reportfrom/bloggerreport'" :params="exportParams">
+                    <i class="iconfont icon-daochu font-size-20" aria-hidden="true"></i>
+                </ImportAndExport>
+            </div>
         </div>
         <div class="page-content container-fluid">
             <div class="bg-white">
@@ -11,22 +17,26 @@
                     </div>
                     <div class="col-md-7 p-20 clearfix float-left" style="z-index: 0;">
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic"
+                            <button type="button"
+                                    class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'day'" @click="selectDate('day')">7天
                             </button>
                         </div>
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic"
+                            <button type="button"
+                                    class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'month'" @click="selectDate('month')">30天
                             </button>
                         </div>
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic"
+                            <button type="button"
+                                    class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'quarter'" @click="selectDate('quarter')">季度
                             </button>
                         </div>
                         <div class="col-md-3 float-left">
-                            <button type="button" class="btn btn-block btn-success waves-effect waves-classic"
+                            <button type="button"
+                                    class="btn btn-block btn-success waves-effect waves-classic search-button"
                                     :disabled="designationDateNum === 'year'" @click="selectDate('year')">年度
                             </button>
                         </div>
@@ -40,15 +50,19 @@
                     </div>
                     <div class="col-md-3 float-left">
                         <div class="col-md-7 float-left text-right pl-0">预计订单收入总额</div>
-                        <div class="col-md-5 float-left">666元</div>
+                        <div class="col-md-5 float-left">{{ tableData.total_fee }}元</div>
                     </div>
                     <div class="col-md-3 float-left">
                         <div class="col-md-7 float-left text-right">合同金额总额</div>
-                        <div class="col-md-5 float-left">666元</div>
+                        <div class="col-md-5 float-left">
+                            {{ tableData.total_contract_amount ? tableData.total_contract_amount : 0 }}元
+                        </div>
                     </div>
                     <div class="col-md-3 float-left">
                         <div class="col-md-7 float-left text-right">花费金额总额</div>
-                        <div class="col-md-5 float-left">666元</div>
+                        <div class="col-md-5 float-left">
+                            {{ tableData.total_expenditure_money ? tableData.total_expenditure_money : 0 }}元
+                        </div>
                     </div>
                 </div>
 
@@ -67,10 +81,6 @@
                             <div class="col-md-2 float-left pl-0">
                                 <Selectors :options="artistStatusArr" @change="changeArtistStatus"
                                            placeholder="请选择博主状态"></Selectors>
-                            </div>
-                            <div class="col-md-2 float-left pl-0" v-if="artistStatus != 1">
-                                <Selectors :options="trailsNumArr" @change="changeTrailsNum"
-                                           placeholder="请选择线索数量"></Selectors>
                             </div>
                             <div class="col-md-3 float-left pl-0"
                                  v-if="departmentsInfo.length > 1 && artistStatus != 1">
@@ -92,6 +102,10 @@
                                 <template v-else>
                                     <th class="cell-100" scope="col">制作组</th>
                                     <th class="cell-100" scope="col">昵称</th>
+                                    <th class="cell-100" scope="col">
+                                        <Selectors :options="trailsNumArr" @change="changeTrailsNum"
+                                                   placeholder="线索数量"></Selectors>
+                                    </th>
                                     <th class="cell-100" scope="col">预计订单收入</th>
                                     <th class="cell-100" scope="col">合同金额</th>
                                     <th class="cell-100" scope="col">花费金额</th>
@@ -112,9 +126,10 @@
                                 <template v-else>
                                     <td>{{ data.department_name }}</td>
                                     <td>{{ data.nickname }}</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td>{{ data.trail_total }}</td>
+                                    <td>{{ data.total_fee ? data.total_fee : 0 }}元</td>
+                                    <td>{{ data.total_contract_money ? data.total_contract_money : 0 }}元</td>
+                                    <td>{{ data.total_expenditure_money ? data.total_expenditure_money : 0 }}元</td>
                                 </template>
                             </tr>
                             </tbody>
@@ -140,6 +155,10 @@
                 designationDateNum: 'day',
                 papiCommunicationStatusArr: config.papiCommunicationStatusArr,
                 artistStatusArr: [
+                    {
+                        name: '全部',
+                        value: ''
+                    },
                     {
                         name: '签约中',
                         value: 1
@@ -208,6 +227,7 @@
                         value: ''
                     }
                 ],
+                exportParams: {},
             }
         },
         mounted() {
@@ -260,6 +280,7 @@
                 if (this.trailsNum) {
                     data.type = this.trailsNum
                 }
+                this.exportParams = data;
                 this.$refs.timeInterval.setValue(start_time, end_time);
                 let _this = this;
                 fetch('get', '/reportfrom/bloggerreport', data).then(function (response) {

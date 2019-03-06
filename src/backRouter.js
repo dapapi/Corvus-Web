@@ -37,6 +37,10 @@ const backRouter = [{
             component: () => import('./views/management/approval.vue'),
         },
         {
+            path: '/apps/notice',
+            component: () => import('./views/management/notice.vue'),
+        },
+        {
             path: '/rolemanagement',
             component: () => import('./views/management/rolemanagement.vue')
         }, {
@@ -78,6 +82,11 @@ const backRouter = [{
             path: '/staff/apply',
             name: 'staffApply',
             component: () => import('./views/staff/apply.vue'),
+        },
+        {
+            path: '/setting',
+            name: 'setting',
+            component: () => import('./views/setting/index.vue')
         }
     ]},
     {

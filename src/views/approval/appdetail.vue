@@ -33,10 +33,10 @@
                     <i v-if="list.form_status==232 && (info.approval.user_id === currentId || (list.creator && list.creator.data.id === currentId)) ">
                         <button class="btn btn-primary" @click='approvalHandler("discard")'>作废</button>
                     </i>
-                    <i v-if="list.form_status==231 && list.approval_begin === 0 && (info.approval.user_id === currentId || (list.creator && list.creator.data.id === currentId)) ">
-                        <button class="btn btn-primary" @click='approvalHandler("cancel")'>撤销</button>
+                    <i v-if="list.form_status==231 && (info.approval.user_id === currentId || (list.creator && list.creator.data.id === currentId)) ">
+                        <button class="btn btn-primary" v-if="list.approval_begin === 0" @click='approvalHandler("cancel")'>撤销</button>
                         <button class="btn btn-danger" type="submit"
-                                data-toggle="modal">提醒
+                                data-toggle="modal" @click='approvalReminder()'>提醒
                         </button>
                     </i>
                     <i v-if="[233,234,235].includes(list.form_status) && (info.approval.user_id === currentId || (list.creator && list.creator.data.id === currentId)) ">
@@ -170,7 +170,7 @@
                     </div>
                 </div>
             </div>
-            <DocPreview :url='previewUrl'/>
+            <DocPreview :url='previewUrl' detailpage='true'/>
         </div>
         <BuildProject :project-type="projectTypeTemp" :project-fields-arr="projectFieldsArr" mode='detail'
                       :default-data='{fields:(info.fields && info.fields.data),list:list,trailInfo:trailInfo}'></BuildProject>
@@ -236,6 +236,7 @@
                 previewUrlArr: [],
                 projectTypeTemp:'',
                 detail_control:{},
+                msg:'',
             }
         },
 
@@ -268,6 +269,11 @@
 
         },
         methods: {
+            approvalReminder(){
+                fetch('put', '/approval_instances/'+this.$route.params.id+'/remind').then((params) => {
+                    toastr.success('提醒成功')
+                })
+            },
             previewHandler(params) {
                 $('#docPreviewSelector').modal('hide')
                 this.previewUrlArr = String(params).split(',')

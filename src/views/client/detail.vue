@@ -116,7 +116,9 @@
                                    aria-controls="forum-present"
                                    aria-expanded="false" role="tab">合同</a>
                             </li>
-                            <li class="nav-item" role="presentation" @click="getClientTask">
+                            <!-- <li class="nav-item" role="presentation" @click="getClientTask"> --> 
+                            <!-- 默认先展示任务的数量 ，所以要先请求数据了 -->
+                            <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-toggle="tab" href="#forum-task"
                                    aria-controls="forum-present"
                                    aria-expanded="false" role="tab">
@@ -178,6 +180,7 @@
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                      style="width: 100%">
                             </div>
+                            <AddClientType @change="changeTrailType"></AddClientType>
                             <pagination :current_page="current_page" :method="getClient"
                                         :total_pages="total_pages" :total="total"></pagination>
                         </div>
@@ -233,7 +236,7 @@
                                 </tr>
                                 <tbody>
                                 <tr v-for="contract in clientContractsInfo"
-                                    @click="redirectContract(contract.contract_number)">
+                                    @click="redirectContract(contract.instance_number)">
                                     <td>{{ contract.contract_number }}</td>
                                     <td>{{ contract.project }}</td>
                                     <td>{{ contract.talents }}</td>
@@ -637,19 +640,21 @@
                                             ref="startTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker :default="startMinutes" @change="changeStartMinutes"
-                                            ref="taskStartTime"></timepicker>
+                                <!-- <timepicker :default="startMinutes" @change="changeStartMinutes"
+                                            ref="taskStartTime"></timepicker> -->
+                                <TimeChoice @change="changeStartMinutes" ref="taskStartTime"></TimeChoice>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left require">截止时间</div>
                             <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="changeEndTime" :placeholder="'请输入结束时间'"
-                                            ref="endTime"></datepicker>
+                                            ref="endTime" :startDate="taskStartTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker :default="endMinutes" @change="changeEndMinutes"
-                                            ref="taskEndTime"></timepicker>
+                                <!-- <timepicker :default="endMinutes" @change="changeEndMinutes"
+                                            ref="taskEndTime"></timepicker> -->
+                                 <TimeChoice @change="changeEndMinutes" ref="taskEndTime"></TimeChoice>
                             </div>
                         </div>
                         <div class="example">
@@ -671,6 +676,7 @@
 
         <!-- 是否确认删除 -->
         <flag @confirmFlag="delContact"/>
+        <AddTrail :trailType="trailType" :clientId="clientId" :companyInfo="companyInfo" @ok="addTrailCallBack" />
     </div>
 
 </template>
@@ -687,7 +693,6 @@
                 total: 0,
                 current_page: 1,
                 total_pages: 1,
-                clientId: '',
                 changeInfo: {},
                 clientTypeArr: config.clientTypeArr,
                 clientLevelArr: config.clientLevelArr,
@@ -730,6 +735,9 @@
                 isLoading: true,
                 clientContractsInfo: [],
                 taskLevelArr: config.taskLevelArr,
+                trailType: '', // 线索类型
+                companyInfo: {}, // 公司信息
+                companyId: '', // 公司id
             }
         },
         beforeMount() {
@@ -753,6 +761,9 @@
                 // 清空state
                 this.cancleContact()
             })
+
+            this.getClientTask() // 为了默认展示任务数量 先在这里请求
+            
         },
         computed: {
             completeNum() {
@@ -812,6 +823,11 @@
                     };
                     this.$store.dispatch('changePrincipal', params);
                     this.isLoading = false
+
+                    this.companyInfo = {
+                        company: this.clientInfoCopy.company,
+                        grade: this.clientInfoCopy.grade
+                    }
                 })
             },
 
@@ -830,9 +846,9 @@
             },
 
             getClientTask: function () {
-                if (this.clientTasksInfo.length > 0) {
-                    return
-                }
+                // if (this.clientTasksInfo.length > 0) {
+                //     return
+                // }
                 let data = {
                     type: 'clients',
                     id: this.clientId,
@@ -1015,7 +1031,7 @@
                     toastr.success('创建成功');
                     $('#addTask').modal('hide');
                     this.editConfig = {}
-                    this.clientTasksInfo.push(response.data)
+                    this.getClientTask()
                     this.getClient();
                     this.getClientTrail();
                     this.getClientProject()
@@ -1125,6 +1141,24 @@
             },
             linkTo(url) {
                 this.$router.push(url)
+            },
+            // 新增销售线索时的线索类型
+            changeTrailType (type) {
+                this.trailType = type
+                $('#addTrail').modal('show')
+                // 
+            },
+            // 新增销售线索类型成功后的回调
+            addTrailCallBack () {
+                this.getClientTrail()
+            },
+            // 跳转
+            redirectContract (id) {
+                // TODO 没有合同编号
+                this.$router.push({
+                    name: 'approval/detail',
+                    params: {id: id}
+                })
             }
         }
     }
@@ -1155,6 +1189,18 @@
     .card-block .card-text {
         display: flex;
         align-items: center;
+    }
+    /deep/ {
+        #forum-trail {
+            .site-action {
+                position: absolute;
+                bottom: 0;
+                & + ul li {
+                    position: absolute;
+                    transform: translateY(55px);
+                }
+            }
+        }
     }
 
 </style>

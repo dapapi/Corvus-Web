@@ -62,6 +62,11 @@
                         name: '审批',
                         code: 'apps/approval',
                         icon: 'icon-shenpi4'
+                    },
+                    {
+                        name: '公告',
+                        code: 'apps/notice',
+                        icon: 'icon-notice' 
                     }
                 ],
                 pageRoute: '',

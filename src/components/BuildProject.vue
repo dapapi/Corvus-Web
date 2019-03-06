@@ -5,7 +5,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                        <i class="iconfont icon-guanbi" aria-hidden="true"></i>
+                        <i class="iconfont icon-guanbi" aria-hidden="true" @click='refreshAddProjectModal'></i>
                     </button>
                     <h4 class="modal-title">新增项目</h4>
                 </div>
@@ -88,14 +88,14 @@
                         <div class="col-md-2 text-right float-left px-0 require">预计支出</div>
                         <div class="col-md-10 float-left">
                             <NumberSpinner ref="projectExpenditureFee"
-                                           @change="(value) => addProjectBaseInfo(value, 'projected_expenditure')"></NumberSpinner>
+                                           @change="(value) => addProjectBaseInfo(value, 'projected_expenditure')" :min="0" :max="1000000000" :precision="2" :value="0"></NumberSpinner>
                         </div>
                     </div>
                     <div class="col-md-12 example clearfix" v-show="projectType != 5">
                         <div class="col-md-2 text-right float-left px-0 require">预计订单收入</div>
                         <div class="col-md-10 float-left">
                             <NumberSpinner ref="projectFee"
-                                           @change="(value) => addProjectBaseInfo(value, 'fee')"></NumberSpinner>
+                                           @change="(value) => addProjectBaseInfo(value, 'fee')" :min="0" :max="1000000000" :precision="2" :value="0"></NumberSpinner>
                         </div>
                     </div>
                     <div class="col-md-12 example clearfix" v-show="projectType == 3">
@@ -149,7 +149,14 @@
                             </template>
                             <template v-if="field.field_type === 11">
                                 <NumberSpinner :default='newArray.find(item=>item.key === field.key)'
-                                               @change="(value) => addInfo(value, field.id )"></NumberSpinner>
+                                               @change="(value) => addInfo(value, field.id )" :min="0" :max="1000000000" :precision="2" :value="0"></NumberSpinner>
+                            </template>
+                             <template v-if="field.field_type === 12">
+                               <CheckboxGroup :optionData="platformLists" @change="(value) => addInfo(value, field.id )" :isLine="true">
+                                    <template slot-scope="scope">
+                                        <span>{{scope.row.name}}</span>
+                                    </template>
+                                </CheckboxGroup>
                             </template>
                         </div>
                     </div>
@@ -216,7 +223,20 @@
                 user: '',
                 cooperationDefault: '',
                 trailStatusDefault: '',
-
+                platformLists: [
+                    {
+                        value: '微博',
+                        name: '微博'
+                    },
+                    {
+                        value: '抖音',
+                        name: '抖音'
+                    },
+                    {
+                        value: '小红书',
+                        name: '小红书'
+                    },
+                ],
             }
         }, 
         created() {

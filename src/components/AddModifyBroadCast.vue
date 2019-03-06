@@ -14,8 +14,7 @@
             data-backdrop="static"
             v-if="pageType === '发布'">
             <button type="button"  
-                class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic"
-                @click='setNote'>
+                class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                 <i aria-hidden="true" 
                     class="front-icon iconfont icon-tianjia1 animation-scale-up" style="font-size:30px"></i>
                     <i aria-hidden="true" 
@@ -49,20 +48,36 @@
                         </div>
                         <div class="form-group row col-sm-12">
                             <label for="" class="col-sm-2 col-form-label"><strong>公告范围</strong></label>
-                            <selectors class="scopeSelector col-sm-4" ref='scopeSelector' :options="departments" @valuelistener="changeDepartments"  multiple='true' :placeholder='"请选择范围"'></selectors>
-                            <label for="" class="col-sm-2 col-form-label text-right"><strong>选择分类</strong></label>
-                            <selectors ref='classifySelector' class="col-sm-4" :options="classifyArr" @change="changeClassify" placeholder='请选择类型' ></selectors>
+                            
+                            <RangeSelector class="scopeSelector"  ref='scopeSelector' :options='departments' @change='changeDepartments'/>
+                            <!-- <selectors class="scopeSelector col-sm-4" ref='scopeSelector' :options="departments" @valuelistener="changeDepartments"  multiple='true' :placeholder='"请选择范围"'></selectors> -->
+                            <label for="" class="col-sm-2 col-form-label text-right" style="z-index:10000"><strong>选择分类</strong></label>
+                            <selectors ref='classifySelector' class="col-sm-4 test" :options="classifyArr" @change="changeClassify" placeholder='请选择类型'></selectors>
                         </div>
-                        <div class="summernote" id="summernote"></div>
-                        <File-Uploader class="upload" url="javascript:void()" @changePlus="fileUploaded" :givenfilename='givenfilename' @deleteAtachment='deleteAttachment' broadcast='true'>上传附件</File-Uploader>
-                        <br/>
-                        <input type="checkbox" v-model="topFlag">
-                        <span class="set-top-flag" >&nbsp;&nbsp;置顶</span>
+                        <!-- <div class="summernote" id="summernote"></div> -->
+                        <vue-ueditor-wrap v-model="msg" :config="myConfig"></vue-ueditor-wrap>
+                        <File-Uploader class="upload" url="javascript:void()" @changePlus="fileUploaded" :givenfilename='givenfilename' broadcast='true'>上传附件</File-Uploader>
+                        <figure style="text-align:center;width:100px" v-for="(item, index) in this.affix" :key="index" class="attachdetail ml-20 float-left"> 
+                            <img src="@/assets/img/attachment.png" alt="" style="width:40px">
+                            <p class="pt-10">{{item.title}}</p>
+                            <div class="img-control">
+                                <div class="icon-control">
+                                    <a :href="item.url" target="_blank">
+                                        <i class="iconfont icon-liulan"></i>
+                                    </a>
+                                    <i class="iconfont icon-shanchu1" @click="imgDelete(item.url)"></i>
+                                </div>
+                            </div>
+                        </figure>
+                        <div class="col-md-12 float-left">
+                            <input type="checkbox" v-model="topFlag">
+                            <span class="set-top-flag" >&nbsp;&nbsp;置顶</span>
+                        </div>
                     </div>
                     
                     <div class="modal-footer">
                         <button data-bb-handler="confirm" type="button" class="btn btn-primary" @click="sendNote">发布</button>
-                        <button data-bb-handler="cancel" type="button" class="btn btn-default" data-dismiss="modal" @click='getNote'>取消</button>
+                        <button data-bb-handler="cancel" type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                     </div>
                 </div>
             </div>
@@ -75,9 +90,12 @@
 import { mapState } from 'vuex'
 import fetch from '@/assets/utils/fetch.js'
 import config from '@/assets/js/config'
-
+import RangeSelector from '@/components/RangeSelector'
 export default {
     props:['notedata','givenfilename'],
+    components:{
+        RangeSelector
+    },
     data(){
         return{
             title:'',               //标题内容
@@ -90,23 +108,40 @@ export default {
             accessory:'',           //附件内容
             is_accessory:false,     //是否携带附件
             departments:{},         //公告范围
-            classifyArr:config.classifyArr, 
+            classifyArr:[], 
             scope:[],
             accessory_name:'',
             whoamiid:'',
-            creator_id:','
+            creator_id:'',
+            affix:[],
+            msg:'',
+            myConfig: {
+            // 编辑器不自动被内容撑高
+            autoHeightEnabled: false,
+            // 初始容器高度
+            initialFrameHeight: 500,
+            // 初始容器宽度
+            initialFrameWidth: '100%',
+            // 上传文件接口（这个地址是我为了方便各位体验文件上传功能搭建的临时接口，请勿在生产环境使用！！！）
+            serverUrl:'https://res-crm.papitube.com/image',
+            // UEditor 资源文件的存放路径，如果你使用的是 vue-cli 生成的项目，通常不需要设置该选项，vue-ueditor-wrap 会自动处理常见的情况，如果需要特殊配置，参考下方的常见问题2
+            UEDITOR_HOME_URL: '/UEditor/',
+            zIndex : 2000,
+            }
         }
     },
     created(){
-        if (this.department.length > 0) {
-            this.departments = this.department
-        }
+        this.getClassify()
+        // if (this.department.length > 0) {
+        //     this.departments = this.department
+        // }
     },
     mounted(){
         this.noteInit()
-        this.getSummernote()
-        this.setNote()
         this.modalInit()
+                          
+                            
+
     },
     computed: {
         ...mapState([
@@ -117,11 +152,11 @@ export default {
         },
     },
     watch:{
+
         notedata:function(value){
             let {creator:{data:{id = '-'}}} = value
             this.creator_id = id
             this.noteInit()
-            this.setNote()
         },
         accessory:function(){
             if(this.accessory){
@@ -135,9 +170,16 @@ export default {
         }
     },
     methods:{
-        deleteAttachment(){
-            this.accessory_name = ''
-            this.accessory = ''
+        getClassify(){
+            fetch('get','/announcements/Classify/').then((params) => {
+                this.classifyArr = params.data
+            })
+        },
+        rangeSelect(params,type,value){
+            console.log(params,type,value);
+        },
+        imgDelete(params){
+            this.affix.splice(this.affix.indexOf(this.affix.find(item=>item.url === params)),1)
         },
         //数据初始化
         noteInit(){
@@ -163,25 +205,26 @@ export default {
     
         //修复富文本编辑器多层弹窗bug
         modalInit(){
-            $('.summernoteUploadModal').click(() => {
-                $('.summernoteUploadModal').modal('hide');
+            let _this = this
+            fetch('get','departments_lists').then((params) => {
+                _this.departments = params
+            })
+            this.$nextTick((params) => {
+                $('.select2-container').addClass('col-md-4')
+                $('.select2-container').addClass('px-0')
+
+                
             })
         },
         //公告范围选择（数组）
         changeDepartments(value){
+            console.log(value);
             this.scope = value
         },
         //公告类型选择
         changeClassify(value){
-            this.type = value
-        },
-        //富文本编辑器初始化
-        getSummernote(){
-            $('#summernote').summernote({
-                tabsize: 2,
-                height: 300,
-                
-            });
+            console.log(value);
+            this.type = Number(value)
         },
         
         //清空数据并关闭窗口
@@ -196,24 +239,9 @@ export default {
             $('#addNewBroadcast').modal('hide')
             this.$router.push('/broadcast/')
         },
-        //富文本内容初始化
-        setNote(){
-            if(this.text){
-                $('#summernote').summernote('code', this.text);
-            }else{
-                // $('#summernote').summernote('code', "输入内容...");
-            }
-        },
-        //获取富文本代码
-        getNote(){
-            var markupStr = $('#summernote').summernote('code');
-            this.text = markupStr
-        },
         // 发送数据
         sendNote(){
             let _this = this
-             var markupStr = $('#summernote').summernote('code');
-                this.text = markupStr
                 let currenttime = Date.now()
                 let topflag = Number(this.topFlag)
                 this.sendData = {
@@ -221,11 +249,12 @@ export default {
                     scope:this.scope,                       //公告范围
                     classify : this.type,                   //公告类型
                     stick:topflag,                          //置顶标示
-                    desc:this.text,                         //富文本代码
+                    desc:this.msg,                         //富文本代码
                     is_accessory : this.is_accessory,       //是否带附件
-                    accessory : this.accessory,             //附件内容
+                    // accessory : this.accessory,             //附件内容
                     readflag : 0, 
-                    accessory_name : this.accessory_name                          //已读状态         
+                    // accessory_name : this.accessory_name            
+                    affix:this.affix      
             }
             //发布模式
             if(this.pageType === '发布'){
@@ -249,21 +278,29 @@ export default {
         },
         //上传
         fileUploaded(value){
-            console.log(value);
-            this.accessory_name = value.fileName
-            this.accessory = value.fileUrl
+            let currentId = this.$route.params.id
+            let attachData = {
+                title:value.fileName,
+                url:value.fileUrl,
+                size:value.fileSize,
+                type:1
+            }
+            this.affix.push(attachData)
+            // fetch('post','/announcements/'+currentId+'/affix',attachData).then((params) => {
+                
+            // })
+            // console.log(value);
+            // this.accessory_name = value.fileName
+            // this.accessory = value.fileUrl
         }
     }
 }
 </script>
 
 <style scoped>
-/* .upload{
-    width:88px;
-    height:30px;
-    font-weight:400;
-    color:rgba(50,152,220,1);
-} */
+.test{
+    z-index:3001 !important;
+}
 .set-top-flag{
     width:44px;
     height:30px;
@@ -275,6 +312,13 @@ export default {
 .bootbox-close-button{
     margin-left:20px;
 }
-
+p{
+    text-align: center;
+    margin-bottom: 0 !important;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
 
 </style>

@@ -41,6 +41,7 @@
                     || this.$route.path === '/rolemanagement'
                     || this.$route.path === '/appmanagement'
                     || this.$route.path === '/organization'
+                    || this.$route.path === '/setting'
                     || this.$route.path.indexOf('staff') > 0
                     || this.$route.path === '/organization/management') {
                     this.isLeftMenuShow = false
@@ -269,6 +270,24 @@
         overflow: hidden;
         text-overflow:ellipsis;
         white-space: nowrap;
+    }
+
+    .search-button {
+        background: white;
+        color: #4caf50;
+    }
+
+    .search-button:disabled {
+        background: #4caf50;
+        color: white;
+        opacity: 1;
+    }
+
+    .search-button:hover {
+        color: #fff;
+        background-color: #4caf50;
+        border-color: #4caf50;
+        opacity: 0.65;
     }
 
 </style>

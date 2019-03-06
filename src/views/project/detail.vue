@@ -17,7 +17,7 @@
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#confirmFlag"
                        @click="changeToastrText(2)" v-show="projectInfo.status != 2">完成</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#confirmFlag"
-                       @click="changeToastrText(3)" v-show="projectInfo.status != 3">撤单</a>
+                       @click="changeToastrText(3)" v-show="projectInfo.status != 3 && projectInfo.status != 2">撤单</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
                     <a class="dropdown-item" role="menuitem" @click="getApprovalsFormData"
                        v-if="projectInfo.approval_status == 232 || projectInfo.type == 5">创建合同</a>
@@ -219,7 +219,7 @@
                                     <div class="project-progress" v-for="item in projectProgressInfo">
                                         <template v-if="!item.isFinish">
                                             <div class="clearfix pointer-content"
-                                                 @click="addProjectProgress(item.status)">
+                                                 @click="changeProjectProgress(item.status)">
                                                 <div class="col-md-4 p-0 float-left">
                                                     <div class="image-wraper">
                                                         <template v-if="item.isFinish == 1">
@@ -418,7 +418,7 @@
                                         <span class="pointer-content hover-content" data-toggle="modal"
                                               data-target="#addBill">
                                             <template
-                                                    v-if="projectBillMetaInfo.divide && projectBillMetaInfo.divide.length === 0">
+                                                    v-if="!projectBillMetaInfo.divide">
                                                 <i class="iconfont icon-tianjia pr-5"></i>新增结算单
                                             </template>
                                             <template v-else>
@@ -647,7 +647,9 @@
                                         </div>
                                     </div>
                                     <div class="py-20" v-if="projectInfo.title">
+                                        
                                         <div class="clearfix">
+                                            <h5 class="pl-15">基本资料</h5>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-3 float-left text-right pl-0">项目名称</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
@@ -731,7 +733,8 @@
                                                                   @change="(value) => changeProjectBaseInfo(value, 'priority')"></EditSelector>
                                                 </div>
                                             </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
+                                                 v-if="projectInfo.type != 5">
                                                 <div class="col-md-3 float-left text-right pl-0">合作类型</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditSelector :is-edit="isEdit" :options="cooperationTypeArr"
@@ -739,7 +742,8 @@
                                                                   @change="(value) => changeProjectBaseInfo(value, 'cooperation_type')"></EditSelector>
                                                 </div>
                                             </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
+                                                 v-if="projectInfo.type != 5">
                                                 <div class="col-md-3 float-left text-right pl-0">状态</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditSelector :is-edit="isEdit" :options="trailStatusArr"
@@ -763,9 +767,11 @@
                                                                     @change="(value) => changeProjectBaseInfo(value, 'end_at')"></EditDatepicker>
                                                 </div>
                                             </div>
+                                            <h5 class="pl-15 pt-10 clearfix float-left col-md-12">合作信息</h5>
                                             <div v-if="projectInfo.type != 5 && projectInfo.fields">
                                                 <div class="card-text py-10 px-0 clearfix col-md-6 float-left "
-                                                     v-for="field in projectInfo.fields">
+                                                     v-for="field in projectInfo.fields"
+                                                     v-show="field.key !== '合作小组' || (field.key === '合作小组' && cooperationOther === '是')">
                                                     <div class="col-md-3 float-left text-right pl-0">{{ field.key }}
                                                     </div>
                                                     <div class="col-md-9 float-left font-weight-bold">
@@ -832,8 +838,8 @@
                                             </div>
                                         </div>
 
-                                        <div class="segmentation-line example"></div>
-
+                                        
+                                        <h5 class="pl-15 pt-10">更新信息</h5>
                                         <div class="clearfix">
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
                                                  v-if="projectInfo.creator">
@@ -860,13 +866,14 @@
                                                     {{ projectInfo.last_updated_at }}
                                                 </div>
                                             </div>
+                                            <h5 class="pl-15 pt-10 clearfix float-left col-md-12">关联信息</h5>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
                                                  v-if="projectInfo.relate_projects">
                                                 <div class="col-md-3 float-left text-right pl-0">关联项目</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <template v-for="project in projectInfo.relate_projects.data">
                                                         <span class="pointer-content"
-                                                              @click="redirectProject(project.id)">{{project.title }}</span>
+                                                              @click="redirectProject(project.id)">{{project.title }} </span>
                                                     </template>
                                                 </div>
                                             </div>
@@ -875,7 +882,7 @@
                                                 <div class="col-md-3 float-left text-right pl-0">关联任务</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <template v-for="task in projectInfo.relate_tasks.data">
-                                                        <span class="pointer-content" @click="redirectTask(task.id)">{{ task.title }}</span>
+                                                        <span class="pointer-content" @click="redirectTask(task.id)">{{ task.title }} </span>
                                                     </template>
                                                 </div>
                                             </div>
@@ -888,9 +895,8 @@
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <div class="segmentation-line example float-left"></div>
-
+                                        <h5 class="pl-15 pt-10">审批流程</h5>
+                                        <div class="segmentation-line float-left"></div>
                                         <div v-if="projectInfo.type != 5">
                                             <ApprovalProgress :formid="projectInfo.form_instance_number"
                                                               :formstatus="projectInfo.approval_text" projcetinfo='true'
@@ -913,7 +919,7 @@
                             <div class="card-block">
                                 <div class="col-md-12 pl-0">
                                     <TaskFollowUp :follow-type="'项目'" :trailId="projectId"
-                                                  trailType="projects"></TaskFollowUp>
+                                                  trailType="projects" ref="projectFollow"></TaskFollowUp>
                                 </div>
                             </div>
                         </div>
@@ -980,18 +986,20 @@
                                 <datepicker ref="startTime" @change="changeStartTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker ref="startMinutes" :default="startMinutes"
-                                            @change="changeStartMinutes"></timepicker>
+                                <!-- <timepicker ref="startMinutes" :default="startMinutes"
+                                            @change="changeStartMinutes"></timepicker> -->
+                                <TimeChoice @change="changeStartMinutes" ref="startMinutes"></TimeChoice>
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">截止时间</div>
                             <div class="col-md-5 float-left pl-0">
-                                <datepicker ref="endTime" @change="changeEndTime"></datepicker>
+                                <datepicker ref="endTime" @change="changeEndTime" :startDate="startTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <timepicker ref="endMinutes" :default="endMinutes"
-                                            @change="changeEndMinutes"></timepicker>
+                                <!-- <timepicker ref="endMinutes" :default="endMinutes"
+                                            @change="changeEndMinutes"></timepicker> -->
+                                <TimeChoice @change="changeEndMinutes" ref="endMinutes"></TimeChoice>
                             </div>
                         </div>
                         <div class="example">
@@ -1085,6 +1093,34 @@
                 </div>
             </div>
         </div>
+        <!-- 修改项目进度 -->
+        <div class="modal fade modal-simple" id="changeProjectProgress" aria-labelledby="exampleModalTitle"
+             role="dialog"
+             tabindex="-1" data-backdrop="static" aria-hidden="true">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
+                        </button>
+                        <h4 class="modal-title">修改项目节点</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mt-20">是否确认已完成当前项目进度节点</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button"
+                                class="btn btn-default btn-pure waves-effect waves-classic"
+                                data-dismiss="modal">取消
+                        </button>
+                        <button type="button"
+                                class="btn btn-primary waves-effect waves-classic"
+                                data-dismiss="modal" @click='addProjectProgress'>确认
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- 新建/修改回款期次 -->
         <div class="modal fade" id="addPaybackTime" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static" v-if="projectInfo.type != 5">
@@ -1129,7 +1165,7 @@
                             <div class="col-md-2 text-right float-left px-0">计划回款金额</div>
                             <div class="col-md-10 float-left">
                                 <NumberSpinner ref="paybackMoney"
-                                               @change="(value) => addProjectReturn(value, 'plan_returned_money')"></NumberSpinner>
+                                               @change="(value) => addProjectReturn(value, 'plan_returned_money')" :min="0" :max="1000000000" :precision="2" :value="0"></NumberSpinner>
                             </div>
                         </div>
                         <div class="example">
@@ -1204,7 +1240,7 @@
                             <div class="col-md-2 text-right float-left px-0">回款金额</div>
                             <div class="col-md-10 float-left">
                                 <NumberSpinner ref="paybackMoney1"
-                                               @change="(value) => addProjectReturn(value, 'plan_returned_money')"></NumberSpinner>
+                                               @change="(value) => addProjectReturn(value, 'plan_returned_money')" :min="0" :max="1000000000" :precision="2" :value="0"></NumberSpinner>
                             </div>
                         </div>
                         <div class="example">
@@ -1282,7 +1318,7 @@
                             <div class="col-md-2 text-right float-left px-0">开票金额</div>
                             <div class="col-md-10 float-left">
                                 <NumberSpinner ref="paybackMoney2"
-                                               @change="(value) => addProjectReturn(value, 'plan_returned_money')"></NumberSpinner>
+                                               @change="(value) => addProjectReturn(value, 'plan_returned_money')" :min="0" :max="1000000000" :precision="2" :value="0"></NumberSpinner>
                             </div>
                         </div>
                         <div class="example">
@@ -1414,10 +1450,11 @@
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
                             <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
-                        <template v-if="projectBillMetaInfo.divide && projectBillMetaInfo.divide.length === 0">
+                        <template
+                                v-if="!projectBillMetaInfo.divide">
                             <h4 class="modal-title">新增结算单</h4>
                         </template>
-                        <template v-if="">
+                        <template v-else>
                             <h4 class="modal-title">修改结算单</h4>
                         </template>
                     </div>
@@ -1444,7 +1481,7 @@
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
                         <template
-                                v-if="projectBillMetaInfo.divide && projectBillMetaInfo.divide.length === 0">
+                                v-if="!projectBillMetaInfo.divide">
                             <button class="btn btn-primary" type="submit" @click="addProjectBill">确定</button>
                         </template>
                         <template v-else>
@@ -1626,16 +1663,20 @@
                 myDivide: 0,
                 billExpenses: 0,
                 divideArrInfo: '',
+                projectProgress: '',
+                cooperationOther: '',
+                cooperationKeyId: '',
             }
         },
 
         mounted() {
             this.projectId = this.$route.params.id;
-            this.getPrivacy() //获取隐私设置列表
+            this.getPrivacy(); //获取隐私设置列表
             this.getProject();
             this.getClients();
             this.getTaskType();
             this.getProjectTasking();
+            this.getProjectTasks();
             this.getProjectProgress();
             this.user = JSON.parse(Cookies.get('user'));
             $('#addPaybackTime').on('hidden.bs.modal', () => {
@@ -1675,9 +1716,9 @@
                 this.endMinutes = '';
                 this.taskIntroduce = '';
                 this.$refs.startTime.setValue('');
-                this.$refs.startMinutes.setValue('00:00');
+                this.$refs.startMinutes.setValue('0');
                 this.$refs.endTime.setValue('');
-                this.$refs.endMinutes.setValue('00:00');
+                this.$refs.endMinutes.setValue('0');
                 this.$store.commit('changeNewPrincipal', {});
                 this.$store.commit('changeNewParticipantsInfo', [])
             })
@@ -1722,6 +1763,12 @@
                                     value: fieldsArr[i].content[j],
                                 })
                             }
+                        }
+                        if (fieldsArr[i].key === '是否与他组合作') {
+                            if (fieldsArr[i].values) {
+                                this.cooperationOther = fieldsArr[i].values.data.value
+                            }
+                            this.cooperationKeyId = fieldsArr[i].id
                         }
                     }
                     response.data.fields = fieldsArr;
@@ -1947,7 +1994,11 @@
             cancelChangeBill: function () {
                 this.myDivide = this.projectBillMetaInfo.my_divide;
                 this.billExpenses = this.projectBillMetaInfo.expenses;
-                this.divideArrInfo = JSON.parse(JSON.stringify(this.projectBillMetaInfo.divide));
+                if (this.projectBillMetaInfo.divide) {
+                    this.divideArrInfo = JSON.parse(JSON.stringify(this.projectBillMetaInfo.divide));
+                } else {
+                    this.divideArrInfo = [];
+                }
                 for (let i = 0; i < this.projectBillMetaInfo.datatitle.length; i++) {
                     if (!this.divideArrInfo.find(item => item.moduleable_title === this.projectBillMetaInfo.datatitle[i])) {
                         this.divideArrInfo.push({
@@ -2017,15 +2068,21 @@
                 })
             },
 
-            addProjectProgress: function (status) {
-                fetch('put', '/projects/' + this.projectId + '/course', {status: status}).then(response => {
-                    let flagInfo = this.projectProgressInfo.find(item => item.status == status);
+            changeProjectProgress: function (status) {
+                this.projectProgress = status;
+                $('#changeProjectProgress').modal('show')
+            },
+
+            addProjectProgress: function () {
+                fetch('put', '/projects/' + this.projectId + '/course', {status: this.projectProgress}).then(response => {
+                    let flagInfo = this.projectProgressInfo.find(item => item.status == this.projectProgress);
                     flagInfo['finisher'] = response.data.user;
                     flagInfo['finish_at'] = response.data.updated_at;
                     flagInfo['isFinish'] = 1;
                     this.coursesLength += 1;
                     toastr.success('进度更新成功');
                     this.getProjectProgress();
+                    this.$refs.projectFollow.getTrail();
                 })
             },
 
@@ -2480,10 +2537,15 @@
             },
 
             addInfo: function (value, name) {
+                if (name === this.cooperationKeyId) {
+                    this.cooperationOther = value;
+                    console.log(this.cooperationOther)
+                }
                 if (this.projectInfo.fields.find(item => item.id == name).values.data.value == value) {
                     return
                 }
                 this.addInfoArr[name] = value
+                console.log(this.cooperationOther)
             },
 
             changeToastrText: function (status) {

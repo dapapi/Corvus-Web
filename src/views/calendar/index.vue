@@ -41,7 +41,10 @@
                                             <i class="md-check"
                                                v-show="selectedCalendar.indexOf(calendar.id) > -1"></i>
                                         </div>
-                                        <div class="float-left ml-10">{{ calendar.title }}</div>
+                                        <div class="float-left col-md-9 pr-0"
+                                             style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
+                                            {{ calendar.title }}
+                                        </div>
                                         <div class="float-right position-relative">
                                             <i class="iconfont icon-gengduo1" aria-hidden="true" id="taskDropdown"
                                                data-toggle="dropdown" aria-expanded="false"></i>
@@ -148,18 +151,21 @@
                                 <datepicker @change="changeStartTime" ref="scheduleStartDate"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-show="!isScheduleAllday">
-                                <timepicker :default="startMinutes" @change="changeStartMinutes"
-                                            ref="scheduleStartMinute"></timepicker>
+                                <!-- <timepicker :default="startMinutes" @change="changeStartMinutes"
+                                            ref="scheduleStartMinute"></timepicker> -->
+                                <TimeChoice @change="changeStartMinutes" ref="scheduleStartMinute"></TimeChoice>
                             </div>
                         </div>
                         <div class="clearfix">
                             <div class="col-md-2 text-right float-left line-fixed-height">结束时间</div>
                             <div class="col-md-5 float-left pl-0">
-                                <datepicker @change="changeEndTime" ref="scheduleEndDate"></datepicker>
+                                <datepicker @change="changeEndTime" ref="scheduleEndDate"
+                                            :startDate="startTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-show="!isScheduleAllday">
-                                <timepicker :default="endMinutes" @change="changeEndMinutes"
-                                            ref="scheduleEndMinute"></timepicker>
+                                <!-- <timepicker :default="endMinutes" @change="changeEndMinutes"
+                                            ref="scheduleEndMinute"></timepicker> -->
+                                <TimeChoice @change="changeEndMinutes" ref="scheduleEndMinute"></TimeChoice>
                             </div>
                         </div>
                         <div class="clearfix">
@@ -209,8 +215,9 @@
                             <div class="example">
                                 <div class="col-md-2 text-right float-left">提醒</div>
                                 <div class="col-md-10 float-left pl-0">
-                                    <selectors :options="remindArr" ref="scheduleRemind"
-                                               @change="changeScheduleRemind"></selectors>
+                                    <AddRemind @change="changeScheduleRemind" :options="remindArr" :isCancel="isCancel"
+                                               :conditionLength="conditionLength" :selectorHidden="selectorHidden"
+                                               ref="scheduleRemind"></AddRemind>
                                 </div>
                             </div>
                             <div class="clearfix my-20">
@@ -253,7 +260,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="cancelSchedule">取消
+                        </button>
                         <template v-if="scheduleType === 'add'">
                             <button class="btn btn-primary" type="submit" @click="addSchedule">确定</button>
                         </template>
@@ -649,9 +657,12 @@
                 toastShow: false,
                 scheduleRemind: '',
                 userInfo: '',
+                conditionLength: 0,
+                selectorHidden: [],
+                isCancel: false,
+                scheduleRemindDate: []
             }
         },
-
         mounted() {
             this.getStars();
             this.getCalendarList();
@@ -667,6 +678,7 @@
                 _this.calendarVisible = 1;
                 _this.$refs.linkageStar.setValue('');
                 _this.$refs.visibleSelector.setValue('');
+
             });
 
             $('#changeSchedule').on('hidden.bs.modal', function () {
@@ -941,7 +953,8 @@
             },
 
             changeScheduleRemind: function (value) {
-                this.scheduleRemind = value;
+
+                this.scheduleRemind = value
             },
 
             changeScheduleParticipants: function (value) {
@@ -1172,6 +1185,9 @@
                         }
                     }
                 }
+                for (let key in this.scheduleRemind) {
+                    this.scheduleRemindDate.push(this.scheduleRemind[key])
+                }
                 let data = {
                     title: this.scheduleName,
                     calendar_id: this.scheduleCalendar,
@@ -1181,7 +1197,7 @@
                     end_at: endTime,
                     repeat: this.scheduleRepeat,
                     desc: this.eventDesc,
-                    remind: this.scheduleRemind
+                    remind: this.scheduleRemindDate
 
                 };
                 if (this.eventPlace) {
@@ -1235,13 +1251,17 @@
                 this.$refs.calendarSelector.setValue('');
                 this.$refs.scheduleStartDate.setValue('');
                 this.$refs.scheduleEndDate.setValue('');
-                this.$refs.scheduleStartMinute.setValue('00:00');
-                this.$refs.scheduleEndMinute.setValue('00:00');
+                this.$refs.scheduleStartMinute.setValue('0');
+                this.$refs.scheduleEndMinute.setValue('0');
                 this.$refs.scheduleResource.setValue('');
                 this.$refs.scheduleRepeat.setValue('0');
-                this.$refs.scheduleRemind.setValue('0');
+                this.isCancel = true
+                this.this.scheduleRemindDate = []
             },
+            cancelSchedule: function () {
 
+
+            },
             addCalendarVisible: function (value) {
                 this.calendarVisible = value
             },
@@ -1431,6 +1451,10 @@
     .calendar-list ul li {
         padding: 7px 0;
         border-bottom: 1px solid #E0E0E0;
+    }
+
+    .calendar-list ul li:hover {
+        background-color: #f5f5f5;
     }
 
     .calendar-list ul {
