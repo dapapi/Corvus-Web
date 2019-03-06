@@ -13,8 +13,6 @@
 
 <script>
 import { mapState } from 'vuex'
-import fetch from '@/assets/utils/fetch.js'
-import config from '@/assets/js/config'
 
 export default {
     data(){

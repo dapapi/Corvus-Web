@@ -1,5 +1,5 @@
 <template>
-        <div class="page">
+        <div class="page-main" style="background-color:#f3f4f5">
             <div class="loader-overlay" v-if="isLoading">
                 <div class="loader-content">
                     <div class="loader-index">
@@ -67,7 +67,6 @@
 
 <script>
 import fetch from '../../assets/utils/fetch.js'
-import config from '../../assets/js/config'
 import {mapState} from 'vuex'
 
 export default {
@@ -178,7 +177,7 @@ export default {
     font-size: 5px;
 }
 .loader-overlay{
-        margin-left: 100px;
+        margin-left: 80px;
         background-color: rgba(7, 17, 27, 0.2)
 }
 table tbody tr {

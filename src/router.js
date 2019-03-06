@@ -126,6 +126,16 @@ export default new Router({
             name: 'address',
             component: () => import('./views/address/index.vue')
         },
+        // {
+        //     path:'/dashboard',
+        //     name:'dashboard',
+        //     redirect: '/dashboard/commerce',
+        //     component:() => import('./views/dashboard/index.vue'),
+        //     children:[{
+        //         path: '/dashboard/commerce',
+        //         component: () => import('./views/dashboard/commerce.vue')
+        //     }]
+        // },
         {
             path: '/approval',
             name: 'approval',
@@ -414,7 +424,12 @@ export default new Router({
                     path: '/my/message',
                     name: 'message',
                     component: () => import('./views/messages/index.vue')
-                }
+                },
+                {
+                    path: '/my/goal',
+                    name: 'message',
+                    component: () => import('./views/goal/index.vue')
+                },
             ]
         }, {
             path: '/broadcast',
@@ -464,6 +479,11 @@ export default new Router({
             path: '/contracts',
             name: 'contracts',
             component: () => import('./views/contracts/index.vue')
+        },
+        {
+            path: '/setting',
+            name: 'setting',
+            component: () => import('./views/setting/index.vue')
         },
         {
             path: '/404',

@@ -41,7 +41,6 @@
                     || this.$route.path === '/rolemanagement'
                     || this.$route.path === '/appmanagement'
                     || this.$route.path === '/organization'
-                    || this.$route.path === '/setting'
                     || this.$route.path.indexOf('staff') > 0
                     || this.$route.path === '/organization/management') {
                     this.isLeftMenuShow = false
@@ -173,7 +172,7 @@
     }
 
     .page {
-        margin-left: 100px !important;
+        margin-left: 80px !important;
         min-height: 100vh;
     }
 
@@ -198,7 +197,7 @@
     }
 
     .site-menu > .site-menu-item > .site-menu-sub {
-        left: 100px;
+        left: 80px;
     }
 
     .modal-header {
@@ -289,5 +288,7 @@
         border-color: #4caf50;
         opacity: 0.65;
     }
-
+    .site-menu>.site-menu-item>a{
+        padding:8px !important;
+    }
 </style>

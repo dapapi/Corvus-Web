@@ -13,6 +13,7 @@
 
 <script>
     import config from '../assets/js/config'
+    import env from '../assets/js/env'
 
     export default {
         name: "edit-company",
@@ -49,12 +50,10 @@
                 let _this = this;
                 $.ajax({
                     type: 'get',
-                    url: config.apiUrl + '/clients/all',
-                    headers: config.getHeaders(),
+                    url: env.apiUrl + '/clients/all',
+                    headers: env.getHeaders(),
                     
                 }).done(function (response) {
-                    // console.log(response.data)
-                    
                     for (let i = 0; i < response.data.length; i++) {
                         _this.clientArr.push({
                             name: response.data[i].company,

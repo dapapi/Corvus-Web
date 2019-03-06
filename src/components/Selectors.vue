@@ -1,5 +1,5 @@
 <template>
-    <select class="selectpicker show-tick form-control" data-plugin="selectpicker" :value="value"
+    <select class="selectpicker show-tick form-control" data-plugin="selectpicker" :data-dropup-auto="!unAutoDrop + ''" :value="value"
             :data-live-search="isSelectable"
             :data-show-subtext="isSelectable" :id="_uid"
             :multiple="multiple" :title="title" v-model="valueListener">
@@ -16,7 +16,8 @@
     export default {
         // 凡是多选，都有搜索框；不是多选传入selectable为true也可以有搜索框
         // changeKey为父组件的data，且可以被改变
-        props: ['options', 'disable', 'multiple', 'placeholder', 'changeKey', 'value', 'resetinfo', 'selectable', 'default', 'defaultFirst'],
+        // unAutoDrop 是否自动调整下拉框显示的位置 参见bootstrap-select官网api中dropup-auto的设置
+        props: ['options', 'disable', 'multiple', 'placeholder', 'changeKey', 'value', 'resetinfo', 'selectable', 'default', 'defaultFirst', 'unAutoDrop'],
         data() {
             return {
                 isDisable: this.disable,

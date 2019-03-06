@@ -34,20 +34,13 @@
                 </div>
             </div>
         </div>
-      <DocPreview :url='$store.state.previewurl' />
+      <DocPreview :url='$store.state.previewurl' :detailpage='detailpage' />
+
         
     </div>
 </template>
 
 <script>
-    import pageData from '@/views/approval/approval_form'
-    // import papiContractConfig from '@/components/ForApproval/papiContractConfig.json'
-    // import papiContractBrokenConfig from '@/components/ForApproval/papiContractBrokenConfig.json'
-    // import mttopContractConfig from '@/components/ForApproval/mttopContractConfig.json'
-    // import mttopContractBrokenConfig from '@/components/ForApproval/mttopContractBrokenConfig.json'
-    // import mttopProjectContract from '@/components/ForApproval/mttopProjectContract.json'
-    // import papiProjectContract from '@/components/ForApproval/papiProjectContract.json'
-    import config from '@/assets/js/config.js'
     import fetch from '@/assets/utils/fetch.js'
     import ApprovalDiv from '@/components/ForApproval/ApprovalDiv'
     import ApprovalSummerNote from '@/components/ForApproval/ApprovalSummerNote'
@@ -65,7 +58,7 @@
     import ApprovalChainReaction from '@/components/ForApproval/ApprovalChainReaction'
 
     export default {
-        props: ['formData', 'singlemode', 'defaultData', 'contract_id', 'defaultValue'],
+        props: ['formData', 'singlemode', 'defaultData', 'contract_id', 'defaultValue','detailpage'],
         data() {
             return {
                 importData: '',
@@ -138,19 +131,15 @@
                 if (this.defaultValue) {
                     for (const key in this.defaultValue.value) {
                         if (this.moduleInfo.find(item => item[0].control_title === key)) {
-                            console.log(this.defaultValue.id,this.defaultValue.value[key]);
                             Object.assign(this.moduleInfo.find(item=>item[0].control_title === key)[0],{control_value:{id:this.defaultValue.id,name:this.defaultValue.value[key]}})
                         }
                     }
                 }
-                // this.moduleInfo.find(item=>item[0].control_title)
             },
             directionalWatcher(params) {
                 this.directionalData = params
             },
             clearSignal() {
-                // this.$store.dispatch('changeOtherSlot',{data:[]});
-                // this.$store.dispatch('changeParticipantsInfo', {data: []});
                 this.trendApprover = {
                     condition: [],
                     ready: false,
@@ -174,6 +163,14 @@
             },
             approvalSubmit() {
                 let _this = this
+                for (const key in this.sendData.values) {
+                    console.log(this.sendData.values[key]);
+                     if (this.sendData.values[key].value || this.sendData.values[key].value[0]) {
+                        
+                    }else{
+                        this.sendData.values.splice(key,1)
+                    }
+                }
                 if (this.getRequiredArr()) {
                     Object.assign(this.sendData, {notice: this.$store.state.newParticipantsInfo})
                     Object.assign(this.sendData, {chains: this.$store.state.otherSlot})

@@ -80,7 +80,6 @@
 </style>
 <script>
 import fetch from '@/assets/utils/fetch'
-import config from '@/assets/js/config'
 
 export default {
     data(){

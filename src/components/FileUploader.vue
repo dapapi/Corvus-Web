@@ -3,6 +3,7 @@
         <div style="display:flex">
             <label :for="`fileUploader${mulId}`" :class="isIcon ? 'md-attachment-alt pr-4': 'btn btn-default waves-effect waves-light waves-round'">
                 <template v-if="!isIcon">
+                    <i class="iconfont icon-fujian"></i>
                     上传附件
                 </template>
             </label>
@@ -31,7 +32,7 @@
 </template>
 
 <script>
-    import config from '../assets/js/config';
+    import env from '../assets/js/env';
     import * as qiniu from 'qiniu-js'
 
     export default {
@@ -81,7 +82,7 @@
                     }, function (error) {
                         console.log(error)
                     }, function (res) {
-                        let fileUrl = config.imgUrl + res.key;
+                        let fileUrl = env.imgUrl + res.key;
                         let fileName = file.name;
                         _this.uploadProgress = 100;
                         setTimeout(() => {
@@ -98,8 +99,8 @@
             getQiniuAccessToken: function (callback) {
                 $.ajax({
                     type: 'get',
-                    url: config.apiUrl + '/services/request_qiniu_token',
-                    headers: config.getHeaders(),
+                    url: env.apiUrl + '/services/request_qiniu_token',
+                    headers: env.getHeaders(),
                 }).done(function (response) {
                     callback(response.data.token)
                 })

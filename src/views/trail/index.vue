@@ -2,19 +2,18 @@
     <div class="page">
         <Loading :is-loading="isLoading"></Loading>
         <div class="page-header page-header-bordered">
-            <h1 class="page-title">销售线索管理</h1>
+            <h1 class="page-title">销售线索管理
+                <span style="color: #3298dc;" class="pl-20 font-size-20 pointer-content" @click="redirectPublicTrail"><i
+                        class="iconfont icon-jiantou_xiayiye font-size-22 pr-5"></i>公海池</span>
+            </h1>
             <div class="page-header-actions">
-                <import-and-export class="float-left" :type="'export'" :moduleName="'trails'" :params="exportParams">
-                    <i class="iconfont icon-daoru px-5 font-size-20 pr-20" aria-hidden="true"></i>
-                </import-and-export>
                 <import-and-export class="float-left" :type="'import'" :moduleName="'trails'">
-                    <i class="iconfont icon-daochu font-size-20" aria-hidden="true"></i>
+                    <i class="iconfont icon-daochu font-size-20 pr-20" aria-hidden="true"></i>
+                </import-and-export>
+                <import-and-export class="float-left" :type="'export'" :moduleName="'trails'" :params="exportParams">
+                    <i class="iconfont icon-daoru px-5 font-size-20 " aria-hidden="true"></i>
                 </import-and-export>
             </div>
-            <!-- <div class="page-header-actions">
-                <i class="iconfont icon-daoru px-5 font-size-20 pr-20" aria-hidden="true"></i>
-                <i class="iconfont icon-daochu font-size-20" aria-hidden="true"></i>
-            </div> -->
         </div>
 
         <div class="page-content container-fluid">
@@ -203,7 +202,8 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left require">预计订单收入</div>
                             <div class="col-md-5 float-left pl-0 pr-0">
-                                <number-spinner @change="changeTrailFee" :min="0" :max="1000000000" :precision="2" :value="0"></number-spinner>
+                                <number-spinner @change="changeTrailFee" :min="0" :max="1000000000" :precision="2"
+                                                :value="0"></number-spinner>
                             </div>
                             <div class="col-md-3 float-left" v-if="trailType == 4">
                                 <div class="checkbox-custom checkbox-primary">
@@ -241,7 +241,7 @@
     import ImportAndExport from '@/components/ImportAndExport.vue'
 
     export default {
-         components: {
+        components: {
             ImportAndExport
         },
         data: function () {
@@ -315,8 +315,8 @@
                 isLoading: true,
                 cleanUp: false,
                 trailIsLocked: '',
-                exportParams:{},//导出参数
-
+                exportParams: {},//导出参数
+                customizeCondition: {}
             }
         },
         created() {
@@ -332,7 +332,6 @@
             this.getStars();
             this.getIndustries();
         },
-
         computed: {
             ...mapState([
                 'userList'
@@ -341,7 +340,6 @@
                 return this.userList
             }
         },
-
         watch: {
             _userList() {
                 this.memberList = this.userList
@@ -387,7 +385,6 @@
                     this.fetchData.principal_ids = value.join(',')
                 }
                 this.fetchHandler('get', '/trails/filter')
-
             },
             phoneValidate() {
                 let phone = this.trailContactPhone
@@ -449,14 +446,17 @@
                     return true
                 }
             },
+            redirectPublicTrail() {
+                this.$router.push({path: '/publictrails'})
+            },
             fetchHandler(methods, url) {
                 let _this = this
                 this.fetchData.include = 'principal,client,contact,recommendations,expectations'
                 console.log(this.fetchData)
-                this.exportParams ={
+                this.exportParams = {
                     keyword: this.fetchData.keyword,
                     status: this.fetchData.status,
-                    principal_ids:this.fetchData.principal_ids,
+                    principal_ids: this.fetchData.principal_ids,
                 }
                 fetch(methods, url, this.fetchData).then((response) => {
                     _this.trailsInfo = response.data
@@ -468,6 +468,13 @@
             },
             filterGo() {
                 this.fetchData.keyword = this.trailFilter
+                // this.fetchHandler('post', '/trails/filter', 'filter')
+                this.fetchHandler('get', '/trails/filter')
+
+            },
+            progressStatusFilter(value) {
+                this.fetchData.status = value
+                // this.fetchHandler('post', '/trails/filter', 'filter')
                 this.fetchHandler('get', '/trails/filter')
             },
             progressStatusFilter(value) {
@@ -480,7 +487,7 @@
                     page: pageNum,
                     include: 'principal,client,expectations',
                 };
-                Object.assign(data,this.fetchData)
+                Object.assign(data, this.fetchData)
                 fetch('get', '/trails', data).then(function (response) {
                     _this.trailsInfo = response.data;
                     _this.total = response.meta.pagination.total;
@@ -489,8 +496,6 @@
                     _this.isLoading = false;
                 })
             },
-
-
             getIndustries: function () {
                 let _this = this;
                 fetch('get', '/industries/all').then(function (response) {
@@ -503,14 +508,12 @@
                     }
                 })
             },
-
             getClients: function () {
                 let _this = this;
                 fetch('get', '/clients/all').then(function (response) {
                     _this.companyArr = response.data
                 })
             },
-
             getStars: function () {
                 if (this.starsArr.length > 0) {
                     return
@@ -524,7 +527,6 @@
                     }
                 })
             },
-
             customize: function (value) {
                 let _this = this
                 fetch('post', '/trails/filter?include=principal,client,contact,recommendations,expectations', value).then((params) => {
@@ -534,11 +536,8 @@
                     _this.current_page = params.meta.pagination.current_page
                     _this.cleanUp = true
                 })
-
             },
-
             addTrail: function () {
-
                 let data = {
                     title: this.trailName,
                     brand: this.brandName,
@@ -582,7 +581,6 @@
                         $('#addTrail').modal('hide');
                         _this.$router.push({path: '/trails/' + response.data.id})
                         _this.cleanTempData()
-
                     })
                 }
             },
@@ -610,11 +608,9 @@
             changeTrailOrigin: function (value) {
                 this.trailOrigin = value
             },
-
             changeTrailOriginType: function (value) {
                 this.trailOrigin = value
             },
-
             changeCompanyName: function () {
                 let companyInfo = this.$store.state.companyInfo;
                 if (companyInfo.value) {
@@ -628,7 +624,6 @@
                     }
                 }
             },
-
             changePrincipal: function (value) {
                 if (this.$store.state.otherSlot.data) {
                     this.trailPrincipal = this.$store.state.otherSlot.data.name
@@ -636,7 +631,6 @@
                     this.trailPrincipal = ''
                 }
             },
-
             changeTargetStars: function (value) {
                 for (let i = 0; i < value.length; i++) {
                     let item = value[i].split('-');
@@ -647,7 +641,6 @@
                 }
                 this.targetStars = value
             },
-
             changeRecommendStars: function (value) {
                 for (let i = 0; i < value.length; i++) {
                     let item = value[i].split('-');
@@ -658,23 +651,18 @@
                 }
                 this.recommendStars = value
             },
-
             changeTrailFee: function (value) {
                 this.trailFee = value
             },
-
             changeCheckbox: function (e) {
                 this.trailIsLocked = Number(e.target.checked)
             },
-
             changeIndustry: function (value) {
                 this.industry = value
             },
-
             changePriority: function (value) {
                 this.priority = value
             },
-
             changeTrailType: function (value) {
                 let organization_id = JSON.parse(Cookies.get('user')).organization_id
                 if (value == 3) {
@@ -690,11 +678,9 @@
                     $('.selectpicker').selectpicker('refresh');
                 }, 500);
             },
-
             changeTrailStatus: function (value) {
                 this.trailStatus = value
             },
-
             changeCooperationType: function (value) {
                 this.cooperation = value
             },
@@ -710,7 +696,6 @@
     }
 </script>
 <style scoped>
-
     .error {
         border: 1px solid red;
         border-radius: 5px;
@@ -736,6 +721,15 @@
 </style>
 
 
-
-
-
+© 2019 GitHub, Inc.
+Terms
+Privacy
+Security
+Status
+Help
+Contact GitHub
+Pricing
+API
+Training
+Blog
+About

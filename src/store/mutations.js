@@ -36,7 +36,6 @@ export default {
         state.newPrincipalInfo = data
     },
     changePreview(state,data){
-        console.log(data);
         state.previewurl = data
     },
     changeCompany(state, data) {

@@ -1,32 +1,43 @@
 <template>
-    <div class="input-group date">
+    <div class="date">
+        <div class="input-group">
         <input type="text" id="dateInput" autocomplete="off" class="form-control" title=""
-               :placeholder="this.placeholder"
+               :placeholder="this.placeholder" :disabled='isDisabled' 
                @change="getInputValue">
         <span class="input-group-addon">
             <i class="icon md-apps" aria-hidden="true"></i>
         </span>
+        </div>
+        <div  class="clearfix checkbox-custom checkbox-primary my-5 " v-if="infinite">
+            <input id="infinite" class="" @change="infiniteSelector" type="checkbox" v-model="infiniteCheck">
+            <label for="infinite">无限期</label>
+        </div>
     </div>
 </template>
 <script>
     export default {
-        props: ['placeholder', 'changeKey', 'startDate', 'default', 'clear'],
+        props: ['placeholder', 'changeKey', 'startDate', 'default', 'clear','infinite'],
         data() {
-            return {}
+            return {
+                isDisabled:false,
+                infiniteCheck:'',
+            }
         },
         mounted() {
 
             let self = this;
-
+        //    $('#dateInput').focus(function(){
+        //        console.log(123);
+        //    }) 
             $(this.$el).datepicker({
                 format: "yyyy-mm-dd",
                 language: "zh-CN",
                 autoclose: true,
                 todayHighlight: true
             }).on("changeDate", function () {
-                self.$emit('change', $(this)[0].children[0].value);
+                self.$emit('change', $(this)[0].children[0].children[0].value);
                 if (self.changeKey) {
-                    self.$emit('select', self.changeKey, $(this)[0].children[0].value)
+                    self.$emit('select', self.changeKey, $(this)[0].children[0].children[0].value)
                 }
             });
             if (this.default) {
@@ -37,7 +48,6 @@
                         this.setValue(this.default)
 
                     })
-                    console.log(this.default);
                 }
             }
 
@@ -55,6 +65,9 @@
             },
             startDate(newValue) {
                 $(this.$el).datepicker('setStartDate', newValue);
+                if(this.infiniteCheck===true){
+                    this.placeholder = '无限期'
+                }
             },
             clear: function (value) {
                 if (value === true) {
@@ -75,12 +88,33 @@
                 $(this.$el).datepicker('destroy');
             },
             //输入日期时获取值
-            getInputValue() {
+            getInputValue(value) {
                 // console.log($('#dateInput').val())
                 this.$emit('change', $('#dateInput').val());
+                console.log(value);
+
+            },
+            infiniteSelector(params){
+                console.log(params);
+                // $(this.$el).datepicker('update', 'infinite');
+                if(this.infiniteCheck === true){
+                    // this.destroy()
+                    this.$emit('change','无限期')
+                    $('.datepicker').css('display','none')
+                    $(this.$el).datepicker('update', '');
+                    this.placeholder = '无限期'
+                }else{
+                    this.placeholder = '请选择合同终止日期'
+                }
+                this.isDisabled = this.infiniteCheck
             }
+
         }
     }
 </script>
-
+<style>
+    .infinite{
+        vertical-align: middle;
+    }
+</style>
 

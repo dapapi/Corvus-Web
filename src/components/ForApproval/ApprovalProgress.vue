@@ -64,8 +64,7 @@
 </template>
 
 <script>
-    import config from '@/assets/js/config.js'
-    import fetch from '@/assets/utils/fetch.js'
+    import fetch from '@/assets/utils/fetch'
 
     export default {
                     //这是啥    提交页/详情页   231/232...   知会人     自由流程

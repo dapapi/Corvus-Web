@@ -5,7 +5,7 @@
     内置下载按钮
 -->
     <div>
-        <div class="modal fade  bootbox" id="docPreview" aria-labelledby="docPreviewPositionCenter" role="dialog" tabindex="-1" data-backdrop="static">
+        <div class="modal fade  bootbox" id="docPreview" :class='givenid' style='z-index:10086' aria-labelledby="docPreviewPositionCenter" role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple modal-center modal-lg">
                 <div class="modal-content preview-content">
                 <div class="modal-header">
@@ -20,7 +20,7 @@
                 <div class="modal-body">
                     <iframe v-if="['doc','docx','xls','xlsx','ppt','pptx'].includes(fileNameHandler)" class=" mt-30" :src='"https://view.officeapps.live.com/op/view.aspx?src="+url' width='100%' height='90%' frameborder='1'>
 			        </iframe>
-                    <img v-else-if="['png','gif','bmp','jpg','jpeg'].includes(fileNameHandler)" :src="url">
+                    <img style="max-width:100%;" v-else-if="['png','gif','bmp','jpg','jpeg'].includes(fileNameHandler)" :src="url">
                     <embed v-else-if="fileNameHandler === 'pdf'" :src="url" type="application/pdf" width="100%" height="100%">
                     <div v-else>不支持此文件格式预览</div>
                 </div>
@@ -43,7 +43,7 @@
 export default {
     name:'docPreview',
         //文件url     文件名
-    props:['url','givenFileName','detailpage'],
+    props:['url','givenFileName','detailpage','givenid'],
     data(){
         return {
             isFullScreen:0,
@@ -55,8 +55,21 @@ export default {
     mounted(){
         if(!this.detailpage){
             $('#docPreview').on('hidden.bs.modal',function(){
-                document.getElementsByTagName('body')[0].classList.add('modal-open')
+                    document.getElementsByTagName('body')[0].classList.add('modal-open')
             })
+            
+        }else{
+            console.log(this.detailpage);
+        }
+    },
+    watch:{
+        detailpage:function(value){
+            if(!value){
+                $('#docPreview').on('hidden.bs.modal',function(){
+                    document.getElementsByTagName('body')[0].classList.add('modal-open')
+                })
+            }
+            
         }
     },
     computed:{

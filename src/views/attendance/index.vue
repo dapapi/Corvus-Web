@@ -116,7 +116,6 @@
 </template>
 <script>
 import fetch from '@/assets/utils/fetch'
-import config from '@/assets/js/config'
 import numberInput from '@/components/numberInput'
 
 export default {

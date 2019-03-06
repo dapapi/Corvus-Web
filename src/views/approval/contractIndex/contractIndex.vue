@@ -28,8 +28,7 @@
 
 <script>
 import ApprovalGreatModule from '@/components/ApprovalGreatModule'
-import config from '@/assets/js/config.js'
-import fetch from '@/assets/utils/fetch.js'
+import fetch from '@/assets/utils/fetch'
 export default {
     
     components:{

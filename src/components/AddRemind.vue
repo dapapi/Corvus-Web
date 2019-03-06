@@ -54,7 +54,6 @@
             },
             changeScheduleRemind:function(value,id){
                 this.Remind[id] = value
-                console.log( this.Remind)
                 this.$emit('change',this.Remind)
             },
              setValue(value) {
