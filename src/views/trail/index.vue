@@ -468,11 +468,13 @@
             },
             filterGo() {
                 this.fetchData.keyword = this.trailFilter
-                this.fetchHandler('post', '/trails/filter', 'filter')
+                // this.fetchHandler('post', '/trails/filter', 'filter')
+                this.fetchHandler('get', '/trails/filter')
+
             },
             progressStatusFilter(value) {
                 this.fetchData.status = value
-                this.fetchHandler('post', '/trails/filter', 'filter')
+                // this.fetchHandler('post', '/trails/filter', 'filter')
                 this.fetchHandler('get', '/trails/filter')
             },
             progressStatusFilter(value) {
