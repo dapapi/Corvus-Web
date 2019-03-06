@@ -1,6 +1,18 @@
 <template>
     <div class="page-main" style="background-color:#f3f4f5">
-        <Loading :is-loading="isLoading"></Loading>
+        <!-- <Loading :is-loading="isLoading"></Loading> -->
+        <div class="loader-overlay" v-if="isLoading">
+                <div class="loader-content">
+                    <div class="loader-index">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    </div>
+                </div>
+            </div>
         <div>
             <div class="page-header page-header-bordered mb-0">
                 <h6 class="page-title nav-head" v-if="info">
@@ -308,6 +320,7 @@
                 }
                 this.getData()
                 toastr.success('审批成功')
+                this.$emit('unreadupdate')
             },
             getCurrentApprover() {
                 let _this = this
@@ -443,7 +456,7 @@
     }
 
     .loader-overlay {
-        margin-left: 320px;
+        margin-left: 300px;
         background-color: rgba(7, 17, 27, 0.2)
     }
 

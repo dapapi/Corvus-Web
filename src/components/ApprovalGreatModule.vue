@@ -163,6 +163,14 @@
             },
             approvalSubmit() {
                 let _this = this
+                for (const key in this.sendData.values) {
+                    console.log(this.sendData.values[key]);
+                    if (!this.sendData.values[key].value || !this.sendData.values[key].value[0]) {
+                        console.log(1111);
+                        this.sendData.values.splice(key,1)
+                        
+                    }
+                }
                 if (this.getRequiredArr()) {
                     Object.assign(this.sendData, {notice: this.$store.state.newParticipantsInfo})
                     Object.assign(this.sendData, {chains: this.$store.state.otherSlot})
