@@ -44,7 +44,7 @@
                     //     level: 1,
                     // },
                     {
-                        id: 2,
+                        id: 1,
                         name: '我的消息',
                         url: '/my/message',
                         type: 'button',
