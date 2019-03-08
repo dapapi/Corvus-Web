@@ -42,6 +42,11 @@ export default {
         
     },
     watch: {
+        checkData:function(value){
+            if(this.optionData.length === this.checkData.length){
+                this.allCheck = true
+            }
+        }
         // checkData() {
         //     this.$emit('click', this.checkData)
         // }
@@ -61,16 +66,22 @@ export default {
         },
         getCheck:function(item){
             if(item.isCheck == true){
-               this.checkData.push(item)
+               this.checkData.push(item.value)
+                if(this.optionData.length === this.checkData.length){
+                    this.allCheck = true
+                }
             }else{
+                this.allCheck = false
                 for (let i = 0; i < this.checkData.length; i++) {
-                    if(this.Compare(this.checkData[i],item)){
+                    if(this.checkData[i] === item.value){
+                        this.allCheck = false
                         this.checkData.splice(i,1);
                     }
                     
                 }
             }
-            this.$emit('change', this.checkData) //回传值
+            let tempData = this.checkData.join(',')
+            this.$emit('change', tempData) //回传值
            
         },
         setAllCheck:function(){
@@ -78,14 +89,16 @@ export default {
             for (let i = 0; i < this.optionData.length; i++) {
                 if(this.allCheck == true){
                     this.optionData[i].isCheck = true
-                    this.checkData[i] = this.optionData[i]
+                    this.checkData[i] = this.optionData[i].value
                 }else{
+                    
                     this.optionData[i].isCheck = false
                     this.checkData = []
                 }
                               
             }
-            this.$emit('change', this.checkData)
+            let tempData = this.checkData.join(',')
+            this.$emit('change', tempData) //回传值
         },
 
         //对象去重

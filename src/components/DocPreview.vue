@@ -53,7 +53,7 @@ export default {
         
     },
     mounted(){
-        if(this.detailpage===false){
+        if(!this.detailpage){
             $('#docPreview').on('hidden.bs.modal',function(){
                     document.getElementsByTagName('body')[0].classList.add('modal-open')
             })

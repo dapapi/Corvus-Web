@@ -12,14 +12,15 @@
                     <span class="col-md-4">请选择转交目标</span>
                     <InputSelectors @change='transferTo()'/>
                 </div>
-                <div class="col-md-12 px-50">
+                <div class="col-md-12 px-50 pb-20">
                     <div class="example" v-if="mode !== 'archive'">审批留言</div>
                     <div class="example" v-if="mode === 'archive'">归档描述</div>
                     <textarea class="approval-comment form-control" name="" id="" rows="5"
                               v-model="approvalComment"></textarea>
                 </div>
-                <Upload class="py-20" @change="uploadControl"><p class="upload-file"><i class="iconfont icon-fujian"></i>合同扫描上传</p></Upload>
-
+                <div class="pb-20" v-if="mode === 'archive'" >
+                    <Upload @change="uploadControl"><p class="upload-file"  v-if="mode === 'archive'" ><i class="iconfont icon-fujian"></i>合同扫描上传</p></Upload>
+                </div>
                 <div v-if="mode === 'archive'" class="row px-50 pb-40">
                     <figure v-for="(item, index) in fileArr" :key="index" style="margin-right:0px;width:100px;overfolw:hidden;" class="ml-10">
                     <!-- <div class="image-show" v-if="fileInfo.length > 0" style="backgroundImage:url(../../../assets/img/attachment.png)"></div> -->
@@ -130,6 +131,7 @@
                 })
                 $('#approvalGo').modal('hide')
                 this.approvalComment = ''
+                
             },
 
         }
