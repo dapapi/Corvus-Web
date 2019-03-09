@@ -2358,14 +2358,12 @@
                 // }
             }
             ,
-
+            //分配经理人和分配宣传人 
             addDistributionPerson: function () {
-                let toast
+                let toast,url
                 let data = {
                     person_ids: [],
-                    del_person_ids: [],
-                    moduleable_type: 'star',
-                    moduleable_ids: [this.artistId]
+                    del_person_ids: []
                 };
 
 
@@ -2389,14 +2387,16 @@
 
 
                 if (this.distributionType === 'broker') {
-                    data.type = 3
-                    toast = '分配经理人成功'
+                    // data.type = 3
+                    toast = '分配经理人成功',
+                    url = `stars/${this.artistId}/broker`
                 } else {
-                    data.type = 2
+                    // data.type = 2
                     toast = '分配宣传人成功'
+                    url = `stars/${this.artistId}/publicity`
                 }
                 let _this = this;
-                fetch('post', '/distribution/person', data).then(function (response) {
+                fetch('post', url, data).then(function (response) {
                     toastr.success(toast)
                     $('#distributionBroker').modal('hide');
                     _this.getArtist();

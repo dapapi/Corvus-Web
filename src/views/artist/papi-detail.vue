@@ -2049,9 +2049,9 @@
                 let data = {
                     person_ids: [],
                     del_person_ids: [],
-                    moduleable_type: 'blogger',
-                    moduleable_ids: [this.artistId],
-                    type: 4
+                    // moduleable_type: 'blogger',
+                    // moduleable_ids: [this.artistId],
+                    // type: 4
                 };
                 let personInfo = this.$store.state.participantsInfo;
                 let oldPersonInfo = this.artistInfo[this.distributionType].data
@@ -2067,11 +2067,11 @@
                     data.person_ids.push(this.$store.state.participantsInfo[i].id)
                 }
                 if (this.distributionType === 'publicity') {
-                    data.type = 4
+                    // data.type = 4
                     toast = '分配制作人成功'
                 }
                 let _this = this;
-                fetch('post', '/distribution/person', data).then(function (response) {
+                fetch('post', `/bloggers/${this.artistId}/produser`, data).then(function (response) {
                     toastr.success(toast)
                     $('#distributionproducer').modal('hide');
                     _this.getArtist();
