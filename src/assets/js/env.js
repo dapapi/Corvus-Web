@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 
 let env = {
     tokenString: 'CORVUS-ACCESS-TOKEN',
-    apiUrl: 'https://api-corvus.mttop.cn',
+    apiUrl: 'https://sandbox-api-crm.papitube.com',
     imgUrl: 'https://res-crm.papitube.com/',
     socketUrl: 'wss://api-corvus.mttop.cn:8081',
 
