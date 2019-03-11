@@ -21,7 +21,7 @@ export default {
      // 凡是多选，都有搜索框；不是多选传入selectable为true也可以有搜索框
         // changeKey为父组件的data，且可以被改变
         name:'ApprovalSelector',
-        props: ['n', 'multiple', 'placeholder', 'changeKey' , 'value', 'resetinfo', 'selectable','title','consdata','index','clear','directionalSender','defaultData','isSelectable'],
+        props: ['n', 'multiple', ,'placeholder', 'changeKey' , 'value', 'resetinfo', 'selectable','title','consdata','index','clear','directionalSender','defaultData','isSelectable'],
         data() {
             return {
                 isDisable: this.disable,
@@ -125,6 +125,8 @@ export default {
                 if(value===true){
                     this.setValue('')
                     this.valueListener = []
+                    this.destroy()
+                    this.refresh()
                 }
         }
         },
