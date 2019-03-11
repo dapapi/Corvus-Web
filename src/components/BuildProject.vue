@@ -155,7 +155,7 @@
                                                :precision="2" :value="0"></NumberSpinner>
                             </template>
                             <template v-if="field.field_type === 12">
-                                <ApprovalCheckBoxGroup :optionData="platformLists" selectAll='全平台'
+                                <ApprovalCheckBoxGroup :optionData="platformLists" select-all='false'
                                                @change="(value) => addInfo(value, field.id )" :isLine="true">
                                     <template slot-scope="scope">
                                         <span>{{scope.row.name}}</span>
@@ -229,6 +229,10 @@
                 trailStatusDefault: '',
                 platformLists: [
                     {
+                        value: '全平台',
+                        name: '全平台'
+                    },
+                    {
                         value: '微博',
                         name: '微博'
                     },
@@ -239,7 +243,8 @@
                     {
                         value: '小红书',
                         name: '小红书'
-                    },
+                    }, 
+                    
                 ],
             }
         },
