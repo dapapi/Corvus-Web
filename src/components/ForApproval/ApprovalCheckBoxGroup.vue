@@ -1,6 +1,6 @@
 <template>
     <div :class="isLine?'clearfix':''" >
-        <div :class="isLine?'float-left':''" class="checkbox-custom checkbox-primary my-0">
+        <div :class="isLine?'float-left':''" class="checkbox-custom checkbox-primary my-0" v-if="selectAll != 'false'">
             <input id="allCheck" class="mr-10" @change="setAllCheck" type="checkbox" v-model="allCheck">
             <label for="allCheck">{{ selectAll }}</label>
         </div>
