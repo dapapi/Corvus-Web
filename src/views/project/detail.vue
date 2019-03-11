@@ -79,6 +79,18 @@
 
                             </div>
                         </div>
+                        <div class="col-md-6 float-left pl-0">
+                            <div class="float-left pl-0 pr-2 col-md-3">
+                                <i class="iconfont icon-gengduo pr-2" aria-hidden="true"></i>项目类型
+                            </div>
+                            <div class="font-weight-bold float-left">
+                                    <template v-if="projectInfo.type === 1">影视项目</template>
+                                    <template v-if="projectInfo.type === 2">综艺项目</template>
+                                    <template v-if="projectInfo.type === 3">商务项目</template>
+                                    <template v-if="projectInfo.type === 4">商务项目</template>
+                                    <template v-if="projectInfo.type === 5">基础项目</template>
+                            </div>
+                        </div>
                     </div>
                     <div class="clearfix">
                         <div v-if="projectInfo.tasks && projectInfo.tasks.data.length > 0"

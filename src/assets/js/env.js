@@ -3,9 +3,10 @@ import Cookies from "js-cookie";
 
 let env = {
     tokenString: 'CORVUS-ACCESS-TOKEN',
-    apiUrl: 'https://test-api-crm.papitube.com',
+    apiUrl: 'https://sandbox-api-crm.papitube.com',
     imgUrl: 'https://res-crm.papitube.com/',
-    socketUrl: 'wss://sandbox-corvus.papitube.com:8082',
+    socketUrl: 'wss://api-corvus.mttop.cn:8081',
+
     getHeaders: function () {
         let headers = {
             'Accept': 'application/vnd.Corvus.v1+json',
