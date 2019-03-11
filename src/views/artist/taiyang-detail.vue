@@ -2339,23 +2339,6 @@
                 if (this.artistInfo[value].data.length > 0) {
                     this.$store.state.participantsInfo = Object.assign([], this.artistInfo[value].data)
                 }
-                // if (value === 'broker') {
-                //     if (this.artistInfo.broker) {
-                //         let params = {
-                //             type: 'change',
-                //             data: JSON.parse(JSON.stringify(this.artistInfo.broker.data))
-                //         };
-                //         this.$store.dispatch('changeParticipantsInfo', params);
-                //     }
-                // } else {
-                //     if (this.artistInfo.publicity) {
-                //         let params = {
-                //             type: 'change',
-                //             data: JSON.parse(JSON.stringify(this.artistInfo.publicity.data))
-                //         };
-                //         this.$store.dispatch('changeParticipantsInfo', params);
-                //     }
-                // }
             }
             ,
             //分配经理人和分配宣传人 
@@ -2384,7 +2367,7 @@
                     data.person_ids.push(this.$store.state.participantsInfo[i].id)
 
                 }
-
+                console.log(data.del_person_ids,data.person_ids)
 
                 if (this.distributionType === 'broker') {
                     // data.type = 3
