@@ -1445,7 +1445,7 @@
                         }
                     }
                 })
-
+                console.log(_this.scheduleShow)
             }
 
             ,
@@ -1918,9 +1918,9 @@
                 })
             },
             getTaskDate: function () {
+                this.doneTaskNum = 0
                 let _this = this
                 fetch('get', `/stars/${this.$route.params.id}/tasks`).then(response => {
-                    // console.log(response.data)
                     _this.allTaskList = response.data
                     if (_this.allTaskList.length > 0) {
                         for (let i = 0; i < _this.allTaskList.length; i++) {
@@ -1930,7 +1930,6 @@
 
                         }
                     }
-                    // console.log(_this.doneTaskNum)
                     _this.taskNum = `${_this.doneTaskNum}/${response.meta.pagination.total}`
                 })
             },

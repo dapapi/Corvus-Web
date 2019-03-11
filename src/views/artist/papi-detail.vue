@@ -212,7 +212,7 @@
                                 <div class="col-md-12">
                                     <calendar v-if="artistInfo.sign_contract_status == 2" :goto-date="selectedDate"
                                               :calendars="calendarId" ref="calendar"
-                                              :isModel="true" @showToast="showToast"
+                                              @showToast="showToast"
                                               @scheduleClick="showScheduleModal"
                                               @dayClick="showAddScheduleModal"></calendar>
                                 </div>
@@ -2010,6 +2010,8 @@
                 this.$store.state.newParticipantsInfo = []
             },
             getTaskNum: function () {
+                this.alltaskshow = []
+                this.doneTaskNum = 0
                 let _this = this;
                 fetch('get', '/bloggers/' + this.artistId + '/tasks').then(function (response) {
 
@@ -2255,6 +2257,7 @@
                     toastr.success('创建成功');
                     $('#addWork').modal('hide');
                     _this.getTaskDate()
+                   
                 })
                 // if(this.scoreId){
                 //     let obj={
@@ -2377,6 +2380,7 @@
                     $('#addTask').modal('hide');
                     _this.getArtist()
                     _this.getArtistTasks()
+                    _this.getTaskNum()
                     $('.selectpicker').selectpicker('refresh')
                 })
             }

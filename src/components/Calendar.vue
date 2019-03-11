@@ -122,7 +122,6 @@
                     }
 
                     fetch('get', url, data).then(response => {
-                        console.log(response.data)
                         self.allScheduleInfo = response.data;
                         let events = [];
                         for (let i = 0; i < response.data.length; i++) {
