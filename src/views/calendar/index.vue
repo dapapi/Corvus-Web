@@ -215,9 +215,11 @@
                             <div class="example">
                                 <div class="col-md-2 text-right float-left">提醒</div>
                                 <div class="col-md-10 float-left pl-0">
-                                    <AddRemind @change="changeScheduleRemind" :options="remindArr" :isCancel="isCancel"
+                                    <!-- <AddRemind @change="changeScheduleRemind" :options="remindArr" :isCancel="isCancel"
                                                :conditionLength="conditionLength" :selectorHidden="selectorHidden"
-                                               ref="scheduleRemind"></AddRemind>
+                                               ref="scheduleRemind"></AddRemind> -->
+                                       <selectors :options="remindArr" ref="scheduleRemind"
+                                               @change="changeScheduleRemind"></selectors>
                                 </div>
                             </div>
                             <div class="clearfix my-20">
@@ -659,8 +661,8 @@
                 userInfo: '',
                 conditionLength: 0,
                 selectorHidden: [],
-                isCancel: false,
-                scheduleRemindDate: []
+                // isCancel: false,
+                // scheduleRemindDate: []
             }
         },
         mounted() {
@@ -1185,9 +1187,9 @@
                         }
                     }
                 }
-                for (let key in this.scheduleRemind) {
-                    this.scheduleRemindDate.push(this.scheduleRemind[key])
-                }
+                // for (let key in this.scheduleRemind) {
+                //     this.scheduleRemindDate.push(this.scheduleRemind[key])
+                // }
                 let data = {
                     title: this.scheduleName,
                     calendar_id: this.scheduleCalendar,
@@ -1197,7 +1199,7 @@
                     end_at: endTime,
                     repeat: this.scheduleRepeat,
                     desc: this.eventDesc,
-                    remind: this.scheduleRemindDate
+                    remind: this.scheduleRemind
 
                 };
                 if (this.eventPlace) {
@@ -1255,8 +1257,9 @@
                 this.$refs.scheduleEndMinute.setValue('0');
                 this.$refs.scheduleResource.setValue('');
                 this.$refs.scheduleRepeat.setValue('0');
-                this.isCancel = true
-                this.this.scheduleRemindDate = []
+                this.$refs.scheduleRemind.setValue('0');
+                // this.isCancel = true
+                // this.this.scheduleRemindDate = []
             },
             cancelSchedule: function () {
 

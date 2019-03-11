@@ -180,7 +180,7 @@
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                      style="width: 100%">
                             </div>
-                            <AddClientType @change="changeTrailType"></AddClientType>
+                            <AddClientType @change="changeTrailType" :hidden="!canAddTrail"></AddClientType>
                             <pagination :current_page="current_page" :method="getClient"
                                         :total_pages="total_pages" :total="total"></pagination>
                         </div>
@@ -294,8 +294,7 @@
                             </div>
                             <pagination :current_page="current_page" :method="getClientTask"
                                         :total_pages="total_pages" :total="total"></pagination>
-                            <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
-                                 data-target="#addTask">
+                            <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal" @click="handleTask">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                                     <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
@@ -483,8 +482,7 @@
                             <pagination :current_page="current_page" :method="getClientContact"
                                         :total_pages="total_pages" :total="total"></pagination>
                             <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
-                                 data-target="#addContact"
-                                 @click="changeEditStatus(true)">
+                                @click="changeEditStatus(true)">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                                     <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
@@ -738,6 +736,10 @@
                 trailType: '', // 线索类型
                 companyInfo: {}, // 公司信息
                 companyId: '', // 公司id
+                canAddTrail: false, // 是否可以添加销售线索
+                canAddTask: false, // 是否可以添加任务
+                canEditClient: false, // 是否可以添加任务
+                canAddContact: false, // 是否可以新增联系人
             }
         },
         beforeMount() {
@@ -763,7 +765,10 @@
             })
 
             this.getClientTask() // 为了默认展示任务数量 先在这里请求
-            
+            this.checkTrailPermission()
+            this.checkTaskPermission()
+            this.checkClientPermission()
+            this.checkContactPermission()
         },
         computed: {
             completeNum() {
@@ -942,6 +947,10 @@
             },
 
             editBaseInfo: function () {
+                if (!this.canEditClient) {
+                    toastr.error('您没有编辑概况的权限！')
+                    return
+                }
                 this.isEdit = true;
                 this.changeInfo = {};
             },
@@ -1070,7 +1079,12 @@
                 this.changeInfo.principal_id = value
             },
             changeEditStatus(value, config) {
-                this.$refs.contact.setValue(config.type || '')
+                if (!this.canAddContact&&value) {
+                    toastr.error('您没有新增联系人的权限！')
+                    return
+                }
+                $('#addContact').modal('show')
+                this.$refs.contact.setValue(config?config.type : '')
                 this.editConfig = config || {
                     position: '',
                     name: '',
@@ -1158,6 +1172,58 @@
                 this.$router.push({
                     name: 'approval/detail',
                     params: {id: id}
+                })
+            },
+            // 新增销售线索权限
+            checkTrailPermission () {
+                const params = {
+                    url: '/trails',
+                    id: '',
+                    method: 'post'
+                }
+                fetch('get', '/console/checkpower', params).then(res => {
+                    this.canAddTrail = !!res.data.power
+                })
+            },
+            // 新增销售线索权限
+            checkTaskPermission () {
+                const params = {
+                    url: '/tasks',
+                    id: '',
+                    method: 'post'
+                }
+                fetch('get', '/console/checkpower', params).then(res => {
+                    this.canAddTask = !!res.data.power
+                })
+            },
+            // 任务弹层
+            handleTask () {
+                if (!this.canAddTask) {
+                    toastr.error('您没有新建任务的权限！')
+                    return
+                }
+                $('#addTask').modal('show')
+            },
+            // 客户编辑权限
+            checkClientPermission () {
+                const params = {
+                    url: `/clients/'${this.clientId}`,
+                    id: this.clientId,
+                    method: 'put'
+                }
+                fetch('get', '/console/checkpower', params).then(res => {
+                    this.canEditClient = !!res.data.power
+                })
+            },
+            // 联系人新增权限
+            checkContactPermission () {
+                const params = {
+                    url: `/clients/${this.clientId}/contacts/${this.editConfig.id}`,
+                    id: this.clientId,
+                    method: 'post'
+                }
+                fetch('get', '/console/checkpower', params).then(res => {
+                    this.canAddContact = !!res.data.power
                 })
             }
         }

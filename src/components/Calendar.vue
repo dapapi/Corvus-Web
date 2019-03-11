@@ -6,7 +6,7 @@
 
 <script>
     import fetch from '../assets/utils/fetch.js'
-    //isModel ===true  调用接口/schedules/all
+    //isModel ===true  调用接口/schedules/all 艺人和博主都用这个接口 
     export default {
         props: ['calendars', 'gotoDate', 'meetingRomeList', 'isMeeting', 'isModel', 'calendarView'],
         data() {
@@ -122,6 +122,7 @@
                     }
 
                     fetch('get', url, data).then(response => {
+                        console.log(response.data)
                         self.allScheduleInfo = response.data;
                         let events = [];
                         for (let i = 0; i < response.data.length; i++) {

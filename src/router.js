@@ -424,7 +424,12 @@ export default new Router({
                     path: '/my/message',
                     name: 'message',
                     component: () => import('./views/messages/index.vue')
-                }
+                },
+                {
+                    path: '/my/goal',
+                    name: 'message',
+                    component: () => import('./views/goal/index.vue')
+                },
             ]
         }, {
             path: '/broadcast',
