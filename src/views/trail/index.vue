@@ -317,10 +317,6 @@
                 trailIsLocked: '',
                 exportParams: {},//导出参数
                 customizeCondition: {}
-<<<<<<< HEAD
-
-=======
->>>>>>> wx
             }
         },
         created() {
