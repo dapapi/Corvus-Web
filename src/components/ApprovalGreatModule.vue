@@ -13,7 +13,7 @@
                     <div class="modal-body modal-greater ">
                         <div v-for="(item, index) in moduleInfo" :key="index" class="great-option example ">
                             <div :is='sortChecker(item)' :ref='item[0].control.data_dictionary_id'
-                                 :consdata='item' :predata='sendData' class="container"
+                                 :consdata='item' :predata='sendData' class="container" @changestarttime='changestarttime'
                                  :singlemode='singlemode' :clear='clearFlag' :directional-sender='directionalData'
                                  @change="changeHandler" @directional='directionalWatcher' is-selectable='true'
                                  :formid='form_id' :startDate="start_date"></div>
@@ -154,7 +154,9 @@
             },
             getRequiredArr() {
                 for (const key in this.moduleInfo) {
-                    if (this.moduleInfo[key][0].required == 1 && !this.sendData.values.find(item => item.key === this.moduleInfo[key][0].id)) {
+                    if (this.moduleInfo[key][0].required == 1 && !this.sendData.values.find(item => item.key == this.moduleInfo[key][0].id)) {
+                        console.log(this.moduleInfo[key][0].id)
+
                         toastr.error(this.moduleInfo[key][0].control_title + '为必填')
                         return false
                     }
@@ -164,11 +166,12 @@
             approvalSubmit() {
                 let _this = this
                 for (const key in this.sendData.values) {
-                    console.log(this.sendData.values[key]);
-                    if (!this.sendData.values[key].value || !this.sendData.values[key].value[0]) {
-                        console.log(1111);
-                        this.sendData.values.splice(key,1)
-                        
+                    console.log(this.sendData.values[key].value.length);
+                    console.log(this.sendData.values[key].value.hasOwnProperty());
+                     if (this.sendData.values[key].value.length===0){
+                        this.sendData.values.splice(key,1)                        
+                    }else{
+
                     }
                 }
                 if (this.getRequiredArr()) {
@@ -206,12 +209,14 @@
                     })
                 }
             },
+            changestarttime(params){
+                if(params.type === 'start_time'){
+                    this.start_date = params.value
+                }
+            },
             changeHandler(params) {
                 if (this.formData.condition) {
                     this.trendApproverChecker(params)
-                }
-                if(params.type === 'contract_start_date'){
-                    this.start_date = params.value
                 }
                 if (!this.sendData.values.find(item => item.key === params.key)) {
                     this.sendData.values.push(params)

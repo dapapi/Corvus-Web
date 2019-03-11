@@ -5,8 +5,12 @@ let env = {
     tokenString: 'CORVUS-ACCESS-TOKEN',
     apiUrl: 'https://sandbox-api-crm.papitube.com',
     imgUrl: 'https://res-crm.papitube.com/',
+<<<<<<< HEAD
     socketUrl: 'wss://sandbox-corvus.papitube.com:8081',
 
+=======
+    socketUrl: 'wss://sandbox-corvus.papitube.com:8082',
+>>>>>>> wx
     getHeaders: function () {
         let headers = {
             'Accept': 'application/vnd.Corvus.v1+json',
