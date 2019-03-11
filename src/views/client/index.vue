@@ -462,7 +462,7 @@
                 }
                 fetch('get', '/console/checkpower', params).then(res => {
                     this.canAdd = !!res.data.power
-                    console.log(this.canAdd)
+                    console.log(this.res)
                 })
             },
         }

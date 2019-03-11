@@ -1489,7 +1489,7 @@
                     include: 'creator,tasks,affixes,producer,type,publicity,trails.project,trails.client,trails.project.principal,trails.project.relate_project_bills_resource,operatelogs,publicity.department',
                 };
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
-
+                    console.log(response)
 
                     _this.artistInfo = response.data;
                    

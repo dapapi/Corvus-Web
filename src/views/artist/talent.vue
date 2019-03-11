@@ -977,6 +977,7 @@
                     communication_status: this.listData.communication_status, //沟通状态
                 }
                 fetch('get', '/stars', this.listData).then(function (response) {
+                    console.log(response)
                     if (response.data) {
                         _this.artistsInfo = response.data;
                     }
@@ -1023,7 +1024,7 @@
                 }
                 data.page = '&page='+page
                 fetch('post', '/bloggers/filter?include=type,creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name +data.page ,this.customizeInfo).then(function (response) {
-                    
+                    console.log(response)
                     if(response.data){
                         _this.bloggerInfo = response.data;
                     }
