@@ -2339,33 +2339,14 @@
                 if (this.artistInfo[value].data.length > 0) {
                     this.$store.state.participantsInfo = Object.assign([], this.artistInfo[value].data)
                 }
-                // if (value === 'broker') {
-                //     if (this.artistInfo.broker) {
-                //         let params = {
-                //             type: 'change',
-                //             data: JSON.parse(JSON.stringify(this.artistInfo.broker.data))
-                //         };
-                //         this.$store.dispatch('changeParticipantsInfo', params);
-                //     }
-                // } else {
-                //     if (this.artistInfo.publicity) {
-                //         let params = {
-                //             type: 'change',
-                //             data: JSON.parse(JSON.stringify(this.artistInfo.publicity.data))
-                //         };
-                //         this.$store.dispatch('changeParticipantsInfo', params);
-                //     }
-                // }
             }
             ,
-
+            //分配经理人和分配宣传人 
             addDistributionPerson: function () {
-                let toast
+                let toast,url
                 let data = {
                     person_ids: [],
-                    del_person_ids: [],
-                    moduleable_type: 'star',
-                    moduleable_ids: [this.artistId]
+                    del_person_ids: []
                 };
 
 
@@ -2386,17 +2367,19 @@
                     data.person_ids.push(this.$store.state.participantsInfo[i].id)
 
                 }
-
+                console.log(data.del_person_ids,data.person_ids)
 
                 if (this.distributionType === 'broker') {
-                    data.type = 3
-                    toast = '分配经理人成功'
+                    // data.type = 3
+                    toast = '分配经理人成功',
+                    url = `stars/${this.artistId}/broker`
                 } else {
-                    data.type = 2
+                    // data.type = 2
                     toast = '分配宣传人成功'
+                    url = `stars/${this.artistId}/publicity`
                 }
                 let _this = this;
-                fetch('post', '/distribution/person', data).then(function (response) {
+                fetch('post', url, data).then(function (response) {
                     toastr.success(toast)
                     $('#distributionBroker').modal('hide');
                     _this.getArtist();
