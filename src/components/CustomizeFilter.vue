@@ -24,7 +24,7 @@
                             </div>
                             <div class="float-left col-md-1 pb-5">
                                 <i class="iconfont icon-guanbi font-size-18" aria-hidden="true" style="line-height: 36px;"
-                                   @click="delSelector('selector' + n)"></i>
+                                   @click="delSelector(n)"></i>
                             </div>
                         </div>
                     </div>
@@ -54,6 +54,7 @@
             return {
                 conditionLength: 1,
                 selectorHidden: [],
+                selectorIdHidden:[],
                 conditionData: {},
                 customizeKeyWords: '',
                 sendFilterData:{
@@ -77,15 +78,15 @@
              })
             })
             
-            $(this.$el).on('hidden.bs.modal',function () {
-                _this.conditionLength = 0;
-                _this.selectorHidden = [];
-                _this.conditionData = {};
-                _this.customizeKeyWords = '';
-                setTimeout(function () {
-                    _this.conditionLength = 1;
-                }, 0);
-            })
+            // $(this.$el).on('hidden.bs.modal',function () {
+            //     _this.conditionLength = 0;
+            //     _this.selectorHidden = [];
+            //     _this.conditionData = {};
+            //     _this.customizeKeyWords = '';
+            //     setTimeout(function () {
+            //         _this.conditionLength = 1;
+            //     }, 0);
+            // })
         },
 
         methods: {
@@ -96,13 +97,25 @@
                 this.conditionLength += 1
             },
             delSelector: function (id) {
-                this.selectorHidden.push(id);
+                this.selectorHidden.push('selector'+id);
+                this.selectorIdHidden.push(id)
             },
             conditionChange: function (e) {
                 this.conditionData[e.n] = e
             },
             filter: function () {
-                this.$emit('change', this.sendFilterData);
+                let tempArr = {
+                    conditions:[]
+                }
+                console.log(this.sendFilterData.conditions.length);
+                for (let key = 0;key <= this.sendFilterData.conditions.length;key++) {
+                    if (this.selectorIdHidden.includes(key+1)) {
+                        continue  
+                    }else{
+                        tempArr.conditions.push(this.sendFilterData.conditions[key])
+                    }
+                }
+                this.$emit('change', tempArr);
                 $('.modal').modal('hide');
             },
             getCusData:function(data,n){
