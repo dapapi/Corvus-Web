@@ -1026,13 +1026,8 @@
                     data.name = ''
                 }
                 data.page = '&page='+page
-<<<<<<< HEAD
-                fetch('post', '/bloggers/filter?include=type,creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name +data.page ,this.customizeInfo).then(function (response) {
-                    console.log(response)
-=======
                 fetch('get', '/bloggers?include=type,creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name +data.page ,this.customizeInfo).then(function (response) {
                     
->>>>>>> wx
                     if(response.data){
                         _this.bloggerInfo = response.data;
                     }
@@ -1109,14 +1104,7 @@
                 }
                 data.page = '&page='+this.current_page
                 this.customizeInfo = value
-<<<<<<< HEAD
-                // this.customizeInfo.name = this.currentpagename
-                this.customizeInfo.sign_contract_status = this.currentpagestatus
-                // this.customizeInfo.communication_status = this.currentcommunicationstatus
-                fetch('post', this.customizeContentType +'/filter?include=creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name ,value).then(function (params) {
-=======
                 fetch('post', this.customizeContentType +'/filter?include=type,creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name ,value).then(function (params) {
->>>>>>> wx
                 // fetch('post', '/'+this.customizeContentType+'/filter', value).then((params) => {
                     console.log(params)
                     // _this.bloggerInfo =params.data
