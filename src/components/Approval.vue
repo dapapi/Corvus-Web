@@ -2,7 +2,7 @@
     <div class="noselect">
         <div class="page-aside-inner page-aside-scroll scrollable is-enabled scrollable-vertical"
              style="position: relative;">
-            <div data-role="container" class="scrollable-container" style="height: 691px; width: 259px;">
+            <div data-role="container" class="scrollable-container" style="height: 100%; width: 259px;">
                 <div data-role="content" class="scrollable-content" style="width: 259px;">
                     <section class="page-aside-section">
                         <h5 class="page-title pl-30 mb-50">审批</h5>
