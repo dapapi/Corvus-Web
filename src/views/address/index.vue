@@ -309,7 +309,6 @@
             const id = JSON.parse(Cookies.get('user')).id
             fetch('get', '/departments/crew').then(res => {
                 this.normalUsers = res;
-                console.log(res)
                 this.setDefaultInfo(id)
             })
             this.getSchedules(id)

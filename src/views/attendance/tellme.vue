@@ -93,7 +93,7 @@
 </template>
 <script>
 import fetch from '@/assets/utils/fetch'
-import config from '@/assets/js/config'
+import env from '@/assets/js/env'
 
 export default {
     data(){
@@ -137,7 +137,7 @@ export default {
             this.$router.push({path:'/brief/add'})
         },
         getlist:function(){
-            fetch('get',`${config.apiUrl}/launch`).then((res) => {
+            fetch('get',`${env.apiUrl}/launch`).then((res) => {
                 this.list = res.data
             })
         }

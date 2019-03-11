@@ -88,14 +88,16 @@
                         <div class="col-md-2 text-right float-left px-0 require">预计支出</div>
                         <div class="col-md-10 float-left">
                             <NumberSpinner ref="projectExpenditureFee"
-                                           @change="(value) => addProjectBaseInfo(value, 'projected_expenditure')" :min="0" :max="1000000000" :precision="2" :value="0"></NumberSpinner>
+                                           @change="(value) => addProjectBaseInfo(value, 'projected_expenditure')"
+                                           :min="0" :max="1000000000" :precision="2" :value="0"></NumberSpinner>
                         </div>
                     </div>
                     <div class="col-md-12 example clearfix" v-show="projectType != 5">
                         <div class="col-md-2 text-right float-left px-0 require">预计订单收入</div>
                         <div class="col-md-10 float-left">
                             <NumberSpinner ref="projectFee"
-                                           @change="(value) => addProjectBaseInfo(value, 'fee')" :min="0" :max="1000000000" :precision="2" :value="0"></NumberSpinner>
+                                           @change="(value) => addProjectBaseInfo(value, 'fee')" :min="0"
+                                           :max="1000000000" :precision="2" :value="0"></NumberSpinner>
                         </div>
                     </div>
                     <div class="col-md-12 example clearfix" v-show="projectType == 3">
@@ -149,10 +151,12 @@
                             </template>
                             <template v-if="field.field_type === 11">
                                 <NumberSpinner :default='newArray.find(item=>item.key === field.key)'
-                                               @change="(value) => addInfo(value, field.id )" :min="0" :max="1000000000" :precision="2" :value="0"></NumberSpinner>
+                                               @change="(value) => addInfo(value, field.id )" :min="0" :max="1000000000"
+                                               :precision="2" :value="0"></NumberSpinner>
                             </template>
-                             <template v-if="field.field_type === 12">
-                               <CheckboxGroup :optionData="platformLists" @change="(value) => addInfo(value, field.id )" :isLine="true">
+                            <template v-if="field.field_type === 12">
+                                <CheckboxGroup :optionData="platformLists"
+                                               @change="(value) => addInfo(value, field.id )" :isLine="true">
                                     <template slot-scope="scope">
                                         <span>{{scope.row.name}}</span>
                                     </template>
@@ -204,7 +208,7 @@
                 levelArr: config.levelArr,
                 trailsArr: [],
                 trailOrigin: '',
-                trailOriginArr: config.trailOrigin,
+                // trailOriginArr: config.trailOrigin,
                 trailStatusArr: config.trailStatusArr,
                 cooperationTypeArr: config.cooperationTypeArr,
                 starsArr: [],
@@ -238,34 +242,12 @@
                     },
                 ],
             }
-        }, 
+        },
         created() {
             this.getStars();
 
         },
         mounted() {
-            
-            // this.setDefaultValue()
-            // $('#addProject').on('hidden.bs.modal', function () {
-            //     console.log(22222);
-            //     _this.refreshAddProjectModal()
-            // });
-            // $('#addProject').on('show.bs.modal', function () {
-            //     if (_this.defaultData) {
-            //         _this.setDefaultValue()
-            //         _this.$nextTick(() => {
-            //             _this.$refs.trails.setValue(_this.defaultData.trailInfo.data.id)
-            //             _this.$nextTick(function () {
-            //                 _this.addProjectTrail(_this.defaultData.trailInfo.data.id)
-            //                 _this.$forceUpdate()
-            //             })
-            //         })
-            //     } else {
-            //         if (!_this.$store.state.newPrincipalInfo.id) {
-            //             _this.$store.dispatch('changePrincipal', {data: {id: _this.user.id, name: _this.user.nickname}})
-            //         }
-            //     }
-            // });
             this.user = JSON.parse(Cookies.get('user'));
         },
         watch: {
@@ -281,10 +263,17 @@
         computed: {
             ...mapState([
                 'userList'
-            ])
+            ]),
+            trailOriginArr () {
+                let organization_id = JSON.parse(Cookies.get('user')).organization_id;
+                if (organization_id == 412) {
+                    return config.trailBloggerOrigin
+                }
+                return config.trailOrigin
+            }
         },
 
-       
+
         methods: {
             defaultDataFilter() {
                 if (!this.defaultData) {
@@ -398,14 +387,12 @@
             },
 
             getTrail: function () {
-                let _this = this
                 let data = {
                     include: 'principal,starexpectations,bloggerexpectations',
                     type: this.projectType
                 };
                 this.trailsArr = [];
                 fetch('get', '/trails/all', data).then(response => {
-                    console.log(response);
                     for (let i = 0; i < response.data.length; i++) {
                         this.trailsArr.push({
                             name: response.data[i].title,
@@ -415,20 +402,25 @@
                     }
                     this.trailsAllInfo = response.data;
                     this.$refs.trails.refresh();
-                        let _this = this
-                if (_this.defaultData) {
-                    _this.setDefaultValue()
-                    _this.$nextTick(() => {
-                        _this.$refs.trails.setValue(_this.defaultData.trailInfo.data.id)
-                        _this.$nextTick(function () {
-                            _this.addProjectTrail(_this.defaultData.trailInfo.data.id)
+                    let _this = this
+                    if (_this.defaultData) {
+                        _this.setDefaultValue()
+                        _this.$nextTick(() => {
+                            _this.$refs.trails.setValue(_this.defaultData.trailInfo.data.id)
+                            _this.$nextTick(function () {
+                                _this.addProjectTrail(_this.defaultData.trailInfo.data.id)
+                            })
                         })
-                    })
-                } else {
-                    if (!_this.$store.state.newPrincipalInfo.id) {
-                        _this.$store.dispatch('changePrincipal', {data: {id: _this.user.id, name: _this.user.nickname}})
+                    } else {
+                        if (!_this.$store.state.newPrincipalInfo.id) {
+                            _this.$store.dispatch('changePrincipal', {
+                                data: {
+                                    id: _this.user.id,
+                                    name: _this.user.nickname
+                                }
+                            })
+                        }
                     }
-                }
                 })
             },
 

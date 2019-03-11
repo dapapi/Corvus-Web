@@ -15,8 +15,7 @@
 </template>
 <script>
 import axios from 'axios'
-import config from '../assets/js/config'
-import fetch from '../assets/utils/fetch.js'
+import env from '../assets/js/env'
 //导入和导出调通的模块只有 客户
 export default {
     name:'ImportAndExport',
@@ -40,7 +39,7 @@ export default {
         return {
           getRandom:Math.round(Math.random() * 1000),
           file:'',
-          header:config.getHeaders()
+          header:env.getHeaders()
         }
     },
     mounted(){
@@ -50,7 +49,7 @@ export default {
         importFile:function(event){
             this.header['Content-Type'] = 'multipart/form-data;boundary = ' + new Date().getTime()
             this.file = event.target.files[0];
-            let importUrl = `${config.apiUrl}/${this.moduleName}/import`
+            let importUrl = `${env.apiUrl}/${this.moduleName}/import`
             let formData = new FormData();
             formData.append('file', this.file);
             //创建一个干净的axios对象
@@ -70,6 +69,7 @@ export default {
             var xhh = new XMLHttpRequest();
             //导出参数
             let getParams = []
+            let _this = this
             if(this.params){
                 //客户里边的参数必须传数组
                for (const key in this.params) {
@@ -89,26 +89,37 @@ export default {
                }
             }
             getParams = getParams.join('&')
-            var page_url = `${config.apiUrl}/${this.moduleName}/export?${getParams}`
-            xhh.open("GET", page_url)
+            var page_url = `${env.apiUrl}/${this.moduleName}/export?${getParams}`
+            xhh.open("post", page_url)
             xhh.setRequestHeader('Accept', 'application/vnd.Corvus.v1+json')
-            xhh.setRequestHeader('Authorization', `Bearer ${config.getAccessToken() || ''}`)
-            xhh.responseType = 'blob'
+            xhh.setRequestHeader('Authorization', `Bearer ${env.getAccessToken() || ''}`)
+            // xhh.responseType = 'blob'
             xhh.onreadystatechange = function () {
                 if (xhh.readyState === 4 && xhh.status === 200) {
-                    var filename = xhh.getResponseHeader("Content-disposition")
-                        // console.log(filename)
+                        var filename = xhh.getResponseHeader("Content-disposition")
                         filename = decodeURI(filename)
                         filename = filename.split("filename*=utf-8''")[1]
-                    var blob = new Blob([xhh.response], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8'})
-                    var csvUrl = URL.createObjectURL(blob)
-                    var link = document.createElement('a')
-                    link.href = csvUrl
-                    link.download = filename
-                    link.click()
+                        var blob = new Blob([xhh.response], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8'})
+                        var csvUrl = URL.createObjectURL(blob)
+                        var link = document.createElement('a')
+                        link.href = csvUrl
+                        link.download = filename
+                        link.click()
+                }else if(xhh.readyState === 4&&xhh.status == 403){
+                    
+                    let str =  _this.toChineseWords(xhh.response);
+                    toastr.error(str)
                 }
             };
             xhh.send();
+        },
+        toChineseWords:function(data){
+            data = data.split("\\u");
+            var str ='';
+            for(var i=0;i<data.length;i++){
+                str+=String.fromCharCode(parseInt(data[i],16).toString(10));
+            }
+            return str;
         }
     }
 }

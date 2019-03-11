@@ -6,9 +6,7 @@
 </template>
 
 <script>
-    import fetch from '@/assets/utils/fetch'
     import secondLeft from '@/components/SecondLeft.vue'
-    import config from '@/assets/js/config'
     import {mapState, mapGetters,mapActions} from 'vuex'
     export default {
         components: {
@@ -38,6 +36,13 @@
         methods: {
             setData: function () {
                 this.leftData = [
+                    // {
+                    //     id: 1,
+                    //     name: '我的目标',
+                    //     url: '/my/goal',
+                    //     type: 'link',
+                    //     level: 1,
+                    // },
                     {
                         id: 1,
                         name: '我的消息',
@@ -47,14 +52,14 @@
                         subMenu:[],
                     },
                     {
-                        id: 2,
+                        id: 3,
                         name: '我的项目',
                         url: '/my/project',
                         type: 'link',
                         level: 1
                     },
                     {
-                        id: 3,
+                        id: 4,
                         name: '我的任务',
                         url: '/my/task',
                         type: 'link',

@@ -1,10 +1,41 @@
 <template>
-    <div class="page">
+    <div class="page-main" style="background-color:#f3f4f5">
         <Loading :is-loading="isLoading"></Loading>
-        <div class="page-header page-header-bordered">
-            <h1 class="page-title">任务管理</h1>
+        <div class="page-header page-header-bordered my-1 ">
+            <h1 class="page-title">目标管理</h1>
         </div>
-
+        <div class="page-header page-header-bordered py-0">
+            <ul class="nav nav-tabs nav-tabs-line" role="tablist" style="position: relative;">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active" data-toggle="tab" href="#forum-artist"
+                               aria-controls="forum-base"
+                               aria-expanded="true" role="tab" >我的</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-toggle="tab" href="#forum-blogger"
+                               aria-controls="forum-present" 
+                               aria-expanded="false" role="tab" >部门</a>
+                        </li>
+                         <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-toggle="tab" href="#forum-blogger"
+                               aria-controls="forum-present"
+                               aria-expanded="false" role="tab"  >公司</a>
+                        </li>
+                         <li class="nav-item" role="presentation">
+                            <a class="nav-link" data-toggle="tab" href="#forum-blogger"
+                               aria-controls="forum-present"
+                               aria-expanded="false" role="tab" >全部</a>
+                        </li>
+                    </ul>
+        </div>
+        <div class="row mx-10">
+            <div class=" col-md-5 panel mx-20">
+                aaaaaa
+            </div>
+            <div class=" col-md-5 panel mx-20">
+                aaaaa
+            </div>
+        </div>
         <div class="page-content container-fluid">
             <div class="panel col-md-12 col-lg-12 py-5">
                 <div class="clearfix">
@@ -14,59 +45,47 @@
                                @blur="changeTaskName"
                                id="inputPlaceholder"
                                v-model="taskNameSearch"
-                               placeholder="请输入任务名称">
+                               placeholder="请输入目标名称">
                     </div>
                     <div class="col-md-3 example float-left">
-                        <Selectors :options="taskTypeArr" @change="changeTaskTypeSearch" placeholder="请选择任务类型"></Selectors>
+                        <Selectors :options="taskTypeArr" @change="changeTaskTypeSearch" placeholder="请筛选部门"></Selectors>
                     </div>
                     <!-- todo 任务类型暂无 -->
                     <div class="col-md-3 example float-left">
-                        <Selectors :options="taskStatusArr" @change="changeTaskStatusSearch" placeholder="请选择任务状态"></Selectors>
+                        <Selectors :options="taskStatusArr" @change="changeTaskStatusSearch" placeholder="请选择负责人"></Selectors>
                     </div>
-                    <!-- <div class="col-md-3 example float-left">
-                        <button type="button"
-                                class="btn btn-default waves-effect waves-classic float-right"
-                                data-toggle="modal"
-                                data-target="#customizeContent"
-                                data-placement="right"
-                                title>自定义筛选
-                        </button>
-                    </div> -->
+                    <!--<div class="col-md-3 example float-left">-->
+                        <!--<button type="button"-->
+                                <!--class="btn btn-default waves-effect waves-classic float-right"-->
+                                <!--data-toggle="modal"-->
+                                <!--data-target="#customizeContent"-->
+                                <!--data-placement="right"-->
+                                <!--title>自定义筛选-->
+                        <!--</button>-->
+                    <!--</div>-->
                 </div>
-
-                <div class="col-md-12">
+                
+                <!-- <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                        <li class="nav-item" role="presentation" @click="getMyTasks()">
-                            <a class="nav-link active"
-                               data-toggle="tab"
-                               href="#forum-task"
-                               aria-controls="forum-base"
-                               aria-expanded="true"
-                               role="tab">所有任务</a>
+                        <li class="nav-item" role="presentation" @click="getTasks(1)">
+                            <a class="nav-link active" data-toggle="tab" href="#forum-task"
+                                aria-controls="forum-base"
+                                aria-expanded="true" role="tab">所有任务</a>
                         </li>
                         <li class="nav-item" role="presentation" @click="getMyTasks(3)">
-                            <a class="nav-link"
-                               data-toggle="tab"
-                               href="#forum-task"
-                               aria-controls="forum-present"
-                               aria-expanded="false"
-                               role="tab">我负责的</a>
+                            <a class="nav-link" data-toggle="tab" href="#forum-task"
+                                aria-controls="forum-present"
+                                aria-expanded="false" role="tab">我负责的</a>
                         </li>
                         <li class="nav-item" role="presentation" @click="getMyTasks(2)">
-                            <a class="nav-link"
-                               data-toggle="tab"
-                               href="#forum-task"
-                               aria-controls="forum-present"
-                               aria-expanded="false"
-                               role="tab">我参与的</a>
+                            <a class="nav-link" data-toggle="tab" href="#forum-task"
+                                aria-controls="forum-present"
+                                aria-expanded="false" role="tab">我参与的</a>
                         </li>
                         <li class="nav-item" role="presentation" @click="getMyTasks(1)">
-                            <a class="nav-link"
-                               data-toggle="tab"
-                               href="#forum-task"
-                               aria-controls="forum-present"
-                               aria-expanded="false"
-                               role="tab">我创建的</a>
+                            <a class="nav-link" data-toggle="tab" href="#forum-task"
+                                aria-controls="forum-present"
+                                aria-expanded="false" role="tab">我创建的</a>
                         </li>
                         <li class="nav-item" role="presentation" @click="getMyTasks(4)">
                             <a class="nav-link"
@@ -77,28 +96,27 @@
                                role="tab">我分配的</a>
                         </li>
                     </ul>
-                </div>
+                </div> -->
 
                 <div class="page-content tab-content nav-tabs-animate bg-white pb-0">
                     <div class="tab-pane animation-fade active" id="forum-task" role="tabpanel">
-                        <table class="table table-hover is-indent"
-                               data-plugin="animateList"
-                               data-animate="fade"
-                               data-child="tr"
-                               data-selectable="selectable">
+                        <table class="table table-hover is-indent" data-plugin="animateList" data-animate="fade"
+                                data-child="tr"
+                                data-selectable="selectable">
                             <tr class="animation-fade"
                                 style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
-                                <th class="cell-300" scope="col">任务名称</th>
-                                <th class="cell-300" scope="col">关联资源</th>
-                                <th class="cell-300" scope="col">任务类型</th>
-                                <th class="cell-300" scope="col">任务状态</th>
+                                <th class="cell-300" scope="col">目标名称</th>
+                                <th class="cell-300" scope="col">父/子</th>
                                 <th class="cell-300" scope="col">负责人</th>
+                                <th class="cell-300" scope="col">进度</th>
+                                <!-- <th class="cell-300" scope="col">负责人</th> -->
                                 <th class="cell-300" scope="col">截止时间</th>
                             </tr>
                             <tbody>
-                            <tr v-for="(task, index) in tasksInfo" :key="index" @click="goDetail(task.id)">
+                            <tr v-for="task in tasksInfo" :key="task.id" @click="taskDetail(task.id)">
                                 <td class="pointer-content">
-                                    {{ task.title }}
+                                    <router-link :to="{name:'tasks/detail', params: {id: task.id}}">{{ task.title }}
+                                    </router-link>
                                 </td>
                                 <td>{{task.resource ? task.resource.data.resource.data.title : ''}}
                                     <template v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.name">
@@ -115,49 +133,34 @@
                                     </template>
                                 </td>
                                 <!-- <td>暂无</td> -->
-                                <td>{{ task.type ? task.type.data ? task.type.data.title : '' : '' }}
-                                </td>
+                                <td>{{ task.type ? task.type.data ? task.type.data.title : '' : '' }}</td>
                                 <td>
-                                    <template v-if="task.status === 1"><span style="color:#FF9800">进行中</span></template>
+                                    <template v-if="task.status === 1"><span style="color:#FF9800">进行中</span> </template>
                                     <template v-if="task.status === 2"><span style="color:#4CAF50">已完成</span></template>
                                     <template v-if="task.status === 3"><span style="color:#9E9E9E">已停止</span></template>
                                     <template v-if="task.status === 4"><span style="color:#F44336">延期</span></template>
                                 </td>
-                                <td>
+                                <!-- <td>
                                     <template v-if="task.principal">{{ task.principal.data.name }}</template>
-                                </td>
+                                </td> -->
                                 <td>{{ task.end_at }}</td>
                             </tr>
                             </tbody>
                         </table>
-                        <div style="margin: 6rem auto;width: 100px" v-if="tasksInfo.length === 0">
-                            <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
-                                 style="width: 100%">
+                            <div style="margin: 6rem auto;width: 100px"  v-if="tasksInfo.length==0">
+                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
                         </div>
-                        <Pagination :current_page="current_page"
-                                        :method="getTasks"
-                                        :total_pages="total_pages"
+                        <template v-if="!taskStatus">
+                            <Pagination :current_page="current_page" :method="getTasks" :total_pages="total_pages"
                                         :total="total"></Pagination>
-                        <!-- <template v-if="!taskStatus && !taskFinishType">
-                            <Pagination :current_page="current_page"
-                                        :method="getTasks"
-                                        :total_pages="total_pages"
+                        </template>
+                        <template v-else>
+                            <Pagination :current_page="current_page" :method="getOther" :total_pages="total_pages"
                                         :total="total"></Pagination>
-                        </template> -->
-                        <!-- <template v-else>
-                            <Pagination :current_page="current_page"
-                                        :method="getMyTasks"
-                                        :total_pages="total_pages"
-                                        :total="total"></Pagination>
-                        </template> -->
+                        </template>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <CustomizeFilter :data="customizeInfo" @change="customize"></CustomizeFilter>
-
-        <div class="site-action" data-plugin="actionBtn" data-toggle="modal" @click="handleAdd">
+                <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addTask">
             <button type="button"
                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                 <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
@@ -188,7 +191,6 @@
                             <div class="col-md-10 float-left">
                                 <normal-linkage-selectors ref="linkage" v-if="linkData.length>0" :myData="linkData"
                                                           :data="linkData"
-                                                          @loadMore="getMoreChildLinkData"
                                                           @change="addLinkage"></normal-linkage-selectors>
                             </div>
                         </div>
@@ -221,7 +223,7 @@
                             <div class="col-md-2 text-right float-left pl-0 require">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
                                 <Selectors
-                                        :options="priorityArr"
+                                        :options="taskLevelArr"
                                         @change="changeTaskLevel"
                                         ref="taskLevel"
                                 ></Selectors>
@@ -235,7 +237,7 @@
                             <div class="col-md-5 float-left pl-0">
                                 <!-- <Timepicker ref="startMinutes" :default="startMinutes"
                                             @change="changeStartMinutes"></Timepicker> -->
-                                 <TimeChoice @change="changeStartMinutes" ref="startMinutes"></TimeChoice>
+                                <TimeChoice @change="changeStartMinutes" ref="startMinutes"></TimeChoice>
                             </div>
                         </div>
                         <div class="example">
@@ -269,9 +271,10 @@
                 </div>
             </div>
         </div>
+            </div>
+        </div>
     </div>
 </template>
-
 <script>
     import fetch from "../../assets/utils/fetch.js";
     import config from "../../assets/js/config";
@@ -310,15 +313,8 @@
                 resourceType: "", // 资源type
                 resourceableId: "", // 资源id
                 user: {}, // 个人信息
-                isLoading: true,
-                priorityArr:config.priorityArr,
-                my: '',//tasks 筛选  3我负责的 2 我参与的 1我创建的 4我分配的
-                linkCurrentPage: 2, // 关联资源当前页数
-                linkTotalPage: 1, // 关联资源总页数
-                linkCode: '', // 关联资源父数据的code
-                linkIndex: 0, //
-                canLoadMore: false, // 关联资源是否可以加载更多
-                canAdd: false, // 是否有权限添加
+                isLoading:true,
+                my:''
             };
         },
         created() {
@@ -337,18 +333,15 @@
                 // 清空state
                 this.closeAddTask()
             })
-            this.checkPermission()
         },
 
         methods: {
-
-            //任务列表的请求都用url = /tasks  上下联动筛选
             getTasks(pageNum = 1) {
-                
                 let params = {
                     page: pageNum,
                     my:this.my,
-                    include:"principal,pTask,tasks,resource.resourceable,resource.resource,participants"
+                    include:
+                        "principal,pTask,tasks,resource.resourceable,resource.resource,participants"
                 };
                 let url = "/tasks";
 
@@ -361,22 +354,27 @@
                 if (this.taskTypeSearch) {
                     params.type_id = this.taskTypeSearch;
                 }
+
+                if (this.taskNameSearch || this.taskStatusSearch || this.taskTypeSearch) {
+                    url = "/tasks/filter";
+                }
+
                 fetch("get", url, params).then(response => {
                     this.tasksInfo = response.data;
+                    this.isLoading = false;
                     this.current_page = response.meta.pagination.current_page;
                     this.total = response.meta.pagination.total;
                     this.total_pages = response.meta.pagination.total_pages;
-                    this.isLoading = false;
                 });
             },
-            //任务我的筛选
+
             getMyTasks(my) {
                 this.my = my
                 this.getTasks(1)
                 
             },
+
             addTask() {
-              
                 // 校验
                 if (!this.taskName) {
                     toastr.error('请填写任务名称！')
@@ -528,20 +526,8 @@
             // 获取关联子资源数据
             getChildLinkData(url, index) {
                 if (url) {
-                    let data = {}
-                    this.linkCode = url
-                    this.linkIndex = index
-                    if (url === 'bloggers' || url === 'stars') {
-                        data.sign_contract_status = 2
-                    }
-                    fetch('get', `/${url === 'bloggers'? url + '/all' : url}`, data).then(res => {
+                    fetch('get', `/${url}`).then(res => {
                         const temp = this.linkData[index]
-                        if (res.meta && res.meta.pagination) {
-                            this.canLoadMore = true
-                            this.linkTotalPage = res.meta.pagination.total_pages
-                        } else {
-                            this.canLoadMore = false
-                        }
                         temp.child = res.data.map(n => {
                             return {
                                 name: n.name || n.nickname || n.title || n.company,
@@ -564,44 +550,7 @@
                     }]
                     this.resourceableId = temp.child[0].id
                     this.$set(this.linkData, index, temp)
-                    setTimeout(() => {
-                        this.$refs.linkage.refresh()
-                    }, 100)
-                }
-            },
-            // 关联子资源滚动到底加载更多
-            getMoreChildLinkData () {
-                const url = this.linkCode
-                const index = this.linkIndex
-                if (url && this.canLoadMore) {
                     
-                    if (this.linkCurrentPage >= this.linkTotalPage) {
-                        return
-                    }
-                    let data = {
-                        page: this.linkCurrentPage
-                    }
-                    if (url === 'bloggers' || url === 'stars') {
-                        data.sign_contract_status = 2
-                    }
-                    fetch('get', `/${url === 'bloggers'? url + '/all' : url}`, data).then(res => {
-                        this.linkCurrentPage = this.linkCurrentPage + 1
-                        const temp = this.linkData[index]
-                        // const temp = this.linkData
-                        const tempArr = res.data.map(n => {
-                            return {
-                                name: n.name || n.nickname || n.title || n.company,
-                                id: n.id,
-                                value: n.id,
-                            }
-                        })
-                        temp.child = [...temp.child, ...tempArr]
-                        this.resourceableId = temp.child[0].id
-                        this.$set(this.linkData, index, temp)
-                        setTimeout(() => {
-                            this.$refs.linkage.refresh()
-                        }, 100)
-                    })
                 }
             },
             // 获取任务类型列表
@@ -642,50 +591,23 @@
                 })
                 this.$store.commit('changeNewParticipantsInfo', [])
             },
-            goDetail (id) {
-                this.$router.push('/tasks/' + id)
+            // 跳转
+            taskDetail(taskId){
+                this.$router.push({path: '/tasks/' + taskId})
             },
-            // 检察权限
-            checkPermission () {
-                const params = {
-                    url: '/tasks',
-                    id: '',
-                    method: 'post'
-                }
-                fetch('get', '/console/checkpower', params).then(res => {
-                    this.canAdd = !!res.data.power
-                })
-            },
-            handleAdd () {
-                if (!this.canAdd) {
-                    toastr.error('您没有新增任务的权限！')
-                    return
-                }
-                $('#addTask').modal('show')
-            }
         }
     };
 </script>
+<style>
+.panel{
+    box-shadow: 0 0 0 0;
+}
 
-<style lang="scss" scoped>
-    table td {
-        position: relative;
-        a:before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            display: inline-block;
-        }
-    }
-    table tbody tr {
-       cursor: pointer;
-    }
-
-    .modal-body .example {
-        display: flex;
-        align-items: center;
-    }
+.page-item{
+    cursor: pointer;
+}
+table tbody tr {
+    cursor: pointer;
+}
 </style>
+

@@ -965,9 +965,9 @@
                             <div class="example">
                                 <div class="col-md-2 text-right float-left">提醒</div>
                                 <div class="col-md-10 float-left pl-0">
-                                    <!-- <selectors :options="remindArr" ref="scheduleRemind"
-                                               @change="changeScheduleRemind"></selectors> -->
-                                    <AddRemind @change="changeScheduleRemind" :options="remindArr" :isCancel="isCancel" :conditionLength="conditionLength" :selectorHidden="selectorHidden" ref="scheduleRemind"></AddRemind>
+                                    <selectors :options="remindArr" ref="scheduleRemind"
+                                               @change="changeScheduleRemind"></selectors>
+                                    <!-- <AddRemind @change="changeScheduleRemind" :options="remindArr" :isCancel="isCancel" :conditionLength="conditionLength" :selectorHidden="selectorHidden" ref="scheduleRemind"></AddRemind> -->
                                 </div>
                             </div>
                             <div class="clearfix my-20">
@@ -1360,8 +1360,8 @@
                 projectPage:'',
                 conditionLength: 0,
                 selectorHidden: [],
-                isCancel:false,
-                scheduleRemindDate:[]
+                // isCancel:false,
+                // scheduleRemindDate:[]
             }
         },
         computed: {
@@ -1489,7 +1489,7 @@
                     include: 'creator,tasks,affixes,producer,type,publicity,trails.project,trails.client,trails.project.principal,trails.project.relate_project_bills_resource,operatelogs,publicity.department',
                 };
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
-
+                    console.log(response)
 
                     _this.artistInfo = response.data;
                    
@@ -1653,9 +1653,9 @@
                         }
                     }
                 }
-                for (let key in this.scheduleRemind ){
-                    this.scheduleRemindDate.push(this.scheduleRemind[key])
-                }
+                // for (let key in this.scheduleRemind ){
+                //     this.scheduleRemindDate.push(this.scheduleRemind[key])
+                // }
                 let data = {
                     title: this.scheduleName,
                     calendar_id: this.calendarId[0],
@@ -1665,7 +1665,7 @@
                     end_at: endTime,
                     repeat: this.scheduleRepeat,
                     desc: this.eventDesc,
-                    remind: this.scheduleRemindDate
+                    remind: this.scheduleRemind
 
                 };
                 if (this.eventPlace) {
@@ -1933,8 +1933,8 @@
                 this.$refs.scheduleResource.setValue('');
                 this.$refs.scheduleRepeat.setValue('0');
                 this.$refs.scheduleNotice.setValue('0');
-                // this.$refs.scheduleRemind.setValue('0');
-                this.this.scheduleRemindDate = []
+                this.$refs.scheduleRemind.setValue('0');
+                // this.this.scheduleRemindDate = []
             },
             changeScheduleRepeat: function (value) {
                 this.scheduleRepeat = value;
@@ -2049,9 +2049,9 @@
                 let data = {
                     person_ids: [],
                     del_person_ids: [],
-                    moduleable_type: 'blogger',
-                    moduleable_ids: [this.artistId],
-                    type: 4
+                    // moduleable_type: 'blogger',
+                    // moduleable_ids: [this.artistId],
+                    // type: 4
                 };
                 let personInfo = this.$store.state.participantsInfo;
                 let oldPersonInfo = this.artistInfo[this.distributionType].data
@@ -2067,11 +2067,11 @@
                     data.person_ids.push(this.$store.state.participantsInfo[i].id)
                 }
                 if (this.distributionType === 'publicity') {
-                    data.type = 4
+                    // data.type = 4
                     toast = '分配制作人成功'
                 }
                 let _this = this;
-                fetch('post', '/distribution/person', data).then(function (response) {
+                fetch('post', `/bloggers/${this.artistId}/produser`, data).then(function (response) {
                     toastr.success(toast)
                     $('#distributionproducer').modal('hide');
                     _this.getArtist();
