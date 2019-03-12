@@ -1771,12 +1771,12 @@
                     this.scheduleCalendar = this.scheduleData.calendar.data.id;
                     this.$refs.scheduleStartDate.setValue(this.scheduleData.start_at.split(' ')[0]);
                     let startMinutes = this.scheduleData.start_at.split(' ')[1].split(':');
-                    this.$refs.scheduleStartMinute.setValue(startMinutes[0] + ':' + startMinutes[1]);
+                    this.$refs.scheduleStartMinute.setValue(startMinutes);
                     this.startTime = this.scheduleData.start_at.split(' ')[0];
                     this.startMinutes = startMinutes[0] + ':' + startMinutes[1];
                     this.$refs.scheduleEndDate.setValue(this.scheduleData.end_at.split(' ')[0]);
                     let endMinutes = this.scheduleData.end_at.split(' ')[1].split(':');
-                    this.$refs.scheduleEndMinute.setValue(endMinutes[0] + ':' + endMinutes[1]);
+                    this.$refs.scheduleEndMinute.setValue(endMinutes);
                     this.endTime = this.scheduleData.end_at.split(' ')[0];
                     this.endMinutes = endMinutes[0] + ':' + endMinutes[1];
                     this.isAllday = this.scheduleData.is_allday;
@@ -1852,7 +1852,7 @@
                 this.$refs.scheduleEndMinute.setValue('0');
                 this.$refs.scheduleResource.setValue('');
                 this.$refs.scheduleRepeat.setValue('0');
-                this.$refs.scheduleNotice.setValue('0');
+                // this.$refs.scheduleNotice.setValue('0');
                 this.$refs.scheduleRemind.setValue('0');
                 // this.this.scheduleRemindDate = []
             }
