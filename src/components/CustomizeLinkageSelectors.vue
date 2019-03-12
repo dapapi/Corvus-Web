@@ -87,6 +87,12 @@ import config from '@/assets/js/config'
             }
         },
         watch:{
+            valueType:function(value){
+                if(value!==2){
+                    this.$refs.numberSpinner.destroy()
+
+                }
+            },
             _department () {
                 this.departments = this.department
             },
