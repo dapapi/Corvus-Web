@@ -296,6 +296,9 @@
         watch: {
             platformType: function () {
                 return this.platformType
+            },
+            currentStatus:function(){
+                this.getField()
             }
         },
         mounted() {
@@ -308,6 +311,20 @@
                    return  this.projectProgress.find(item=>item.id == params).value
                 }
             },
+            typeHandler(){
+                if(this.currentStatus === 'project'){
+                    return 'approvals_project'
+                }else if(this.currentStatus === 'economic'){
+                    return 'approvals_contract'
+                }
+            },
+            statusHandler(){
+                 if(this.currentStatus === 'project'){
+                    return 'project'
+                }else if(this.currentStatus === 'economic'){
+                    return 'contract'
+                }
+            }
         },
         methods: {
             fetchHandler(methods, url,type) {
@@ -352,7 +369,7 @@
             },
             getField() {
                 let _this = this
-                fetch('get', '/contract/filter_fields').then((params) => {
+                fetch('get', '/'+this.statusHandler+'/filter_fields').then((params) => {
                     _this.customizeInfo = params.data
                 })
             },
@@ -374,7 +391,7 @@
             getList: function (params) {
                 this.currentStatus = params
                 let _this = this;
-                fetch('get', '/approvals_contract/'+params).then(function (response) {
+                fetch('get', '/approvals_contract/'+this.currentStatus).then(function (response) {
                     _this.pageList = response.data
                     _this.total = response.meta.pagination.total;
                     _this.current_page = response.meta.pagination.current_page;
@@ -410,7 +427,7 @@
                  // let _this = this
                  console.log(value);
                 this.customizeCondition = value
-                this.fetchHandler('post', '/approvals_contract/filter','filter')
+                this.fetchHandler('post', '/'+this.typeHandler+'/filter','filter')
                 // fetch('post', '/trails/filter?include=principal,client,contact,recommendations,expectations', value).then((params) => {
                 //     _this.trailsInfo = params.data
                 //     _this.total = params.meta.pagination.total;
