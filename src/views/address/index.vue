@@ -85,7 +85,7 @@
                                 <div class="col-md-4 float-left">
                                     <div class="float-left col-md-6">
                                         <i class="iconfont icon-yonghu pr-2"></i>
-                                        <span class="font-weight-bold">姓名</span>
+                                        <span class="font-weight-bold">昵称</span>
                                     </div>
                                     <div class="float-left col-md-6 pl-0">
                                         {{ personalInfo.name ? personalInfo.name : ''}}

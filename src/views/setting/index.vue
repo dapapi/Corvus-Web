@@ -68,12 +68,12 @@
 
                         <div class="title">个人资料</div>
                         <div class="example">
-                            <div class="float-left" style="width: 40px;">姓名</div>
+                            <div class="float-left" style="width: 40px;">昵称</div>
                             <div class="float-left pl-0">
                                 <input 
                                     type="text"
                                     v-model="name"
-                                    placeholder="请输入姓名"
+                                    placeholder="请输入昵称"
                                     class="form-control"
                                     style="width: 240px"
                                 >
@@ -82,7 +82,7 @@
                         <div class="example mt-10 mb-20">
                             <div class="float-left" style="width: 40px;"></div>
                             <div class="float-left pl-0">
-                                <p>真实姓名，企业成员知道如何称呼你</p>
+                                <!-- <p>真实姓名，企业成员知道如何称呼你</p> -->
                             </div>
                         </div>
                          <div class="example" style="margin-top: -20px">
@@ -220,6 +220,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+p {
+    text-align: left;
+}
 .title {
     color: #333;
     font-size: 16px;
