@@ -29,7 +29,7 @@
                 </div>
 
                 <div class="tab-content nav-tabs-animate bg-white">
-                    <!-- <div class="tab-pane animation-fade" id="forum-artist" role="tabpanel">
+                    <div class="tab-pane animation-fade" id="forum-artist" role="tabpanel">
                         <div class="clearfix my-20">
                             <div class="col-md-3 example float-left">
                                 <input type="text" v-model="listData.name" class="form-control"
@@ -58,7 +58,7 @@
                             <tbody>
 
                             <tr v-for="(item,index) in pageList" :key="index" class="pointer-content">
-                                <td @click="redirectContractDetail(item.form_instance_number)">{{ item.form_instance_number }}</td>
+                                <td @click="redirectContractDetail(item.form_instance_number)">{{ item.contract_number }}</td>
                                 <td @click="redirectContractDetail(item.form_instance_number)">{{item.title}}</td>
                                 <td @click="redirectContractDetail(item.form_instance_number)">{{item.form_name}}</td>
                                 <td @click="redirectContractDetail(item.form_instance_number)">{{item.name}}</td>
@@ -74,10 +74,10 @@
                         </div>
                         <pagination :current_page="current_page" :total_pages="total_pages"
                                     :total="total"></pagination>
-                    </div> -->
+                    </div>
                     <div class="tab-pane animation-fade active" id="forum-blogger" role="tabpanel">
                         <div class="clearfix my-20">
-                            <!-- <div class="col-md-3 example float-left">
+                            <div class="col-md-3 example float-left">
                                 <input type="text" class="form-control"  placeholder="请输入合同编号"
                                        v-model="blogName" >
                             </div>
@@ -93,14 +93,14 @@
                             <div class="col-md-3 example float-left">
                                 <selectors  @change="CommunicationStatus"
                                            placeholder="请选择Talent"></selectors>
-                            </div> -->
-                            <!-- <div class="col-md-3 example float-left">
+                            </div>
+                            <div class="col-md-3 example float-left">
                                 <button type="button" class="btn btn-default waves-effect waves-classic float-right"
                                 data-toggle="modal" data-target="#customizeContent"
                                 data-placement="right" title="">
                                 自定义筛选
                                 </button>
-                            </div> -->
+                            </div>
                         </div>
                         <table class="table table-hover is-indent ml-5" data-plugin="selectable"
                                data-selectable="selectable">
@@ -162,7 +162,7 @@
                 total: 0,
                 current_page: 1,
                 total_pages: 1,
-                customizeInfo: config.customizeInfo,
+                customizeInfo: {},
                 pageList: [],
                 artistStatus: '',
                 bolggerName: '',
@@ -281,7 +281,9 @@
                 affixesType: '',//附件类型
                 isShow: '',
                 projectProgress:PROJECT_CONFIG.approvalProgress,
-                currentStatus:'project'
+                currentStatus:'project',
+                customizeCondition:{},
+                fetchData: {},
             }
         },
         watch: {
@@ -290,6 +292,7 @@
             }
         },
         mounted() {
+            this.getField()
             this.getList('project')
         },
         computed:{
@@ -300,6 +303,51 @@
             },
         },
         methods: {
+            fetchHandler(methods, url,type) {
+                let _this = this,
+                fetchData = this.fetchData,
+                newUrl
+                this.fetchData.include = 'include=principal,client,contact,recommendations,expectations'
+                if(type=='filter'){
+                    fetchData = this.customizeCondition 
+                    let keyword,status,principal_ids
+                    if(this.fetchData.keyword){
+                        keyword = '&keyword='+this.fetchData.keyword
+                    }else{
+                        keyword = ''
+                    }
+                    if(this.fetchData.status){
+                        status = '&status='+this.fetchData.status
+                    }else{
+                        status = ''
+                    }
+                     if(this.fetchData.principal_ids){
+                        principal_ids = '&principal_ids='+this.fetchData.principal_ids
+                    }else{
+                        principal_ids = ''
+                    }
+                    newUrl = url+'?'+this.fetchData.include+keyword+status+principal_ids
+                }
+                // console.log(this.fetchData)
+                this.exportParams = {
+                    keyword: this.fetchData.keyword,
+                    status: this.fetchData.status,
+                    principal_ids: this.fetchData.principal_ids,
+                }
+                fetch(methods, newUrl || url, fetchData).then((response) => {
+                    _this.pageList = response.data
+                    _this.total = response.meta.pagination.total;
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total_pages = response.meta.pagination.total_pages;
+                    _this.isLoading = false;
+                })
+            },
+            getField() {
+                let _this = this
+                fetch('get', '/contract/filter_fields').then((params) => {
+                    _this.customizeInfo = params.data
+                })
+            },
             getProjects: function (pageNum = 1, signStatus) {
                 let _this = this
                 let data = {
@@ -342,16 +390,25 @@
             //选择博主类型
             typeFilter(value) {
                 this.blogType = value
-                this.getBlogger()
+                // this.getBlogger()
 
             },
             //沟通状态
             CommunicationStatus(value) {
                 this.blogCommunication = value
-                this.getBlogger()
+                // this.getBlogger()
             },
-            customize: function (value) {
-
+             customize: function (value) {
+                 // let _this = this
+                this.customizeCondition = value
+                this.fetchHandler('post', '/trails/filter','filter')
+                // fetch('post', '/trails/filter?include=principal,client,contact,recommendations,expectations', value).then((params) => {
+                //     _this.trailsInfo = params.data
+                //     _this.total = params.meta.pagination.total;
+                //     _this.total_pages = params.meta.pagination.total_pages;
+                //     _this.current_page = params.meta.pagination.current_page
+                //     _this.cleanUp = true
+                // })
             },
             changeArtistStatus: function (value) {
                 this.artistStatus = value
@@ -419,33 +476,33 @@
                 this.giveType = type
             },
             //分配制作人
-            giveProducer: function () {
+            // giveProducer: function () {
 
-                let _this = this
-                let data = {}
-                data = {
-                    person_ids: [],
-                    del_person_ids: [],//删除
-                    moduleable_ids: this.selectedArtistsArr,//
-                    moduleable_type: 'blogger',
-                    type: 4, //制作人
-                }
-                for (let i = 0; i < this.$store.state.participantsInfo.length; i++) {
-                    data.person_ids.push(this.$store.state.participantsInfo[i].id)
+            //     let _this = this
+            //     let data = {}
+            //     data = {
+            //         person_ids: [],
+            //         del_person_ids: [],//删除
+            //         moduleable_ids: this.selectedArtistsArr,//
+            //         moduleable_type: 'blogger',
+            //         type: 4, //制作人
+            //     }
+            //     for (let i = 0; i < this.$store.state.participantsInfo.length; i++) {
+            //         data.person_ids.push(this.$store.state.participantsInfo[i].id)
 
-                }
-                fetch('post', 'distribution/person', data).then(function (response) {
-                    if (_this.selectedArtistsArr.length == 0) {
-                        return false
-                    }
-                    toastr.success('分配制作人成功')
-                    $('#giveProducer').modal('hide')
-                    _this.getBlogger()
-                    _this.$store.state.participantsInfo = []
-                    _this.selectedArtistsArr = []
-                })
+            //     }
+            //     fetch('post', 'distribution/person', data).then(function (response) {
+            //         if (_this.selectedArtistsArr.length == 0) {
+            //             return false
+            //         }
+            //         toastr.success('分配制作人成功')
+            //         $('#giveProducer').modal('hide')
+            //         _this.getBlogger()
+            //         _this.$store.state.participantsInfo = []
+            //         _this.selectedArtistsArr = []
+            //     })
 
-            },
+            // },
             judge() {
                 if (this.selectedArtistsArr.length == 0) {
                     toastr.error('请先选择博主，再进行分配')
@@ -462,17 +519,17 @@
                     this.isShow = false
                 }
             },
-            tab:function(value){
-                this.selectedArtistsArr = []
-                if(value == 0){
-                    this.getArtists()
+            // tab:function(value){
+            //     this.selectedArtistsArr = []
+            //     if(value == 0){
+            //         this.getArtists()
 
-                } else if (value == 1) {
-                    this.getBlogger()
+            //     } else if (value == 1) {
+            //         this.getBlogger()
 
-                }
-                this.isShow = !this.isShow
-            },
+            //     }
+            //     this.isShow = !this.isShow
+            // },
             giveBroker: function () {
                 let url, toast, data
                 let _this = this
