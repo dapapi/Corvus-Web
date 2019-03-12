@@ -312,7 +312,7 @@
                                         <td class="pointer-content">
                                             {{ task.title }}
                                         </td>
-                                        <td>{{ task.type.data.title }}</td>
+                                        <td>{{ task.type ? task.type.data.title : ''}}</td>
                                         <td>
                                             <template v-if="task.status === 1"><span style="color: #FF9800;">进行中</span>
                                             </template>
