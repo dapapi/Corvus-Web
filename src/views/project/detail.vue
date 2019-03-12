@@ -15,7 +15,7 @@
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#confirmFlag"
                        @click="changeToastrText(1)" v-show="projectInfo.status != 1">激活</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#confirmFlag"
-                       @click="changeToastrText(2)" v-show="projectInfo.status != 2">完成</a>
+                       @click="changeToastrText(2)" v-show="projectInfo.status != 2 && projectInfo.status != 3">完成</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#confirmFlag"
                        @click="changeToastrText(3)" v-show="projectInfo.status != 3 && projectInfo.status != 2">撤单</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
