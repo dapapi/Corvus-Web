@@ -234,7 +234,7 @@
                                     <tr v-for="(item,index) in ProjectsInfo" :key="index" @click="projectdetil(item.id)"
                                         class="Jump projectcontent">
                                         <td>{{item.title}}</td>
-                                        <td v-if="item.principal">{{item.principal.data.name}}</td>
+                                        <td v-if="item.principal">{{item.principal}}</td>
                                         <td v-if="!item.principal"></td>
                                         <td>{{item.company}}</td>
                                         <td>{{item.created_at}}</td>

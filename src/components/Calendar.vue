@@ -150,7 +150,7 @@
                             self.$emit('dayClick', formatDate);
                         }
                     } else {
-                        self.$emit('showToast', event.pageX, event.pageY)
+                        self.$emit('showToast', allDay.pageX, allDay.pageY)
                     }
                     self.clickDate = formatDate;
                     self.firstClickTime = currentClickTime;
