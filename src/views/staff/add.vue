@@ -34,7 +34,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="example">
-                                    <div class="col-md-3 text-right float-left require">姓名(中文)</div>
+                                    <div class="col-md-3 text-right float-left require">昵称</div>
                                     <div class="col-md-8 float-left pl-0">
                                         <template v-if="isLook">
                                             {{ nameCN }}
@@ -43,6 +43,21 @@
                                             v-else
                                             :disabled="isLook"
                                             v-model="nameCN"
+                                            placeholder="1-30个字符"
+                                            maxlength="30"
+                                            class="form-control">
+                                    </div>
+                                </div>
+                                <div class="example">
+                                    <div class="col-md-3 text-right float-left require">姓名(中文)</div>
+                                    <div class="col-md-8 float-left pl-0">
+                                        <template v-if="isLook">
+                                            {{ realName }}
+                                        </template>
+                                        <input type="text"
+                                            v-else
+                                            :disabled="isLook"
+                                            v-model="realName"
                                             placeholder="1-30个字符"
                                             maxlength="30"
                                             class="form-control">
@@ -425,6 +440,7 @@ export default {
             addUrl: window.location.origin + '/informationForm',
             nameCN: '',
             nameEN: '',
+            realName: '', // 真实姓名
             gender: '',
             IDNum: '',
             phoneNum: '',
@@ -572,6 +588,10 @@ export default {
             remarks: '',
             formCheck: [{
                 name: 'nameCN',
+                msg: '请填写昵称'
+            },
+            {
+                name: 'realName',
                 msg: '请填写姓名'
             }, {
                 name: 'gender',
@@ -645,6 +665,7 @@ export default {
             let params = {
 				name: this.nameCN,
 				en_name: this.nameEN,
+				real_name: this.realName,
 				gender: this.gender,
 				id_number: this.IDNum,
 				phone: this.phoneNum,
@@ -684,6 +705,7 @@ export default {
                 const data = res.data
                 this.nameCN = data.name
                 this.nameEN = data.en_name
+                this.realName = data.real_name
                 this.gender = data.gender
                 this.IDNum = data.id_number
                 this.phoneNum = data.phone

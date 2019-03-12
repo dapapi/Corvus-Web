@@ -23,7 +23,7 @@
 
     export default {
         name: 'AddClientType',
-        props: ['type'],
+        props: ['type', 'hidden'],
         data() {
             return {
                 visible: false,
@@ -41,6 +41,10 @@
         methods: {
             // 显示、隐藏
             show() {
+                if (this.hidden) {
+                    toastr.error('您没有权限新增！')
+                    return
+                }
                 this.visible = !this.visible
             },
             XPos(num) {

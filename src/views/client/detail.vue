@@ -180,7 +180,7 @@
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                      style="width: 100%">
                             </div>
-                            <AddClientType @change="changeTrailType"></AddClientType>
+                            <AddClientType @change="changeTrailType" :hidden="!canAddTrail"></AddClientType>
                             <pagination :current_page="current_page" :method="getClient"
                                         :total_pages="total_pages" :total="total"></pagination>
                         </div>
@@ -294,8 +294,7 @@
                             </div>
                             <pagination :current_page="current_page" :method="getClientTask"
                                         :total_pages="total_pages" :total="total"></pagination>
-                            <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
-                                 data-target="#addTask">
+                            <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal" @click="handleTask">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                                     <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
@@ -440,7 +439,7 @@
                                     style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                                     <th class="cell-300" scope="col">联系人</th>
                                     <th class="cell-300" scope="col">关键决策人</th>
-                                    <th class="cell-300" scope="col">联系人电话</th>
+                                    <th class="cell-300" scope="col">微信号</th>
                                     <th class="cell-300" scope="col">职位</th>
                                     <th class="cell-300" scope="col">负责人</th>
                                     <th class="cell-300" scope="col">操作</th>
@@ -452,39 +451,48 @@
                                         {{ contact.type === 1 ? '否' : '' }}
                                         {{ contact.type === 2 ? '是' : '' }}
                                     </td>
-                                    <td>{{ contact.phone }}</td>
+                                    <td>{{ contact.wechat }}</td>
                                     <td>{{ contact.position }}</td>
                                     <td>{{ clientInfo.principal?clientInfo.principal.data.name:'' }}</td>
                                     <td>
-                                            <span class="pr-20 d-block float-left pointer-content"
-                                                  style="color: #b9b9b9;"
-                                                  data-plugin="actionBtn" data-toggle="modal"
-                                                  data-target="#addContact"
-                                                  @click="changeEditStatus(false,contact)"
-                                            >
-                                                <i class="iconfont icon-bianji2" aria-hidden="true"></i>
-                                            </span>
+                                        
+                                        <span class="pr-10 d-block float-left pointer-content"
+                                            style="color: #b9b9b9;"
+                                            data-plugin="actionBtn" data-toggle="modal"
+                                            @click="seeContact(contact)"
+                                        >
+                                            <i class="iconfont icon-liulan" aria-hidden="true"></i>
+                                        </span>
                                         <span class="d-block float-left"
-                                              style="width: 1px; height: 14px;border-right: 1px solid #b9b9b9;margin: 3px;"></span>
-                                        <span class="pl-20 d-block float-left pointer-content" style="color: #b9b9b9"
-                                              data-plugin="actionBtn" @click="setDelInfo(contact.id)"
-                                              data-toggle="modal"
-                                              data-target="#confirmFlag" typeText="删除">
-                                                <i class="iconfont icon-shanchu1" aria-hidden="true"></i>
-                                            </span>
+                                            style="width: 1px; height: 14px;border-right: 1px solid #b9b9b9;margin: 3px;"></span>
+                                        <span class="px-10 d-block float-left pointer-content"
+                                            style="color: #b9b9b9;"
+                                            data-plugin="actionBtn" data-toggle="modal"
+                                            data-target="#addContact"
+                                            @click="changeEditStatus(false,contact)"
+                                        >
+                                            <i class="iconfont icon-bianji2" aria-hidden="true"></i>
+                                        </span>
+                                        <span class="d-block float-left"
+                                            style="width: 1px; height: 14px;border-right: 1px solid #b9b9b9;margin: 3px;"></span>
+                                        <span class="pl-10 d-block float-left pointer-content" style="color: #b9b9b9"
+                                            data-plugin="actionBtn" @click="setDelInfo(contact.id)"
+                                            data-toggle="modal"
+                                            data-target="#confirmFlag" typeText="删除">
+                                            <i class="iconfont icon-shanchu1" aria-hidden="true"></i>
+                                        </span>
                                     </td>
                                 </tr>
                                 </tbody>
                             </table>
                             <div style="margin: 6rem auto;width: 100px" v-if="clientContactsInfo.length === 0">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
-                                     style="width: 100%">
+                                    style="width: 100%">
                             </div>
                             <pagination :current_page="current_page" :method="getClientContact"
                                         :total_pages="total_pages" :total="total"></pagination>
                             <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
-                                 data-target="#addContact"
-                                 @click="changeEditStatus(true)">
+                                @click="changeEditStatus(true)">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                                     <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
@@ -552,10 +560,24 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left require pl-0">联系人电话</div>
+                            <div class="col-md-2 text-right float-left pl-0">联系人电话</div>
                             <div class="col-md-10 float-left">
                                 <input type="text" title="" class="form-control"
                                        placeholder="请输入联系人电话" v-model="editConfig.phone"/>
+                            </div>
+                        </div>
+                         <div class="example">
+                            <div class="col-md-2 text-right float-left pl-0">微信</div>
+                            <div class="col-md-10 float-left">
+                                <input type="text" title="" class="form-control"
+                                       placeholder="请输入联系人微信号" v-model="editConfig.wechat" />
+                            </div>
+                        </div>
+                         <div class="example">
+                            <div class="col-md-2 text-right float-left pl-0">其他联系方式</div>
+                            <div class="col-md-10 float-left">
+                                <input type="text" title="" class="form-control"
+                                       placeholder="请输入联系人其他联系方式" v-model="editConfig.other_contact_ways" />
                             </div>
                         </div>
                         <div class="example">
@@ -563,6 +585,69 @@
                             <div class="col-md-10 float-left">
                                 <input type="text" title="" class="form-control"
                                        placeholder="请输入联系人职位" v-model="editConfig.position">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-primary" @click="addContact">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="seeContact" aria-hidden="true" aria-labelledby="addLabelForm"
+             role="dialog" tabindex="-1" data-backdrop="static">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
+                        </button>
+                        <h4 class="modal-title">查看联系人</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">关联公司</div>
+                            <div class="col-md-10 float-left">
+                                {{ clientInfo.company }}
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left require pl-0">联系人</div>
+                            <div class="col-md-10 float-left">
+                                {{ editConfig.name }}
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left require pl-0">关键决策人</div>
+                            <div class="col-md-10 float-left">
+                                {{ editConfig.type ? keyMasterArr.find( n => n.value == editConfig.type).name : '' }}
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left pl-0">联系人电话</div>
+                            <div class="col-md-10 float-left">
+                               {{ editConfig.phone }}
+                            </div>
+                        </div>
+                         <div class="example">
+                            <div class="col-md-2 text-right float-left pl-0">微信</div>
+                            <div class="col-md-10 float-left">
+                                {{ editConfig.wechat }}
+                            </div>
+                        </div>
+                         <div class="example">
+                            <div class="col-md-2 text-right float-left pl-0">其他联系方式</div>
+                            <div class="col-md-10 float-left">
+                                {{ editConfig.other_contact_ways }}
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left require pl-0">职位</div>
+                            <div class="col-md-10 float-left">
+                                {{ editConfig.position }}
                             </div>
                         </div>
                     </div>
@@ -728,7 +813,9 @@
                     position: '',
                     name: '',
                     phone: '',
-                    type: '' // 是否是关键人
+                    type: '', // 是否是关键人
+                    wechat: '',  // 微信
+                    other_contact_ways: '' // 其他联系方式
                 }, // 修改的联系人信息
                 contactId: '', // 联系人id
                 user: {},
@@ -738,6 +825,11 @@
                 trailType: '', // 线索类型
                 companyInfo: {}, // 公司信息
                 companyId: '', // 公司id
+                canAddTrail: false, // 是否可以添加销售线索
+                canAddTask: false, // 是否可以添加任务
+                canEditClient: false, // 是否可以添加任务
+                canAddContact: false, // 是否可以新增联系人
+                isDisabled: false, // 联系人是否可以编辑
             }
         },
         beforeMount() {
@@ -761,9 +853,16 @@
                 // 清空state
                 this.cancleContact()
             })
+             $('#seeContact').on('hidden.bs.modal', () => {
+                // 清空state
+                this.cancleContact()
+            })
 
             this.getClientTask() // 为了默认展示任务数量 先在这里请求
-            
+            this.checkTrailPermission()
+            this.checkTaskPermission()
+            this.checkClientPermission()
+            this.checkContactPermission()
         },
         computed: {
             completeNum() {
@@ -897,7 +996,7 @@
                     toastr.error('请输入联系人！')
                     return
                 }
-                if (this.editConfig.phone.length !== 11) {
+                if (this.editConfig.phone && this.editConfig.phone.length !== 11) {
                     toastr.error('手机号码格式不对！')
                     return
                 }
@@ -914,7 +1013,9 @@
                     name: this.editConfig.name || '',
                     phone: this.editConfig.phone,
                     position: this.editConfig.position,
-                    type: this.editConfig.type
+                    type: this.editConfig.type,
+                    wechat: this.editConfig.wechat,
+                    other_contact_ways: this.editConfig.other_contact_ways
                 };
 
                 fetch(this.isEditContact ? 'post' : 'put', `/clients/${this.clientId}/contacts${!this.isEditContact ? '/' + this.editConfig.id : ''}`, data).then(response => {
@@ -942,6 +1043,10 @@
             },
 
             editBaseInfo: function () {
+                if (!this.canEditClient) {
+                    toastr.error('您没有编辑概况的权限！')
+                    return
+                }
                 this.isEdit = true;
                 this.changeInfo = {};
             },
@@ -1070,14 +1175,31 @@
                 this.changeInfo.principal_id = value
             },
             changeEditStatus(value, config) {
-                this.$refs.contact.setValue(config.type || '')
+                if (!this.canAddContact&&value) {
+                    toastr.error('您没有新增联系人的权限！')
+                    return
+                }
+                $('#addContact').modal('show')
+                this.$refs.contact.setValue(config?config.type : '')
                 this.editConfig = config || {
                     position: '',
                     name: '',
                     phone: '',
                     type: '',
+                    wechat: '',
+                    other_contact_ways: ''
                 }
                 this.isEditContact = value
+            },
+            seeContact (config) {
+                this.editConfig = config || {
+                    position: '',
+                    name: '',
+                    phone: '',
+                    type: '',
+                    other_contact_ways: ''
+                }
+                $('#seeContact').modal('show')
             },
             // 获取任务类型列表
             getTaskType() {
@@ -1127,7 +1249,9 @@
                     position: '',
                     name: '',
                     phone: '',
-                    type: ''
+                    type: '',
+                    wechat: '',
+                    other_contact_ways: ''
                 }
                 this.$refs.contact.setValue('')
             },
@@ -1158,6 +1282,58 @@
                 this.$router.push({
                     name: 'approval/detail',
                     params: {id: id}
+                })
+            },
+            // 新增销售线索权限
+            checkTrailPermission () {
+                const params = {
+                    url: '/trails',
+                    id: '',
+                    method: 'post'
+                }
+                fetch('get', '/console/checkpower', params).then(res => {
+                    this.canAddTrail = !!res.data.power
+                })
+            },
+            // 新增销售线索权限
+            checkTaskPermission () {
+                const params = {
+                    url: '/tasks',
+                    id: '',
+                    method: 'post'
+                }
+                fetch('get', '/console/checkpower', params).then(res => {
+                    this.canAddTask = !!res.data.power
+                })
+            },
+            // 任务弹层
+            handleTask () {
+                if (!this.canAddTask) {
+                    toastr.error('您没有新建任务的权限！')
+                    return
+                }
+                $('#addTask').modal('show')
+            },
+            // 客户编辑权限
+            checkClientPermission () {
+                const params = {
+                    url: `/clients/'${this.clientId}`,
+                    id: this.clientId,
+                    method: 'put'
+                }
+                fetch('get', '/console/checkpower', params).then(res => {
+                    this.canEditClient = !!res.data.power
+                })
+            },
+            // 联系人新增权限
+            checkContactPermission () {
+                const params = {
+                    url: `/clients/${this.clientId}/contacts/${this.editConfig.id}`,
+                    id: this.clientId,
+                    method: 'post'
+                }
+                fetch('get', '/console/checkpower', params).then(res => {
+                    this.canAddContact = !!res.data.power
                 })
             }
         }
