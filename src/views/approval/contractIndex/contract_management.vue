@@ -44,6 +44,13 @@
                                 <selectors  placeholder="请选择项目名称"
                                           ></selectors>
                             </div>
+                            <div class="col-md-3 example float-left" >
+                                <button type="button" class="btn btn-default waves-effect waves-classic float-right"
+                                data-toggle="modal" data-target="#customizeContent"
+                                data-placement="right" title="">
+                                自定义筛选
+                                </button>
+                            </div>
                         </div>
                         <table class="table table-hover is-indent ml-5" data-plugin="selectable"
                                data-selectable="selectable">
@@ -94,7 +101,7 @@
                                 <selectors  @change="CommunicationStatus"
                                            placeholder="请选择Talent"></selectors>
                             </div>
-                            <div class="col-md-3 example float-left">
+                            <div class="col-md-3 example float-left" >
                                 <button type="button" class="btn btn-default waves-effect waves-classic float-right"
                                 data-toggle="modal" data-target="#customizeContent"
                                 data-placement="right" title="">
@@ -113,7 +120,7 @@
                                         </span>
                                 </th> -->
                                 <th class="cell-300" scope="col">合同编号</th>
-                                <th class="cell-300" scope="col">项目名称</th>
+                                <th class="cell-300" scope="col">合同名称</th>
                                 <th class="cell-300" scope="col">合同类型</th>
                                 <th class="cell-300" scope="col">创建人</th>
                                 <th class="cell-300" scope="col">创建时间</th>
@@ -335,6 +342,7 @@
                     principal_ids: this.fetchData.principal_ids,
                 }
                 fetch(methods, newUrl || url, fetchData).then((response) => {
+                    console.log(response);
                     _this.pageList = response.data
                     _this.total = response.meta.pagination.total;
                     _this.current_page = response.meta.pagination.current_page;
@@ -400,8 +408,9 @@
             },
              customize: function (value) {
                  // let _this = this
+                 console.log(value);
                 this.customizeCondition = value
-                this.fetchHandler('post', '/trails/filter','filter')
+                this.fetchHandler('post', '/approvals_contract/filter','filter')
                 // fetch('post', '/trails/filter?include=principal,client,contact,recommendations,expectations', value).then((params) => {
                 //     _this.trailsInfo = params.data
                 //     _this.total = params.meta.pagination.total;
