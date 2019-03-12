@@ -1104,15 +1104,15 @@
                 }
                 data.page = '&page='+this.current_page
                 this.customizeInfo = value
-                console.log(this.customizeInfo.conditions)
-                this.customizeInfo.conditions.forEach(item=>{
-                   if(item!=undefined){
-                       if(item.id==1561909265){
-                           console.log(new Date().getFullYear())
-                       }
-                   }
+                // console.log(this.customizeInfo.conditions)
+                // this.customizeInfo.conditions.forEach(item=>{
+                //    if(item!=undefined){
+                //        if(item.id==1561909265){
+                //            console.log(new Date().getFullYear())
+                //        }
+                //    }
                     
-                })
+                // })
                 fetch('post', this.customizeContentType +'/filter?include=type,creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name ,value).then(function (params) {
                 // fetch('post', '/'+this.customizeContentType+'/filter', value).then((params) => {
                     console.log(params)
