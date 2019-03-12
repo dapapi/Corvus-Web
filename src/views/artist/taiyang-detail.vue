@@ -1445,7 +1445,7 @@
                         }
                     }
                 })
-
+                console.log(_this.scheduleShow)
             }
 
             ,
@@ -1918,6 +1918,7 @@
                 })
             },
             getTaskDate: function () {
+                this.doneTaskNum = 0
                 let _this = this
                 fetch('get', `/stars/${this.$route.params.id}/tasks`).then(response => {
                     // console.log(response.data)

@@ -32,13 +32,13 @@
                         <selectors ref='principal_id' :options="memberList" multiple='true'
                                    @valuelistener="principalFilter" placeholder="请选择负责人"></selectors>
                     </div>
-                    <!-- <div class="col-md-3 example float-left">
+                    <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
                                 data-toggle="modal" data-target="#customizeContent"
                                 data-placement="right" title="">
                             自定义筛选
                         </button>
-                    </div> -->
+                    </div>
                 </div>
 
                 <div class="col-md-12">
@@ -89,8 +89,8 @@
         </div>
 
 
-        <customize-filter :data="customizeInfo" :stararr='starsArr' @change="customize" :cleanup="cleanUp"
-                          @cleanupdone='cleanUp=false'></customize-filter>
+        <customize-filter :data="customizeInfo" :stararr='starsArr' @change="customize"
+        ></customize-filter>
         <AddClientType @change="changeTrailType"></AddClientType>
 
         <div class="modal fade" id="addTrail" aria-hidden="true" aria-labelledby="addLabelForm"
@@ -200,7 +200,7 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left require">预计订单收入</div>
+                            <div class="col-md-2 text-right float-left require">预计订单收入/元</div>
                             <div class="col-md-5 float-left pl-0 pr-0">
                                 <number-spinner @change="changeTrailFee" :min="0" :max="1000000000" :precision="2"
                                                 :value="0"></number-spinner>
@@ -449,47 +449,38 @@
             redirectPublicTrail() {
                 this.$router.push({path: '/publictrails'})
             },
-        < < < < < < < HEAD
-        fetchHandler(methods, url, type) {
-            let _this = this,
-                fetchData = this.fetchData,
-                newUrl
-            this.fetchData.include = 'include=principal,client,contact,recommendations,expectations'
-            if (type == 'filter') {
-                fetchData = this.customizeCondition
-                let keyword, status, principal_ids
-                if (this.fetchData.keyword) {
-                    keyword = '&keyword=' + this.fetchData.keyword
-                } else {
-                    keyword = ''
+            fetchHandler(methods, url, type) {
+                let _this = this,
+                    fetchData = this.fetchData,
+                    newUrl
+                this.fetchData.include = 'include=principal,client,contact,recommendations,expectations'
+                if (type == 'filter') {
+                    fetchData = this.customizeCondition
+                    let keyword, status, principal_ids
+                    if (this.fetchData.keyword) {
+                        keyword = '&keyword=' + this.fetchData.keyword
+                    } else {
+                        keyword = ''
+                    }
+                    if (this.fetchData.status) {
+                        status = '&status=' + this.fetchData.status
+                    } else {
+                        status = ''
+                    }
+                    if (this.fetchData.principal_ids) {
+                        principal_ids = '&principal_ids=' + this.fetchData.principal_ids
+                    } else {
+                        principal_ids = ''
+                    }
+                    newUrl = url + '?' + this.fetchData.include + keyword + status + principal_ids
                 }
-                if (this.fetchData.status) {
-                    status = '&status=' + this.fetchData.status
-                } else {
-                    status = ''
-                }
-                if (this.fetchData.principal_ids) {
-                    principal_ids = '&principal_ids=' + this.fetchData.principal_ids
-                } else {
-                    principal_ids = ''
-                }
-                newUrl = url + '?' + this.fetchData.include + keyword + status + principal_ids
-            }
-            // console.log(this.fetchData)
-        ======
-            =
-                fetchHandler(methods, url)
-            {
-                let _this = this
-                this.fetchData.include = 'principal,client,contact,recommendations,expectations'
-                console.log(this.fetchData)
-                >>> >>> > cxy
+                // console.log(this.fetchData)
                 this.exportParams = {
                     keyword: this.fetchData.keyword,
                     status: this.fetchData.status,
                     principal_ids: this.fetchData.principal_ids,
                 }
-                fetch(methods, url, this.fetchData).then((response) => {
+                fetch(methods, newUrl || url, fetchData).then((response) => {
                     _this.trailsInfo = response.data
                     _this.total = response.meta.pagination.total;
                     _this.current_page = response.meta.pagination.current_page;
@@ -497,38 +488,23 @@
                     _this.isLoading = false;
                 })
             }
-        ,
-            filterGo()
-            {
+            ,
+            filterGo() {
                 this.fetchData.keyword = this.trailFilter
-                    << < < < < < HEAD
                 this.fetchHandler('post', '/trails/filter', 'filter')
-            }
-        ,
-            progressStatusFilter(value)
-            {
-                this.fetchData.status = value
-                this.fetchHandler('post', '/trails/filter', 'filter')
-                === === =
-                    // this.fetchHandler('post', '/trails/filter', 'filter')
-                    this.fetchHandler('get', '/trails/filter')
+                // this.fetchHandler('get', '/trails/filter')
 
             }
-        ,
-            progressStatusFilter(value)
-            {
+            ,
+            progressStatusFilter(value) {
                 this.fetchData.status = value
-                // this.fetchHandler('post', '/trails/filter', 'filter')
-                this.fetchHandler('get', '/trails/filter')
-            }
-        ,
-            progressStatusFilter(value)
-            {
+                this.fetchHandler('post', '/trails/filter', 'filter')
+                // this.fetchHandler('get', '/trails/filter')
+            },
+            progressStatusFilter(value) {
                 this.fetchData.status = value
                 this.fetchHandler('get', '/trails/filter')
-                >>> >>> > cxy
-            }
-        ,
+            },
             getSales: function (pageNum = 1) {
                 let _this = this;
                 let data = {
@@ -544,7 +520,7 @@
                     _this.isLoading = false;
                 })
             }
-        ,
+            ,
             getIndustries: function () {
                 let _this = this;
                 fetch('get', '/industries/all').then(function (response) {
@@ -557,14 +533,14 @@
                     }
                 })
             }
-        ,
+            ,
             getClients: function () {
                 let _this = this;
                 fetch('get', '/clients/all').then(function (response) {
                     _this.companyArr = response.data
                 })
             }
-        ,
+            ,
             getStars: function () {
                 if (this.starsArr.length > 0) {
                     return
@@ -578,10 +554,8 @@
                     }
                 })
             }
-        ,
+            ,
             customize: function (value) {
-            <<<<<<<
-                HEAD
                 // let _this = this
                 this.customizeCondition = value
                 this.fetchHandler('post', '/trails/filter', 'filter')
@@ -592,20 +566,7 @@
                 //     _this.current_page = params.meta.pagination.current_page
                 //     _this.cleanUp = true
                 // })
-
-                === === =
-                    let
-                _this = this
-                fetch('post', '/trails/filter?include=principal,client,contact,recommendations,expectations', value).then((params) => {
-                    _this.trailsInfo = params.data
-                    _this.total = params.meta.pagination.total;
-                    _this.total_pages = params.meta.pagination.total_pages;
-                    _this.current_page = params.meta.pagination.current_page
-                    _this.cleanUp = true
-                })
-                >>> >>> > cxy
-            }
-        ,
+            },
             addTrail: function () {
                 let data = {
                     title: this.trailName,
@@ -653,9 +614,8 @@
                     })
                 }
             }
-        ,
-            cleanTempData()
-            {
+            ,
+            cleanTempData() {
                 this.trailName = ''
                 this.brandName = ''
                 this.selectCompany = ''
@@ -670,24 +630,23 @@
                 this.priority = ''
                 this.cooperation = ''
             }
-        ,
+            ,
             redirectTrailDetail: function (trailId) {
                 this.$router.push({path: '/trails/' + trailId})
             }
-        ,
-            changeTrailOriginPerson(value)
-            {
+            ,
+            changeTrailOriginPerson(value) {
                 this.trailOriginPerson = value
             }
-        ,
+            ,
             changeTrailOrigin: function (value) {
                 this.trailOrigin = value
             }
-        ,
+            ,
             changeTrailOriginType: function (value) {
                 this.trailOrigin = value
             }
-        ,
+            ,
             changeCompanyName: function () {
                 let companyInfo = this.$store.state.companyInfo;
                 if (companyInfo.value) {
@@ -701,7 +660,7 @@
                     }
                 }
             }
-        ,
+            ,
             changePrincipal: function (value) {
                 if (this.$store.state.otherSlot.data) {
                     this.trailPrincipal = this.$store.state.otherSlot.data.name
@@ -709,7 +668,7 @@
                     this.trailPrincipal = ''
                 }
             }
-        ,
+            ,
             changeTargetStars: function (value) {
                 for (let i = 0; i < value.length; i++) {
                     let item = value[i].split('-');
@@ -720,7 +679,7 @@
                 }
                 this.targetStars = value
             }
-        ,
+            ,
             changeRecommendStars: function (value) {
                 for (let i = 0; i < value.length; i++) {
                     let item = value[i].split('-');
@@ -731,23 +690,23 @@
                 }
                 this.recommendStars = value
             }
-        ,
+            ,
             changeTrailFee: function (value) {
                 this.trailFee = value
             }
-        ,
+            ,
             changeCheckbox: function (e) {
                 this.trailIsLocked = Number(e.target.checked)
             }
-        ,
+            ,
             changeIndustry: function (value) {
                 this.industry = value
             }
-        ,
+            ,
             changePriority: function (value) {
                 this.priority = value
             }
-        ,
+            ,
             changeTrailType: function (value) {
                 let organization_id = JSON.parse(Cookies.get('user')).organization_id
                 if (value == 3) {
@@ -763,23 +722,22 @@
                     $('.selectpicker').selectpicker('refresh');
                 }, 500);
             }
-        ,
+            ,
             changeTrailStatus: function (value) {
                 this.trailStatus = value
             }
-        ,
+            ,
             changeCooperationType: function (value) {
                 this.cooperation = value
             }
-        ,
+            ,
             clearPrincipalFilter: function () {
                 this.fetchData.principal_ids = ''
                 this.fetchHandler('get', '/trails/filter')
                 this.$refs.principal_id.setValue('')
             }
-        ,
-            goDetail(id)
-            {
+            ,
+            goDetail(id) {
                 this.$router.push({path: '/trails/' + id})
             }
         }
@@ -809,17 +767,3 @@
         align-items: center;
     }
 </style>
-
-
-© 2019 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Help
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About

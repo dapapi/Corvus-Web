@@ -700,7 +700,6 @@
                 userInfo: '',
                 conditionLength: 0,
                 selectorHidden: [],
-                calendarTitle: '',
             }
         },
         mounted() {

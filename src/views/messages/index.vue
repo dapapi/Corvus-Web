@@ -46,15 +46,9 @@
                                                    :class="iconList[moduleList.find(item => item.id == moduleType).val]"></i>
                                             </div>
                                             <div class="float-left mb-10 col-md-11" style="margin-left:-10px">
-                                                <<<<<<< HEAD
-                                                <p class="mb-5 text-left"><span class="module_title mr-5 title">{{moduleList.find(item=>item.id ==moduleType).name}}助手</span><i
-                                                        class="timesR">{{item2.created_at}}</i></p>
-                                                <p class="desc text-left txt font-size-16">{{item2.message_title}}</p>
-                                                =======
                                                 <p class="text-left mb-5"><span class="module_title mr-5 title">{{moduleList.find(item=>item.id ==moduleType).name}}助手</span><i
                                                         class="timesR">{{item2.created_at}}</i></p>
                                                 <p class="desc txt text-left font-size-16">{{item2.message_title}}</p>
-                                                >>>>>>> cxy
                                             </div>
                                         </div>
                                         <div class="content py-15 pl-40 col-md-8 ml-80"
@@ -339,13 +333,27 @@
                         if (module_id == 214) {
                             this.showScheduleModal(module_data_id)
                         } else if (module_id == 216 || module_id == 213) {
+
                             this.$router.push(`${this.msgLink.find(item => item.value == module_id).name}/${module_data_id}?mode=approver`)
                         } else {
                             this.$router.push(`${this.msgLink.find(item => item.value == module_id).name}/${module_data_id}`)
                         }
-                    }
+                        fetch('get', '/console/checkpower', data).then(response => {
+                            //日历模块显示弹框
 
-                });
+                            if (response.data.power === 'true') {
+                                if (module_id == 214) {
+                                    this.showScheduleModal(module_data_id)
+                                } else if (module_id == 216 || module_id == 213) {
+                                    this.$router.push(`${this.msgLink.find(item => item.value == module_id).name}/${module_data_id}?mode=approver`)
+                                } else {
+                                    this.$router.push(`${this.msgLink.find(item => item.value == module_id).name}/${module_data_id}`)
+                                }
+                            }
+
+                        });
+                    }
+                })
             },
             //获取日历详情
             showScheduleModal: function (scheduleId) {
@@ -366,36 +374,38 @@
             }
 
         },
-        filters: {
-            getWeek: function (date) {
-                let week = new Date(date).getDay();
-                let value = '';
-                switch (week) {
-                    case 0:
-                        value = '周日';
-                        break;
-                    case 1:
-                        value = '周一';
-                        break;
-                    case 2:
-                        value = '周二';
-                        break;
-                    case 3:
-                        value = '周三';
-                        break;
-                    case 4:
-                        value = '周四';
-                        break;
-                    case 5:
-                        value = '周五';
-                        break;
-                    case 6:
-                        value = '周六';
-                        break;
+        filters:
+            {
+                getWeek: function (date) {
+                    let week = new Date(date).getDay();
+                    let value = '';
+                    switch (week) {
+                        case 0:
+                            value = '周日';
+                            break;
+                        case 1:
+                            value = '周一';
+                            break;
+                        case 2:
+                            value = '周二';
+                            break;
+                        case 3:
+                            value = '周三';
+                            break;
+                        case 4:
+                            value = '周四';
+                            break;
+                        case 5:
+                            value = '周五';
+                            break;
+                        case 6:
+                            value = '周六';
+                            break;
+                    }
+                    return value;
                 }
-                return value;
             }
-        },
+        ,
     };
 </script>
 
