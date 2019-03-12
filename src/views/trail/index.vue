@@ -10,7 +10,7 @@
                 <import-and-export class="float-left" :type="'export'" :moduleName="'trails'" :params="exportParams">
                     <i class="iconfont icon-daochu font-size-20 pr-20" aria-hidden="true"></i>
                 </import-and-export>
-                <import-and-export class="float-left" :type="'import'" :moduleName="'trails'" >
+                <import-and-export class="float-left" :type="'import'" :moduleName="'trails'">
                     <i class="iconfont icon-daoru px-5 font-size-20 " aria-hidden="true"></i>
                 </import-and-export>
             </div>
@@ -89,8 +89,8 @@
         </div>
 
 
-        <customize-filter :data="customizeInfo" :stararr='starsArr' @change="customize" 
-                          ></customize-filter>
+        <customize-filter :data="customizeInfo" :stararr='starsArr' @change="customize"
+        ></customize-filter>
         <AddClientType @change="changeTrailType"></AddClientType>
 
         <div class="modal fade" id="addTrail" aria-hidden="true" aria-labelledby="addLabelForm"
@@ -449,30 +449,30 @@
             redirectPublicTrail() {
                 this.$router.push({path: '/publictrails'})
             },
-            fetchHandler(methods, url,type) {
+            fetchHandler(methods, url, type) {
                 let _this = this,
-                fetchData = this.fetchData,
-                newUrl
+                    fetchData = this.fetchData,
+                    newUrl
                 this.fetchData.include = 'include=principal,client,contact,recommendations,expectations'
-                if(type=='filter'){
-                    fetchData = this.customizeCondition 
-                    let keyword,status,principal_ids
-                    if(this.fetchData.keyword){
-                        keyword = '&keyword='+this.fetchData.keyword
-                    }else{
+                if (type == 'filter') {
+                    fetchData = this.customizeCondition
+                    let keyword, status, principal_ids
+                    if (this.fetchData.keyword) {
+                        keyword = '&keyword=' + this.fetchData.keyword
+                    } else {
                         keyword = ''
                     }
-                    if(this.fetchData.status){
-                        status = '&status='+this.fetchData.status
-                    }else{
+                    if (this.fetchData.status) {
+                        status = '&status=' + this.fetchData.status
+                    } else {
                         status = ''
                     }
-                     if(this.fetchData.principal_ids){
-                        principal_ids = '&principal_ids='+this.fetchData.principal_ids
-                    }else{
+                    if (this.fetchData.principal_ids) {
+                        principal_ids = '&principal_ids=' + this.fetchData.principal_ids
+                    } else {
                         principal_ids = ''
                     }
-                    newUrl = url+'?'+this.fetchData.include+keyword+status+principal_ids
+                    newUrl = url + '?' + this.fetchData.include + keyword + status + principal_ids
                 }
                 // console.log(this.fetchData)
                 this.exportParams = {
@@ -487,13 +487,15 @@
                     _this.total_pages = response.meta.pagination.total_pages;
                     _this.isLoading = false;
                 })
-            },
+            }
+            ,
             filterGo() {
                 this.fetchData.keyword = this.trailFilter
                 this.fetchHandler('post', '/trails/filter', 'filter')
                 // this.fetchHandler('get', '/trails/filter')
 
-            },
+            }
+            ,
             progressStatusFilter(value) {
                 this.fetchData.status = value
                 this.fetchHandler('post', '/trails/filter', 'filter')
@@ -517,7 +519,8 @@
                     _this.total_pages = response.meta.pagination.total_pages;
                     _this.isLoading = false;
                 })
-            },
+            }
+            ,
             getIndustries: function () {
                 let _this = this;
                 fetch('get', '/industries/all').then(function (response) {
@@ -529,13 +532,15 @@
                         })
                     }
                 })
-            },
+            }
+            ,
             getClients: function () {
                 let _this = this;
                 fetch('get', '/clients/all').then(function (response) {
                     _this.companyArr = response.data
                 })
-            },
+            }
+            ,
             getStars: function () {
                 if (this.starsArr.length > 0) {
                     return
@@ -548,11 +553,12 @@
                         })
                     }
                 })
-            },
+            }
+            ,
             customize: function (value) {
-                 // let _this = this
+                // let _this = this
                 this.customizeCondition = value
-                this.fetchHandler('post', '/trails/filter','filter')
+                this.fetchHandler('post', '/trails/filter', 'filter')
                 // fetch('post', '/trails/filter?include=principal,client,contact,recommendations,expectations', value).then((params) => {
                 //     _this.trailsInfo = params.data
                 //     _this.total = params.meta.pagination.total;
@@ -607,7 +613,8 @@
                         _this.cleanTempData()
                     })
                 }
-            },
+            }
+            ,
             cleanTempData() {
                 this.trailName = ''
                 this.brandName = ''
@@ -622,19 +629,24 @@
                 this.trailType = ''
                 this.priority = ''
                 this.cooperation = ''
-            },
+            }
+            ,
             redirectTrailDetail: function (trailId) {
                 this.$router.push({path: '/trails/' + trailId})
-            },
+            }
+            ,
             changeTrailOriginPerson(value) {
                 this.trailOriginPerson = value
-            },
+            }
+            ,
             changeTrailOrigin: function (value) {
                 this.trailOrigin = value
-            },
+            }
+            ,
             changeTrailOriginType: function (value) {
                 this.trailOrigin = value
-            },
+            }
+            ,
             changeCompanyName: function () {
                 let companyInfo = this.$store.state.companyInfo;
                 if (companyInfo.value) {
@@ -647,14 +659,16 @@
                         company: companyInfo.name
                     }
                 }
-            },
+            }
+            ,
             changePrincipal: function (value) {
                 if (this.$store.state.otherSlot.data) {
                     this.trailPrincipal = this.$store.state.otherSlot.data.name
                 } else {
                     this.trailPrincipal = ''
                 }
-            },
+            }
+            ,
             changeTargetStars: function (value) {
                 for (let i = 0; i < value.length; i++) {
                     let item = value[i].split('-');
@@ -664,7 +678,8 @@
                     };
                 }
                 this.targetStars = value
-            },
+            }
+            ,
             changeRecommendStars: function (value) {
                 for (let i = 0; i < value.length; i++) {
                     let item = value[i].split('-');
@@ -674,19 +689,24 @@
                     };
                 }
                 this.recommendStars = value
-            },
+            }
+            ,
             changeTrailFee: function (value) {
                 this.trailFee = value
-            },
+            }
+            ,
             changeCheckbox: function (e) {
                 this.trailIsLocked = Number(e.target.checked)
-            },
+            }
+            ,
             changeIndustry: function (value) {
                 this.industry = value
-            },
+            }
+            ,
             changePriority: function (value) {
                 this.priority = value
-            },
+            }
+            ,
             changeTrailType: function (value) {
                 let organization_id = JSON.parse(Cookies.get('user')).organization_id
                 if (value == 3) {
@@ -701,18 +721,22 @@
                 setTimeout(() => {
                     $('.selectpicker').selectpicker('refresh');
                 }, 500);
-            },
+            }
+            ,
             changeTrailStatus: function (value) {
                 this.trailStatus = value
-            },
+            }
+            ,
             changeCooperationType: function (value) {
                 this.cooperation = value
-            },
+            }
+            ,
             clearPrincipalFilter: function () {
                 this.fetchData.principal_ids = ''
                 this.fetchHandler('get', '/trails/filter')
                 this.$refs.principal_id.setValue('')
-            },
+            }
+            ,
             goDetail(id) {
                 this.$router.push({path: '/trails/' + id})
             }

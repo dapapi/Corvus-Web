@@ -1104,10 +1104,8 @@
                 }
                 data.page = '&page='+this.current_page
                 this.customizeInfo = value
-                fetch('post', this.customizeContentType +'/filter?include=type,creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name ,value).then(function (params) {
-                // fetch('post', '/'+this.customizeContentType+'/filter', value).then((params) => {
-                    console.log(params)
-                    // _this.bloggerInfo =params.data
+                this.customizeInfo.sign_contract_status = this.currentpagestatus
+                fetch('post', this.customizeContentType +'/filter?include=creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name ,value).then(function (params) {
                     if (_this.customizeContentType == 'stars') {
                         _this.artistsInfo = params.data
                         _this.current_page = params.meta.pagination.current_page;
