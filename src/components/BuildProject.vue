@@ -208,7 +208,7 @@
                 levelArr: config.levelArr,
                 trailsArr: [],
                 trailOrigin: '',
-                trailOriginArr: config.trailOrigin,
+                // trailOriginArr: config.trailOrigin,
                 trailStatusArr: config.trailStatusArr,
                 cooperationTypeArr: config.cooperationTypeArr,
                 starsArr: [],
@@ -268,7 +268,14 @@
         computed: {
             ...mapState([
                 'userList'
-            ])
+            ]),
+            trailOriginArr () {
+                let organization_id = JSON.parse(Cookies.get('user')).organization_id;
+                if (organization_id == 412) {
+                    return config.trailBloggerOrigin
+                }
+                return config.trailOrigin
+            }
         },
 
 

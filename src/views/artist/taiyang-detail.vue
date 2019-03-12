@@ -939,7 +939,7 @@
                             <div class="example">
                                 <div class="col-md-2 text-right float-left">提醒</div>
                                 <div class="col-md-10 float-left pl-0">
-                                    <selectors :options="remindArr" ref="scheduleNotice"></selectors>
+                                    <selectors :options="remindArr" ref="scheduleRemind"></selectors>
                                 </div>
                             </div>
                             <div class="clearfix my-20">
@@ -1461,6 +1461,7 @@
                     include: 'calendar,participants,creator,material,affixes,project,task',
                 };
                 fetch('get', '/schedules/' + schedule.id, data).then(response => {
+                    console.log(response)
                     if (!response) {
                         this.scheduleData = schedule;
                         this.noPermission = true;
@@ -1501,9 +1502,9 @@
                         }
                     }
                 }
-                for (let key in this.scheduleRemind ){
-                    this.scheduleRemindDate.push(this.scheduleRemind[key])
-                }
+                // for (let key in this.scheduleRemind ){
+                //     this.scheduleRemindDate.push(this.scheduleRemind[key])
+                // }
                 let data = {
                     title: this.scheduleName,
                     calendar_id: this.calendarId[0],
@@ -1513,7 +1514,7 @@
                     end_at: endTime,
                     repeat: this.scheduleRepeat,
                     desc: this.eventDesc,
-                    remind: this.scheduleRemindDate
+                    // remind: this.scheduleRemind
                 };
                 if (this.eventPlace) {
                     data.position = this.eventPlace;
@@ -1852,7 +1853,8 @@
                 this.$refs.scheduleResource.setValue('');
                 this.$refs.scheduleRepeat.setValue('0');
                 this.$refs.scheduleNotice.setValue('0');
-                this.this.scheduleRemindDate = []
+                this.$refs.scheduleRemind.setValue('0');
+                // this.this.scheduleRemindDate = []
             }
             ,
             /*查看日历详情 --添加日历 -- 修改日历 --结束*/
@@ -1918,6 +1920,7 @@
             getTaskDate: function () {
                 let _this = this
                 fetch('get', `/stars/${this.$route.params.id}/tasks`).then(response => {
+                    // console.log(response.data)
                     _this.allTaskList = response.data
                     if (_this.allTaskList.length > 0) {
                         for (let i = 0; i < _this.allTaskList.length; i++) {
@@ -1927,6 +1930,7 @@
 
                         }
                     }
+                    // console.log(_this.doneTaskNum)
                     _this.taskNum = `${_this.doneTaskNum}/${response.meta.pagination.total}`
                 })
             },
@@ -2155,6 +2159,7 @@
                     _this.allTaskList.push(response.data)
                     $('#addTask').modal('hide');
                     _this.getTaskList()
+                    _this.getTaskDate()
                     _this.getArtist()
                     _this.setDefaultPrincipal()
                     _this.$store.state.newParticipantsInfo = []
