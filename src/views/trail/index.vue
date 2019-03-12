@@ -499,10 +499,10 @@
                 this.fetchHandler('post', '/trails/filter', 'filter')
                 // this.fetchHandler('get', '/trails/filter')
             },
-            progressStatusFilter(value) {
-                this.fetchData.status = value
-                this.fetchHandler('get', '/trails/filter')
-            },
+            // progressStatusFilter(value) {
+            //     this.fetchData.status = value
+            //     this.fetchHandler('get', '/trails/filter')
+            // },
             getSales: function (pageNum = 1) {
                 let _this = this;
                 let data = {
