@@ -12,7 +12,7 @@
                     <span class="col-md-4">请选择转交目标</span>
                     <InputSelectors @change='transferTo()'/>
                 </div>
-                <div class="col-md-12 px-50">
+                <div class="col-md-12 px-50 pb-20">
                     <div class="example" v-if="mode !== 'archive'">审批留言</div>
                     <div class="example" v-if="mode === 'archive'">归档描述</div>
                     <textarea class="approval-comment form-control" name="" id="" rows="5"
@@ -27,9 +27,9 @@
                 <div v-if="mode === 'archive'" class="row px-50 pb-40">
                     <figure v-for="(item, index) in fileArr" :key="index" style="margin-right:0px;width:100px;overfolw:hidden;" class="ml-10">
                     <!-- <div class="image-show" v-if="fileInfo.length > 0" style="backgroundImage:url(../../../assets/img/attachment.png)"></div> -->
-                        <figure style="text-align:center;margin-top:30px;" class="attachdetail"> 
+                        <figure style="text-align:center;margin-top:30px;" class="attachdetail">
                             <img src="@/assets/img/attachment.png" alt="" style="width:40px">
-                            <p style='text-overflow: ellipsis;'>{{item}}</p>
+                            <p style='text-overflow: ellipsis;'>{{item.fileName}}</p>
                             <div class="img-control">
                                 <!-- <hr> -->
                                 <div class="icon-control">
@@ -40,7 +40,7 @@
                                 </div>
                             </div>
                         </figure>
-            
+
             <!-- <p>{{item.fileName.split('.')[0]}}</p> -->
                     </figure>
                 </div>
@@ -53,7 +53,7 @@
                     </button>
                 </div>
             </div>
-            
+
         </div>
         <!-- <DocPreview :url='$store.state.previewurl'  /> -->
 
@@ -115,9 +115,9 @@
             this.$delete(this.fileArr,this.fileArr.indexOf(params))
             // this.$emit('change',{key:id,value:this.fileInfo,type:related_field})
             },
-            uploadControl(params){
-                console.log(params);
-                this.fileArr.push(params)
+            uploadControl(fileUrl, fileName, fileSize){
+                console.log(fileUrl, fileName, fileSize);
+                this.fileArr.push({fileUrl:fileUrl, fileName:fileName, fileSize:fileSize})
             },
             transferTo(params) {
                 this.next_id = this.$store.state.newPrincipalInfo.id
@@ -129,12 +129,20 @@
                     Object.assign(data, {next_id: this.next_id})
                 }
                 let _this = this
-                fetch('put', '/approval_instances/' + this.id + '/' + this.mode, data).then((params) => {
-                    _this.$emit('approvaldone')
-                })
+                if(this.mode !== 'archive'){
+                     fetch('put', '/approval_instances/' + this.id + '/' + this.mode, data).then((params) => {
+                        _this.$emit('approvaldone')
+                    })
+                }else{
+                    Object.assign(data, {files: this.fileArr})
+                    fetch('post','/approval_instances/'+this.id+'/archive',data).then((params) => {
+                        _this.$emit('approvaldone',params)
+                    })
+                }
+
                 $('#approvalGo').modal('hide')
                 this.approvalComment = ''
-                
+
             },
 
         }

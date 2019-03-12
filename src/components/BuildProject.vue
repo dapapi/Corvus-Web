@@ -155,12 +155,12 @@
                                                :precision="2" :value="0"></NumberSpinner>
                             </template>
                             <template v-if="field.field_type === 12">
-                                <CheckboxGroup :optionData="platformLists"
+                                <ApprovalCheckBoxGroup :optionData="platformLists" select-all='false'
                                                @change="(value) => addInfo(value, field.id )" :isLine="true">
                                     <template slot-scope="scope">
                                         <span>{{scope.row.name}}</span>
                                     </template>
-                                </CheckboxGroup>
+                                </ApprovalCheckBoxGroup>
                             </template>
                         </div>
                     </div>
@@ -194,10 +194,10 @@
     import ApprovalProgress from '@/components/ForApproval/ApprovalProgress'
     import Cookies from 'js-cookie'
     import {mapState} from 'vuex'
-
+    import ApprovalCheckBoxGroup from '@/components/ForApproval/ApprovalCheckBoxGroup'
     export default {
         components: {
-            ApprovalProgress
+            ApprovalProgress,ApprovalCheckBoxGroup
         },
         name: "BuildProject",
         //projectType 项目类型   projectFieldsArr 不同项目类型的数据
@@ -229,6 +229,10 @@
                 trailStatusDefault: '',
                 platformLists: [
                     {
+                        value: '全平台',
+                        name: '全平台'
+                    },
+                    {
                         value: '微博',
                         name: '微博'
                     },
@@ -239,7 +243,8 @@
                     {
                         value: '小红书',
                         name: '小红书'
-                    },
+                    }, 
+                    
                 ],
             }
         },

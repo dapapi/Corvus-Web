@@ -1,111 +1,149 @@
 <template>
     <div class="page">
-
-        <div class="page-header page-header-bordered">
-            <h1 class="page-title">日历</h1>
-            <div class="page-header-actions" data-toggle="modal" data-target="#addCalendar"
-                 @click="changeCalendarActionType('add')">
-                <i class="iconfont icon-tianjia font-size-20" aria-hidden="true"></i>
-            </div>
-        </div>
-
-        <div class="page-content container-fluid">
-            <div class="panel col-md-12 py-5 clearfix px-0 mb-0">
-                <div class="float-left py-30" style="width: 20%;">
-                    <div style="border-bottom: 1px solid #D8D8D8;width: 90%;margin: 0 auto">
-                        <InlineDatepicker @change="selectDate"></InlineDatepicker>
-                    </div>
-                    <div class="calendar-list">
-                        <div>
-                            <div class="calendar-title position-relative" style="line-height: 20px">
-                                <i class="iconfont icon-richeng pr-5"></i>
-                                <span @click="displayMeetingRoom" class="pointer-content">所有日历</span>
-                                <span class="px-5 pointer-content" @click="allCalendarShow">
-                                    <template v-if="showAllCalendar">
-                                        <i class="iconfont icon-xiajiantou" style="font-size:12px"></i>
-                                    </template>
-                                    <template v-else>
-                                        <i class="iconfont icon-xiangshangjiantou" style="font-size:12px"></i>
-                                    </template>
-                                </span>
-                                <span class="float-right pointer-content" @click="addMultipleMember">
-                                    <i class="iconfont icon-tianjiarenyuan"></i>
-                                </span>
-                            </div>
-                            <div v-show="showAllCalendar">
-                                <ul>
-                                    <li v-for="(calendar,index) in calendarList" :key="index" class="clearfix">
-                                        <div class="calendar-checkbox float-left pointer-content"
-                                             :style="'background-color:' + calendar.color"
-                                             @click="checkCalendar(calendar.id)">
-                                            <i class="md-check"
-                                               v-show="selectedCalendar.indexOf(calendar.id) > -1"></i>
-                                        </div>
-                                        <div class="float-left col-md-9 pr-0"
-                                             style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
-                                            {{ calendar.title }}
-                                        </div>
-                                        <div class="float-right position-relative">
-                                            <i class="iconfont icon-gengduo1" aria-hidden="true" id="taskDropdown"
-                                               data-toggle="dropdown" aria-expanded="false"></i>
-                                            <div class="dropdown-menu" aria-labelledby="taskDropdown">
-                                                <a class="dropdown-item" @click="getCalendarDetail(calendar.id)"
-                                                   data-target="#addCalendar" data-toggle="modal">编辑</a>
-                                                <a class="dropdown-item" data-target="#delModel" data-toggle="modal"
-                                                   @click="deleteToastr('calendar', calendar)">删除</a>
+        <div class="page-aside-left">
+            <div class="page-aside">
+                <div class="page-aside-inner page-aside-scroll scrollable is-enabled scrollable-vertical"
+                     style="position: relative;">
+                    <div data-role="container" class="scrollable-container">
+                        <div data-role="content" class="scrollable-content">
+                            <section class="page-aside-section">
+                                <h5 class="page-title px-20 mb-45">
+                                    <span>日历</span>
+                                    <span class="float-right pointer-content" @click="changeCalendarActionType('add')">
+                                        <i class="iconfont icon-tianjiarili"></i>
+                                    </span>
+                                </h5>
+                                <div class="container-fluid">
+                                    <div style="border-bottom: 1px solid #D8D8D8;margin: 0 auto">
+                                        <InlineDatepicker @change="selectDate"></InlineDatepicker>
+                                    </div>
+                                    <div class="calendar-list">
+                                        <div>
+                                            <div class="calendar-title position-relative"
+                                                 style="line-height: 20px">
+                                                <i class="iconfont icon-richeng pr-5"></i>
+                                                <span @click="displayMeetingRoom"
+                                                      class="pointer-content">所有日历</span>
+                                                <span class="px-5 pointer-content" @click="allCalendarShow">
+                                                            <template v-if="showAllCalendar">
+                                                                <i class="iconfont icon-xiajiantou"
+                                                                   style="font-size:12px"></i>
+                                                            </template>
+                                                            <template v-else>
+                                                                <i class="iconfont icon-xiangshangjiantou"
+                                                                   style="font-size:12px"></i>
+                                                            </template>
+                                                        </span>
+                                                <span class="float-right pointer-content"
+                                                      @click="addMultipleMember">
+                                                            <i class="iconfont icon-tianjiarenyuan"></i>
+                                                        </span>
+                                            </div>
+                                            <div class="input-search my-10">
+                                                <button type="button" class="input-search-btn">
+                                                    <i aria-hidden="true" class="iconfont icon-buoumaotubiao13"></i>
+                                                </button>
+                                                <input type="text" placeholder="请输入日历名称" v-model="calendarTitle"
+                                                       class="form-control project-search" style="height: 2rem;"
+                                                       @blur="getCalendarList" @keyup.enter="getCalendarList">
+                                            </div>
+                                            <div v-show="showAllCalendar" style="max-height: 350px;overflow-y: auto">
+                                                <ul>
+                                                    <li v-for="(calendar,index) in calendarList" :key="index"
+                                                        class="clearfix">
+                                                        <div class="calendar-checkbox float-left pointer-content"
+                                                             :style="'background-color:' + calendar.color"
+                                                             @click="checkCalendar(calendar.id)">
+                                                            <i class="md-check"
+                                                               v-show="selectedCalendar.indexOf(calendar.id) > -1"></i>
+                                                        </div>
+                                                        <div class="float-left col-md-9 pr-0"
+                                                             style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
+                                                            {{ calendar.title }}
+                                                        </div>
+                                                        <div class="float-right position-relative">
+                                                            <i class="iconfont icon-gengduo1" aria-hidden="true"
+                                                               id="taskDropdown"
+                                                               data-toggle="dropdown" aria-expanded="false"></i>
+                                                            <div class="dropdown-menu"
+                                                                 aria-labelledby="taskDropdown">
+                                                                <a class="dropdown-item"
+                                                                   @click="getCalendarDetail(calendar.id)"
+                                                                   data-target="#addCalendar"
+                                                                   data-toggle="modal">编辑</a>
+                                                                <a class="dropdown-item" data-target="#delModel"
+                                                                   data-toggle="modal"
+                                                                   @click="deleteToastr('calendar', calendar)">删除</a>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                <div class="checkbox-custom checkbox-primary">
+                                                    <input type="checkbox" id="inputUnchecked"
+                                                           @change="selectAllCalendar">
+                                                    <label for="inputUnchecked">全选</label>
+                                                </div>
                                             </div>
                                         </div>
-                                    </li>
-                                </ul>
-                                <div class="px-20">
-                                    <div class="checkbox-custom checkbox-primary">
-                                        <input type="checkbox" id="inputUnchecked" @change="selectAllCalendar">
-                                        <label for="inputUnchecked">全选</label>
+                                        <div>
+                                            <div class="calendar-title">
+                                                <i class="iconfont icon-richeng pr-5"></i>资源
+                                                <span class="px-5 pointer-content" @click="allResourceShow">
+                                                            <template v-if="showAllResource">
+                                                                <i class="iconfont icon-xiajiantou"
+                                                                   style="font-size:12px"></i>
+                                                            </template>
+                                                            <template v-else>
+                                                                <i class="iconfont icon-xiangshangjiantou"
+                                                                   style="font-size:12px"></i>
+                                                            </template>
+                                                        </span>
+                                                <span class="float-right pointer-content" v-show="isMeeting"
+                                                      @click="displayMeetingRoom">回到日历</span>
+                                            </div>
+                                            <div v-show="showAllResource">
+                                                <div class="text-center pb-10">
+                                                            <span class="pointer-content hover-content"
+                                                                  @click="checkMeetingRoom(1)">会议室占用情况</span>
+                                                </div>
+                                                <div class="text-center pb-10">
+                                                            <span class="pointer-content hover-content"
+                                                                  @click="checkMeetingRoom(2)">摄影棚占用情况</span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="calendar-title">
-                                <i class="iconfont icon-richeng pr-5"></i>资源
-                                <span class="px-5 pointer-content" @click="allResourceShow">
-                                    <template v-if="showAllResource">
-                                        <i class="iconfont icon-xiajiantou" style="font-size:12px"></i>
-                                    </template>
-                                    <template v-else>
-                                        <i class="iconfont icon-xiangshangjiantou" style="font-size:12px"></i>
-                                    </template>
-                                </span>
-                                <span class="float-right pointer-content" v-show="isMeeting"
-                                      @click="displayMeetingRoom">
-                                    回到日历
-                                </span>
-                            </div>
-                            <div v-show="showAllResource">
-                                <div class="text-center pb-10">
-                                    <span class="pointer-content hover-content"
-                                          @click="checkMeetingRoom(1)">会议室占用情况</span>
-                                </div>
-                                <div class="text-center pb-10">
-                                    <span class="pointer-content hover-content"
-                                          @click="checkMeetingRoom(2)">摄影棚占用情况</span>
-                                </div>
-                            </div>
+
+                            </section>
                         </div>
                     </div>
+                    <div class="scrollable-bar scrollable-bar-vertical is-disabled scrollable-bar-hide"
+                         draggable="false">
+                        <div class="scrollable-bar-handle"></div>
+                    </div>
                 </div>
-                <div class="vertical-line float-left"></div>
-                <div class="float-left p-0" style="width: 79%;">
-                    <calendar :goto-date="selectedDate" v-if="!meetingRomeShow" @dayClick="showAddScheduleModal"
-                              :calendars="selectedCalendar" :meeting-rome-list="meetingRomeList" ref="calendar"
-                              :is-meeting="isMeeting" @calendarDisplay="checkMeetingRoom" @showToast="showToast"
-                              @scheduleClick="showScheduleModal" :calendarView="calendarView"></calendar>
-                    <MeetingRoomCalendar v-show="meetingRomeShow" :meetingRomeList="meetingRomeList" ref="meetingRoom"
-                                         @change="changeToCalendar"></MeetingRoomCalendar>
-                </div>
-
             </div>
+
+            <div class="page-main" style="background-color:#f3f4f5">
+                <div class="page-header page-header-bordered">
+                    <h1 class="page-title">日程</h1>
+                </div>
+                <div class="page-content container-fluid">
+                    <div class="bg-white">
+                        <calendar :goto-date="selectedDate" v-if="!meetingRomeShow" @dayClick="showAddScheduleModal"
+                                  :calendars="selectedCalendar" :meeting-rome-list="meetingRomeList" ref="calendar"
+                                  :is-meeting="isMeeting" @calendarDisplay="checkMeetingRoom" @showToast="showToast"
+                                  @scheduleClick="showScheduleModal" :calendarView="calendarView"></calendar>
+                        <MeetingRoomCalendar v-show="meetingRomeShow" :meetingRomeList="meetingRomeList"
+                                             ref="meetingRoom"
+                                             @change="changeToCalendar"></MeetingRoomCalendar>
+                    </div>
+                </div>
+            </div>
+
         </div>
+
         <div class="calendar-toast" v-show="toastShow"
              :style="'position: absolute;top:' + toastY + 'px; left: ' + toastX + 'px;'">双击创建日程
         </div>
@@ -215,9 +253,11 @@
                             <div class="example">
                                 <div class="col-md-2 text-right float-left">提醒</div>
                                 <div class="col-md-10 float-left pl-0">
-                                    <AddRemind @change="changeScheduleRemind" :options="remindArr" :isCancel="isCancel"
+                                    <!-- <AddRemind @change="changeScheduleRemind" :options="remindArr" :isCancel="isCancel"
                                                :conditionLength="conditionLength" :selectorHidden="selectorHidden"
-                                               ref="scheduleRemind"></AddRemind>
+                                               ref="scheduleRemind"></AddRemind> -->
+                                    <selectors :options="remindArr" ref="scheduleRemind"
+                                               @change="changeScheduleRemind"></selectors>
                                 </div>
                             </div>
                             <div class="clearfix my-20">
@@ -616,6 +656,7 @@
                 selectedDate: '',
                 calendarColor: '',
                 selectedCalendar: [],
+                oldSelectedCalendar: [],
                 delCalendarInfo: '',
                 meetingRomeShow: false,
                 calendarList: [],
@@ -626,7 +667,7 @@
                 starFlag: '',
                 calendarVisible: 1,
                 calendarDetailInfo: '',
-                calendarActionType: '',
+                calendarActionType: 'add',
                 scheduleCalendar: '',
                 isScheduleAllday: 0,
                 scheduleRepeat: 0,
@@ -659,8 +700,7 @@
                 userInfo: '',
                 conditionLength: 0,
                 selectorHidden: [],
-                isCancel: false,
-                scheduleRemindDate: []
+                calendarTitle: '',
             }
         },
         mounted() {
@@ -705,8 +745,6 @@
             });
             this.globalClick(this.removeSelector);
             this.initCalendar();
-            let pageContent = $('.container-fluid');
-            $('.vertical-line').css('height', (pageContent[0].offsetHeight - 60) + 'px');
             this.userInfo = JSON.parse(Cookies.get('user'));
         },
 
@@ -788,11 +826,24 @@
 
             getCalendarList: function () {
                 this.calendarList = [];
-                fetch('get', '/calendars/all').then(response => {
+                let data = {};
+                if (this.calendarTitle) {
+                    data.title = this.calendarTitle
+                }
+                fetch('get', '/calendars/all', data).then(response => {
                     for (let i = 0; i < response.data.length; i++) {
                         response.data[i].name = response.data[i].title;
                         response.data[i].value = response.data[i].id;
                         this.calendarList.push(response.data[i])
+                    }
+                    if (data.title) {
+                        this.oldSelectedCalendar = this.selectedCalendar;
+                        this.selectedCalendar = [];
+                        for (let i = 0; i < response.data.length; i++) {
+                            this.selectedCalendar.push(response.data[i].id)
+                        }
+                    } else {
+                        this.selectedCalendar = this.oldSelectedCalendar;
                     }
                 })
 
@@ -1143,6 +1194,7 @@
 
             changeCalendarActionType: function (value) {
                 this.calendarActionType = value
+                $('#addCalendar').modal('show')
             },
 
             changeScheduleRepeat: function (value) {
@@ -1185,9 +1237,6 @@
                         }
                     }
                 }
-                for (let key in this.scheduleRemind) {
-                    this.scheduleRemindDate.push(this.scheduleRemind[key])
-                }
                 let data = {
                     title: this.scheduleName,
                     calendar_id: this.scheduleCalendar,
@@ -1197,8 +1246,6 @@
                     end_at: endTime,
                     repeat: this.scheduleRepeat,
                     desc: this.eventDesc,
-                    remind: this.scheduleRemindDate
-
                 };
                 if (this.eventPlace) {
                     data.position = this.eventPlace;
@@ -1255,8 +1302,7 @@
                 this.$refs.scheduleEndMinute.setValue('0');
                 this.$refs.scheduleResource.setValue('');
                 this.$refs.scheduleRepeat.setValue('0');
-                this.isCancel = true
-                this.this.scheduleRemindDate = []
+                this.$refs.scheduleRemind.setValue('0');
             },
             cancelSchedule: function () {
 
@@ -1445,7 +1491,7 @@
     }
 
     .calendar-title {
-        padding: 20px 20px 10px;
+        padding: 20px 0 10px;
     }
 
     .calendar-list ul li {
@@ -1458,7 +1504,7 @@
     }
 
     .calendar-list ul {
-        padding: 0 20px;
+        padding: 0;
         margin-top: 10px;
     }
 
@@ -1495,6 +1541,11 @@
         padding: 2px 3px;
         border-radius: 2px;
         z-index: 1000;
+    }
+
+    .project-search::-webkit-input-placeholder {
+        font-weight: 200;
+        font-size: 12px;
     }
 
 </style>

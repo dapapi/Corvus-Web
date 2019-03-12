@@ -1003,6 +1003,7 @@
                 //博主状态
                 if (signStatus) {
                     this.blogStatus = signStatus
+                    this.getBlogger()
                 }
                 if(this.blogStatus){
                     data.status = '&status='+this.blogStatus
@@ -1012,17 +1013,19 @@
                 //沟通状态
                 if (this.blogCommunication) {
                     data.communication_status = '&communication_status='+this.blogCommunication
+                    this.getBlogger()
                 }else{
                     data.communication_status = ''
                 }
                 //博主名称
                 if (this.blogName) {
                     data.name = '&name='+this.blogName
+                    this.getBlogger()
                 }else{
                     data.name = ''
                 }
                 data.page = '&page='+page
-                fetch('post', '/bloggers/filter?include=type,creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name +data.page ,this.customizeInfo).then(function (response) {
+                fetch('get', '/bloggers?include=type,creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name +data.page ,this.customizeInfo).then(function (response) {
                     
                     if(response.data){
                         _this.bloggerInfo = response.data;
@@ -1107,7 +1110,7 @@
                 console.log(this.customizeInfo)
                 fetch('post', this.customizeContentType +'/filter?include=creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name ,value).then(function (params) {
                 // fetch('post', '/'+this.customizeContentType+'/filter', value).then((params) => {
-                    
+                    console.log(params)
                     // _this.bloggerInfo =params.data
                     if (_this.customizeContentType == 'stars') {
                         _this.artistsInfo = params.data
