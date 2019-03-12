@@ -1,6 +1,18 @@
 <template>
     <div class="page-main" style="background-color:#f3f4f5">
-        <Loading :is-loading="isLoading"></Loading>
+        <!-- <Loading :is-loading="isLoading"></Loading> -->
+        <div class="loader-overlay" v-if="isLoading">
+                <div class="loader-content">
+                    <div class="loader-index">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    </div>
+                </div>
+            </div>
         <div>
             <div class="page-header page-header-bordered mb-0">
                 <h6 class="page-title nav-head" v-if="info">
@@ -30,7 +42,8 @@
                     </div>
                     <span v-if="list.form_status=== 231">&nbsp;{{currentStatus.slice(0,1)}}{{pending.name}}{{currentStatus.slice(1)}}</span>
                     <span v-if="list.form_status !== 231">{{pending.name}}{{currentStatus}}</span>
-                    <i v-if="list.form_status==232 && (info.approval.user_id === currentId || (list.creator && list.creator.data.id === currentId)) ">
+                    <i v-if="list.form_status==232 && (info.approval.user_id === currentId || (list.creator && list.creator.data.id === currentId)) && !info.contract_archive  ">
+                        <button class="btn btn-success" v-if="info.contract" @click='approvalHandler("archive")'>归档</button>
                         <button class="btn btn-primary" @click='approvalHandler("discard")'>作废</button>
                     </i>
                     <i v-if="list.form_status==231 && (info.approval.user_id === currentId || (list.creator && list.creator.data.id === currentId)) ">
@@ -70,6 +83,7 @@
                         <h6 class="page-title mx-15">{{list.title}}</h6>
                         <span class="mx-15">编号：{{list.form_instance_number}}</span>
                     </div>
+                    
                     <div class="col-md-10">
                         <div class="example">
                             <div class="col-md-2 float-left text-right">申请人</div>
@@ -141,7 +155,41 @@
                                     </div>
                                 </div>
                             </div>
+                            
                         </div>
+                    <div class="caption" v-if="info.contract_archive">
+                        <h6 class="page-title mx-15">归档信息</h6>
+                    </div>
+                    
+                    <div class="col-md-10" v-if="info.contract_archive">
+                        <div class="example">
+                            <div class="col-md-2 float-left text-right">归档描述</div>
+                            <div class="col-md-4 float-left">{{info.contract_archive.comment}}
+                            </div>
+                           
+                            <div class="col-md-2 float-left text-right">附件</div>
+                             <div class=" float-left detail-value"
+                                    @click='previewHandler(archivesArr)'>
+                                <figure style="text-align:center" class="float-left"> 
+                                    <img src="@/assets/img/attachment.png" alt="" style="width:20px">
+                                    <p>点击查看</p>
+                                </figure>
+                            </div>
+                            <!-- <div class="col-md-4 float-left">{{(list && list.position) || (info.approval &&
+                                info.approval.position && info.approval.position.name)}}
+                            </div> -->
+                        </div>
+                        <!-- <div class="example">
+                            <div class="col-md-2 float-left text-right">部门</div>
+                            <div class="col-md-4 float-left">{{list.department_name || (info.approval &&
+                                info.approval.department_name)}}
+                            </div>
+                            <div class="col-md-2 float-left text-right">申请时间</div>
+                            <div class="col-md-4 float-left">{{list.created_at || (info.approval &&
+                                info.approval.created_at)}}
+                            </div>
+                        </div> -->
+                    </div>
                         <div class=" col-md-12 col-lg-12">
                             <div class="caption" style="border:0;">
                                 <h6 class="page-title pb-20" style="border-bottom:1px solid #e3e3e3">审批流程</h6>
@@ -157,6 +205,7 @@
                         </div>
                     </div>
                 </div>
+               
                 <div class="panel">
                     <div class="card col-md-12">
                         <div class="card-header card-header-transparent card-header-bordered">
@@ -170,7 +219,9 @@
                     </div>
                 </div>
             </div>
-            <DocPreview :url='previewUrl' detailpage='true'/>
+         <DocPreview :url='$store.state.previewurl' detailpage='true' />
+
+            <!-- <DocPreview :url='previewUrl' detailpage='true'/> -->
         </div>
         <BuildProject :project-type="projectTypeTemp" :project-fields-arr="projectFieldsArr" mode='detail'
                       :default-data='{fields:(info.fields && info.fields.data),list:list,trailInfo:trailInfo}'></BuildProject>
@@ -236,6 +287,7 @@
                 projectTypeTemp:'',
                 detail_control:{},
                 msg:'',
+                archivesArr:''
             }
         },
 
@@ -274,6 +326,7 @@
                 })
             },
             previewHandler(params) {
+            this.$store.dispatch('changePreview',params)
                 $('#docPreviewSelector').modal('hide')
                 this.previewUrlArr = String(params).split(',')
                 if (this.previewUrlArr.length === 1) {
@@ -296,14 +349,15 @@
                     $('#approval-great-module').modal('show') 
                 })
             },
-            approvalDone() {
+            approvalDone(params = '审批成功') {
                 if (this.list.project_number) {
                     this.$refs.approvalProgress.getApprover(this.list.project_number)
                 } else {
                     this.$refs.approvalProgress.getApprover(this.list.form_instance_number)
                 }
                 this.getData()
-                toastr.success('审批成功')
+                toastr.success(params)
+                this.$emit('unreadupdate')
             },
             getCurrentApprover() {
                 let _this = this
@@ -391,6 +445,11 @@
                     _this.detailData = data
                     _this.trailInfo = params.data.trail
                     _this.detail_control = params.meta.detail_control
+                    let tempArr = []
+                    for (const key in meta.contract_archive.archives.data) {
+                        tempArr.push(meta.contract_archive.archives.data[key].url)
+                    }
+                    _this.archivesArr = tempArr.join(',')
                 })
             },
             participantChange: function (value) {
@@ -439,7 +498,7 @@
     }
 
     .loader-overlay {
-        margin-left: 320px;
+        margin-left: 300px;
         background-color: rgba(7, 17, 27, 0.2)
     }
 

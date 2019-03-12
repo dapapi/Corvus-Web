@@ -1,21 +1,3 @@
-Skip to content
- 
-Search or jump to…
-
-Pull requests
-Issues
-Marketplace
-Explore
- @ycsx Sign out
-5
-0 1 dapapi/Corvus-Web
- Code  Issues 0  Pull requests 0  Projects 0  Wiki  Insights
-Corvus-Web/src/views/artist/talent.vue
-@Cxiaoyu Cxiaoyu 报表模块添加导出
-0295d27  2 days ago
-@hanpeng111 @Cxiaoyu @ycsx @Apple-0722
-1657 lines (1574 sloc)  81.8 KB
-    
 <template>
     <div class="page">
         <Loading :is-loading="isLoading"></Loading>
@@ -1016,6 +998,7 @@ Corvus-Web/src/views/artist/talent.vue
                 //博主状态
                 if (signStatus) {
                     this.blogStatus = signStatus
+                    this.getBlogger()
                 }
                 if(this.blogStatus){
                     data.status = '&status='+this.blogStatus
@@ -1025,17 +1008,19 @@ Corvus-Web/src/views/artist/talent.vue
                 //沟通状态
                 if (this.blogCommunication) {
                     data.communication_status = '&communication_status='+this.blogCommunication
+                    this.getBlogger()
                 }else{
                     data.communication_status = ''
                 }
                 //博主名称
                 if (this.blogName) {
                     data.name = '&name='+this.blogName
+                    this.getBlogger()
                 }else{
                     data.name = ''
                 }
                 data.page = '&page='+page
-                fetch('post', '/bloggers/filter?include=type,creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name +data.page ,this.customizeInfo).then(function (response) {
+                fetch('get', '/bloggers?include=type,creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name +data.page ,this.customizeInfo).then(function (response) {
                     
                     if(response.data){
                         _this.bloggerInfo = response.data;
@@ -1112,9 +1097,9 @@ Corvus-Web/src/views/artist/talent.vue
                 }
                 data.page = '&page='+this.current_page
                 this.customizeInfo = value
-                fetch('post', this.customizeContentType +'/filter?include=creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name ,value).then(function (params) {
+                fetch('post', this.customizeContentType +'/filter?include=type,creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name ,value).then(function (params) {
                 // fetch('post', '/'+this.customizeContentType+'/filter', value).then((params) => {
-                    
+                    console.log(params)
                     // _this.bloggerInfo =params.data
                     if (_this.customizeContentType == 'stars') {
                         _this.artistsInfo = params.data

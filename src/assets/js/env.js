@@ -5,7 +5,7 @@ let env = {
     tokenString: 'CORVUS-ACCESS-TOKEN',
     apiUrl: 'https://sandbox-api-crm.papitube.com',
     imgUrl: 'https://res-crm.papitube.com/',
-    socketUrl: 'wss://sandbox-corvus.papitube.com:8081',
+    socketUrl: 'wss://api-corvus.mttop.cn:8081',
 
     getHeaders: function () {
         let headers = {

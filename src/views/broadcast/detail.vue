@@ -1,5 +1,5 @@
 <template>
-    <div class="page">
+    <div class="page-main" style="background-color:#f3f4f5">
         <div class="loader-overlay" v-if="isLoading">
             <div class="loader-content">
                 <div class="loader-index">
@@ -221,12 +221,12 @@ iframe{
 
 }
 .page{
-    margin-left: 260px !important;
+    /* margin-left: 260px !important; */
 }
 .loader-overlay{
-        margin-left: 100px;
-        background-color: rgba(7, 17, 27, 0.2)
-    }
+    margin-left: 100px;
+    background-color: rgba(7, 17, 27, 0.2)
+}
 .broadcast-content{
     min-height: 200px;
 }

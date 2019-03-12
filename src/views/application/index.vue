@@ -36,6 +36,13 @@
         methods: {
             setData: function () {
                 this.leftData = [
+                    // {
+                    //     id: 1,
+                    //     name: '我的目标',
+                    //     url: '/my/goal',
+                    //     type: 'link',
+                    //     level: 1,
+                    // },
                     {
                         id: 1,
                         name: '我的消息',
@@ -45,14 +52,14 @@
                         subMenu:[],
                     },
                     {
-                        id: 2,
+                        id: 3,
                         name: '我的项目',
                         url: '/my/project',
                         type: 'link',
                         level: 1
                     },
                     {
-                        id: 3,
+                        id: 4,
                         name: '我的任务',
                         url: '/my/task',
                         type: 'link',
