@@ -1514,7 +1514,7 @@
                     end_at: endTime,
                     repeat: this.scheduleRepeat,
                     desc: this.eventDesc,
-                    remind: this.scheduleRemind
+                    // remind: this.scheduleRemind
                 };
                 if (this.eventPlace) {
                     data.position = this.eventPlace;
