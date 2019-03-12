@@ -26,7 +26,7 @@
                         <div class="input-search">
                             <button type="button" @click="getStaffList" class="input-search-btn"><i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
                             </button>
-                            <input type="text" class="form-control" @keyup.enter="getStaffList" v-model="search" placeholder="请搜索姓名/手机号">
+                            <input type="text" class="form-control" @keyup.enter="getStaffList" v-model="search" placeholder="请搜索昵称/手机号">
                         </div>
                     </div>
                     <div class="col-md-3 example float-left" 
