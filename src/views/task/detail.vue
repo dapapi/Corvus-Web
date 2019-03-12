@@ -445,12 +445,12 @@
                                             <span class="float-right pl-10 pointer-content"
                                                   data-plugin="actionBtn" @click="setDelInfo(attachment.id)"
                                                   data-toggle="modal"
-                                                  data-target="#confirmFlag"><i
-                                                    class="iconfont icon-shanchu1"></i> 删除</span>
+                                                  data-target="#confirmFlag">
+                                                  <i class="iconfont icon-shanchu1"></i> 删除</span>
                                             <span class="float-right px-10">|</span>
                                             <span class="float-right px-10 pointer-content"
-                                                  @click="downloadAttachment(attachment.id, attachment.url)"><i
-                                                    class="iconfont icon-download"></i> 下载</span>
+                                                  @click="downloadAttachment(attachment.id, attachment.url)">
+                                                  <i class="iconfont icon-download"></i> 下载</span>
                                             <span class="float-right px-10">{{ attachment.size }}</span>
                                             <a data-toggle="modal" data-target='#docPreview'
                                                 @click="previewFile(attachment.url, attachment.title)"
