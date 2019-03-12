@@ -220,6 +220,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+p {
+    text-align: left;
+}
 .title {
     color: #333;
     font-size: 16px;
