@@ -8,8 +8,8 @@
                     </button>
                     <h4 class="modal-title" id="exampleModalTitle">{{titleHandler}}</h4>
                 </div>
-                <div class="modal-body col-md-12 row px-50 pt-20" v-if="mode === 'transfer'">
-                    <span class="col-md-4">请选择转交目标</span>
+                <div class="modal-body col-md-12 px-50 pt-20 pb-0" v-if="mode === 'transfer'">
+                    <span class="">请选择转交目标</span>
                     <InputSelectors @change='transferTo()'/>
                 </div>
                 <div class="col-md-12 px-50 pb-20">
