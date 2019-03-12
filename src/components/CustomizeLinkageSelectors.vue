@@ -87,10 +87,14 @@ import config from '@/assets/js/config'
             }
         },
         watch:{
-            valueType:function(value){
-                if(value!==2){
+            keyId:function(value){
+                this.normalInput = ''
+                this.childData = ''
+                this.$refs.selectors.setValue('')
+            },
+            valueType:function(value,oldValue){
+                if(oldValue === 2 && value!==2){
                     this.$refs.numberSpinner.destroy()
-
                 }
             },
             _department () {
@@ -105,15 +109,20 @@ import config from '@/assets/js/config'
             normalInput:function(){
                 this.sendData.value = this.normalInput
             },
-            fatherData:function(){
-                
+            fatherData:function(value){
+                if(!value){
+                    return
+                }
                 let currentData = this.data.find(item => item.value == this.fatherData)
                 this.sendData.field = currentData.code
                 this.sendData.type = currentData.type
                 this.sendData.value = ''
                 this.sendData.id = currentData.id
             },
-            childData:function(){
+            childData:function(value){
+                 if(!value){
+                    return
+                }
                 let currentData = this.item.find(item =>item.value == this.childData)
                 this.sendData.operator = currentData.code
             }
