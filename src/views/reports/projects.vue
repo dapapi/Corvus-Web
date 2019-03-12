@@ -5,7 +5,7 @@
 
             <div class="page-header-actions">
                 <ImportAndExport class="float-left" :type="'export'" :moduleName="'reportfrom/projectreport'" :params="exportParams">
-                    <i class="iconfont icon-daochu font-size-20" aria-hidden="true"></i>
+                    <a class="iconfont icon-daochu font-size-20" aria-hidden="true" title="导出项目报表"></a>
                 </ImportAndExport>
             </div>
         </div>
