@@ -449,14 +449,16 @@
             redirectPublicTrail() {
                 this.$router.push({path: '/publictrails'})
             },
-            fetchHandler(methods, url, type) {
+            fetchHandler(methods, url, type,pageNum = 1) {
+                this.isLoading = true
+                console.log(pageNum);
                 let _this = this,
                     fetchData = this.fetchData,
                     newUrl
                 this.fetchData.include = 'include=principal,client,contact,recommendations,expectations'
                 if (type == 'filter') {
                     fetchData = this.customizeCondition
-                    let keyword, status, principal_ids
+                    let keyword, status, principal_ids, pagenumber
                     if (this.fetchData.keyword) {
                         keyword = '&keyword=' + this.fetchData.keyword
                     } else {
@@ -472,7 +474,8 @@
                     } else {
                         principal_ids = ''
                     }
-                    newUrl = url + '?' + this.fetchData.include + keyword + status + principal_ids
+                    pagenumber = '&page=' + pageNum
+                    newUrl = url + '?' + this.fetchData.include + keyword + status + principal_ids + pagenumber
                 }
                 // console.log(this.fetchData)
                 this.exportParams = {
@@ -507,18 +510,19 @@
             // },
             getSales: function (pageNum = 1) {
                 let _this = this;
-                let data = {
-                    page: pageNum,
-                    include: 'principal,client,expectations',
-                };
-                Object.assign(data, this.fetchData)
-                fetch('get', '/trails', data).then(function (response) {
-                    _this.trailsInfo = response.data;
-                    _this.total = response.meta.pagination.total;
-                    _this.current_page = response.meta.pagination.current_page;
-                    _this.total_pages = response.meta.pagination.total_pages;
-                    _this.isLoading = false;
-                })
+                this.fetchHandler('post', '/trails/filter', 'filter',pageNum)
+                // let data = {
+                //     page: pageNum,
+                //     include: 'principal,client,expectations',
+                // };
+                // Object.assign(data, this.fetchData)
+                // fetch('post', '/trails/filter', data).then(function (response) {
+                //     _this.trailsInfo = response.data;
+                //     _this.total = response.meta.pagination.total;
+                //     _this.current_page = response.meta.pagination.current_page;
+                //     _this.total_pages = response.meta.pagination.total_pages;
+                //     _this.isLoading = false;
+                // })
             }
             ,
             getIndustries: function () {
