@@ -18,7 +18,7 @@
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
                         <input type="text" class="form-control" placeholder="请输入公司名称" v-model="companyName"
-                               @blur="getClients(1)">
+                               @keyup.enter='filterGo' @blur='filterGo'>
                     </div>
                     <div class="col-md-3 example float-left">
                         <selectors :options="userList" @change="changePrincipalSelect" placeholder="请选择负责人"
@@ -236,6 +236,8 @@
                 cleanUp: false,
                 exportParams: {},//导出参数
                 canAdd: false, // 可以新增吗
+                fetchData:{},
+                customizeCondition: {}
             }
         },
 
@@ -368,17 +370,57 @@
             },
         
             customize: function (value) {
-                let _this = this
-                fetch('post', '/clients/filter?include=principal', value).then((params) => {
-                    _this.clientsInfo = params.data
-                    _this.total = params.meta.pagination.total;
-                    _this.total_pages = params.meta.pagination.total_pages;
-                    _this.current_page = params.meta.pagination.current_page
-                    _this.cleanUp = true
-                })
+                this.customizeCondition = value
+                this.fetchHandler('post','/clients/filter','filter')
+                // let _this = this
+                // fetch('post', '/clients/filter?include=principal', value).then((params) => {
+                //     _this.clientsInfo = params.data
+                //     _this.total = params.meta.pagination.total;
+                //     _this.total_pages = params.meta.pagination.total_pages;
+                //     _this.current_page = params.meta.pagination.current_page
+                //     _this.cleanUp = true
+                // })
 
             },
-
+            fetchHandler(methods, url, type) {
+                let _this = this,
+                    fetchData = this.fetchData,
+                    newUrl
+                this.fetchData.include = 'include=principal'
+                if (type == 'filter') {
+                    fetchData = this.customizeCondition
+                    let keyword, status, principal_ids
+                    if (this.fetchData.keyword) {
+                        keyword = '&keyword=' + this.fetchData.keyword
+                    } else {
+                        keyword = ''
+                    }
+                    if (this.fetchData.status) {
+                        status = '&status=' + this.fetchData.status
+                    } else {
+                        status = ''
+                    }
+                    if (this.fetchData.principal_ids) {
+                        principal_ids = '&principal_ids=' + this.fetchData.principal_ids
+                    } else {
+                        principal_ids = ''
+                    }
+                    newUrl = url + '?' + this.fetchData.include + keyword + status + principal_ids
+                }
+                // console.log(this.fetchData)
+                this.exportParams = {
+                    keyword: this.fetchData.keyword,
+                    status: this.fetchData.status,
+                    principal_ids: this.fetchData.principal_ids,
+                }
+                fetch(methods, newUrl || url, fetchData).then((response) => {
+                    _this.clientsInfo = response.data
+                    _this.total = response.meta.pagination.total;
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total_pages = response.meta.pagination.total_pages;
+                    _this.isLoading = false;
+                })
+            },
             redirectClientDetail: function (clientId) {
                 this.$router.push({path: 'clients/' + clientId});
             },
@@ -394,15 +436,20 @@
             changePrincipal: function (value) {
                 this.clientPrincipal = value
             },
+            filterGo() {
+                this.fetchData.keyword = this.companyName
+                this.fetchHandler('post','/clients/filter','filter')
+                // this.fetchHandler('get', '/trails/filter')
 
+            },
             changePrincipalSelect(value) {
                 this.clientPrincipalIdSearch = value
-                this.getClients()
+                this.fetchHandler('post','/clients/filter','filter')
             },
 
             changeClientLevelSelect(value) {
                 this.clientLevelSearch = value
-                this.getClients()
+                this.fetchHandler('post','/clients/filter','filter')
             },
 
             changeClientScale: function (value) {
