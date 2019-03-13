@@ -85,7 +85,7 @@
                                 <div class="col-md-4 float-left">
                                     <div class="float-left col-md-6">
                                         <i class="iconfont icon-yonghu pr-2"></i>
-                                        <span class="font-weight-bold">姓名</span>
+                                        <span class="font-weight-bold">昵称</span>
                                     </div>
                                     <div class="float-left col-md-6 pl-0">
                                         {{ personalInfo.name ? personalInfo.name : ''}}
@@ -146,7 +146,7 @@
                                     <Avatar class="small-avatar" :imgUrl="item.principal.data.icon_url"/>
                                     {{ item.title }}
                                 </div>
-                                <div class="">{{ item.start_at }}</div>
+                                <div class="">{{ item.end_at }}</div>
                             </div>
                             <div style="margin: 6rem auto;width: 100px" v-if="tasks.length === 0">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
@@ -164,7 +164,7 @@
                                     <Avatar class="small-avatar" :imgUrl="item.creator.data.icon_url"/>
                                     {{ item.title }}
                                 </div>
-                                <div class="">{{ item.end_at }}</div>
+                                <div class="">{{ item.start_at }}</div>
                             </div>
                             <div style="margin: 6rem auto;width: 100px" v-if="schedules.length === 0">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
@@ -535,7 +535,8 @@
     }
 
     .overflowY {
-        height: calc(100vh - 400px);
+        /* height: calc(100vh - 400px); */
+        height: calc((100vh - 400px) * 0.9);
         overflow-y: auto;
     }
 

@@ -6,7 +6,7 @@
             <div class="page-header-actions">
                 <ImportAndExport class="float-left" :type="'export'" :moduleName="'reportfrom/bloggerreport'"
                                  :params="exportParams">
-                    <i class="iconfont icon-daochu font-size-20" aria-hidden="true"></i>
+                    <a class="iconfont icon-daochu font-size-20" aria-hidden="true" title="导出博主报表"></a>
                 </ImportAndExport>
             </div>
         </div>

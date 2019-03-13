@@ -291,4 +291,7 @@
     .site-menu>.site-menu-item>a{
         padding:8px !important;
     }
+    a:hover{
+        cursor: pointer;
+    }
 </style>

@@ -5,7 +5,7 @@
             <h1 class="page-title">项目管理</h1>
             <div class="page-header-actions">
                 <import-and-export class="float-left" :type="'export'" :moduleName="'projects'" :params="exportParams">
-                    <i class="iconfont icon-daochu px-5 font-size-20 pr-20" aria-hidden="true"></i>
+                    <a class="iconfont icon-daochu px-5 font-size-20 pr-20" aria-hidden="true" title="导出项目管理"></a>
                 </import-and-export>
             </div>
         </div>

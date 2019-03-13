@@ -5,7 +5,7 @@
 
             <div class="page-header-actions">
                 <ImportAndExport class="float-left" :type="'export'" :moduleName="'reportfrom/commercialfunnel'" :params="exportParams">
-                    <i class="iconfont icon-daochu font-size-20" aria-hidden="true"></i>
+                    <a class="iconfont icon-daochu font-size-20" aria-hidden="true" title="导出商业漏斗分析"></a>
                 </ImportAndExport>
             </div>
 

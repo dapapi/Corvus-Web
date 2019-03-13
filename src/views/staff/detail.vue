@@ -15,9 +15,15 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="example">
-                            <div class="col-md-3 text-right float-left">姓名(中文)</div>
+                            <div class="col-md-3 text-right float-left">昵称</div>
                             <div class="col-md-9 float-left pl-0">
                                 <EditInput :content="info.name" :isEdit="editInfo" @change="item => changeState('info.name', item)" />
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-3 text-right float-left">姓名(中文)</div>
+                            <div class="col-md-9 float-left pl-0">
+                                <EditInput :content="info.realName" :isEdit="editInfo" @change="item => changeState('info.realName', item)" />
                             </div>
                         </div>
                         <div class="example">
@@ -42,12 +48,6 @@
                             <div class="col-md-9 float-left pl-0">
                                 <DropDepartment v-if="editInfo" :data="department" @change="selectDepartment"/>
                                 <span v-else>{{ info.department }}</span>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-3 text-right float-left">工作邮箱</div>
-                            <div class="col-md-9 float-left pl-0">
-                                <EditInput :content="info.email" :isEdit="editInfo" @change="item => changeState('info.email', item)" />
                             </div>
                         </div>
                     </div>
@@ -87,6 +87,12 @@
                                 />
                             </div>
                         </div>
+                        <div class="example">
+                            <div class="col-md-3 text-right float-left">工作邮箱</div>
+                            <div class="col-md-9 float-left pl-0">
+                                <EditInput :content="info.email" :isEdit="editInfo" @change="item => changeState('info.email', item)" />
+                            </div>
+                        </div>
                         <!-- <div class="example">
                             <div class="col-md-3 text-right float-left">工号</div>
                             <div class="col-md-9 float-left pl-0">
@@ -104,10 +110,10 @@
                                 </div>
                             </upload> -->
                         <!-- </div> -->
-                            <Avatar v-if="!editInfo" :imgUrl="iconUrlCopy" style="width: 120px; height: 120px; font-size: 24px;" />
+                            <Avatar v-if="!editInfo" :imgUrl="info.iconUrl" style="width: 120px; height: 120px; font-size: 24px;" />
                             <upload @change="uploadImg" v-else accept="image/png, image/jpeg, image/gif, image/jpg">
                                 <div class="upload-head">
-                                    <img v-if="iconUrlCopy" :src="iconUrlCopy" alt="头像" />
+                                    <img v-if="info.iconUrl" :src="info.iconUrl" alt="头像" />
                                     <template v-else>
                                         上传头像
                                     </template>
@@ -206,9 +212,15 @@
                                 </div>
                             </div>
                             <div class="col-md-8 example">
-                                <div class="col-md-2 text-right float-left">地址</div>
+                                <div class="col-md-2 text-right float-left">现居住地址</div>
                                 <div class="col-md-6 float-left pl-0">
                                     <EditInput :content="detail.currentAddress" :isEdit="editDetail" @change="item => changeState('detail.currentAddress', item)" />
+                                </div>
+                            </div>
+                            <div class="col-md-8 example">
+                                <div class="col-md-2 text-right float-left">户籍地址</div>
+                                <div class="col-md-6 float-left pl-0">
+                                    <EditInput :content="detail.cadastralAddress" :isEdit="editDetail" @change="item => changeState('detail.cadastralAddress', item)" />
                                 </div>
                             </div>
                             <div class="col-md-8 example">
@@ -519,11 +531,12 @@ export default {
             positiveStateArr: positiveStateArr,
             incomeTaxTypeArr: incomeTaxTypeArr,
             schoolRecordArr: schoolRecordArr, // 学历
-            iconUrlCopy: '', // 头像原始url
+            // iconUrlCopy: '', // 头像原始url
             info: {
-                name: '',
+                name: '', // 昵称
+                realName: '', // 真实姓名
                 phone: '',
-                icon_url: '',
+                iconUrl: '',
                 department: '',
                 departmentId: '',
                 // workEmail: '',
@@ -551,6 +564,7 @@ export default {
                 responsibility: '', // 职责
                 contract: '', // 合同
                 currentAddress: '',
+                cadastralAddress: '', // 户籍地址
                 address: '', // 工作地点
                 hireShape: '', // 聘用形式
             },
@@ -629,16 +643,15 @@ export default {
                 }
                 this.detail.email = data.email || ''
                 this.detail.currentAddress = data.current_address || ''
+                this.detail.cadastralAddress = data.cadastral_address || ''
                 this.info.departmentId = data.department ? data.department.id : ''
                 this.info.department = data.department ? data.department.name : ''
                 this.job.status = data.status || ''
                 this.detail.hireShape = data.hire_shape && data.hire_shape != 0 ? data.hire_shape : ''
-                this.info.positionId = data.position ? data.position.data.id : ''
+                this.info.positionId = data.position && data.position.data ? data.position.data.id : ''
 
                 this.info.email = data.email || ''
                 this.detail.workEmail = data.work_email || ''
-                this.info.icon_url = ''
-                this.iconUrlCopy = data.icon_url
 
                 this.infoCopy = JSON.parse(JSON.stringify(this.info))
                 this.detailCopy = JSON.parse(JSON.stringify(this.detail))
@@ -670,6 +683,9 @@ export default {
         saveEdit (name) {
             const params = {}
             let _data = this.info
+            if (this.info.name !== this.infoCopy.name) {
+                _data.iconUrl = ''  
+            }
             let url = `/edit/${this.userId}/personal`
             let type = 'put' 
             if (name === 'editDetail') {
@@ -732,7 +748,7 @@ export default {
         },
         // 头像修改
         uploadImg (fileUrl, fileName, fileSize) {
-            this.info.icon_url = fileUrl
+            this.info.iconUrl = fileUrl
         },
         // 身份证号修改
         uploadIDImg (fileUrl, fileName, fileSize) {
