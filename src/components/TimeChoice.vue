@@ -32,8 +32,9 @@
               this.$emit('change',this.hour+':'+this.minute)  
             },
             setValue(value) {
-                this.$refs.timehour.setValue(value)
-                this.$refs.minute.setValue(value)
+                console.log(value)
+                this.$refs.timehour.setValue(value[0])
+                this.$refs.minute.setValue(value[1])
             },
 
             destroy() {

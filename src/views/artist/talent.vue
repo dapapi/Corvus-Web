@@ -332,7 +332,7 @@
         </div>
 
         <customize-filter :data="customizeContentType==='stars'?customizeInfoStars:customizeInfoBloggers"
-                          @change="customize" ref="removeDate"></customize-filter>
+                          @change="customize" ref="removeDate" :isint="true"></customize-filter>
 
         <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addBolgger" v-if="!isShow">
             <button type="button"
@@ -1004,6 +1004,7 @@
                 //博主状态
                 if (signStatus) {
                     this.blogStatus = signStatus
+                    // this.getBlogger()
                 }
                 if(this.blogStatus){
                     data.status = '&status='+this.blogStatus
@@ -1013,18 +1014,20 @@
                 //沟通状态
                 if (this.blogCommunication) {
                     data.communication_status = '&communication_status='+this.blogCommunication
+                    // this.getBlogger()
                 }else{
                     data.communication_status = ''
                 }
                 //博主名称
                 if (this.blogName) {
                     data.name = '&name='+this.blogName
+                    // this.getBlogger()
                 }else{
                     data.name = ''
                 }
                 data.page = '&page='+page
-                fetch('post', '/bloggers/filter?include=type,creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name +data.page ,this.customizeInfo).then(function (response) {
-                    console.log(response)
+                fetch('get', '/bloggers?include=type,creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name +data.page ,this.customizeInfo).then(function (response) {
+                    
                     if(response.data){
                         _this.bloggerInfo = response.data;
                     }
@@ -1101,13 +1104,19 @@
                 }
                 data.page = '&page='+this.current_page
                 this.customizeInfo = value
-                // this.customizeInfo.name = this.currentpagename
-                this.customizeInfo.sign_contract_status = this.currentpagestatus
-                // this.customizeInfo.communication_status = this.currentcommunicationstatus
-                fetch('post', this.customizeContentType +'/filter?include=creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name ,value).then(function (params) {
-                // fetch('post', '/'+this.customizeContentType+'/filter', value).then((params) => {
+                // console.log(this.customizeInfo.conditions)
+                // this.customizeInfo.conditions.forEach(item=>{
+                //    if(item!=undefined){
+                //        if(item.id==1561909265){
+                //            console.log(new Date().getFullYear())
+                //        }
+                //    }
                     
-                    // _this.bloggerInfo =params.data
+                // })
+                
+                this.customizeInfo.sign_contract_status = this.currentpagestatus
+                fetch('post', this.customizeContentType +'/filter?include=creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name ,value).then(function (params) {
+
                     if (_this.customizeContentType == 'stars') {
                         _this.artistsInfo = params.data
                         _this.current_page = params.meta.pagination.current_page;

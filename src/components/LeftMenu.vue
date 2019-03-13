@@ -82,16 +82,16 @@
                         code: 'my',
                         image: 'https://res-crm.papitube.com/image/login-icon/wode.png',
                         hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-wode.png',
-                        data: [
-                            {
-                                name: '工作台',
-                                code: 'my'
-                            },
-                            {
-                                name: '报表',
-                                code: 'reports'
-                            }
-                        ]
+                        // data: [
+                        //     {
+                        //         name: '工作台',
+                        //         code: 'my'
+                        //     },
+                        //     {
+                        //         name: '报表',
+                        //         code: 'reports'
+                        //     }
+                        // ]
                     },
                     {
                         name: '日历',

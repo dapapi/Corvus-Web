@@ -5,10 +5,10 @@
             <h1 class="page-title">客户管理</h1>
             <div class="page-header-actions">
                 <ImportAndExport class="float-left" :type="'export'" :moduleName="'clients'" :params="exportParams">
-                    <i class="iconfont icon-daochu px-5 font-size-20 pr-20" aria-hidden="true"></i>
+                    <i class="iconfont icon-daochu px-5 font-size-20 pr-20 pointer-content" title="导出" aria-hidden="true"></i>
                 </ImportAndExport>
                 <ImportAndExport class="float-left" :type="'import'" :moduleName="'clients'">
-                    <i class="iconfont icon-daoru font-size-20" aria-hidden="true"></i>
+                    <i class="iconfont icon-daoru font-size-20 pointer-content" title="导入" aria-hidden="true"></i>
                 </ImportAndExport>
             </div>
         </div>
@@ -103,7 +103,7 @@
                                            @change="changeClientLevel"></selectors>
                             </div>
                         </div>
-                        <!-- 暂时隐藏 -->
+                        
                         <div class="example">
                             <div class="col-md-2 text-right float-left">地区</div>
                             <div class="col-md-10 float-left pl-0 region">
@@ -137,9 +137,21 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left require">联系人电话</div>
+                            <div class="col-md-2 text-right float-left">联系人电话</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" title="" v-model="clientContactPhone">
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">微信</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <input type="text" class="form-control" title=""  v-model="wechat">
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">其他联系方式</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <input type="text" class="form-control" title="" v-model="otherContactWays">
                             </div>
                         </div>
                         <div class="example">
@@ -208,6 +220,8 @@
                 clientContact: '',
                 clientContactPhone: '',
                 clientContactPosition: '',
+                otherContactWays: '', // 其他联系方式
+                wechat: '', // 微信
                 clientContactType: '', // 是否是关键人
                 clientRemark: '',
                 // clientPrincipalSearch: '', // 条件筛选的负责人
@@ -313,7 +327,7 @@
                     toastr.error('请选择客户评级！')
                     return
                 }
-                if (this.clientContactPhone.length !== 11) {
+                if (this.clientContactPhone && this.clientContactPhone.length !== 11) {
                     toastr.error('手机号码格式不对！');
                     return
                 }
@@ -335,6 +349,8 @@
                         phone: this.clientContactPhone,
                         position: this.clientContactPosition,
                         type: this.clientContactType,
+                        other_contact_ways: this.otherContactWays,
+                        wechat: this.wechat
                     },
                     client_rating: this.clientScale,
                     desc: this.clientRemark
@@ -350,7 +366,7 @@
                     _this.$router.push({path: 'clients/' + response.data.id});
                 })
             },
-
+        
             customize: function (value) {
                 let _this = this
                 fetch('post', '/clients/filter?include=principal', value).then((params) => {
@@ -443,6 +459,8 @@
                 this.clientContact = ''
                 this.clientContactPhone = ''
                 this.clientContactPosition = ''
+                this.wechat = ''
+                this.otherContactWays = ''
                 this.clientContactType = ''
                 this.clientScale = ''
                 this.$refs.clientScale.setValue('')
