@@ -1434,6 +1434,7 @@
                 };
                 let _this = this;
                 fetch('get', '/stars/' + this.artistId, data).then(function (response) {
+                     console.log(response.data)
                     if (response.data.calendar) {
                         _this.calendarId.push(response.data.calendar.data.id)
                         _this.calendarName = response.data.calendar.data.title
@@ -1445,7 +1446,7 @@
                         }
                     }
                 })
-                console.log(_this.scheduleShow)
+               
             }
 
             ,

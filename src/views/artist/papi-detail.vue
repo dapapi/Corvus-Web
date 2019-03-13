@@ -1489,8 +1489,6 @@
                     include: 'creator,tasks,affixes,producer,type,publicity,trails.project,trails.client,trails.project.principal,trails.project.relate_project_bills_resource,operatelogs,publicity.department',
                 };
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
-                    console.log(response)
-
                     _this.artistInfo = response.data;
                    
                     _this.uploadUrl = _this.artistInfo.avatar;
@@ -1585,6 +1583,7 @@
                 };
                 let _this = this;
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
+                    console.log(response.data)
                     if (response.data.calendar) {
                         _this.calendarId.push(response.data.calendar.data.id)
                         _this.calendarName = response.data.calendar.data.title
