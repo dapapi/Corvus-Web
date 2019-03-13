@@ -7,12 +7,12 @@
                         class="iconfont icon-jiantou_xiayiye font-size-22 pr-5"></i>公海池</span>
             </h1>
             <div class="page-header-actions">
-                <import-and-export class="float-left" :type="'export'" :moduleName="'trails'" :params="exportParams">
-                    <a class="iconfont icon-daochu font-size-20 pr-20" aria-hidden="true" title="导出销售线索"></a>
-                </import-and-export>
-                <import-and-export class="float-left" :type="'import'" :moduleName="'trails'" >
-                    <a class="iconfont icon-daoru px-5 font-size-20 " aria-hidden="true" title="导入销售线索"></a>
-                </import-and-export>
+                <ImportAndExport class="float-left" :type="'export'" :moduleName="'trails'" :params="exportParams">
+                    <a class="iconfont icon-daochu font-size-20 pr-20 pointer-content" aria-hidden="true" title="导出公海池线索"></a>
+                </ImportAndExport>
+                <ImportAndExport class="float-left" :type="'import'" :moduleName="'trails'" >
+                    <a class="iconfont icon-daoru px-5 font-size-20 pointer-content" aria-hidden="true" title="导入公海池线索"></a>
+                </ImportAndExport>
             </div>
         </div>
 
