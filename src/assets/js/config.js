@@ -1,5 +1,4 @@
 let config = {
-
         trailOrigin: [
             {
                 name: '商务邮箱',

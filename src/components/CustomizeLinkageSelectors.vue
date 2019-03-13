@@ -21,18 +21,18 @@
                    :onchange="inputChange">
             <datepicker v-if="valueType === 3" @change="datePickerChange"></datepicker>
             <number-spinner v-if="valueType === 2" ref="numberSpinner" :shortInput="true"
-                            @change="numberSpinnerChange" :min="0" :max="1000000000" :precision="2" :value="0"></number-spinner>
+                            @change="numberSpinnerChange" :min="0" :max="1000000000" :precision="isint===true?0:2" :value="0"></number-spinner>
             <!-- <input-selectors v-if="valueType === 6" :otherslot="true"></input-selectors> -->
             <div v-if="valueType === 6" class="">
-                <selectors class="pr-40" ref='selectors' :options="users" @valuelistener="changeUsers" :multiple="true"
+                <selectors class="" ref='selectors' :options="users" @valuelistener="changeUsers" :multiple="true"
                                         :placeholder="'请选择'"></selectors>
             </div>
             <div v-if="valueType === 5" class="">
-                <selectors class="pr-40" ref='selectors' :options="stararr" @valuelistener="changeTargetStars" :multiple="true"
+                <selectors class="" ref='selectors' :options="stararr" @valuelistener="changeTargetStars" :multiple="true"
                                         :placeholder="'请选择'"></selectors>
             </div>
             <div class="" v-if="[4,7].includes(valueType) ">
-                <selectors  class="scopeSelector pr-40" ref='selectors' :options="valueType===7?departments:optionsData" 
+                <selectors  class="scopeSelector" ref='selectors' :options="valueType===7?departments:optionsData" 
                 @valuelistener="changeDepartments"  multiple='true' :placeholder='"请选择"'></selectors>
             </div>
         </div>
@@ -45,7 +45,7 @@ import fetch from '@/assets/utils/fetch.js'
 import config from '@/assets/js/config'
 
     export default {
-        props: ['data', 'n','stararr'],
+        props: ['data', 'n','stararr','isint'],
         data() {
             return {
                 valueType: 'disable',
@@ -79,14 +79,24 @@ import config from '@/assets/js/config'
                 'userList'
             ]),
 
-            _department () {
-                return this.department
-            },
+            // _department () {
+            //     return this.department
+            // },
             _userList () {
                 return this.userList
             }
         },
         watch:{
+            keyId:function(value){
+                this.normalInput = ''
+                this.childData = ''
+                this.$refs.selectors.setValue('')
+            },
+            valueType:function(value,oldValue){
+                if(oldValue === 2 && value!==2){
+                    this.$refs.numberSpinner.destroy()
+                }
+            },
             _department () {
                 this.departments = this.department
             },
@@ -99,20 +109,26 @@ import config from '@/assets/js/config'
             normalInput:function(){
                 this.sendData.value = this.normalInput
             },
-            fatherData:function(){
-                
+            fatherData:function(value){
+                if(!value){
+                    return
+                }
                 let currentData = this.data.find(item => item.value == this.fatherData)
                 this.sendData.field = currentData.code
                 this.sendData.type = currentData.type
                 this.sendData.value = ''
                 this.sendData.id = currentData.id
             },
-            childData:function(){
+            childData:function(value){
+                 if(!value){
+                    return
+                }
                 let currentData = this.item.find(item =>item.value == this.childData)
                 this.sendData.operator = currentData.code
             }
         },
         created(){
+            this.getDepartments()
             if (this.department.length > 0) {
                 this.departments = this.department
             }
@@ -160,6 +176,12 @@ import config from '@/assets/js/config'
         },
 
         methods: {
+            getDepartments(){
+                let _this = this
+                fetch('get','departments_lists').then((params) => {
+                    _this.departments = params
+                })
+            },
             refresh: function () {
                 $('#child' + this.n).selectpicker('refresh');
             },

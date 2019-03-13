@@ -4,9 +4,9 @@
         <div class="page-header page-header-bordered">
             <h1 class="page-title">项目管理</h1>
             <div class="page-header-actions">
-                <import-and-export class="float-left" :type="'export'" :moduleName="'projects'" :params="exportParams">
-                    <a class="iconfont icon-daochu px-5 font-size-20 pr-20" aria-hidden="true" title="导出项目管理"></a>
-                </import-and-export>
+                <ImportAndExport class="float-left" :type="'export'" :moduleName="'projects'" :params="exportParams">
+                    <a class="iconfont icon-daochu px-5 font-size-20 pr-20 pointer-content" aria-hidden="true" title="导出项目管理"></a>
+                </ImportAndExport>
             </div>
         </div>
 

@@ -5,17 +5,10 @@
             <h1 class="page-title">客户管理</h1>
             <div class="page-header-actions">
                 <ImportAndExport class="float-left" :type="'export'" :moduleName="'clients'" :params="exportParams">
-<<<<<<< HEAD
-                    <a class="iconfont icon-daochu px-5 font-size-20 pr-20" aria-hidden="true" title="导出客户"></a>
+                    <a class="iconfont icon-daochu px-5 font-size-20 pr-20 pointer-content" aria-hidden="true" title="导出客户"></a>
                 </ImportAndExport>
                 <ImportAndExport class="float-left" :type="'import'" :moduleName="'clients'">
                     <a class="iconfont icon-daoru font-size-20" aria-hidden="true" title="导入客户"></a>
-=======
-                    <i class="iconfont icon-daochu px-5 font-size-20 pr-20 pointer-content" title="导出" aria-hidden="true"></i>
-                </ImportAndExport>
-                <ImportAndExport class="float-left" :type="'import'" :moduleName="'clients'">
-                    <i class="iconfont icon-daoru font-size-20 pointer-content" title="导入" aria-hidden="true"></i>
->>>>>>> da2674ecd082e2ad575b859b6c24dcd2d89c1dc5
                 </ImportAndExport>
             </div>
         </div>
@@ -35,13 +28,13 @@
                         <selectors :options="clientLevelArr" @change="changeClientLevelSelect"
                                    placeholder="请选择公司级别"></selectors>
                     </div>
-                    <!-- <div class="col-md-3 example float-left">
+                    <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
                                 data-toggle="modal" data-target="#customizeContent"
                                 data-placement="right" title="">
                             自定义筛选
                         </button>
-                    </div> -->
+                    </div>
                 </div>
                 <div class="col-md-12">
                     <table class="table table-hover is-indent mb-20" data-plugin="animateList" data-animate="fade"
@@ -487,7 +480,7 @@
                 }
                 fetch('get', '/console/checkpower', params).then(res => {
                     this.canAdd = !!res.data.power
-                    console.log(this.canAdd)
+                    console.log(this.res)
                 })
             },
         }
