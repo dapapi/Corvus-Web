@@ -212,7 +212,7 @@
                                 <div class="col-md-12">
                                     <calendar v-if="artistInfo.sign_contract_status == 2" :goto-date="selectedDate"
                                               :calendars="calendarId" ref="calendar"
-                                              :isModel="true" @showToast="showToast"
+                                              @showToast="showToast"
                                               @scheduleClick="showScheduleModal"
                                               @dayClick="showAddScheduleModal"></calendar>
                                 </div>
@@ -234,7 +234,7 @@
                                     <tr v-for="(item,index) in ProjectsInfo" :key="index" @click="projectdetil(item.id)"
                                         class="Jump projectcontent">
                                         <td>{{item.title}}</td>
-                                        <td v-if="item.principal">{{item.principal.data.name}}</td>
+                                        <td v-if="item.principal">{{item.principal}}</td>
                                         <td v-if="!item.principal"></td>
                                         <td>{{item.company}}</td>
                                         <td>{{item.created_at}}</td>
@@ -1857,12 +1857,12 @@
                     this.scheduleCalendar = this.scheduleData.calendar.data.id;
                     this.$refs.scheduleStartDate.setValue(this.scheduleData.start_at.split(' ')[0]);
                     let startMinutes = this.scheduleData.start_at.split(' ')[1].split(':');
-                    this.$refs.scheduleStartMinute.setValue(startMinutes[0] + ':' + startMinutes[1]);
+                    this.$refs.scheduleStartMinute.setValue(startMinutes);
                     this.startTime = this.scheduleData.start_at.split(' ')[0];
                     this.startMinutes = startMinutes[0] + ':' + startMinutes[1];
                     this.$refs.scheduleEndDate.setValue(this.scheduleData.end_at.split(' ')[0]);
                     let endMinutes = this.scheduleData.end_at.split(' ')[1].split(':');
-                    this.$refs.scheduleEndMinute.setValue(endMinutes[0] + ':' + endMinutes[1]);
+                    this.$refs.scheduleEndMinute.setValue(endMinutes);
                     this.endTime = this.scheduleData.end_at.split(' ')[0];
                     this.endMinutes = endMinutes[0] + ':' + endMinutes[1];
                     this.$refs.scheduleRemind.setValue(this.scheduleData.remind);
@@ -2010,6 +2010,8 @@
                 this.$store.state.newParticipantsInfo = []
             },
             getTaskNum: function () {
+                this.alltaskshow = []
+                this.doneTaskNum = 0
                 let _this = this;
                 fetch('get', '/bloggers/' + this.artistId + '/tasks').then(function (response) {
 
@@ -2255,6 +2257,7 @@
                     toastr.success('创建成功');
                     $('#addWork').modal('hide');
                     _this.getTaskDate()
+                   
                 })
                 // if(this.scoreId){
                 //     let obj={
@@ -2377,6 +2380,7 @@
                     $('#addTask').modal('hide');
                     _this.getArtist()
                     _this.getArtistTasks()
+                    _this.getTaskNum()
                     $('.selectpicker').selectpicker('refresh')
                 })
             }
