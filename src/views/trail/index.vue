@@ -180,10 +180,24 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left require">联系人电话</div>
+                            <div class="col-md-2 text-right float-left">联系人电话</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" title="" placeholder="请输入联系电话"
                                        v-model="trailContactPhone" @blur='phoneValidate'>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">微信</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <input type="text" class="form-control" title="" placeholder="请输入微信号"
+                                       v-model="trailContactWechat" @blur='phoneValidate'>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">其他联系方式</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <input type="text" class="form-control" title="" placeholder="请输入其他联系方式"
+                                       v-model="trailContactEtc" @blur='phoneValidate'>
                             </div>
                         </div>
                         <div class="example" v-show="trailType != 4">
@@ -316,7 +330,9 @@
                 cleanUp: false,
                 trailIsLocked: '',
                 exportParams: {},//导出参数
-                customizeCondition: {}
+                customizeCondition: {},
+                trailContactWechat:'',
+                trailContactEtc:''
             }
         },
         created() {
@@ -439,10 +455,7 @@
                     } else {
                         return true;
                     }
-                } else if (!this.trailContactPhone) {
-                    toastr.error("手机号码为必填")
-                    return false;
-                } else {
+                }else {
                     return true
                 }
             },
@@ -577,7 +590,9 @@
                     expectations: this.targetStars,
                     contact: {
                         name: this.trailContact,
-                        phone: this.trailContactPhone
+                        phone: this.trailContactPhone,
+                        wechat:this.trailContactWechat,
+                        etc:this.trailContactEtc
                     },
                     fee: this.trailFee,
                     desc: this.trailDesc,
@@ -607,6 +622,7 @@
                 }
                 let _this = this;
                 if (this.trailTypeValidate()) {
+                    console.log(data);
                     fetch('post', '/trails', data).then(function (response) {
                         $('#addTrail').modal('hide');
                         _this.$router.push({path: '/trails/' + response.data.id})
