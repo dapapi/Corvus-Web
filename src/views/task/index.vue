@@ -23,15 +23,15 @@
                     <div class="col-md-3 example float-left">
                         <Selectors :options="taskStatusArr" @change="changeTaskStatusSearch" placeholder="请选择任务状态"></Selectors>
                     </div>
-                    <!--<div class="col-md-3 example float-left">-->
-                        <!--<button type="button"-->
-                                <!--class="btn btn-default waves-effect waves-classic float-right"-->
-                                <!--data-toggle="modal"-->
-                                <!--data-target="#customizeContent"-->
-                                <!--data-placement="right"-->
-                                <!--title>自定义筛选-->
-                        <!--</button>-->
-                    <!--</div>-->
+                    <!-- <div class="col-md-3 example float-left">
+                        <button type="button"
+                                class="btn btn-default waves-effect waves-classic float-right"
+                                data-toggle="modal"
+                                data-target="#customizeContent"
+                                data-placement="right"
+                                title>自定义筛选
+                        </button>
+                    </div> -->
                 </div>
 
                 <div class="col-md-12">

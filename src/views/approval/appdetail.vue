@@ -362,7 +362,7 @@
             getCurrentApprover() {
                 let _this = this
                 this.roleUser = []
-                fetch('get', '/users/my?include=department,roleUser').then((params) => {
+                fetch('get', '/users/my?include=roleUser').then((params) => {
                     _this.currentId = params.data.id
                     for (const key in params.data.roleUser.data) {
                         _this.roleUser.push(params.data.roleUser.data[key].role_id)

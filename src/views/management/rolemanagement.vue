@@ -444,7 +444,7 @@
                         <h4 class="modal-title">删除</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="example" v-for="item in groupingDate" :key="item.id" v-if="item.id==groupingId">
+                        <div class="example">
                             <div class="col-md-12  pl-0">
                                 <p class="modal-title text-center">确认删除{{item.name}}</p>
                             </div>

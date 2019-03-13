@@ -8,8 +8,8 @@
                     </button>
                     <h4 class="modal-title" id="exampleModalTitle">{{titleHandler}}</h4>
                 </div>
-                <div class="modal-body col-md-12 row px-50 pt-20" v-if="mode === 'transfer'">
-                    <span class="col-md-4">请选择转交目标</span>
+                <div class="modal-body col-md-12 px-50 pt-20 pb-0" v-if="mode === 'transfer'">
+                    <span class="">请选择转交目标</span>
                     <InputSelectors @change='transferTo()'/>
                 </div>
                 <div class="col-md-12 px-50 pb-20">
@@ -18,13 +18,16 @@
                     <textarea class="approval-comment form-control" name="" id="" rows="5"
                               v-model="approvalComment"></textarea>
                 </div>
-                <div class="pb-20" v-if="mode === 'archive'" >
-                    <Upload @change="uploadControl"><p class="upload-file"  v-if="mode === 'archive'" ><i class="iconfont icon-fujian"></i>合同扫描上传</p></Upload>
-                </div>
+                <Upload  class="py-20" @change="uploadControl">
+                    <p class="upload-file" v-if="mode === 'archive'">
+                        <i class="iconfont icon-fujian"></i>
+                        合同扫描上传</p>
+                </Upload>
+
                 <div v-if="mode === 'archive'" class="row px-50 pb-40">
                     <figure v-for="(item, index) in fileArr" :key="index" style="margin-right:0px;width:100px;overfolw:hidden;" class="ml-10">
                     <!-- <div class="image-show" v-if="fileInfo.length > 0" style="backgroundImage:url(../../../assets/img/attachment.png)"></div> -->
-                        <figure style="text-align:center;margin-top:30px;" class="attachdetail"> 
+                        <figure style="text-align:center;margin-top:30px;" class="attachdetail">
                             <img src="@/assets/img/attachment.png" alt="" style="width:40px">
                             <p style='text-overflow: ellipsis;'>{{item.fileName}}</p>
                             <div class="img-control">
@@ -37,7 +40,7 @@
                                 </div>
                             </div>
                         </figure>
-            
+
             <!-- <p>{{item.fileName.split('.')[0]}}</p> -->
                     </figure>
                 </div>
@@ -50,7 +53,7 @@
                     </button>
                 </div>
             </div>
-            
+
         </div>
         <!-- <DocPreview :url='$store.state.previewurl'  /> -->
 
@@ -136,10 +139,10 @@
                         _this.$emit('approvaldone',params)
                     })
                 }
-               
+
                 $('#approvalGo').modal('hide')
                 this.approvalComment = ''
-                
+
             },
 
         }
