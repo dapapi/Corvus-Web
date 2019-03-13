@@ -48,6 +48,7 @@ export default {
             let {id} = this.consdata[0]
             let {related_field} = this.consdata[0]
             this.$emit('change',{key:id,value:this.ymd+' '+this.hms,type:related_field})
+            this.$emit('changestarttime',{type:this.consdata[0].control_source.flag,value:this.ymd+' '+this.hms})
         }
     },
     watch:{
@@ -55,7 +56,7 @@ export default {
            this.change(value)
        },
        startDate(newValue) {
-           if(this.consdata[0].related_field === 'contract_end_date'){
+           if(this.consdata[0].control_source.flag === 'end_time'){
                this.start_date = newValue
            }
         },
