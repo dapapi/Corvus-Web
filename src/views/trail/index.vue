@@ -180,10 +180,24 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left require">联系人电话</div>
+                            <div class="col-md-2 text-right float-left">联系人电话</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" title="" placeholder="请输入联系电话"
                                        v-model="trailContactPhone" @blur='phoneValidate'>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">微信</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <input type="text" class="form-control" title="" placeholder="请输入微信号"
+                                       v-model="trailContactWechat" @blur='phoneValidate'>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">其他联系方式</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <input type="text" class="form-control" title="" placeholder="请输入其他联系方式"
+                                       v-model="trailContactEtc" @blur='phoneValidate'>
                             </div>
                         </div>
                         <div class="example" v-show="trailType != 4">
@@ -316,7 +330,9 @@
                 cleanUp: false,
                 trailIsLocked: '',
                 exportParams: {},//导出参数
-                customizeCondition: {}
+                customizeCondition: {},
+                trailContactWechat:'',
+                trailContactEtc:''
             }
         },
         created() {
@@ -439,24 +455,23 @@
                     } else {
                         return true;
                     }
-                } else if (!this.trailContactPhone) {
-                    toastr.error("手机号码为必填")
-                    return false;
-                } else {
+                }else {
                     return true
                 }
             },
             redirectPublicTrail() {
                 this.$router.push({path: '/publictrails'})
             },
-            fetchHandler(methods, url, type) {
+            fetchHandler(methods, url, type,pageNum = 1) {
+                this.isLoading = true
+                console.log(pageNum);
                 let _this = this,
                     fetchData = this.fetchData,
                     newUrl
                 this.fetchData.include = 'include=principal,client,contact,recommendations,expectations'
                 if (type == 'filter') {
                     fetchData = this.customizeCondition
-                    let keyword, status, principal_ids
+                    let keyword, status, principal_ids, pagenumber
                     if (this.fetchData.keyword) {
                         keyword = '&keyword=' + this.fetchData.keyword
                     } else {
@@ -472,7 +487,8 @@
                     } else {
                         principal_ids = ''
                     }
-                    newUrl = url + '?' + this.fetchData.include + keyword + status + principal_ids
+                    pagenumber = '&page=' + pageNum
+                    newUrl = url + '?' + this.fetchData.include + keyword + status + principal_ids + pagenumber
                 }
                 // console.log(this.fetchData)
                 this.exportParams = {
@@ -507,18 +523,19 @@
             // },
             getSales: function (pageNum = 1) {
                 let _this = this;
-                let data = {
-                    page: pageNum,
-                    include: 'principal,client,expectations',
-                };
-                Object.assign(data, this.fetchData)
-                fetch('get', '/trails', data).then(function (response) {
-                    _this.trailsInfo = response.data;
-                    _this.total = response.meta.pagination.total;
-                    _this.current_page = response.meta.pagination.current_page;
-                    _this.total_pages = response.meta.pagination.total_pages;
-                    _this.isLoading = false;
-                })
+                this.fetchHandler('post', '/trails/filter', 'filter',pageNum)
+                // let data = {
+                //     page: pageNum,
+                //     include: 'principal,client,expectations',
+                // };
+                // Object.assign(data, this.fetchData)
+                // fetch('post', '/trails/filter', data).then(function (response) {
+                //     _this.trailsInfo = response.data;
+                //     _this.total = response.meta.pagination.total;
+                //     _this.current_page = response.meta.pagination.current_page;
+                //     _this.total_pages = response.meta.pagination.total_pages;
+                //     _this.isLoading = false;
+                // })
             }
             ,
             getIndustries: function () {
@@ -577,7 +594,9 @@
                     expectations: this.targetStars,
                     contact: {
                         name: this.trailContact,
-                        phone: this.trailContactPhone
+                        phone: this.trailContactPhone,
+                        wechat:this.trailContactWechat,
+                        other_contact_ways:this.trailContactEtc
                     },
                     fee: this.trailFee,
                     desc: this.trailDesc,
@@ -607,6 +626,7 @@
                 }
                 let _this = this;
                 if (this.trailTypeValidate()) {
+                    console.log(data);
                     fetch('post', '/trails', data).then(function (response) {
                         $('#addTrail').modal('hide');
                         _this.$router.push({path: '/trails/' + response.data.id})

@@ -19,10 +19,10 @@ export default {
 }
 </script>
 <style scoped>
-    .tree-view-menu {
+.tree-view-menu {
 width: 100%;
-height: 100%;
-overflow-y: auto;
+height: 85vh;
+overflow-y: auto !important;
 overflow-x: hidden;
 }
 .tree-view-menu::-webkit-scrollbar {
