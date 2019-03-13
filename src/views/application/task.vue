@@ -190,7 +190,7 @@
                             <div class="col-md-2 text-right float-left pl-0 require">任务优先级</div>
                             <div class="col-md-10 float-left pl-0">
                                 <Selectors
-                                        :options="taskLevelArr"
+                                        :options="priorityArr"
                                         @change="changeTaskLevel"
                                         ref="taskLevel"
                                 ></Selectors>
@@ -271,7 +271,7 @@
                 taskLevel: "",
                 taskTypeArr: [],
                 taskStatusArr: taskStatusArr,
-                taskLevelArr: config.taskLevelArr,
+                priorityArr:config.priorityArr,
                 customizeInfo: config.customizeInfo,
                 linkData: [],
                 taskNameSearch: "", // 搜索的任务名称
