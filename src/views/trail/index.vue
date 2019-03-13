@@ -596,7 +596,7 @@
                         name: this.trailContact,
                         phone: this.trailContactPhone,
                         wechat:this.trailContactWechat,
-                        etc:this.trailContactEtc
+                        other_contact_ways:this.trailContactEtc
                     },
                     fee: this.trailFee,
                     desc: this.trailDesc,
