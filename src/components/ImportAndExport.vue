@@ -4,7 +4,7 @@
             <slot></slot>
         </span>
         <span v-if="type === 'import'" style="width:100%">
-            <form action="" style="display:inline-block;width:100%" >
+            <form action="" style="display:inline-block;width:100%;height:34px;" >
                 <input type="file" :id="`import_${this.getRandom}`" name="avatar" accept=".xlsx" style="display:none" @change="importFile($event)">
                 <label :for="`import_${this.getRandom}`" style="width:100%">
                 <slot></slot>
