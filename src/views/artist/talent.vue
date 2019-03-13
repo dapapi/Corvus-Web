@@ -1113,6 +1113,7 @@
                 //    }
                     
                 // })
+                
                 this.customizeInfo.sign_contract_status = this.currentpagestatus
                 fetch('post', this.customizeContentType +'/filter?include=creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name ,value).then(function (params) {
 
