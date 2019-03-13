@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html class="no-js js-menubar" lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <title>泰洋系</title>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://res.papitube.com/vendors/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="https://res.papitube.com/vendors/bootstrap/bootstrap-extend.min.css">
+    <link href="https://res.papitube.com/vendors/summernote-bs4.css" rel="stylesheet">
+
+    <!-- Plugins -->
+    <link rel="stylesheet" href="https://res.papitube.com/vendors/select2/select2.css"> 
+    <link rel="stylesheet" href="https://res.papitube.com/vendors/animsition/animsition.min.css">
+    <link rel="stylesheet" href="https://res.papitube.com/vendors/asscrollable/asScrollable.min.css">
+    <link rel="stylesheet" href="https://res.papitube.com/vendors/flag-icon-css/flag-icon.min.css">
+    <link rel="stylesheet" href="https://res.papitube.com/vendors/waves/waves.min.css">
+    <link rel="stylesheet" href="https://res.papitube.com/vendors/toastr/toastr.min.css">
+    <link rel="stylesheet" href="https://res.papitube.com/vendors/bootstrap-select/bootstrap-select.min.css">
+    <link rel="stylesheet" href="https://res.papitube.com/vendors/bootstrap-datepicker/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="https://res.papitube.com/vendors/site.min.css">
+    <link rel="stylesheet" href="https://res.papitube.com/remark/js/Plugin/asSpinner.css">
+    <link rel="stylesheet" href="https://res.papitube.com/vendors/fullcalendar/fullcalendar.css">
+    <link rel="stylesheet" href="https://res.papitube.com/vendors/calendar.css">
+    <link rel="stylesheet" href="https://res.papitube.com/vendors/toolbar/toolbar.css">
+    <link rel="stylesheet" href="https://res.papitube.com/vendors/jquery-selective/jquery-selective.css">
+
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://res.papitube.com/fonts/material-design/material-design.min.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_969370_g8pybq472g9.css">
+
+    <!-- Scripts -->
+    <script src="https://res.papitube.com/vendors/breakpoints/breakpoints.js"></script>
+</head>
+<body class="animsition" style="padding: 0">
+<!--[if lt IE 8]>
+<p class="browserupgrade">
+    You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your
+    browser</a> to improve your experience.
+</p>
+<![endif]-->
+<script src="https://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"></script>
+<div id="app"></div>
+<!-- Core  -->
+
+<script src="https://res.papitube.com/vendors/babel-external-helpers/babel-external-helpers.js"></script>
+<script src="https://res.papitube.com/vendors/jquery/jquery.min.js"></script>
+<script src="https://res.papitube.com/vendors/popper-js/umd/popper.min.js"></script>
+<script src="https://res.papitube.com/vendors/bootstrap/bootstrap.js"></script>
+<script src="https://res.papitube.com/vendors/animsition/animsition.js"></script>
+<script src="https://res.papitube.com/vendors/asscrollbar/jquery-asScrollbar.js"></script>
+<script src="https://res.papitube.com/vendors/asscrollable/jquery-asScrollable.js"></script>
+<script src="https://res.papitube.com/vendors/ashoverscroll/jquery-asHoverScroll.js"></script>
+<script src="https://res.papitube.com/vendors/js-cookie/js.cookie.min.js"></script>
+<script src="https://res.papitube.com/vendors/waves/waves.js"></script>
+
+<script src="https://res.papitube.com/vendors/toastr/toastr.min.js"></script>
+
+<!-- Scripts -->
+<script src="https://res.papitube.com/vendors/select2/select2.full.min.js"></script>
+<script src="https://res.papitube.com/remark/js/Component.js"></script>
+<script src="https://res.papitube.com/remark/js/Plugin.js"></script>
+<script src="https://res.papitube.com/remark/js/Base.js"></script>
+<script src="https://res.papitube.com/remark/js/Config.js"></script>
+
+<script src="https://res.papitube.com/remark/js/Section/Menubar.js"></script>
+<script src="https://res.papitube.com/remark/js/Section/GridMenu.js"></script>
+<script src="https://res.papitube.com/remark/js/Section/Sidebar.js"></script>
+<script src="https://res.papitube.com/remark/js/Section/PageAside.js"></script>
+<script src="https://res.papitube.com/remark/js/Plugin/menu.js"></script>
+<script src="https://res.papitube.com/remark/js/Site.js"></script>
+
+<script src="https://res.papitube.com/remark/js/config/colors.js"></script>
+<script>
+    Config.set('assets', '/');
+</script>
+
+<!-- Page -->
+
+<script src="https://res.papitube.com/vendors/bootstrap-select/bootstrap-select.min.js"></script>
+<script src="https://res.papitube.com/remark/js/Plugin/action-btn.js"></script>
+<script src="https://res.papitube.com/vendors/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+<script>
+!function(a){a.fn.datepicker.dates["zh-CN"]={days:["星期日","星期一","星期二","星期三","星期四","星期五","星期六"],
+    daysShort:["周日","周一","周二","周三","周四","周五","周六"],daysMin:["日","一","二","三","四","五","六"],
+    months:["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],
+    monthsShort:["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],
+    today:"今日",clear:"清除",format:"yyyy年mm月dd日",titleFormat:"yyyy年mm月",weekStart:1}}(jQuery);
+</script>
+<script src="https://res.papitube.com/vendors/toolbar/jquery.toolbar.js"></script>
+<script src="https://res.papitube.com/vendors/asspinner/jquery-asSpinner.min.js"></script>
+<script src="https://res.papitube.com/vendors/moment.min.js"></script>
+<script src="https://res.papitube.com/vendors/fullcalendar/fullcalendar.js"></script>
+<script src="https://res.papitube.com/remark/js/Plugin/asselectable.js"></script>
+
+<!-- echarts -->
+<script src="https://res-crm.papitube.com/echarts.min.js"></script>
+
+<!-- Text Editor -->
+<script>
+    (function (document, window, $) {
+        'use strict';
+        var Site = window.Site;
+        $(document).ready(function () {
+            Site.run();
+        });
+    })(document, window, jQuery);
+
+    function noneAvatar(image) {
+        image.src = 'https://res.papitube.com/no-avatar.png'
+    }
+
+    $.getJSON('https://res-crm.papitube.com/mttop.project.json', function (themeJSON) {
+        echarts.registerTheme('mttop', themeJSON);
+    });
+
+</script>
+
+</body>
+</html>

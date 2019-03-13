@@ -1,0 +1,269 @@
+﻿[{
+  "form_id": 1,
+  "name": "机票预订审批",
+  "modifid": 0,
+  "description": "预订机票",
+  "icon": "http://xxxx/xxx.png",
+  "approval_form_controls": [
+    {
+      "form_control_id": 1,
+      "control": {
+        "data_dictionary_id": 88,
+        "data_dictionary_val": 0,
+        "data_dictionary_name": "明细"
+      },
+      "form_control_pid": 0,
+      "sort_number": 1,
+      "required": 0,
+      "control_title": "订票信息",
+      "control_placeholder": "请输入"
+    },
+    {
+      "form_control_id": 2,
+      "control": {
+        "data_dictionary_id": 78,
+        "data_dictionary_val": 0,
+        "data_dictionary_name": "单行文本"
+      },
+      "form_control_pid": 1,
+      "sort_number": 2,
+      "required": 1,
+      "control_title": "出行人姓名",
+      "control_placeholder": "请输入"
+    },
+    {
+      "form_control_id": 3,
+      "control": {
+        "data_dictionary_id": 78,
+        "data_dictionary_val": 0,
+        "data_dictionary_name": "单行文本"
+      },
+      "form_control_pid": 1,
+      "sort_number": 3,
+      "required": 1,
+      "control_title": "证件信息",
+      "control_placeholder": "请输入"
+    },
+    {
+      "form_control_id": 4,
+      "control": {
+        "data_dictionary_id": 82,
+        "data_dictionary_val": 0,
+        "data_dictionary_name": "下拉列表"
+      },
+      "form_control_pid": 1,
+      "sort_number": 4,
+      "required": 1,
+      "control_title": "舱位",
+      "control_placeholder": "请输入",
+      "control_enums": [
+        {
+          "enum_value": "经济舱",
+          "enum_sort": 1
+        },
+        {
+          "enum_value": "公务舱",
+          "enum_sort": 2
+        },
+        {
+          "enum_value": "头等舱",
+          "enum_sort": 3
+        }
+      ]
+    },
+    {
+      "form_control_id": 5,
+      "control": {
+        "data_dictionary_id": 91,
+        "data_dictionary_val": 0,
+        "data_dictionary_name": "图片"
+      },
+      "form_control_pid": 0,
+      "sort_number": 5,
+      "required": 0,
+      "control_title": "艺人项目团体订票信息（图片）",
+      "control_placeholder": "仅限图片"
+    },
+    {
+      "form_control_id": 6,
+      "control": {
+        "data_dictionary_id": 92,
+        "data_dictionary_val": 0,
+        "data_dictionary_name": "附件"
+      },
+      "form_control_pid": 0,
+      "sort_number": 6,
+      "required": 0,
+      "control_title": "艺人项目团体订票信息（附件）",
+      "control_placeholder": "请输入"
+    },
+    {
+      "form_control_id": 7,
+      "control": {
+        "data_dictionary_id": 82,
+        "data_dictionary_val": 0,
+        "data_dictionary_name": "下拉列表"
+      },
+      "form_control_pid": 0,
+      "sort_number": 7,
+      "required": 1,
+      "control_title": "费用承担归属",
+      "control_placeholder": "请选择",
+      "control_enums": [
+        {
+          "enum_value": "公司承担",
+          "enum_sort": 1
+        },
+        {
+          "enum_value": "工作室承担",
+          "enum_sort": 2
+        },
+        {
+          "enum_value": "客户承担",
+          "enum_sort": 3
+        },
+        {
+          "enum_value": "其他",
+          "enum_sort": 4
+        }
+      ]
+    },
+    {
+      "form_control_id": 8,
+      "control": {
+        "data_dictionary_id": 86,
+        "data_dictionary_val": 0,
+        "data_dictionary_name": "富文本"
+      },
+      "form_control_pid": 0,
+      "sort_number": 8,
+      "required": 1,
+      "control_title": "详细名称",
+      "control_placeholder": "具体公司名、工作室名称、客户名称、个人"
+    },
+    {
+      "form_control_id": 9,
+      "control": {
+        "data_dictionary_id": 78,
+        "data_dictionary_val": 0,
+        "data_dictionary_name": "单行文本"
+      },
+      "form_control_pid": 0,
+      "sort_number": 9,
+      "required": 1,
+      "control_title": "具体承担部门",
+      "control_placeholder": "如公司承担写清部门"
+    },
+    {
+      "form_control_id": 10,
+      "control": {
+        "data_dictionary_id": 78,
+        "data_dictionary_val": 0,
+        "data_dictionary_name": "单行文本"
+      },
+      "form_control_pid": 0,
+      "sort_number": 10,
+      "required": 1,
+      "control_title": "项目名称",
+      "control_placeholder": "请输入"
+    },
+    {
+      "form_control_id": 11,
+      "control": {
+        "data_dictionary_id": 78,
+        "data_dictionary_val": 0,
+        "data_dictionary_name": "单行文本"
+      },
+      "form_control_pid": 0,
+      "sort_number": 11,
+      "required": 1,
+      "control_title": "涉及艺人",
+      "control_placeholder": "请输入"
+    },
+    {
+      "form_control_id": 12,
+      "control": {
+        "data_dictionary_id": 80,
+        "data_dictionary_val": 1,
+        "data_dictionary_name": "日期"
+      },
+      "form_control_pid": 0,
+      "sort_number": 11,
+      "required": 1,
+      "control_title": "涉及艺人",
+      "control_placeholder": "请输入",
+      "control_date_select_format": 95
+    },
+    {
+      "form_control_id": 13,
+      "control": {
+        "data_dictionary_id": 78,
+        "data_dictionary_val": 0,
+        "data_dictionary_name": "单行文本"
+      },
+      "form_control_pid": 0,
+      "sort_number": 13,
+      "required": 1,
+      "control_title": "出发地点",
+      "control_placeholder": "如北京、上海"
+    },
+    {
+      "form_control_id": 14,
+      "control": {
+        "data_dictionary_id": 78,
+        "data_dictionary_val": 0,
+        "data_dictionary_name": "单行文本"
+      },
+      "form_control_pid": 0,
+      "sort_number": 14,
+      "required": 1,
+      "control_title": "到达地点",
+      "control_placeholder": "请输入"
+    },
+    {
+      "form_control_id": 15,
+      "control": {
+        "data_dictionary_id": 78,
+        "data_dictionary_val": 0,
+        "data_dictionary_name": "单行文本"
+      },
+      "form_control_pid": 0,
+      "sort_number": 15,
+      "required": 1,
+      "control_title": "航班号",
+      "control_placeholder": "请输入"
+    },
+    {
+      "form_control_id": 16,
+      "control": {
+        "data_dictionary_id": 86,
+        "data_dictionary_val": 0,
+        "data_dictionary_name": "富文本"
+      },
+      "form_control_pid": 0,
+      "sort_number": 16,
+      "required": 1,
+      "control_title": "出差事由",
+      "control_placeholder": "请输入出差事由"
+    },
+    {
+      "form_control_id": 17,
+      "control": {
+        "data_dictionary_id": 92,
+        "data_dictionary_val": 0,
+        "data_dictionary_name": "附件"
+      },
+      "form_control_pid": 0,
+      "sort_number": 17,
+      "required": 0,
+      "control_title": "附件",
+      "control_placeholder": "请输入"
+    }
+  ],
+  "apporvers":[
+    {
+      "name":"123",
+      "icon":"url"
+    }
+  ]
+}]
