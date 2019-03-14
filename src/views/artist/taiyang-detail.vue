@@ -1349,7 +1349,7 @@
             this.getTaskType();
             this.getCalendar();
             this.draw();
-            this.getArtistsBill()
+            // this.getArtistsBill()
             this.getTaskDate()
             this.getProjectList()
             this.selectProjectLinkage();
