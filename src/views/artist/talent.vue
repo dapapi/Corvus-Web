@@ -1131,17 +1131,17 @@
                     principal_ids: this.fetchData.communication_status,
                 }
                 fetch(methods, newUrl || url, fetchData).then((response) => {
-                    if(url=='/bloggers/filter'){
-                        _this.bloggerInfo = response.data;
-                        _this.Bcurrent_page = response.meta.pagination.current_page;
-                        _this.Btotal = response.meta.pagination.total;
-                        _this.Btotal_pages = response.meta.pagination.total_pages;
-                    }else if(url == '/stars/filter'){
-                        _this.artistsInfo = response.data
-                        _this.current_page = response.meta.pagination.current_page;
-                        _this.total = response.meta.pagination.total;
-                        _this.total_pages = response.meta.pagination.total_pages;
+                         if (_this.customizeContentType == 'stars') {
+                        _this.artistsInfo = params.data
+                        _this.current_page = params.meta.pagination.current_page;
+                        _this.total = params.meta.pagination.total;
+                        _this.total_pages = params.meta.pagination.total_pages;
                         _this.cleanUp = true
+                    } else if (_this.customizeContentType == 'bloggers') {
+                        _this.bloggerInfo = params.data;
+                        _this.Bcurrent_page = params.meta.pagination.current_page;
+                        _this.Btotal = params.meta.pagination.total;
+                        _this.Btotal_pages = params.meta.pagination.total_pages;
                     }
                     // _this.clientsInfo = response.data
                     // _this.total = response.meta.pagination.total;
@@ -1177,7 +1177,7 @@
                 // data.page = '&page='+this.current_page
                 this.customizeCondition = value  
                 this.customizeCondition.sign_contract_status = this.currentpagestatus
-                this.fetchHandler('post', '/'+this.typeHandler+'/filter','filter')
+                this.fetchHandler('post', '/'+this.customizeContentTyper+'/filter','filter')
                 // fetch('post', this.customizeContentType +'/filter?include=creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name ,value).then(function (params) {
 
                 //     if (_this.customizeContentType == 'stars') {
