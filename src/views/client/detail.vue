@@ -116,7 +116,7 @@
                                    aria-controls="forum-present"
                                    aria-expanded="false" role="tab">合同</a>
                             </li>
-                            <!-- <li class="nav-item" role="presentation" @click="getClientTask"> --> 
+                            <!-- <li class="nav-item" role="presentation" @click="getClientTask"> -->
                             <!-- 默认先展示任务的数量 ，所以要先请求数据了 -->
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-toggle="tab" href="#forum-task"
@@ -170,9 +170,9 @@
                                         <template v-if="trail.progress_status === 2">已确定合作</template>
                                         <template v-if="trail.progress_status === 0">已拒绝</template>
                                     </td>
-                                    <td>{{ trail.principal?trail.principal.data.name: '' }}</td>
-                                    <td>{{ trail.client?trail.client.data.company:'' }}</td>
-                                    <td>{{ trail.created_at }}</td>
+                                    <td>{{ trail.principal ? trail.principal.data.name: '' }}</td>
+                                    <td>{{ trail.client ? trail.client.data.company:'' }}</td>
+                                    <td>{{ common.timeProcessing(trail.created_at) }}</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -213,7 +213,7 @@
                                     </td>
                                     <td>{{ project.principal?project.principal.data.name:'' }}</td>
                                     <td>{{ project.trail.data.client.data.company}}</td>
-                                    <td>{{ project.created_at }}</td>
+                                    <td>{{ common.timeProcessing(project.created_at) }}</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -294,7 +294,8 @@
                             </div>
                             <pagination :current_page="current_page" :method="getClientTask"
                                         :total_pages="total_pages" :total="total"></pagination>
-                            <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal" @click="handleTask">
+                            <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
+                                 @click="handleTask">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                                     <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
@@ -402,13 +403,14 @@
                                         <div class="col-md-6 px-0">
                                             <div class="col-md-3 float-left text-right pl-0">录入人</div>
                                             <div class="col-md-9 float-left font-weight-bold">
-                                                {{clientInfo.creator?clientInfo.creator.data.name:''}}
+                                                {{clientInfo.creator ? clientInfo.creator.data.name : ''}}
                                             </div>
                                         </div>
                                         <div class="col-md-6 px-0">
                                             <div class="col-md-3 float-left text-right pl-0">录入时间</div>
                                             <div class="col-md-6 float-left font-weight-bold">
-                                                {{clientInfo.created_at?clientInfo.created_at:''}}
+                                                {{clientInfo.created_at ? common.timeProcessing(clientInfo.created_at) :
+                                                ''}}
                                             </div>
                                         </div>
                                     </div>
@@ -416,13 +418,14 @@
                                         <div class="col-md-6 px-0">
                                             <div class="col-md-3 float-left text-right pl-0">最近更新人</div>
                                             <div class="col-md-6 float-left font-weight-bold">
-                                                {{clientInfo.last_updated_user?clientInfo.last_updated_user:''}}
+                                                {{clientInfo.last_updated_user ? clientInfo.last_updated_user : ''}}
                                             </div>
                                         </div>
                                         <div class="col-md-6 px-0">
                                             <div class="col-md-3 float-left text-right pl-0">最近更新时间</div>
                                             <div class="col-md-6 float-left font-weight-bold">
-                                                {{clientInfo.updated_at?clientInfo.updated_at:''}}
+                                                {{clientInfo.updated_at ? common.timeProcessing(clientInfo.updated_at) :
+                                                ''}}
                                             </div>
                                         </div>
                                     </div>
@@ -457,28 +460,28 @@
                                     <td>
                                         
                                         <span class="pr-10 d-block float-left pointer-content"
-                                            style="color: #b9b9b9;"
-                                            data-plugin="actionBtn" data-toggle="modal"
-                                            @click="seeContact(contact)"
+                                              style="color: #b9b9b9;"
+                                              data-plugin="actionBtn" data-toggle="modal"
+                                              @click="seeContact(contact)"
                                         >
                                             <i class="iconfont icon-liulan" aria-hidden="true"></i>
                                         </span>
                                         <span class="d-block float-left"
-                                            style="width: 1px; height: 14px;border-right: 1px solid #b9b9b9;margin: 3px;"></span>
+                                              style="width: 1px; height: 14px;border-right: 1px solid #b9b9b9;margin: 3px;"></span>
                                         <span class="px-10 d-block float-left pointer-content"
-                                            style="color: #b9b9b9;"
-                                            data-plugin="actionBtn" data-toggle="modal"
-                                            data-target="#addContact"
-                                            @click="changeEditStatus(false,contact)"
+                                              style="color: #b9b9b9;"
+                                              data-plugin="actionBtn" data-toggle="modal"
+                                              data-target="#addContact"
+                                              @click="changeEditStatus(false,contact)"
                                         >
                                             <i class="iconfont icon-bianji2" aria-hidden="true"></i>
                                         </span>
                                         <span class="d-block float-left"
-                                            style="width: 1px; height: 14px;border-right: 1px solid #b9b9b9;margin: 3px;"></span>
+                                              style="width: 1px; height: 14px;border-right: 1px solid #b9b9b9;margin: 3px;"></span>
                                         <span class="pl-10 d-block float-left pointer-content" style="color: #b9b9b9"
-                                            data-plugin="actionBtn" @click="setDelInfo(contact.id)"
-                                            data-toggle="modal"
-                                            data-target="#confirmFlag" typeText="删除">
+                                              data-plugin="actionBtn" @click="setDelInfo(contact.id)"
+                                              data-toggle="modal"
+                                              data-target="#confirmFlag" typeText="删除">
                                             <i class="iconfont icon-shanchu1" aria-hidden="true"></i>
                                         </span>
                                     </td>
@@ -487,12 +490,12 @@
                             </table>
                             <div style="margin: 6rem auto;width: 100px" v-if="clientContactsInfo.length === 0">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
-                                    style="width: 100%">
+                                     style="width: 100%">
                             </div>
                             <pagination :current_page="current_page" :method="getClientContact"
                                         :total_pages="total_pages" :total="total"></pagination>
                             <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
-                                @click="changeEditStatus(true)">
+                                 @click="changeEditStatus(true)">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                                     <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
@@ -566,18 +569,18 @@
                                        placeholder="请输入联系人电话" v-model="editConfig.phone"/>
                             </div>
                         </div>
-                         <div class="example">
+                        <div class="example">
                             <div class="col-md-2 text-right float-left pl-0">微信</div>
                             <div class="col-md-10 float-left">
                                 <input type="text" title="" class="form-control"
-                                       placeholder="请输入联系人微信号" v-model="editConfig.wechat" />
+                                       placeholder="请输入联系人微信号" v-model="editConfig.wechat"/>
                             </div>
                         </div>
-                         <div class="example">
+                        <div class="example">
                             <div class="col-md-2 text-right float-left pl-0">其他联系方式</div>
                             <div class="col-md-10 float-left">
                                 <input type="text" title="" class="form-control"
-                                       placeholder="请输入联系人其他联系方式" v-model="editConfig.other_contact_ways" />
+                                       placeholder="请输入联系人其他联系方式" v-model="editConfig.other_contact_ways"/>
                             </div>
                         </div>
                         <div class="example">
@@ -629,16 +632,16 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left pl-0">联系人电话</div>
                             <div class="col-md-10 float-left">
-                               {{ editConfig.phone }}
+                                {{ editConfig.phone }}
                             </div>
                         </div>
-                         <div class="example">
+                        <div class="example">
                             <div class="col-md-2 text-right float-left pl-0">微信</div>
                             <div class="col-md-10 float-left">
                                 {{ editConfig.wechat }}
                             </div>
                         </div>
-                         <div class="example">
+                        <div class="example">
                             <div class="col-md-2 text-right float-left pl-0">其他联系方式</div>
                             <div class="col-md-10 float-left">
                                 {{ editConfig.other_contact_ways }}
@@ -739,7 +742,7 @@
                             <div class="col-md-5 float-left pl-0">
                                 <!-- <timepicker :default="endMinutes" @change="changeEndMinutes"
                                             ref="taskEndTime"></timepicker> -->
-                                 <TimeChoice @change="changeEndMinutes" ref="taskEndTime"></TimeChoice>
+                                <TimeChoice @change="changeEndMinutes" ref="taskEndTime"></TimeChoice>
                             </div>
                         </div>
                         <div class="example">
@@ -761,7 +764,7 @@
 
         <!-- 是否确认删除 -->
         <flag @confirmFlag="delContact"/>
-        <AddTrail :trailType="trailType" :clientId="clientId" :companyInfo="companyInfo" @ok="addTrailCallBack" />
+        <AddTrail :trailType="trailType" :clientId="clientId" :companyInfo="companyInfo" @ok="addTrailCallBack"/>
     </div>
 
 </template>
@@ -771,10 +774,12 @@
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
     import Cookies from 'js-cookie'
+    import common from '../../assets/js/common'
 
     export default {
         data: function () {
             return {
+                common: common,
                 total: 0,
                 current_page: 1,
                 total_pages: 1,
@@ -853,7 +858,7 @@
                 // 清空state
                 this.cancleContact()
             })
-             $('#seeContact').on('hidden.bs.modal', () => {
+            $('#seeContact').on('hidden.bs.modal', () => {
                 // 清空state
                 this.cancleContact()
             })
@@ -1175,12 +1180,12 @@
                 this.changeInfo.principal_id = value
             },
             changeEditStatus(value, config) {
-                if (!this.canAddContact&&value) {
+                if (!this.canAddContact && value) {
                     toastr.error('您没有新增联系人的权限！')
                     return
                 }
                 $('#addContact').modal('show')
-                this.$refs.contact.setValue(config?config.type : '')
+                this.$refs.contact.setValue(config ? config.type : '')
                 this.editConfig = config || {
                     position: '',
                     name: '',
@@ -1191,7 +1196,7 @@
                 }
                 this.isEditContact = value
             },
-            seeContact (config) {
+            seeContact(config) {
                 this.editConfig = config || {
                     position: '',
                     name: '',
@@ -1267,17 +1272,17 @@
                 this.$router.push(url)
             },
             // 新增销售线索时的线索类型
-            changeTrailType (type) {
+            changeTrailType(type) {
                 this.trailType = type
                 $('#addTrail').modal('show')
                 // 
             },
             // 新增销售线索类型成功后的回调
-            addTrailCallBack () {
+            addTrailCallBack() {
                 this.getClientTrail()
             },
             // 跳转
-            redirectContract (id) {
+            redirectContract(id) {
                 // TODO 没有合同编号
                 this.$router.push({
                     name: 'approval/detail',
@@ -1285,7 +1290,7 @@
                 })
             },
             // 新增销售线索权限
-            checkTrailPermission () {
+            checkTrailPermission() {
                 const params = {
                     url: '/trails',
                     id: '',
@@ -1296,7 +1301,7 @@
                 })
             },
             // 新增销售线索权限
-            checkTaskPermission () {
+            checkTaskPermission() {
                 const params = {
                     url: '/tasks',
                     id: '',
@@ -1307,7 +1312,7 @@
                 })
             },
             // 任务弹层
-            handleTask () {
+            handleTask() {
                 if (!this.canAddTask) {
                     toastr.error('您没有新建任务的权限！')
                     return
@@ -1315,7 +1320,7 @@
                 $('#addTask').modal('show')
             },
             // 客户编辑权限
-            checkClientPermission () {
+            checkClientPermission() {
                 const params = {
                     url: `/clients/'${this.clientId}`,
                     id: this.clientId,
@@ -1326,7 +1331,7 @@
                 })
             },
             // 联系人新增权限
-            checkContactPermission () {
+            checkContactPermission() {
                 const params = {
                     url: `/clients/${this.clientId}/contacts/${this.editConfig.id}`,
                     id: this.clientId,
@@ -1366,6 +1371,7 @@
         display: flex;
         align-items: center;
     }
+
     /deep/ {
         #forum-trail {
             .site-action {

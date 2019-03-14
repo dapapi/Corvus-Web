@@ -101,8 +101,8 @@
                                 info.approval.department_name)}}
                             </div>
                             <div class="col-md-2 float-left text-right">申请时间</div>
-                            <div class="col-md-4 float-left">{{list.created_at || (info.approval &&
-                                info.approval.created_at)}}
+                            <div class="col-md-4 float-left">{{common.timeProcessing(list.created_at) || (info.approval &&
+                                common.timeProcessing(info.approval.created_at))}}
                             </div>
                         </div>
                     </div>
@@ -259,6 +259,7 @@
     import {PROJECT_CONFIG} from '@/views/approval/project/projectConfig'
     import ApprovalGreatModule from '@/components/ApprovalGreatModule'
     import ApprovalProgress from '@/components/ForApproval/ApprovalProgress'
+    import common from '../../assets/js/common'
 
     export default {
         name: 'approvalDetail',
@@ -267,6 +268,7 @@
         },
         data() {
             return {
+                common: common,
                 list: {},
                 info: {},
                 detailData: {},
@@ -436,7 +438,6 @@
             getData() {
                 let _this = this
                 fetch('get', '/approval_instances/' + this.$route.params.id + '?include=principal,creator,fields,trail,detail_control').then((params) => {
-                    console.log(params);
                     let {meta} = params
                     _this.list = params.data
                     _this.projectType = params.data.type

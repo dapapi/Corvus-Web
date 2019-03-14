@@ -1,16 +1,18 @@
 <template>
     <div class="page-aside">
-        <div class="page-aside-switch">
-            <i class="icon wb-chevron-left" aria-hidden="true"></i>
-            <i class="icon wb-chevron-right" aria-hidden="true"></i>
-        </div>
-        <div class="page-aside-inner page-aside-scroll scrollable is-enabled scrollable-vertical"
-             style="position: relative;">
-            <div data-role="content" class="scrollable-content" style="width: 259px;">
-                <section class="page-aside-section">
-                    <h5 class="page-title pl-30 mb-30">{{title}}</h5>
-                    <treeView :menus="leftData" :isMessage="true"></treeView>
-                </section>
+        <div class="scroll">
+            <div class="page-aside-switch">
+                <i class="icon wb-chevron-left" aria-hidden="true"></i>
+                <i class="icon wb-chevron-right" aria-hidden="true"></i>
+            </div>
+            <div class="page-aside-inner page-aside-scroll scrollable is-enabled scrollable-vertical"
+                style="position: relative;">
+                <div data-role="content" class="scrollable-content" style="width: 259px;">
+                    <section class="page-aside-section">
+                        <h5 class="page-title pl-30 mb-30">{{title}}</h5>
+                        <treeView :menus="leftData" :isMessage="true"></treeView>
+                    </section>
+                </div>
             </div>
         </div>
     </div>
@@ -103,6 +105,19 @@
         }
     }
 </script>
+<style lang="scss" scoped>
+    .page-aside-left .page-aside{
+        left:80px!important;
+    }
+    .page-aside{
+        position: fixed !important;
+    }
+    .scroll{
+        height: 100%;
+        overflow-y: scroll;
+    }
+</style>
+
 
 
 

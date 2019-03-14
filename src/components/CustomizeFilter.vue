@@ -34,6 +34,8 @@
                     </div>
 
                 </div>
+                    <button class="btn btn-primary reset" type="submit" @click="reset">重制</button>
+
                 <div class="modal-footer">
                     <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
                     <button class="btn btn-primary" type="submit" @click="filter">确定</button>
@@ -90,6 +92,22 @@
         },
 
         methods: {
+            reset(){
+                this.selectorHidden = [],
+                this.selectorIdHidden = [],
+                this.conditionData = {},
+                this.customizeKeyWords = '',
+                this.sendFilterData = {
+                    'conditions':[]
+                },
+                this.conditionLength = 0
+                setTimeout(() => {
+                     this.conditionLength = 1
+                }, 1);
+                this.$emit('change',[])
+                // $('.modal').modal('hide');
+
+            },
             refresh: function () {
                 $('#condition').selectpicker('refresh');
             },
@@ -128,3 +146,10 @@
         }
     }
 </script>
+<style scope>
+    .reset{
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+    }
+</style>
