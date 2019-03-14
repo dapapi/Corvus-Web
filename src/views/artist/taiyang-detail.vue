@@ -916,26 +916,7 @@
                                 <AddMember type="add"></AddMember>
                             </div>
                         </div>
-                        <div class="my-10 clearfix"
-                             v-show="linkageSelectedIds.projects.length > 0 || linkageSelectedIds.tasks.length > 0">
-                            <div class="col-md-2 text-right float-left">关联资源</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <div class="clearfix" v-for="(id,index) in linkageSelectedIds.projects" :key="index">
-                                    <span class="float-left">
-                                        项目 - {{ allProjectsInfo.find(item => item.id == id).title }}
-                                    </span>
-                                    <span class="float-right icon iconfont icon-shanchu1"
-                                          @click="delNewScheduleLinkage('projects', id)"></span>
-                                </div>
-                                <div class="clearfix" v-for="(id,index) in linkageSelectedIds.tasks" :key="index">
-                                    <span class="float-left">
-                                        任务 - {{ allTasksInfo.find(item => item.id == id).title }}
-                                    </span>
-                                    <span class="float-right icon iconfont icon-shanchu1"
-                                          @click="delNewScheduleLinkage('tasks', id)"></span>
-                                </div>
-                            </div>
-                        </div>
+                       
                         <div v-show="showMore">
                             <div class="pt-10 mb-20 clearfix">
                                 <div class="col-md-2 text-right float-left line-fixed-height">资源</div>
@@ -2334,6 +2315,7 @@
                         this.changeArtistInfo.sign_contract_other_name
                     }
                 }
+                
                 if (JSON.stringify(this.changeArtistInfo) === "{}") {
                     this.isEdit = false;
                     return

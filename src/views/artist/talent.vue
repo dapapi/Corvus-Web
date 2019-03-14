@@ -61,9 +61,9 @@
                     <div class="tab-pane animation-fade" id="forum-artist" role="tabpanel" :class="isShow?'active':''">
                         <div class="clearfix my-20">
                             <div class="col-md-3 example float-left">
-                                <input type="text" v-model="artistsName" class="form-control"
+                                <input type="text" v-model="listData.name" class="form-control"
                                        placeholder="请输入姓名"
-                                       @blur="getArtistsName">
+                                       @blur="getArtists">
                             </div>
                             <div class="col-md-3 example float-left">
                                 <selectors :options="artistStatusArr" placeholder="请选择艺人沟通状态"
@@ -920,7 +920,6 @@
                 currentpagename:'',
                 fetchData:{},
                 customizeCondition: {},
-                artistsName:''
                 // currentStatus:'start'
             }
         },
@@ -961,10 +960,6 @@
                 fetch('get', '/bloggers/filter_fields').then((params) => {
                     _this.customizeInfoBloggers = params.data
                 })
-            },
-            getArtistsName:function(){
-                this.listData.name = this.artistsName
-                this.fetchHandler('post', '/stars/filter','filter')
             },
             //获取沟通状态
             getStatus: function (value) {
@@ -1088,7 +1083,7 @@
             typeFilter(value) {
                 this.blogStatus = value
                 // this.getBlogger()
-                // this.fetchHandler('post', '/bloggers/filter','filter')
+                this.fetchHandler('post', '/bloggers/filter','filter')
             },
             //沟通状态
             CommunicationStatus(value) {
@@ -1097,6 +1092,7 @@
                 this.fetchHandler('post', '/bloggers/filter','filter')
             },
             fetchHandler(methods, url, type) {
+                console.log(url)
                 let _this = this,
                     fetchData = this.fetchData,
                     newUrl
@@ -1108,12 +1104,12 @@
                         if (this.listData.name) {
                             keyword = '&name='+this.listData.name
                         } else {
-                            keyword = ''
+                            keyword = '&name='
                         }
                         if (this.listData.communication_status) {
                             communication_status = '&communication_status='+this.listData.communication_status
                         } else {
-                            communication_status = ''
+                            communication_status = '&communication_status='
                         }
                         if(this.listData.sign_contract_status){
                           sign_contract_status  = '&sign_contract_status='+this.listData.sign_contract_status 
@@ -1124,8 +1120,8 @@
                             page = ''
                         }
                         newUrl = url + '?' + this.fetchData.include + keyword + sign_contract_status + communication_status+page
-                        console.log(newUrl)
-                }else if(url == '/bloggers/filter'){
+                       
+                }else{
                     this.fetchData.include = 'include=creator,affixes,publicity,operatelogs,contracts'
                     if (type == 'filter') {
                         fetchData = this.customizeCondition
