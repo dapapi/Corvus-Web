@@ -634,6 +634,7 @@
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
     import Cookies from 'js-cookie'
+    import { mapState } from 'vuex'
 
     export default {
 
@@ -694,7 +695,6 @@
                 linkIndex: 0, //
                 canLoadMore: false, // 关联资源是否可以加载更多
                 canEdit: false, // 是否可以编辑
-                canAdd: false, // 是否可以新增子任务
             }
         },
 
@@ -723,8 +723,8 @@
             // 请求问卷
             this.getQuestionId()
 
-            this.checkPermission()
-            this.checkAddPermission()
+            // this.checkPermission()
+            // this.checkAddPermission()
         },
 
         watch: {
@@ -749,6 +749,9 @@
         },
 
         computed: {
+            ...mapState([
+                'power'
+            ]),
             routerId() {
                 return this.$route.params.id
             },
@@ -769,6 +772,8 @@
                             response.data.affixes.data[i].size = this.unitConversion(size)
                         }
                     }
+
+                    this.canEdit = response.data.power == 'true'
 
                     this.oldInfo = JSON.parse(JSON.stringify(response.data));
                     this.taskInfo = response.data;
@@ -1342,30 +1347,8 @@
                 this.previewUrl = url
                 this.previewName = name
             },
-            // 检察编辑任务权限
-            checkPermission () {
-                const params = {
-                    url: `/tasks/${this.taskId}`,
-                    id: this.taskId,
-                    method: 'put'
-                }
-                fetch('get', '/console/checkpower', params).then(res => {
-                    this.canEdit = !!res.data.power
-                })
-            },
-            // 新增子任务权限
-            checkAddPermission () {
-                const params = {
-                    url: `/tasks/${this.taskId}/subtask`,
-                    id: this.taskId,
-                    method: 'post'
-                }
-                fetch('get', '/console/checkpower', params).then(res => {
-                    this.canAdd = !!res.data.power
-                })
-            },
             handleChildTask () {
-                if (!this.canAdd) {
+                if (this.power.task == 'false') {
                     toastr.error('您没有权限新增子任务！')
                     return
                 }

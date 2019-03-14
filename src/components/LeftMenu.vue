@@ -173,7 +173,9 @@
         created () {
             if(Cookies.get('user')){
                 const avatar = JSON.parse(Cookies.get('user')).avatar;
+                const power = JSON.parse(Cookies.get('user')).power
                 this.setUserAvatar(avatar)
+                this.setUserPower(power)
             }
         },
 
@@ -191,7 +193,8 @@
         },
         methods: {
             ...mapMutations([
-                'setUserAvatar'
+                'setUserAvatar',
+                'setUserPower'
             ]),
             showBackModel() {
                 this.visible = !this.visible

@@ -85,5 +85,10 @@ export default {
     // 修改个人信息字段
     setUserAvatar (state, data) {
         state.avatar = data
+    },
+    // 设置权限(新增)
+    setUserPower (state, data) {
+        console.log(data)
+        state.power = data
     }
 }

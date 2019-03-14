@@ -180,7 +180,7 @@
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                      style="width: 100%">
                             </div>
-                            <AddClientType @change="changeTrailType" :hidden="!canAddTrail"></AddClientType>
+                            <AddClientType @change="changeTrailType" :hidden="power.trail == 'false'"></AddClientType>
                             <pagination :current_page="current_page" :method="getClient"
                                         :total_pages="total_pages" :total="total"></pagination>
                         </div>
@@ -771,6 +771,7 @@
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
     import Cookies from 'js-cookie'
+    import { mapState } from 'vuex'
 
     export default {
         data: function () {
@@ -825,11 +826,11 @@
                 trailType: '', // 线索类型
                 companyInfo: {}, // 公司信息
                 companyId: '', // 公司id
-                canAddTrail: false, // 是否可以添加销售线索
-                canAddTask: false, // 是否可以添加任务
+                // canAddTrail: false, // 是否可以添加销售线索
+                // canAddTask: false, // 是否可以添加任务
                 canEditClient: false, // 是否可以添加任务
-                canAddContact: false, // 是否可以新增联系人
-                isDisabled: false, // 联系人是否可以编辑
+                canAddContact: true, // 是否可以新增联系人
+                isDisabled: true, // 联系人是否可以编辑
             }
         },
         beforeMount() {
@@ -859,12 +860,11 @@
             })
 
             this.getClientTask() // 为了默认展示任务数量 先在这里请求
-            this.checkTrailPermission()
-            this.checkTaskPermission()
-            this.checkClientPermission()
-            this.checkContactPermission()
         },
         computed: {
+            ...mapState([
+                'power'
+            ]),
             completeNum() {
                 return this.clientTasksInfo.filter(n => n.status === 2).length
             }
@@ -915,7 +915,7 @@
                 fetch('get', '/clients/' + this.clientId, {include: 'principal,creator,tasks'}).then(response => {
                     this.clientInfo = response.data;
                     this.clientInfoCopy = JSON.parse(JSON.stringify(response.data))
-
+                    this.canEditClient = response.data.power == 'true'
                     let params = {
                         type: 'change',
                         data: response.data.principal.data
@@ -1284,58 +1284,14 @@
                     params: {id: id}
                 })
             },
-            // 新增销售线索权限
-            checkTrailPermission () {
-                const params = {
-                    url: '/trails',
-                    id: '',
-                    method: 'post'
-                }
-                fetch('get', '/console/checkpower', params).then(res => {
-                    this.canAddTrail = !!res.data.power
-                })
-            },
-            // 新增销售线索权限
-            checkTaskPermission () {
-                const params = {
-                    url: '/tasks',
-                    id: '',
-                    method: 'post'
-                }
-                fetch('get', '/console/checkpower', params).then(res => {
-                    this.canAddTask = !!res.data.power
-                })
-            },
             // 任务弹层
             handleTask () {
-                if (!this.canAddTask) {
+                if (this.power == 'false') {
                     toastr.error('您没有新建任务的权限！')
                     return
                 }
                 $('#addTask').modal('show')
             },
-            // 客户编辑权限
-            checkClientPermission () {
-                const params = {
-                    url: `/clients/'${this.clientId}`,
-                    id: this.clientId,
-                    method: 'put'
-                }
-                fetch('get', '/console/checkpower', params).then(res => {
-                    this.canEditClient = !!res.data.power
-                })
-            },
-            // 联系人新增权限
-            checkContactPermission () {
-                const params = {
-                    url: `/clients/${this.clientId}/contacts/${this.editConfig.id}`,
-                    id: this.clientId,
-                    method: 'post'
-                }
-                fetch('get', '/console/checkpower', params).then(res => {
-                    this.canAddContact = !!res.data.power
-                })
-            }
         }
     }
 </script>
