@@ -1414,7 +1414,7 @@
                 _this.$refs.workReleaseTime.setValue('');
             })
             this.getTimes()
-            this.getArtistsBill()
+            // this.getArtistsBill()
             this.getResources();
             this.getPrivacy() //获取隐私设置
         },
@@ -2142,9 +2142,9 @@
             //签约其他公司
             changeArtistSignStatus: function (value) {
                 if (value == 1) {
-                    this.artistInfo.sign_contract_other = true
+                    this.artistInfo.sign_contract_other = 1
                 } else {
-                    this.artistInfo.sign_contract_other = false
+                    this.artistInfo.sign_contract_other = 0
                 }
             },
             //平台id
@@ -2182,14 +2182,14 @@
                 let _this = this;
                 this.artistId = this.$route.params.id;
                 if (this.artistInfo.intention == 1) {
-                    this.artistInfo.intention = true
+                    this.artistInfo.intention = 1
                 } else {
-                    this.artistInfo.intention = false
+                    this.artistInfo.intention = 0
                 }
                 if (this.artistInfo.sign_contract_other == 1) {
-                    this.artistInfo.sign_contract_other = true
+                    this.artistInfo.sign_contract_other = 1
                 } else {
-                    this.artistInfo.sign_contract_other = false
+                    this.artistInfo.sign_contract_other = 0
                 }
                 this.changeArtistInfo = {
                     nickname: this.Namevalue,
