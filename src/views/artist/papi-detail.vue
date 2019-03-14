@@ -239,10 +239,10 @@
                                         <td>{{item.company}}</td>
                                         <td>{{item.created_at}}</td>
                                         <td>
-                                            <template v-if="item.relate_project_bills_resource">
-                                                {{item.relate_project_bills_resource}}
+                                            <template v-if="item.contract_sharing_ratio">
+                                                {{item.contract_sharing_ratio}}
                                             </template>
-                                            <template>0</template>
+                                            <template v-if="!item.contract_sharing_ratio">>0</template>
                                         </td>
                                     </tr>
                                 </table>
