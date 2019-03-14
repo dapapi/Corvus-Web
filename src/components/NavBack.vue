@@ -2,7 +2,7 @@
     <div class="page-header page-header-bordered">
         <h1 class="page-title">
             <!-- <i class="icon angle-left"></i> -->
-            <router-link :to="href"><i class="icon md-chevron-left"></i></router-link>
+            <router-link :to="href?href:''"><i class="icon md-chevron-left" @click="goPrevious"></i></router-link>
             {{ title }}
         </h1>
 
@@ -25,6 +25,11 @@ export default {
     },
 
     methods: {
+        goPrevious () {
+            if (!this.href) {
+                this.$router.go(-1)
+            }
+        }
     }
 }
 </script>
