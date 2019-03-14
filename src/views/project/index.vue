@@ -143,6 +143,7 @@
 
         data: function () {
             return {
+                common: common,
                 total: 0,
                 current_page: 1,
                 total_pages: 1,
