@@ -400,25 +400,27 @@
                     fetchData = this.fetchData,
                     newUrl
                 this.fetchData.include = 'include=principal'
+                console.log(this.clientPrincipalIdSearch)
                 if (type == 'filter') {
                     fetchData = this.customizeCondition
+                    this.customizeCondition.principal_ids=this.clientPrincipalIdSearch
                     let keyword, status, principal_ids
                     if (this.fetchData.keyword) {
                         keyword = '&keyword=' + this.fetchData.keyword
                     } else {
                         keyword = ''
                     }
-                    if (this.fetchData.status) {
-                        status = '&status=' + this.fetchData.status
+                    // if (this.clientPrincipalIdSearch) {
+                    //     principal_ids = '&principal_ids=' + this.clientPrincipalIdSearch
+                    // } else {
+                    //     principal_ids = ''
+                    // }
+                    if (this.clientLevelSearch) {
+                        status= '&grade=' + this.clientLevelSearch
                     } else {
-                        status = ''
+                        status= ''
                     }
-                    if (this.fetchData.principal_ids) {
-                        principal_ids = '&principal_ids=' + this.fetchData.principal_ids
-                    } else {
-                        principal_ids = ''
-                    }
-                    newUrl = url + '?' + this.fetchData.include + keyword + status + principal_ids
+                    newUrl = url + '?' + this.fetchData.include + keyword + status 
                 }
                 this.exportParams = {
                     keyword: this.fetchData.keyword,

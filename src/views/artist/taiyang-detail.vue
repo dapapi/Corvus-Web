@@ -1381,11 +1381,16 @@
                 fetch('get', '/stars/' + this.artistId, data).then(function (response) {
 
                     _this.artistInfo = response.data;
-                    console.log(response.data)
+                     console.log(response.data)
+                    if(response.data.star_risk_point == "privacy"){
+                         _this.artistInfo.star_risk_point = '**'
+                        
+                    }
+                   
                     _this.uploadUrl = _this.artistInfo.avatar
                     // _this.artistProjectsInfo = []
                     _this.artistTasksInfo = response.data.tasks.data//任务数据
-
+                    console.log(_this.artistTasksInfo)
 
                     _this.artistWorksInfo = response.data.works.data//作品数据
 

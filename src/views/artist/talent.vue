@@ -206,7 +206,7 @@
                         <div class="clearfix my-20">
                             <div class="col-md-3 example float-left">
                                 <input type="text" class="form-control" placeholder="请输入博主昵称"
-                                       v-model="blogName" @blur='getBlogger()'>
+                                       v-model="blogName" @blur='getBloggerName'>
                             </div>
                             <div class="col-md-3 example float-left">
                                 <selectors :options="papiCommunicationStatusArr" @change="CommunicationStatus"
@@ -1081,6 +1081,10 @@
                     _this.artistTypeArr.unshift(data)
                 })
             },
+            getBloggerName(){
+                this.blogName = this.blogName 
+                this.fetchHandler('post', '/bloggers/filter','filter')
+            },
             //选择博主类型
             typeFilter(value) {
                 this.blogStatus = value
@@ -1099,7 +1103,7 @@
                     fetchData = this.fetchData,
                     newUrl
                 if(url == '/stars/filter'){
-                     this.fetchData.include = 'broker,creator,contracts'
+                     this.fetchData.include = 'include=broker,creator,contracts'
                     if (type == 'filter') {
                         fetchData = this.customizeCondition
                         let keyword, sign_contract_status, communication_status,page
@@ -1131,7 +1135,7 @@
                         if (this.blogName) {
                             keyword = '&name='+this.blogName
                         } else {
-                            keyword = ''
+                            keyword = '&name='
                         }
                         if (this.blogStatus) {
                             status = '&status='+this.blogStatus
@@ -1415,18 +1419,19 @@
                 }
             },
             tab: function (value) {
-                this.currentStatus = value
                 this.selectedArtistsArr = []
                 if (value == 'start') {
                     this.$refs.removeDate.setValue({conditions:[]})
-                    this.customizeInfo = {}
+                    this.customizeCondition = {}
                     this.getArtists()                  
                     this.isShow = true
+                    this.$refs.removeDate.reset()
                 } else if (value == 'bloggers') {
                     this.$refs.removeDate.setValue({conditions:[]})
-                    this.customizeInfo = {}
+                    this.customizeCondition  = {}
                     this.getBlogger()
                     this.isShow = false
+                    this.$refs.removeDate.reset()
                 }
             },
             giveBroker: function () {
