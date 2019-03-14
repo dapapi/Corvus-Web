@@ -81,5 +81,9 @@ export default {
     setModule(state,data){
         state.moduleList = data.moduleList
         state.unReadMsg = data.num
+    },
+    // 修改个人信息字段
+    setUserAvatar (state, data) {
+        state.avatar = data
     }
 }
