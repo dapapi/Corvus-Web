@@ -107,8 +107,8 @@
                     </div>
                 </div>
             </div>
-            <div style="display: flex; justify-content: space-between; align-items: flex-start">
-                <div class="panel" style="width: calc(66% - 15px);">
+            <div style="display: -webkit-box ">
+                <div class="panel" style="width: calc(66% - 15px);float:left;margin-right:30px;">
                     <div class="col-md-12">
                         <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                             <li class="nav-item" role="presentation" v-if="artistInfo.sign_contract_status == 2">
@@ -200,7 +200,7 @@
                                             <template v-if="item.contract_sharing_ratio">
                                                 {{item.contract_sharing_ratio}}
                                             </template>
-                                            <template>0</template>
+                                            <template v-if="!item.contract_sharing_ratio">0</template>
                                         </td>
                                     </tr>
                                 </table>
@@ -244,8 +244,8 @@
                                             <template v-if="task.status === 4"><span style="color:#F44336">延期</span>
                                             </template>
                                         </td>
-                                        <td>{{ task.principal.data.name }}</td>
-                                        <td>{{ common.timeProcessing(task.end_at) }}</td>
+                                        <td><span v-if="task.principal">{{ task.principal.data.name }}</span></td>
+                                        <td>{{ task.end_at }}</td>
                                     </tr>
 
                                 </table>
@@ -475,11 +475,14 @@
                                                                @change="(value) => changeArtistBaseInfo(value, 'star_location')"></EditInput>
                                                 </div>
                                             </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height" v-if="artistInfo.star_risk_point!=='undefined'">
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height" >
                                                 <div class="col-md-3 float-left text-right pl-0">潜在风险点</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
+                                                <div class="col-md-9 float-left font-weight-bold" v-if="artistInfo.star_risk_point!=='**'">
                                                     <editTextarea :content="artistInfo.star_risk_point" :is-edit="isEdit"
                                                                   @change="(value) => changeArtistBaseInfo(value, 'star_risk_point')"></editTextarea>
+                                                </div>
+                                                <div class="col-md-9 float-left font-weight-bold" v-if="artistInfo.star_risk_point=='**'">
+                                                    {{artistInfo.star_risk_point}}
                                                 </div>
                                             </div>
                                             <h5 class="pl-15 pt-10 clearfix col-md-12 float-left">联系信息</h5>
@@ -635,7 +638,7 @@
 
                     </div>
                 </div>
-                <div class="panel" style="width: calc(34% - 15px);">
+                <div class="panel" style="width: calc(34% - 15px);min-height:100%">
                     <div class="col-md-12">
                         <div class="card col-md-12">
                             <div class="card-header card-header-transparent card-header-bordered p-10"
@@ -1349,7 +1352,7 @@
             this.getTaskType();
             this.getCalendar();
             this.draw();
-            // this.getArtistsBill()
+            this.getArtistsBill()
             this.getTaskDate()
             this.getProjectList()
             this.selectProjectLinkage();
@@ -1381,12 +1384,14 @@
                 fetch('get', '/stars/' + this.artistId, data).then(function (response) {
 
                     _this.artistInfo = response.data;
-                     console.log(response.data)
+                    console.log(_this.artistInfo )
                     if(response.data.star_risk_point == "privacy"){
                          _this.artistInfo.star_risk_point = '**'
                         
+                    }else{
+                         _this.artistInfo.star_risk_point = response.data.star_risk_point
                     }
-                   
+                     console.log(_this.artistInfo.star_risk_point)
                     _this.uploadUrl = _this.artistInfo.avatar
                     // _this.artistProjectsInfo = []
                     _this.artistTasksInfo = response.data.tasks.data//任务数据
