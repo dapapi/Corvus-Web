@@ -542,7 +542,13 @@
                                                                   @change="(value) => changeArtistBaseInfo(value, 'desc')"></editTextarea>
                                                 </div>
                                             </div>
-                                           
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height" v-if="artistInfo.star_risk_point">
+                                                <div class="col-md-3 float-left text-right pl-0">潜在风险点</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <editTextarea :content="artistInfo.star_risk_point" :is-edit="isEdit"
+                                                                  @change="(value) => changeArtistBaseInfo(value, 'star_risk_point')"></editTextarea>
+                                                </div>
+                                            </div>
                                             <div v-show="isEdit"
                                                  class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                                 <div class="col-md-3 float-left text-right pl-0">附件类型</div>
