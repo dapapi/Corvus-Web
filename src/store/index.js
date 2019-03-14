@@ -34,6 +34,17 @@ const state = {
     //消息模块列表
     moduleList:[],
     unReadMsg: 0, //未读消息
+
+    // 个人信息
+    avatar: '', // 用户头像
+    power: {
+        blogger: true,
+        client: true,
+        project: true,
+        star: true,
+        task: true,
+        trail: true,
+    }, // 用户权限(新增)
 };
 
 export default new Vuex.Store({

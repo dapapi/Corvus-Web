@@ -35,7 +35,10 @@ let env = {
         let that = this;
         return {
             401: function () {
-                Cookies.remove(that.tokenString);
+                // Cookies.remove(that.tokenString);
+                Cookies.remove('user');
+                Cookies.remove('CORVUS-ACCESS-TOKEN');
+                Cookies.remove('selectedCalendar');
                 redirect('/login')
             },
             403: function () {

@@ -1,7 +1,7 @@
 <template>
     <!-- Page -->
     <div class="page">
-        <NavBack title="添加员工" href="/staff"></NavBack>
+        <NavBack title="添加员工"></NavBack>
         <div class="page-content container-fluid">
             <div class="panel col-md-12 clearfix py-5">
                 <div class="nav-tabs-horizontal" data-plugin="tabs">

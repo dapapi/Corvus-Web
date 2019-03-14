@@ -81,7 +81,7 @@
         <customize-filter :data="customizeInfo" @change="customize" :cleanup="cleanUp"
                           @cleanupdone='cleanUp=false'></customize-filter>
 
-        <AddClientType :hidden="!canAdd" @change="showAddModal"/>
+        <AddClientType :hidden="power.client == 'false'" @change="showAddModal"/>
 
         <div class="modal fade" id="addClient" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
@@ -239,9 +239,9 @@
                 taskLevelArr: config.taskLevelArr,
                 cleanUp: false,
                 exportParams: {},//导出参数
-                canAdd: false, // 可以新增吗
                 fetchData: {},
                 customizeCondition: {}
+                // canAdd: false, // 可以新增吗
             }
         },
 
@@ -255,13 +255,21 @@
                 // 清空state
                 this.cancelClient()
             })
-            this.checkPermission()
+            // this.checkPermission()
+            console.log(this.power)
         },
 
         computed: {
             ...mapState([
-                'userList'
+                'userList',
+                'power'
             ])
+        },
+
+        watch : {
+            power () {
+                console.log(this.power)
+            }
         },
 
         methods: {
@@ -522,17 +530,6 @@
             },
             goDetail(id) {
                 this.$router.push('/clients/' + id)
-            },
-            // 检察权限
-            checkPermission() {
-                const params = {
-                    url: '/clients',
-                    id: '',
-                    method: 'post'
-                }
-                fetch('get', '/console/checkpower', params).then(res => {
-                    this.canAdd = !!res.data.power
-                })
             },
         }
     }

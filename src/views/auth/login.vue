@@ -424,7 +424,8 @@
                         id: userData.id,
                         avatar: userData.icon_url,
                         nickname: userData.name,
-                        organization_id: userData.organization_id
+                        organization_id: userData.organization_id,
+                        power: userData.power
                     };
                     callback(json, userData.company)
                 })

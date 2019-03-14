@@ -540,6 +540,19 @@
         overflow-y: auto;
     }
 
+    @media screen and (max-width: 1600px) {
+        .overflowY {
+            height: calc((100vh - 370px) * 0.9);
+            overflow-y: auto;
+        }
+    }
+    @media screen and (max-width: 1400px) {
+        .overflowY {
+            height: calc((100vh - 350px) * 0.9);
+            overflow-y: auto;
+        }
+    }
+
     .list-wrap {
         display: flex;
         justify-content: space-between;
