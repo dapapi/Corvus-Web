@@ -52,7 +52,7 @@
                                     <td>{{project.title}}</td>
                                     <td>{{project.name}}</td>
                                     <!-- <td></td> -->
-                                    <td>{{project.created_at}}</td>
+                                    <td>{{common.timeProcessing(project.created_at)}}</td>
                                     <td>{{getProgressName(project.form_status)}}</td>
                                     <!-- <td></td> -->
                                 </tr>
@@ -74,13 +74,14 @@
 </template>
 
 <script>
-    import {PROJECT_CONFIG} from '@/views/approval/project/projectConfig.js'
-    import fetch from '@/assets/utils/fetch.js'
-    import config from '@/assets/js/config'
+    import {PROJECT_CONFIG} from '@/views/approval/project/projectConfig'
+    import fetch from '@/assets/utils/fetch'
+    import common from '@/assets/js/common'
     export default {
         name: "my",
         data() {
             return {
+                common: common,
                 total: 1,
                 current_page: 1,
                 total_pages: 1,

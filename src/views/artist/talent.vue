@@ -171,11 +171,11 @@
                                 </td>
                                 <td @click="redirectArtistDetail(artist.id)"
                                     v-if="artistsInfo.find(item=>item.sign_contract_status==2)&&artist.contracts">{{
-                                    artist.contracts.data.contract_start_date }}
+                                    common.timeProcessing(artist.contracts.data.contract_start_date, 'day') }}
                                 </td>
                                 <td @click="redirectArtistDetail(artist.id)"
                                     v-if="artistsInfo.find(item=>item.sign_contract_status==3)&&artist.contracts">{{
-                                    artist.contracts.data.contract_end_date}}
+                                    common.timeProcessing(artist.contracts.data.contract_end_date, 'day')}}
                                 </td>
                                 <td @click="redirectArtistDetail(artist.id)"
                                     v-if="artist.communication_status&&artistsInfo.find(item=>item.sign_contract_status==1)">
@@ -188,8 +188,8 @@
 
                                     </template>
                                 </td>
-                                <td @click="redirectArtistDetail(artist.id)">{{artist.created_at}}</td>
-                                <td @click="redirectArtistDetail(artist.id)">{{artist.last_follow_up_at}}</td>
+                                <td @click="redirectArtistDetail(artist.id)">{{common.timeProcessing(artist.created_at)}}</td>
+                                <td @click="redirectArtistDetail(artist.id)">{{common.timeProcessing(artist.last_follow_up_at)}}</td>
                             </tr>
                             </tbody>
 
@@ -286,11 +286,11 @@
                                 <td @click="redirectBolggerDetail(artist.id)" v-if=" artist.type">{{ artist.type.data.name }}</td>
                                 <td @click="redirectBolggerDetail(artist.id)"
                                     v-if="bloggerInfo.find(item=>item.sign_contract_status==2&&artist.contracts)">{{
-                                    artist.contracts.data.contract_start_date }}
+                                    common.timeProcessing(artist.contracts.data.contract_start_date, 'day') }}
                                 </td>
                                 <td @click="redirectBolggerDetail(artist.id)"
                                     v-if="bloggerInfo.find(item=>item.sign_contract_status==3&&artist.contracts)">{{
-                                    artist.contracts.data.contract_end_date}}
+                                    common.timeProcessing(artist.contracts.data.contract_end_date, 'day')}}
                                 </td>
                                 <td @click="redirectBolggerDetail(artist.id)"
                                     v-if="artist.communication_status&&bloggerInfo.find(item=>item.sign_contract_status==1)">
@@ -309,8 +309,8 @@
                                         {{v.name}}
                                     </span>
                                 </td>
-                                <td @click="redirectBolggerDetail(artist.id)">{{artist.created_at}}</td>
-                                <td @click="redirectBolggerDetail(artist.id)">{{artist.last_follow_up_at}}
+                                <td @click="redirectBolggerDetail(artist.id)">{{common.timeProcessing(artist.created_at)}}</td>
+                                <td @click="redirectBolggerDetail(artist.id)">{{common.timeProcessing(artist.last_follow_up_at)}}
                                 </td>
                             </tr>
 
@@ -757,10 +757,12 @@
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
+    import common from '../../assets/js/common'
     import Cookies from 'js-cookie'
     export default {
         data: function () {
             return {
+                common: common,
                 customizeContentType: '',
                 total: 0,
                 current_page: 1,
@@ -1104,7 +1106,6 @@
                 }
                 data.page = '&page='+this.current_page
                 this.customizeInfo = value
-                // console.log(this.customizeInfo.conditions)
                 // this.customizeInfo.conditions.forEach(item=>{
                 //    if(item!=undefined){
                 //        if(item.id==1561909265){

@@ -31,7 +31,7 @@
                                     </td>
                                     <td>{{classifyArr.find(classifyArr => classifyArr.value == item.classify).name}}</td>
                                     <td>
-                                        <span>{{item.created_at}}</span> 
+                                        <span>{{common.timeProcessing(item.created_at)}}</span>
                                     </td>
                                     <td v-if="memberList[0]">
                                         {{memberList.find(memberList => memberList.id == item.creator.data.id).name}}
@@ -53,11 +53,13 @@
 <script>
 import fetch from '../../assets/utils/fetch.js'
 import config from '../../assets/js/config'
+import common from '../../assets/js/common'
 import { mapState } from 'vuex'
 
 export default {
     data(){
         return{
+            common: common,
              broadCastInfo:{},
              classifyArr:config.classifyArr,
              memberList:[],

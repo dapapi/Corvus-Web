@@ -194,7 +194,6 @@
         getUnread(){
             let _this = this
             fetch('get','/pending_sum').then((params) => {
-                console.log(params.project);
                 _this.unreadInfo = params
                 _this.leftData[0].subMenu[2].num = params.project
                 _this.leftData[1].subMenu[2].num = params.contract

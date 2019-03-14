@@ -100,7 +100,7 @@
                                         元
                                     </template>
                                 </td>
-                                <td>{{ project.last_follow_up_at }}</td>
+                                <td>{{ common.timeProcessing(project.last_follow_up_at) }}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -131,6 +131,7 @@
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
+    import common from '../../assets/js/common'
     import {mapState} from 'vuex'
     import Cookies from 'js-cookie'
     import ImportAndExport from '../../components/ImportAndExport.vue'
