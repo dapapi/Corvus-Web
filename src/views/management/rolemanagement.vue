@@ -446,7 +446,7 @@
                     <div class="modal-body">
                         <div class="example">
                             <div class="col-md-12  pl-0">
-                                <p class="modal-title text-center">确认删除{{item.name}}</p>
+                                <p class="modal-title text-center">确认删除</p>
                             </div>
                         </div>
                     </div>
