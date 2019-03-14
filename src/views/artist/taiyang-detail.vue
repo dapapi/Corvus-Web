@@ -468,11 +468,18 @@
                                                                       @change="(value) => changeArtistBaseInfo(value, 'sign_contract_other')"></ConditionalInput>
                                                 </div>
                                             </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height" style="height:64px;">
                                                 <div class="col-md-3 float-left text-right pl-0">地区</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditInput :content="artistInfo.star_location" :is-edit="isEdit"
                                                                @change="(value) => changeArtistBaseInfo(value, 'star_location')"></EditInput>
+                                                </div>
+                                            </div>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height" v-if="artistInfo.star_risk_point!=='undefined'">
+                                                <div class="col-md-3 float-left text-right pl-0">潜在风险点</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <editTextarea :content="artistInfo.star_risk_point" :is-edit="isEdit"
+                                                                  @change="(value) => changeArtistBaseInfo(value, 'star_risk_point')"></editTextarea>
                                                 </div>
                                             </div>
                                             <h5 class="pl-15 pt-10 clearfix col-md-12 float-left">联系信息</h5>
@@ -542,13 +549,7 @@
                                                                   @change="(value) => changeArtistBaseInfo(value, 'desc')"></editTextarea>
                                                 </div>
                                             </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height" v-if="artistInfo.star_risk_point">
-                                                <div class="col-md-3 float-left text-right pl-0">潜在风险点</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
-                                                    <editTextarea :content="artistInfo.star_risk_point" :is-edit="isEdit"
-                                                                  @change="(value) => changeArtistBaseInfo(value, 'star_risk_point')"></editTextarea>
-                                                </div>
-                                            </div>
+                                            
                                             <div v-show="isEdit"
                                                  class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                                 <div class="col-md-3 float-left text-right pl-0">附件类型</div>
@@ -592,6 +593,7 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                          
                                         </div>
 
                                         <h5 class="pl-15 pt-10">更新信息</h5>
@@ -1396,6 +1398,7 @@
                 fetch('get', '/stars/' + this.artistId, data).then(function (response) {
 
                     _this.artistInfo = response.data;
+                    console.log(response.data)
                     _this.uploadUrl = _this.artistInfo.avatar
                     // _this.artistProjectsInfo = []
                     _this.artistTasksInfo = response.data.tasks.data//任务数据

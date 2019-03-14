@@ -61,9 +61,9 @@
                     <div class="tab-pane animation-fade" id="forum-artist" role="tabpanel" :class="isShow?'active':''">
                         <div class="clearfix my-20">
                             <div class="col-md-3 example float-left">
-                                <input type="text" v-model="listData.name" class="form-control"
+                                <input type="text" v-model="artistsName" class="form-control"
                                        placeholder="请输入姓名"
-                                       @blur="getArtists">
+                                       @blur="getArtistsName">
                             </div>
                             <div class="col-md-3 example float-left">
                                 <selectors :options="artistStatusArr" placeholder="请选择艺人沟通状态"
@@ -920,7 +920,8 @@
                 currentpagename:'',
                 fetchData:{},
                 customizeCondition: {},
-                currentStatus:'start'
+                artistsName:''
+                // currentStatus:'start'
             }
         },
         watch: {
@@ -929,13 +930,13 @@
             }
         },
         computed:{
-            typeHandler(){
-                if(this.currentStatus === 'start'){
-                    return 'stars'
-                }else if(this.currentStatus === 'bloggers'){
-                    return 'bloggers'
-                }
-            },
+            // typeHandler(){
+            //     if(this.currentStatus === 'start'){
+            //         return 'stars'
+            //     }else if(this.currentStatus === 'bloggers'){
+            //         return 'bloggers'
+            //     }
+            // },
         },
         created() {
             this.getStarsField()
@@ -961,19 +962,23 @@
                     _this.customizeInfoBloggers = params.data
                 })
             },
+            getArtistsName:function(){
+                this.listData.name = this.artistsName
+                this.fetchHandler('post', '/stars/filter','filter')
+            },
             //获取沟通状态
             getStatus: function (value) {
                 this.listData.communication_status = value
-                this.getArtists()
-                // this.fetchHandler('post', '/stars/filter','filter')
+                // this.getArtists()
+                this.fetchHandler('post', '/stars/filter','filter')
             },
             //获取签约状态
             getSource: function (value) {
                 if (value) {
                     this.listData.sign_contract_status = value
                 }
-                this.getArtists()
-                // this.fetchHandler('post', '/stars/filter','filter')
+                // this.getArtists()
+                this.fetchHandler('post', '/stars/filter','filter')
             },
             //查询列表
             getArtists: function (page = 1, signStatus) {
@@ -1018,7 +1023,6 @@
                 //博主状态
                 if (signStatus) {
                     this.blogStatus = signStatus
-                    // this.getBlogger()
                 }
                 if(this.blogStatus){
                     data.status = '&status='+this.blogStatus
@@ -1028,14 +1032,12 @@
                 //沟通状态
                 if (this.blogCommunication) {
                     data.communication_status = '&communication_status='+this.blogCommunication
-                    // this.getBlogger()
                 }else{
                     data.communication_status = ''
                 }
                 //博主名称
                 if (this.blogName) {
                     data.name = '&name='+this.blogName
-                    // this.getBlogger()
                 }else{
                     data.name = ''
                 }
@@ -1085,44 +1087,72 @@
             //选择博主类型
             typeFilter(value) {
                 this.blogStatus = value
-                this.getBlogger()
+                // this.getBlogger()
                 // this.fetchHandler('post', '/bloggers/filter','filter')
             },
             //沟通状态
             CommunicationStatus(value) {
                 this.blogCommunication = value
-                this.getBlogger()
-                // this.fetchHandler('post', '/bloggers/filter','filter')
+                // this.getBlogger()
+                this.fetchHandler('post', '/bloggers/filter','filter')
             },
             fetchHandler(methods, url, type) {
                 let _this = this,
                     fetchData = this.fetchData,
                     newUrl
-                this.fetchData.include = 'include=creator,affixes,publicity,operatelogs,contracts'
-                if (type == 'filter') {
-                    fetchData = this.customizeCondition
-                    let keyword, status, communication_status,page
-                    if (this.fetchData.keyword) {
-                        keyword = '&name='+this.blogName
-                    } else {
-                        keyword = ''
-                    }
-                    if (this.fetchData.status) {
-                        status = '&status='+this.blogStatus
-                    } else {
-                        status = ''
-                    }
-                    if (this.fetchData.communication_status) {
-                        communication_status = '&communication_status='+this.blogCommunication
-                    } else {
-                        communication_status = ''
-                    }
-                    if (this.fetchData.page) {
-                        page = '&page='+this.current_page
-                    } else {
-                        page = ''
-                    }
-                    newUrl = url + '?' + this.fetchData.include + keyword + status + communication_status+page
+                if(url == '/stars/filter'){
+                     this.fetchData.include = 'broker,creator,contracts'
+                    if (type == 'filter') {
+                        fetchData = this.customizeCondition
+                        let keyword, sign_contract_status, communication_status,page
+                        if (this.listData.name) {
+                            keyword = '&name='+this.listData.name
+                        } else {
+                            keyword = ''
+                        }
+                        if (this.listData.communication_status) {
+                            communication_status = '&communication_status='+this.listData.communication_status
+                        } else {
+                            communication_status = ''
+                        }
+                        if(this.listData.sign_contract_status){
+                          sign_contract_status  = '&sign_contract_status='+this.listData.sign_contract_status 
+                        }
+                        if (this.listData.page) {
+                            page = '&page='+this.current_page
+                        } else {
+                            page = ''
+                        }
+                        newUrl = url + '?' + this.fetchData.include + keyword + sign_contract_status + communication_status+page
+                        console.log(newUrl)
+                }else if(url == '/bloggers/filter'){
+                    this.fetchData.include = 'include=creator,affixes,publicity,operatelogs,contracts'
+                    if (type == 'filter') {
+                        fetchData = this.customizeCondition
+                        let keyword, status, communication_status,page
+                        if (this.fetchData.keyword) {
+                            keyword = '&name='+this.blogName
+                        } else {
+                            keyword = ''
+                        }
+                        if (this.fetchData.status) {
+                            status = '&status='+this.blogStatus
+                        } else {
+                            status = ''
+                        }
+                        if (this.fetchData.communication_status) {
+                            communication_status = '&communication_status='+this.blogCommunication
+                        } else {
+                            communication_status = ''
+                        }
+                        if (this.fetchData.page) {
+                            page = '&page='+this.current_page
+                        } else {
+                            page = ''
+                        }
+                        newUrl = url + '?' + this.fetchData.include + keyword + status + communication_status+page
+                }
+               
                 }
                 // console.log(this.fetchData)
                 this.exportParams = {
@@ -1131,17 +1161,17 @@
                     principal_ids: this.fetchData.communication_status,
                 }
                 fetch(methods, newUrl || url, fetchData).then((response) => {
-                         if (_this.customizeContentType == 'stars') {
-                        _this.artistsInfo = params.data
-                        _this.current_page = params.meta.pagination.current_page;
-                        _this.total = params.meta.pagination.total;
-                        _this.total_pages = params.meta.pagination.total_pages;
+                         if (url == '/stars/filter') {
+                        _this.artistsInfo = response.data
+                        _this.current_page = response.meta.pagination.current_page;
+                        _this.total = response.meta.pagination.total;
+                        _this.total_pages = response.meta.pagination.total_pages;
                         _this.cleanUp = true
-                    } else if (_this.customizeContentType == 'bloggers') {
-                        _this.bloggerInfo = params.data;
-                        _this.Bcurrent_page = params.meta.pagination.current_page;
-                        _this.Btotal = params.meta.pagination.total;
-                        _this.Btotal_pages = params.meta.pagination.total_pages;
+                    } else if (url == '/bloggers/filter') {
+                        _this.bloggerInfo = response.data;
+                        _this.Bcurrent_page = response.meta.pagination.current_page;
+                        _this.Btotal = response.meta.pagination.total;
+                        _this.Btotal_pages = response.meta.pagination.total_pages;
                     }
                     // _this.clientsInfo = response.data
                     // _this.total = response.meta.pagination.total;
@@ -1149,6 +1179,7 @@
                     // _this.total_pages = response.meta.pagination.total_pages;
                     // _this.isLoading = false;
                 })
+                }
             },
             customize: function (value) {
                 
@@ -1177,7 +1208,8 @@
                 // data.page = '&page='+this.current_page
                 this.customizeCondition = value  
                 this.customizeCondition.sign_contract_status = this.currentpagestatus
-                this.fetchHandler('post', '/'+this.customizeContentTyper+'/filter','filter')
+                console.log(this.customizeContentType)
+                this.fetchHandler('post', '/'+this.customizeContentType+'/filter','filter')
                 // fetch('post', this.customizeContentType +'/filter?include=creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name ,value).then(function (params) {
 
                 //     if (_this.customizeContentType == 'stars') {
