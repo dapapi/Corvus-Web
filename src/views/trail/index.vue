@@ -8,10 +8,12 @@
             </h1>
             <div class="page-header-actions">
                 <ImportAndExport class="float-left" :type="'export'" :moduleName="'trails'" :params="exportParams">
-                    <i class="iconfont icon-daochu font-size-20 pr-20 pointer-content" title="导出" aria-hidden="true"></i>
+                    <a class="iconfont icon-daochu font-size-20 pr-20 pointer-content" aria-hidden="true"
+                       title="导出线索"></a>
                 </ImportAndExport>
-                <ImportAndExport class="float-left" :type="'import'" :moduleName="'trails'" >
-                    <i class="iconfont icon-daoru px-5 font-size-20 pointer-content" title="导入" aria-hidden="true"></i>
+                <ImportAndExport class="float-left" :type="'import'" :moduleName="'trails'">
+                    <a class="iconfont icon-daoru px-5 font-size-20 pointer-content" aria-hidden="true"
+                       title="导入线索"></a>
                 </ImportAndExport>
             </div>
         </div>
@@ -73,7 +75,7 @@
                                 </template>
                             </td>
                             <td>
-                                <template>{{trail.last_follow_up_at}}</template>
+                                <template>{{ common.timeProcessing(trail.last_follow_up_at) }}</template>
                             </td>
                         </tr>
                         </tbody>
@@ -253,6 +255,7 @@
     import {mapState} from 'vuex'
     import Cookies from 'js-cookie'
     import ImportAndExport from '@/components/ImportAndExport.vue'
+    import common from '../../assets/js/common'
 
     export default {
         components: {
@@ -260,6 +263,7 @@
         },
         data: function () {
             return {
+                common: common,
                 total: 0,
                 current_page: 1,
                 total_pages: 1,
@@ -331,8 +335,8 @@
                 trailIsLocked: '',
                 exportParams: {},//导出参数
                 customizeCondition: {},
-                trailContactWechat:'',
-                trailContactEtc:''
+                trailContactWechat: '',
+                trailContactEtc: ''
             }
         },
         created() {
@@ -455,16 +459,15 @@
                     } else {
                         return true;
                     }
-                }else {
+                } else {
                     return true
                 }
             },
             redirectPublicTrail() {
                 this.$router.push({path: '/publictrails'})
             },
-            fetchHandler(methods, url, type,pageNum = 1) {
+            fetchHandler(methods, url, type, pageNum = 1) {
                 this.isLoading = true
-                console.log(pageNum);
                 let _this = this,
                     fetchData = this.fetchData,
                     newUrl
@@ -523,7 +526,7 @@
             // },
             getSales: function (pageNum = 1) {
                 let _this = this;
-                this.fetchHandler('post', '/trails/filter', 'filter',pageNum)
+                this.fetchHandler('post', '/trails/filter', 'filter', pageNum)
                 // let data = {
                 //     page: pageNum,
                 //     include: 'principal,client,expectations',
@@ -595,8 +598,8 @@
                     contact: {
                         name: this.trailContact,
                         phone: this.trailContactPhone,
-                        wechat:this.trailContactWechat,
-                        other_contact_ways:this.trailContactEtc
+                        wechat: this.trailContactWechat,
+                        other_contact_ways: this.trailContactEtc
                     },
                     fee: this.trailFee,
                     desc: this.trailDesc,
@@ -626,7 +629,6 @@
                 }
                 let _this = this;
                 if (this.trailTypeValidate()) {
-                    console.log(data);
                     fetch('post', '/trails', data).then(function (response) {
                         $('#addTrail').modal('hide');
                         _this.$router.push({path: '/trails/' + response.data.id})

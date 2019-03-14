@@ -150,7 +150,7 @@
 
 </script>
 
-<style>
+<style scoped>
 p{
     text-align: center;
     margin-bottom: 0 !important;

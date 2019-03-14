@@ -67,7 +67,7 @@
                                 </div>
                                 <div class="font-weight-bold float-left" v-if="principalName" style="padding-top:1.5px">
                                     <template>
-                                        {{artistInfo.created_at}}
+                                        {{common.timeProcessing(artistInfo.created_at)}}
                                     </template>
                                 </div>
                             </div>
@@ -326,7 +326,7 @@
                                     <tr v-for="work in worksData" :key="work.id">
                                         <td>{{work.nickname}}</td>
                                         <td>{{work.videoname}}</td>
-                                        <td>{{work.release_time}}</td>
+                                        <td>{{common.timeProcessing(work.release_time)}}</td>
                                         <td>{{work.read_proportion}}</td>
                                         <td @click="Jump(work.link)">
                                             <template v-show="work.link">
@@ -422,7 +422,7 @@
                                         <td>{{item.expense_type}}</td>
                                         <td>{{item.project_kd_name}}</td>
                                         <td>{{item.money}}元</td>
-                                        <td>{{item.pay_rec_time}}</td>
+                                        <td>{{common.timeProcessing(item.pay_rec_time)}}</td>
                                         <td>{{item.action_user}}</td>
                                     </tr>
                                     </tbody>
@@ -611,7 +611,7 @@
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">录入时间</div>
                                                 <div class="col-md-8 float-left font-weight-bold">
-                                                    {{artistInfo.created_at}}
+                                                    {{common.timeProcessing(artistInfo.created_at)}}
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
@@ -625,7 +625,7 @@
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">最近更新时间</div>
                                                 <div class="col-md-8 float-left font-weight-bold">
-                                                    {{artistInfo.updated_at}}
+                                                    {{common.timeProcessing(artistInfo.updated_at)}}
                                                 </div>
                                             </div>
                                         </div>
@@ -1240,6 +1240,7 @@
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
+    import common from '../../assets/js/common'
     import Cookies from 'js-cookie'
 
     import ApprovalGreatModule from '../../components/ApprovalGreatModule'
@@ -1247,6 +1248,7 @@
     export default {
         data: function () {
             return {
+                common: common,
                 artistId: '',
                 artistInfo: {},
                 calculatedAmount: '',//计算金额

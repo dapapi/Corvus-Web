@@ -402,7 +402,7 @@ export default {
     margin-left:20px;
 }
 p{
-    text-align: center;
+    /* text-align: center; */
     margin-bottom: 0 !important;
     text-overflow: ellipsis;
     overflow: hidden;
