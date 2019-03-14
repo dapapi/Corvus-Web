@@ -1095,7 +1095,6 @@
                     this.scheduleCalendar = this.scheduleData.calendar.data.id;
                     this.$refs.scheduleStartDate.setValue(this.scheduleData.start_at.split(' ')[0]);
                     let startMinutes = this.scheduleData.start_at.split(' ')[1].split(':');
-                     console.log(startMinutes)
                     this.$refs.scheduleStartMinute.setValue(startMinutes);
                     this.startTime = this.scheduleData.start_at.split(' ')[0];
                     this.startMinutes = startMinutes[0] + ':' + startMinutes[1];

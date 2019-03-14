@@ -54,7 +54,7 @@
                                     <template v-if="task.type === 2">通用审批</template>
                                 </td>
                                 <td>
-                                    {{task.time}}
+                                    {{common.timeProcessing(task.time)}}
                                 </td>
                                 <td>
                                     <template v-if="task.status === 0">
@@ -85,11 +85,13 @@ import fetch from '../../assets/utils/fetch.js';
 import config from '../../assets/js/config';
 import env from '../../assets/js/env';
 import approval from "./approval.json";
+import common from '../../assets/js/common'
 
 export default {
   name: '',
   data () {
             return {
+                common: common,
                 total: 0,
                 current_page: 1,
                 total_pages: 1,

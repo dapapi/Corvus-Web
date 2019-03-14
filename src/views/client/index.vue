@@ -5,7 +5,8 @@
             <h1 class="page-title">客户管理</h1>
             <div class="page-header-actions">
                 <ImportAndExport class="float-left" :type="'export'" :moduleName="'clients'" :params="exportParams">
-                    <i class="iconfont icon-daochu px-5 font-size-20 pr-20 pointer-content" title="导出" aria-hidden="true"></i>
+                    <i class="iconfont icon-daochu px-5 font-size-20 pr-20 pointer-content" title="导出"
+                       aria-hidden="true"></i>
                 </ImportAndExport>
                 <ImportAndExport class="float-left" :type="'import'" :moduleName="'clients'">
                     <i class="iconfont icon-daoru font-size-20 pointer-content" title="导入" aria-hidden="true"></i>
@@ -57,9 +58,10 @@
                                 <template v-if="client.grade === 1">直客</template>
                                 <template v-if="client.grade === 2">代理公司</template>
                             </td>
-                            <td>{{ client.principal?client.principal.data.name:'' }}</td>
-                            <td>{{ client.created_at?client.created_at:'' }}</td>
-                            <td>{{ client.last_follow_up_at?client.last_follow_up_at:'' }}</td>
+                            <td>{{ client.principal ? client.principal.data.name : '' }}</td>
+                            <td>{{ client.created_at ? common.timeProcessing(client.created_at) : '' }}</td>
+                            <td>{{ client.last_follow_up_at ? common.timeProcessing(client.last_follow_up_at) : '' }}
+                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -103,7 +105,7 @@
                                            @change="changeClientLevel"></selectors>
                             </div>
                         </div>
-                        
+
                         <div class="example">
                             <div class="col-md-2 text-right float-left">地区</div>
                             <div class="col-md-10 float-left pl-0 region">
@@ -145,7 +147,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">微信</div>
                             <div class="col-md-10 float-left pl-0">
-                                <input type="text" class="form-control" title=""  v-model="wechat">
+                                <input type="text" class="form-control" title="" v-model="wechat">
                             </div>
                         </div>
                         <div class="example">
@@ -198,11 +200,13 @@
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
     import Cookies from 'js-cookie'
+    import common from '../../assets/js/common'
 
     const clientLevelArr = [{name: '全部', value: ''}, ...config.clientLevelArr]
     export default {
         data: function () {
             return {
+                common: common,
                 total: 0,
                 current_page: 0,
                 total_pages: 0,
@@ -236,7 +240,7 @@
                 cleanUp: false,
                 exportParams: {},//导出参数
                 canAdd: false, // 可以新增吗
-                fetchData:{},
+                fetchData: {},
                 customizeCondition: {}
             }
         },
@@ -368,10 +372,10 @@
                     _this.$router.push({path: 'clients/' + response.data.id});
                 })
             },
-        
+
             customize: function (value) {
                 this.customizeCondition = value
-                this.fetchHandler('post','/clients/filter','filter')
+                this.fetchHandler('post', '/clients/filter', 'filter')
                 // let _this = this
                 // fetch('post', '/clients/filter?include=principal', value).then((params) => {
                 //     _this.clientsInfo = params.data
@@ -407,7 +411,6 @@
                     }
                     newUrl = url + '?' + this.fetchData.include + keyword + status + principal_ids
                 }
-                // console.log(this.fetchData)
                 this.exportParams = {
                     keyword: this.fetchData.keyword,
                     status: this.fetchData.status,
@@ -438,18 +441,18 @@
             },
             filterGo() {
                 this.fetchData.keyword = this.companyName
-                this.fetchHandler('post','/clients/filter','filter')
+                this.fetchHandler('post', '/clients/filter', 'filter')
                 // this.fetchHandler('get', '/trails/filter')
 
             },
             changePrincipalSelect(value) {
                 this.clientPrincipalIdSearch = value
-                this.fetchHandler('post','/clients/filter','filter')
+                this.fetchHandler('post', '/clients/filter', 'filter')
             },
 
             changeClientLevelSelect(value) {
                 this.clientLevelSearch = value
-                this.fetchHandler('post','/clients/filter','filter')
+                this.fetchHandler('post', '/clients/filter', 'filter')
             },
 
             changeClientScale: function (value) {
@@ -519,7 +522,7 @@
                 this.$router.push('/clients/' + id)
             },
             // 检察权限
-            checkPermission () {
+            checkPermission() {
                 const params = {
                     url: '/clients',
                     id: '',
@@ -527,7 +530,6 @@
                 }
                 fetch('get', '/console/checkpower', params).then(res => {
                     this.canAdd = !!res.data.power
-                    console.log(this.res)
                 })
             },
         }

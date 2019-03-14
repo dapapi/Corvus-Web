@@ -352,7 +352,6 @@
                     }
                     newUrl = url+'?'+this.fetchData.include+keyword+status+principal_ids
                 }
-                // console.log(this.fetchData)
                 this.exportParams = {
                     keyword: this.fetchData.keyword,
                     status: this.fetchData.status,

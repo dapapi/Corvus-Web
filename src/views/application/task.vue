@@ -99,7 +99,6 @@
                                         - {{ task.resource.data.resourceable.data.company }}
                                     </template>
                                 </td>
-                                <!-- <td>暂无</td> -->
                                 <td>{{ task.type ? task.type.data ? task.type.data.title : '' : '' }}</td>
                                 <td>
                                     <template v-if="task.status === 1"><span style="color:#FF9800">进行中</span> </template>
@@ -202,8 +201,6 @@
                                 <Datepicker ref="startTime" @change="changeStartTime"></Datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <!-- <Timepicker ref="startMinutes" :default="startMinutes"
-                                            @change="changeStartMinutes"></Timepicker> -->
                                 <TimeChoice @change="changeStartMinutes" ref="startMinutes"></TimeChoice>
                             </div>
                         </div>
@@ -213,8 +210,6 @@
                                 <Datepicker ref="endTime" @change="changeEndTime" :startDate="startTime"></Datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <!-- <Timepicker ref="endMinutes" :default="endMinutes"
-                                            @change="changeEndMinutes"></Timepicker> -->
                                 <TimeChoice @change="changeEndMinutes" ref="endMinutes"></TimeChoice>
                             </div>
                         </div>
@@ -246,12 +241,14 @@
     import fetch from "../../assets/utils/fetch.js";
     import config from "../../assets/js/config";
     import Cookies from 'js-cookie'
+    import common from '../../assets/js/common'
 
     const taskStatusArr = [{name: "全部", value: ""}, ...config.taskStatusArr];
     export default {
         name: "",
         data() {
             return {
+                common: common,
                 total: 0,
                 current_page: 1,
                 total_pages: 1,

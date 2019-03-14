@@ -99,7 +99,7 @@
                                     </template>
                                 </td>
                                 <td @click="goDetail(trail.id)">{{ trail.creator }}</td>
-                                <td @click="goDetail(trail.id)">{{ trail.last_follow_up_at }}</td>
+                                <td @click="goDetail(trail.id)">{{ common.timeProcessing(trail.last_follow_up_at) }}</td>
                             </tr>
                             </tbody>
 
@@ -147,10 +147,12 @@
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
+    import common from '../../assets/js/common'
 
     export default {
         data: function () {
             return {
+                common: common,
                 total: 0,
                 current_page: 1,
                 total_pages: 1,

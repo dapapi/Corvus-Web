@@ -602,7 +602,6 @@
             getroleDate() {
                 let _this = this;
                 fetch('get', '/console/role').then(function (response) {
-                    console.log(response)
                     _this.roleDate = response.data;
                     _this.isLoading = false
                 });
@@ -641,7 +640,6 @@
             getmemberDate(id) {
                 let _this = this;
                 fetch('get', '/console/person/' + id).then(function (response) {
-                     console.log(response)
                     _this.memberDate = response.data;
                     let datas = []
                     _this.memberDate.forEach(item => {
