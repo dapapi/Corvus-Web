@@ -293,5 +293,6 @@
     }
     a:hover{
         cursor: pointer;
+        text-decoration: none;
     }
 </style>

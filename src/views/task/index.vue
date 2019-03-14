@@ -276,6 +276,7 @@
     import fetch from "../../assets/utils/fetch.js";
     import config from "../../assets/js/config";
     import Cookies from 'js-cookie'
+    import { mapState } from 'vuex'
 
     const taskStatusArr = [{name: "全部", value: ""}, ...config.taskStatusArr];
     export default {
@@ -318,11 +319,16 @@
                 linkCode: '', // 关联资源父数据的code
                 linkIndex: 0, //
                 canLoadMore: false, // 关联资源是否可以加载更多
-                canAdd: false, // 是否有权限添加
+                // canAdd: false, // 是否有权限添加
             };
         },
         created() {
             this.getLinkData()
+        },
+        computed: {
+            ...mapState([
+                'power'
+            ])
         },
         mounted() {
             this.getTasks();
@@ -337,7 +343,7 @@
                 // 清空state
                 this.closeAddTask()
             })
-            this.checkPermission()
+            // this.checkPermission()
         },
 
         methods: {
@@ -645,19 +651,9 @@
             goDetail (id) {
                 this.$router.push('/tasks/' + id)
             },
-            // 检察权限
-            checkPermission () {
-                const params = {
-                    url: '/tasks',
-                    id: '',
-                    method: 'post'
-                }
-                fetch('get', '/console/checkpower', params).then(res => {
-                    this.canAdd = !!res.data.power
-                })
-            },
+
             handleAdd () {
-                if (!this.canAdd) {
+                if (this.power.task == 'false') {
                     toastr.error('您没有新增任务的权限！')
                     return
                 }
