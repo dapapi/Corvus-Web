@@ -1506,8 +1506,6 @@
                     }
                     if(response.data.tasks){
                          _this.tasksInfo = response.data.tasks.data
-                         console.log(_this.tasksInfo )
-                         
                     }
                     //任务数据
                      //项目
