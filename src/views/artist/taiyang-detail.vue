@@ -475,11 +475,14 @@
                                                                @change="(value) => changeArtistBaseInfo(value, 'star_location')"></EditInput>
                                                 </div>
                                             </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height" v-if="artistInfo.star_risk_point!=='undefined'">
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height" >
                                                 <div class="col-md-3 float-left text-right pl-0">潜在风险点</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
+                                                <div class="col-md-9 float-left font-weight-bold" v-if="artistInfo.star_risk_point!=='**'">
                                                     <editTextarea :content="artistInfo.star_risk_point" :is-edit="isEdit"
                                                                   @change="(value) => changeArtistBaseInfo(value, 'star_risk_point')"></editTextarea>
+                                                </div>
+                                                <div class="col-md-9 float-left font-weight-bold" v-if="artistInfo.star_risk_point=='**'">
+                                                    {{artistInfo.star_risk_point}}
                                                 </div>
                                             </div>
                                             <h5 class="pl-15 pt-10 clearfix col-md-12 float-left">联系信息</h5>
@@ -1381,12 +1384,14 @@
                 fetch('get', '/stars/' + this.artistId, data).then(function (response) {
 
                     _this.artistInfo = response.data;
-                     console.log(response.data)
+                    console.log(_this.artistInfo )
                     if(response.data.star_risk_point == "privacy"){
                          _this.artistInfo.star_risk_point = '**'
                         
+                    }else{
+                         _this.artistInfo.star_risk_point = response.data.star_risk_point
                     }
-                   
+                     console.log(_this.artistInfo.star_risk_point)
                     _this.uploadUrl = _this.artistInfo.avatar
                     // _this.artistProjectsInfo = []
                     _this.artistTasksInfo = response.data.tasks.data//任务数据
