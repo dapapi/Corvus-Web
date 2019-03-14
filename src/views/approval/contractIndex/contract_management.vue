@@ -181,7 +181,7 @@
                 platformLists: [
                     {
                         value: '',
-                        name: '全选'
+                        name: '全部'
                     },
                     {
                         value: '影视项目',
@@ -197,6 +197,10 @@
                     },
                 ],
                 talentArr: [
+                    {
+                        value: '',
+                        name: '全部'
+                    },
                     {
                         value: '艺人',
                         name: '艺人'
@@ -384,19 +388,6 @@
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total_pages = response.meta.pagination.total_pages;
                     _this.isLoading = false;
-                })
-            },
-            //获取博主类型
-            getBlogType() {
-                let _this = this
-                fetch('get', '/bloggers/gettype').then(function (response) {
-                    let data = {
-                        id: '',
-                        name: '全部'
-                    }
-                    _this.artistTypeArr = response.data
-                    _this.artistTypeArr.unshift(data)
-
                 })
             },
             //沟通状态
