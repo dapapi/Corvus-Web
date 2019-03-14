@@ -34,6 +34,9 @@ const state = {
     //消息模块列表
     moduleList:[],
     unReadMsg: 0, //未读消息
+
+    // 个人信息
+    avatar: '' // 用户头像
 };
 
 export default new Vuex.Store({
