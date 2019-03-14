@@ -107,8 +107,8 @@
                     </div>
                 </div>
             </div>
-            <div style="display: flex; justify-content: space-between; align-items: flex-start">
-                <div class="panel" style="width: calc(66% - 15px);">
+            <div style="display: -webkit-box ">
+                <div class="panel" style="width: calc(66% - 15px);float:left;margin-right:30px;">
                     <div class="col-md-12">
                         <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                             <li class="nav-item" role="presentation" v-if="artistInfo.sign_contract_status == 2">
@@ -244,7 +244,7 @@
                                             <template v-if="task.status === 4"><span style="color:#F44336">延期</span>
                                             </template>
                                         </td>
-                                        <td>{{ task.principal.data.name }}</td>
+                                        <td><span v-if="task.principal">{{ task.principal.data.name }}</span></td>
                                         <td>{{ task.end_at }}</td>
                                     </tr>
 
@@ -627,7 +627,7 @@
 
                     </div>
                 </div>
-                <div class="panel" style="width: calc(34% - 15px);">
+                <div class="panel" style="width: calc(34% - 15px);min-height:100%">
                     <div class="col-md-12">
                         <div class="card col-md-12">
                             <div class="card-header card-header-transparent card-header-bordered p-10"

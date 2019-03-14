@@ -128,8 +128,8 @@
 
                 </div>
             </div>
-            <div style="display: flex; justify-content: space-between; align-items: flex-start">
-                <div class="panel" style="width: calc(66% - 15px);z-index: 100;">
+            <div style="display: -webkit-box">
+                <div class="panel" style="width: calc(66% - 15px);z-index: 100;float:left;margin-right:30px;">
 
                     <div class="col-md-12">
                         <ul class="nav nav-tabs nav-tabs-line" role="tablist">
