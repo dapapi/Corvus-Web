@@ -5,18 +5,11 @@
             <h1 class="page-title">客户管理</h1>
             <div class="page-header-actions">
                 <ImportAndExport class="float-left" :type="'export'" :moduleName="'clients'" :params="exportParams">
-<<<<<<< HEAD
-                    <a class="iconfont icon-daochu px-5 font-size-20 pr-20" aria-hidden="true" title="导出客户"></a>
-                </ImportAndExport>
-                <ImportAndExport class="float-left" :type="'import'" :moduleName="'clients'">
-                    <a class="iconfont icon-daoru font-size-20" aria-hidden="true" title="导入客户"></a>
-=======
                     <i class="iconfont icon-daochu px-5 font-size-20 pr-20 pointer-content" title="导出"
                        aria-hidden="true"></i>
                 </ImportAndExport>
                 <ImportAndExport class="float-left" :type="'import'" :moduleName="'clients'">
                     <i class="iconfont icon-daoru font-size-20 pointer-content" title="导入" aria-hidden="true"></i>
->>>>>>> 1c08372853a6b19a91acddb47938ded32cb800c0
                 </ImportAndExport>
             </div>
         </div>

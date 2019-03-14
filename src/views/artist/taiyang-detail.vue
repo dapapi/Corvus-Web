@@ -244,13 +244,8 @@
                                             <template v-if="task.status === 4"><span style="color:#F44336">延期</span>
                                             </template>
                                         </td>
-<<<<<<< HEAD
                                         <td><span v-if="task.principal">{{ task.principal.data.name }}</span></td>
                                         <td>{{ task.end_at }}</td>
-=======
-                                        <td>{{ task.principal.data.name }}</td>
-                                        <td>{{ common.timeProcessing(task.end_at) }}</td>
->>>>>>> 1c08372853a6b19a91acddb47938ded32cb800c0
                                     </tr>
 
                                 </table>
