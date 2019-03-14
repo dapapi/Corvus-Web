@@ -1092,7 +1092,7 @@
                 this.fetchHandler('post', '/bloggers/filter','filter')
             },
             fetchHandler(methods, url, type) {
-                console.log(url)
+                
                 let _this = this,
                     fetchData = this.fetchData,
                     newUrl
@@ -1120,42 +1120,42 @@
                             page = ''
                         }
                         newUrl = url + '?' + this.fetchData.include + keyword + sign_contract_status + communication_status+page
-                       
-                }else{
+                    }    
+                }else if(url == '/bloggers/filter'){
                     this.fetchData.include = 'include=creator,affixes,publicity,operatelogs,contracts'
                     if (type == 'filter') {
                         fetchData = this.customizeCondition
                         let keyword, status, communication_status,page
-                        if (this.fetchData.keyword) {
+                        if (this.blogName) {
                             keyword = '&name='+this.blogName
                         } else {
                             keyword = ''
                         }
-                        if (this.fetchData.status) {
+                        if (this.blogStatus) {
                             status = '&status='+this.blogStatus
                         } else {
                             status = ''
                         }
-                        if (this.fetchData.communication_status) {
+                        if (this.blogCommunication) {
                             communication_status = '&communication_status='+this.blogCommunication
                         } else {
                             communication_status = ''
                         }
-                        if (this.fetchData.page) {
+                        if (this.current_page) {
                             page = '&page='+this.current_page
                         } else {
                             page = ''
                         }
                         newUrl = url + '?' + this.fetchData.include + keyword + status + communication_status+page
                 }
+                // console.log(this.fetchData)
                
                 }
-                // console.log(this.fetchData)
-                this.exportParams = {
-                    keyword: this.fetchData.keyword,
-                    status: this.fetchData.status,
-                    principal_ids: this.fetchData.communication_status,
-                }
+                // this.exportParams = {
+                //     keyword: this.fetchData.keyword,
+                //     status: this.fetchData.status,
+                //     principal_ids: this.fetchData.communication_status,
+                // }
                 fetch(methods, newUrl || url, fetchData).then((response) => {
                          if (url == '/stars/filter') {
                         _this.artistsInfo = response.data
@@ -1175,10 +1175,8 @@
                     // _this.total_pages = response.meta.pagination.total_pages;
                     // _this.isLoading = false;
                 })
-                }
             },
             customize: function (value) {
-                
                 // let _this = this
                 // let data = {
                 //     include: 'type,creator,affixes,publicity,operatelogs,contracts',
