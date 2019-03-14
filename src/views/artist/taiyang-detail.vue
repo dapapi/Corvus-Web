@@ -244,8 +244,13 @@
                                             <template v-if="task.status === 4"><span style="color:#F44336">延期</span>
                                             </template>
                                         </td>
+<<<<<<< HEAD
                                         <td><span v-if="task.principal">{{ task.principal.data.name }}</span></td>
                                         <td>{{ task.end_at }}</td>
+=======
+                                        <td>{{ task.principal.data.name }}</td>
+                                        <td>{{ common.timeProcessing(task.end_at) }}</td>
+>>>>>>> 1c08372853a6b19a91acddb47938ded32cb800c0
                                     </tr>
 
                                 </table>
@@ -287,7 +292,7 @@
                                     <tr v-for="(work,index) in artistWorksInfo" :key="index">
                                         <td>{{work.name}}</td>
                                         <td>{{work.director}}</td>
-                                        <td>{{work.release_time}}</td>
+                                        <td>{{common.timeProcessing(work.release_time)}}</td>
                                         <td>{{workTypeArr.find(item => item.value == work.works_type).name}}</td>
                                         <td>{{work.role}}</td>
                                         <td>{{work.co_star}}</td>
@@ -358,7 +363,7 @@
                                         <td>{{ bill.expense_type }}</td>
                                         <td>{{ bill.project_kd_name }}</td>
                                         <td>{{ bill.money }}</td>
-                                        <td>{{ bill.pay_rec_time }}</td>
+                                        <td>{{ common.timeProcessing(bill.pay_rec_time) }}</td>
                                         <td>{{ bill.action_user }}</td>
                                     </tr>
                                     </tbody>
@@ -598,7 +603,7 @@
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-3 float-left text-right pl-0">录入时间</div>
                                             <div class="col-md-9 float-left font-weight-bold">
-                                                {{ artistInfo.created_at }}
+                                                {{ common.timeProcessing(artistInfo.created_at) }}
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
@@ -614,9 +619,9 @@
                                             <div class="col-md-3 float-left text-right pl-0">最近更新时间</div>
                                             <div class="col-md-9 float-left font-weight-bold">
                                                 <template v-if="artistInfo.last_follow_up_at">
-                                                    {{artistInfo.last_follow_up_at}}
+                                                    {{ common.timeProcessing(artistInfo.last_follow_up_at)}}
                                                 </template>
-                                                <template v-else>{{ artistInfo.created_at }}</template>
+                                                <template v-else>{{ common.timeProcessing(artistInfo.created_at) }}</template>
                                             </div>
                                         </div>
                                     </div>
@@ -1217,6 +1222,7 @@
     //项目列表include 头部三个项目单独接口  作品include 任务列表单独接口  头部三个任务include  
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
+    import common from '../../assets/js/common'
     import Cookies from 'js-cookie'
 
     import ApprovalGreatModule from '../../components/ApprovalGreatModule'
@@ -1224,6 +1230,7 @@
     export default {
         data: function () {
             return {
+                common: common,
                 artistId: '',
                 artistInfo: {},
                 taskTypeArr: [],
@@ -1445,7 +1452,6 @@
                         }
                     }
                 })
-
             }
 
             ,
@@ -1771,12 +1777,12 @@
                     this.scheduleCalendar = this.scheduleData.calendar.data.id;
                     this.$refs.scheduleStartDate.setValue(this.scheduleData.start_at.split(' ')[0]);
                     let startMinutes = this.scheduleData.start_at.split(' ')[1].split(':');
-                    this.$refs.scheduleStartMinute.setValue(startMinutes[0] + ':' + startMinutes[1]);
+                    this.$refs.scheduleStartMinute.setValue(startMinutes);
                     this.startTime = this.scheduleData.start_at.split(' ')[0];
                     this.startMinutes = startMinutes[0] + ':' + startMinutes[1];
                     this.$refs.scheduleEndDate.setValue(this.scheduleData.end_at.split(' ')[0]);
                     let endMinutes = this.scheduleData.end_at.split(' ')[1].split(':');
-                    this.$refs.scheduleEndMinute.setValue(endMinutes[0] + ':' + endMinutes[1]);
+                    this.$refs.scheduleEndMinute.setValue(endMinutes);
                     this.endTime = this.scheduleData.end_at.split(' ')[0];
                     this.endMinutes = endMinutes[0] + ':' + endMinutes[1];
                     this.isAllday = this.scheduleData.is_allday;
@@ -1852,7 +1858,7 @@
                 this.$refs.scheduleEndMinute.setValue('0');
                 this.$refs.scheduleResource.setValue('');
                 this.$refs.scheduleRepeat.setValue('0');
-                this.$refs.scheduleNotice.setValue('0');
+                // this.$refs.scheduleNotice.setValue('0');
                 this.$refs.scheduleRemind.setValue('0');
                 // this.this.scheduleRemindDate = []
             }
@@ -1918,9 +1924,9 @@
                 })
             },
             getTaskDate: function () {
+                this.doneTaskNum = 0
                 let _this = this
                 fetch('get', `/stars/${this.$route.params.id}/tasks`).then(response => {
-                    // console.log(response.data)
                     _this.allTaskList = response.data
                     if (_this.allTaskList.length > 0) {
                         for (let i = 0; i < _this.allTaskList.length; i++) {
@@ -2372,7 +2378,6 @@
                     data.person_ids.push(this.$store.state.participantsInfo[i].id)
 
                 }
-                console.log(data.del_person_ids,data.person_ids)
 
                 if (this.distributionType === 'broker') {
                     // data.type = 3

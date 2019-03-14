@@ -398,7 +398,7 @@
                                     <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                         <div class="col-md-3 float-left text-right pl-0">录入时间</div>
                                         <div class="col-md-9 float-left font-weight-bold">
-                                            {{ taskInfo.created_at }}
+                                            {{ common.timeProcessing(taskInfo.created_at) }}
                                         </div>
                                     </div>
                                     <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
@@ -410,7 +410,7 @@
                                     <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                         <div class="col-md-3 float-left text-right pl-0">最近更新时间</div>
                                         <div class="col-md-9 float-left font-weight-bold">
-                                            {{ taskInfo.operate ? taskInfo.operate.created_at : ''  }}
+                                            {{ taskInfo.operate ? common.timeProcessing(taskInfo.operate.created_at) : ''  }}
                                         </div>
                                     </div>
                                     <div class="card-text py-10 px-0 clearfix col-md-6 float-left" v-if="oldInfo.status === 2">
@@ -445,12 +445,12 @@
                                             <span class="float-right pl-10 pointer-content"
                                                   data-plugin="actionBtn" @click="setDelInfo(attachment.id)"
                                                   data-toggle="modal"
-                                                  data-target="#confirmFlag"><i
-                                                    class="iconfont icon-shanchu1"></i> 删除</span>
+                                                  data-target="#confirmFlag">
+                                                  <i class="iconfont icon-shanchu1"></i> 删除</span>
                                             <span class="float-right px-10">|</span>
                                             <span class="float-right px-10 pointer-content"
-                                                  @click="downloadAttachment(attachment.id, attachment.url)"><i
-                                                    class="iconfont icon-download"></i> 下载</span>
+                                                  @click="downloadAttachment(attachment.id, attachment.url)">
+                                                  <i class="iconfont icon-download"></i> 下载</span>
                                             <span class="float-right px-10">{{ attachment.size }}</span>
                                             <a data-toggle="modal" data-target='#docPreview'
                                                 @click="previewFile(attachment.url, attachment.title)"
@@ -502,7 +502,7 @@
                             </div>
 
                             <div class="site-action fixed-button mt-20" data-plugin="actionBtn" data-toggle="modal"
-                                 data-target="#addChildTask">
+                                @click="handleChildTask">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                                     <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
@@ -633,12 +633,14 @@
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
+    import common from '../../assets/js/common'
     import Cookies from 'js-cookie'
 
     export default {
 
         data: function () {
             return {
+                common: common,
                 taskId: this.$route.params.id,
                 changeInfo: {},
                 isEdit: false,
@@ -693,6 +695,8 @@
                 linkCode: '', // 关联资源父数据的code
                 linkIndex: 0, //
                 canLoadMore: false, // 关联资源是否可以加载更多
+                canEdit: false, // 是否可以编辑
+                canAdd: false, // 是否可以新增子任务
             }
         },
 
@@ -720,6 +724,9 @@
             })
             // 请求问卷
             this.getQuestionId()
+
+            this.checkPermission()
+            this.checkAddPermission()
         },
 
         watch: {
@@ -815,6 +822,10 @@
             },
 
             editBaseInfo: function () {
+                if (!this.canEdit) {
+                    toastr.error('您没有编辑任务的权限！')
+                    return
+                }
                 this.isEdit = true;
                 this.changeInfo = {};
             },
@@ -953,7 +964,6 @@
             },
             // 添加子任务
             addChildTask: function () {
-                // 校验
                 if (!this.taskName) {
                     toastr.error('请填写任务名称！')
                     return
@@ -1334,6 +1344,35 @@
                 this.previewUrl = url
                 this.previewName = name
             },
+            // 检察编辑任务权限
+            checkPermission () {
+                const params = {
+                    url: `/tasks/${this.taskId}`,
+                    id: this.taskId,
+                    method: 'put'
+                }
+                fetch('get', '/console/checkpower', params).then(res => {
+                    this.canEdit = !!res.data.power
+                })
+            },
+            // 新增子任务权限
+            checkAddPermission () {
+                const params = {
+                    url: `/tasks/${this.taskId}/subtask`,
+                    id: this.taskId,
+                    method: 'post'
+                }
+                fetch('get', '/console/checkpower', params).then(res => {
+                    this.canAdd = !!res.data.power
+                })
+            },
+            handleChildTask () {
+                if (!this.canAdd) {
+                    toastr.error('您没有权限新增子任务！')
+                    return
+                }
+                $('#addChildTask').modal('show')
+            }
         }
     }
 </script>

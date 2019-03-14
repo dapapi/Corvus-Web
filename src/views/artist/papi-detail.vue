@@ -67,7 +67,7 @@
                                 </div>
                                 <div class="font-weight-bold float-left" v-if="principalName" style="padding-top:1.5px">
                                     <template>
-                                        {{artistInfo.created_at}}
+                                        {{common.timeProcessing(artistInfo.created_at)}}
                                     </template>
                                 </div>
                             </div>
@@ -212,7 +212,7 @@
                                 <div class="col-md-12">
                                     <calendar v-if="artistInfo.sign_contract_status == 2" :goto-date="selectedDate"
                                               :calendars="calendarId" ref="calendar"
-                                              :isModel="true" @showToast="showToast"
+                                              @showToast="showToast"
                                               @scheduleClick="showScheduleModal"
                                               @dayClick="showAddScheduleModal"></calendar>
                                 </div>
@@ -234,7 +234,7 @@
                                     <tr v-for="(item,index) in ProjectsInfo" :key="index" @click="projectdetil(item.id)"
                                         class="Jump projectcontent">
                                         <td>{{item.title}}</td>
-                                        <td v-if="item.principal">{{item.principal.data.name}}</td>
+                                        <td v-if="item.principal">{{item.principal}}</td>
                                         <td v-if="!item.principal"></td>
                                         <td>{{item.company}}</td>
                                         <td>{{item.created_at}}</td>
@@ -326,7 +326,7 @@
                                     <tr v-for="work in worksData" :key="work.id">
                                         <td>{{work.nickname}}</td>
                                         <td>{{work.videoname}}</td>
-                                        <td>{{work.release_time}}</td>
+                                        <td>{{common.timeProcessing(work.release_time)}}</td>
                                         <td>{{work.read_proportion}}</td>
                                         <td @click="Jump(work.link)">
                                             <template v-show="work.link">
@@ -422,7 +422,7 @@
                                         <td>{{item.expense_type}}</td>
                                         <td>{{item.project_kd_name}}</td>
                                         <td>{{item.money}}元</td>
-                                        <td>{{item.pay_rec_time}}</td>
+                                        <td>{{common.timeProcessing(item.pay_rec_time)}}</td>
                                         <td>{{item.action_user}}</td>
                                     </tr>
                                     </tbody>
@@ -611,7 +611,7 @@
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">录入时间</div>
                                                 <div class="col-md-8 float-left font-weight-bold">
-                                                    {{artistInfo.created_at}}
+                                                    {{common.timeProcessing(artistInfo.created_at)}}
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
@@ -625,7 +625,7 @@
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">最近更新时间</div>
                                                 <div class="col-md-8 float-left font-weight-bold">
-                                                    {{artistInfo.updated_at}}
+                                                    {{common.timeProcessing(artistInfo.updated_at)}}
                                                 </div>
                                             </div>
                                         </div>
@@ -1240,6 +1240,7 @@
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
+    import common from '../../assets/js/common'
     import Cookies from 'js-cookie'
 
     import ApprovalGreatModule from '../../components/ApprovalGreatModule'
@@ -1247,6 +1248,7 @@
     export default {
         data: function () {
             return {
+                common: common,
                 artistId: '',
                 artistInfo: {},
                 calculatedAmount: '',//计算金额
@@ -1489,7 +1491,6 @@
                     include: 'creator,tasks,affixes,producer,type,publicity,trails.project,trails.client,trails.project.principal,trails.project.relate_project_bills_resource,operatelogs,publicity.department',
                 };
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
-                    console.log(response)
 
                     _this.artistInfo = response.data;
                    
@@ -1857,12 +1858,12 @@
                     this.scheduleCalendar = this.scheduleData.calendar.data.id;
                     this.$refs.scheduleStartDate.setValue(this.scheduleData.start_at.split(' ')[0]);
                     let startMinutes = this.scheduleData.start_at.split(' ')[1].split(':');
-                    this.$refs.scheduleStartMinute.setValue(startMinutes[0] + ':' + startMinutes[1]);
+                    this.$refs.scheduleStartMinute.setValue(startMinutes);
                     this.startTime = this.scheduleData.start_at.split(' ')[0];
                     this.startMinutes = startMinutes[0] + ':' + startMinutes[1];
                     this.$refs.scheduleEndDate.setValue(this.scheduleData.end_at.split(' ')[0]);
                     let endMinutes = this.scheduleData.end_at.split(' ')[1].split(':');
-                    this.$refs.scheduleEndMinute.setValue(endMinutes[0] + ':' + endMinutes[1]);
+                    this.$refs.scheduleEndMinute.setValue(endMinutes);
                     this.endTime = this.scheduleData.end_at.split(' ')[0];
                     this.endMinutes = endMinutes[0] + ':' + endMinutes[1];
                     this.$refs.scheduleRemind.setValue(this.scheduleData.remind);
@@ -2010,6 +2011,8 @@
                 this.$store.state.newParticipantsInfo = []
             },
             getTaskNum: function () {
+                this.alltaskshow = []
+                this.doneTaskNum = 0
                 let _this = this;
                 fetch('get', '/bloggers/' + this.artistId + '/tasks').then(function (response) {
 
@@ -2255,6 +2258,7 @@
                     toastr.success('创建成功');
                     $('#addWork').modal('hide');
                     _this.getTaskDate()
+                   
                 })
                 // if(this.scoreId){
                 //     let obj={
@@ -2377,6 +2381,7 @@
                     $('#addTask').modal('hide');
                     _this.getArtist()
                     _this.getArtistTasks()
+                    _this.getTaskNum()
                     $('.selectpicker').selectpicker('refresh')
                 })
             }

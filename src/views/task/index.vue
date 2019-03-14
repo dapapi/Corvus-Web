@@ -23,15 +23,15 @@
                     <div class="col-md-3 example float-left">
                         <Selectors :options="taskStatusArr" @change="changeTaskStatusSearch" placeholder="请选择任务状态"></Selectors>
                     </div>
-                    <!--<div class="col-md-3 example float-left">-->
-                        <!--<button type="button"-->
-                                <!--class="btn btn-default waves-effect waves-classic float-right"-->
-                                <!--data-toggle="modal"-->
-                                <!--data-target="#customizeContent"-->
-                                <!--data-placement="right"-->
-                                <!--title>自定义筛选-->
-                        <!--</button>-->
-                    <!--</div>-->
+                    <!-- <div class="col-md-3 example float-left">
+                        <button type="button"
+                                class="btn btn-default waves-effect waves-classic float-right"
+                                data-toggle="modal"
+                                data-target="#customizeContent"
+                                data-placement="right"
+                                title>自定义筛选
+                        </button>
+                    </div> -->
                 </div>
 
                 <div class="col-md-12">
@@ -157,7 +157,7 @@
 
         <CustomizeFilter :data="customizeInfo" @change="customize"></CustomizeFilter>
 
-        <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addTask">
+        <div class="site-action" data-plugin="actionBtn" data-toggle="modal" @click="handleAdd">
             <button type="button"
                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                 <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
@@ -318,6 +318,7 @@
                 linkCode: '', // 关联资源父数据的code
                 linkIndex: 0, //
                 canLoadMore: false, // 关联资源是否可以加载更多
+                canAdd: false, // 是否有权限添加
             };
         },
         created() {
@@ -336,6 +337,7 @@
                 // 清空state
                 this.closeAddTask()
             })
+            this.checkPermission()
         },
 
         methods: {
@@ -374,6 +376,7 @@
                 
             },
             addTask() {
+              
                 // 校验
                 if (!this.taskName) {
                     toastr.error('请填写任务名称！')
@@ -641,6 +644,24 @@
             },
             goDetail (id) {
                 this.$router.push('/tasks/' + id)
+            },
+            // 检察权限
+            checkPermission () {
+                const params = {
+                    url: '/tasks',
+                    id: '',
+                    method: 'post'
+                }
+                fetch('get', '/console/checkpower', params).then(res => {
+                    this.canAdd = !!res.data.power
+                })
+            },
+            handleAdd () {
+                if (!this.canAdd) {
+                    toastr.error('您没有新增任务的权限！')
+                    return
+                }
+                $('#addTask').modal('show')
             }
         }
     };

@@ -468,7 +468,7 @@
                                         <td>{{ bill.expense_type }}</td>
                                         <td>{{ bill.artist_name }}</td>
                                         <td>{{ bill.money }}</td>
-                                        <td>{{ bill.pay_rec_time }}</td>
+                                        <td>{{ common.timeProcessing(bill.pay_rec_time) }}</td>
                                         <td>{{ bill.action_user }}</td>
                                     </tr>
                                     </tbody>
@@ -1541,11 +1541,13 @@
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
+    import common from '../../assets/js/common'
     import Cookies from 'js-cookie'
 
     export default {
         data: function () {
             return {
+                common: common,
                 total: 0,
                 current_page: 1,
                 total_pages: 1,

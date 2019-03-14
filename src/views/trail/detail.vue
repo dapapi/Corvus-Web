@@ -333,7 +333,8 @@
                                     </div>
                                     <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                         <div class="col-md-3 float-left text-right pl-0">录入时间</div>
-                                        <div class="col-md-9 float-left font-weight-bold">{{trailInfo.created_at}}
+                                        <div class="col-md-9 float-left font-weight-bold">
+                                            {{common.timeProcessing(trailInfo.created_at)}}
                                         </div>
                                     </div>
                                     <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
@@ -345,24 +346,24 @@
                                     <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                         <div class="col-md-3 float-left text-right pl-0">最近更新时间</div>
                                         <div class="col-md-9 float-left font-weight-bold">
-                                            {{trailInfo.last_updated_at
-                                            ||trailInfo.last_follow_up_at }}
+                                            {{ common.timeProcessing(trailInfo.last_updated_at)
+                                            || common.timeProcessing(trailInfo.last_follow_up_at) }}
                                         </div>
                                     </div>
                                     <div v-if="trailInfo.progress_status === 0 && trailInfo.refused_user && trailInfo.refused_at">
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-3 float-left text-right pl-0">拒绝人</div>
                                             <div class="col-md-9 float-left font-weight-bold">
-                                                {{trailInfo.refused_user}}
+                                                {{ trailInfo.refused_user }}
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-3 float-left text-right pl-0">拒绝日期</div>
                                             <div class="col-md-9 float-left font-weight-bold">
-                                                {{trailInfo.refused_at}}
+                                                {{ common.timeProcessing(trailInfo.refused_at, 'day') }}
                                             </div>
                                         </div>
-                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-3 float-left text-right pl-0">拒绝原因</div>
                                             <div class="col-md-9 float-left font-weight-bold">
                                                 {{trailInfo.refused_detail}}
@@ -373,13 +374,13 @@
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-3 float-left text-right pl-0">锁价人</div>
                                             <div class="col-md-9 float-left font-weight-bold">
-                                                {{lockUser.data.name}} 
+                                                {{lockUser.data.name}}
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-3 float-left text-right pl-0">锁价日期</div>
                                             <div class="col-md-9 float-left font-weight-bold">
-                                                {{trailInfo.lock_at}}
+                                                {{ common.timeProcessing(trailInfo.lock_at, 'day') }}
                                             </div>
                                         </div>
                                         <!-- <div class="card-text py-5 clearfix">
@@ -418,7 +419,7 @@
                                     </td>
                                     <td v-if="task.principal">{{ task.principal.data.name }}</td>
                                     <td v-if="!task.principal">{{ '' }}</td>
-                                    <td>{{ task.end_at }}</td>
+                                    <td>{{ common.timeProcessing(task.end_at) }}</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -602,10 +603,12 @@
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
+    import common from "../../assets/js/common";
 
     export default {
         data: function () {
             return {
+                common: common,
                 total: 0,
                 current_page: 1,
                 total_pages: 1,
@@ -622,7 +625,7 @@
                 customizeInfo: config.customizeInfo,
                 taskTypeArr: {},
                 taskLevelArr: config.priorityArr,
-                trailLevelArr:config.levelArr,
+                trailLevelArr: config.levelArr,
                 taskPrincipal: '',
                 startMinutes: '00:00',
                 taskType: '',
@@ -652,8 +655,8 @@
                 taskCount: {},
                 currentUser: {},
                 principalName: '',
-                lockUser:{},
-                startTime:''
+                lockUser: {},
+                startTime: ''
             }
         },
         created() {
@@ -890,7 +893,7 @@
             changeTrailBaseInfo: function () {
                 if (this.changeInfo.resource_type) {
                     this.changeInfo.resource_type = Number(this.changeInfo.resource_type)
-                }else{
+                } else {
                     this.changeInfo.resource_type = Number(this.oldInfo.resource_type)
                 }
                 if (this.changeInfo.hasOwnProperty('resource') && this.changeInfo.resource != this.oldInfo.resource) {
@@ -903,17 +906,17 @@
                     if (JSON.stringify(this.changeInfo) === "{}") {
                         this.isEdit = false
                         return
-                }
-                if([1,2,3,4,5].includes(this.trailOrigin)){
-                    if(!this.changeInfo.resource && !this.oldInfo.resource){
-                        toastr.error('线索来源不能为空')
-                        return
-                    }else{
-                        if(!this.changeInfo.resource){
-                            this.changeInfo.resource = this.oldInfo.resource
+                    }
+                    if ([1, 2, 3, 4, 5].includes(this.trailOrigin)) {
+                        if (!this.changeInfo.resource && !this.oldInfo.resource) {
+                            toastr.error('线索来源不能为空')
+                            return
+                        } else {
+                            if (!this.changeInfo.resource) {
+                                this.changeInfo.resource = this.oldInfo.resource
+                            }
                         }
                     }
-                }
                     fetch('put', '/trails/' + this.trailId, data).then(() => {
                         toastr.success('修改成功');
                         this.isEdit = false
@@ -1124,10 +1127,10 @@
 
             changeTrailCompanyLevel: function (value) {
                 this.trailInfo.client.data.grade = value
-                if(this.changeInfo.client){
+                if (this.changeInfo.client) {
                     this.changeInfo.client.grade = value
-                }else{
-                    Object.assign(this.changeInfo,{client:{grade:value}})
+                } else {
+                    Object.assign(this.changeInfo, {client: {grade: value}})
                 }
             },
 

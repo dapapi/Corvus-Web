@@ -5,10 +5,18 @@
             <h1 class="page-title">客户管理</h1>
             <div class="page-header-actions">
                 <ImportAndExport class="float-left" :type="'export'" :moduleName="'clients'" :params="exportParams">
+<<<<<<< HEAD
                     <a class="iconfont icon-daochu px-5 font-size-20 pr-20" aria-hidden="true" title="导出客户"></a>
                 </ImportAndExport>
                 <ImportAndExport class="float-left" :type="'import'" :moduleName="'clients'">
                     <a class="iconfont icon-daoru font-size-20" aria-hidden="true" title="导入客户"></a>
+=======
+                    <i class="iconfont icon-daochu px-5 font-size-20 pr-20 pointer-content" title="导出"
+                       aria-hidden="true"></i>
+                </ImportAndExport>
+                <ImportAndExport class="float-left" :type="'import'" :moduleName="'clients'">
+                    <i class="iconfont icon-daoru font-size-20 pointer-content" title="导入" aria-hidden="true"></i>
+>>>>>>> 1c08372853a6b19a91acddb47938ded32cb800c0
                 </ImportAndExport>
             </div>
         </div>
@@ -18,7 +26,7 @@
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
                         <input type="text" class="form-control" placeholder="请输入公司名称" v-model="companyName"
-                               @blur="getClients(1)">
+                               @keyup.enter='filterGo' @blur='filterGo'>
                     </div>
                     <div class="col-md-3 example float-left">
                         <selectors :options="userList" @change="changePrincipalSelect" placeholder="请选择负责人"
@@ -28,13 +36,13 @@
                         <selectors :options="clientLevelArr" @change="changeClientLevelSelect"
                                    placeholder="请选择公司级别"></selectors>
                     </div>
-                    <!-- <div class="col-md-3 example float-left">
+                    <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
                                 data-toggle="modal" data-target="#customizeContent"
                                 data-placement="right" title="">
                             自定义筛选
                         </button>
-                    </div> -->
+                    </div>
                 </div>
                 <div class="col-md-12">
                     <table class="table table-hover is-indent mb-20" data-plugin="animateList" data-animate="fade"
@@ -57,9 +65,10 @@
                                 <template v-if="client.grade === 1">直客</template>
                                 <template v-if="client.grade === 2">代理公司</template>
                             </td>
-                            <td>{{ client.principal?client.principal.data.name:'' }}</td>
-                            <td>{{ client.created_at?client.created_at:'' }}</td>
-                            <td>{{ client.last_follow_up_at?client.last_follow_up_at:'' }}</td>
+                            <td>{{ client.principal ? client.principal.data.name : '' }}</td>
+                            <td>{{ client.created_at ? common.timeProcessing(client.created_at) : '' }}</td>
+                            <td>{{ client.last_follow_up_at ? common.timeProcessing(client.last_follow_up_at) : '' }}
+                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -79,7 +88,7 @@
         <customize-filter :data="customizeInfo" @change="customize" :cleanup="cleanUp"
                           @cleanupdone='cleanUp=false'></customize-filter>
 
-        <AddClientType @change="showAddModal"/>
+        <AddClientType :hidden="!canAdd" @change="showAddModal"/>
 
         <div class="modal fade" id="addClient" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
@@ -103,7 +112,7 @@
                                            @change="changeClientLevel"></selectors>
                             </div>
                         </div>
-                        <!-- 暂时隐藏 -->
+
                         <div class="example">
                             <div class="col-md-2 text-right float-left">地区</div>
                             <div class="col-md-10 float-left pl-0 region">
@@ -137,9 +146,21 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left require">联系人电话</div>
+                            <div class="col-md-2 text-right float-left">联系人电话</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" title="" v-model="clientContactPhone">
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">微信</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <input type="text" class="form-control" title="" v-model="wechat">
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">其他联系方式</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <input type="text" class="form-control" title="" v-model="otherContactWays">
                             </div>
                         </div>
                         <div class="example">
@@ -186,11 +207,13 @@
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
     import Cookies from 'js-cookie'
+    import common from '../../assets/js/common'
 
     const clientLevelArr = [{name: '全部', value: ''}, ...config.clientLevelArr]
     export default {
         data: function () {
             return {
+                common: common,
                 total: 0,
                 current_page: 0,
                 total_pages: 0,
@@ -208,6 +231,8 @@
                 clientContact: '',
                 clientContactPhone: '',
                 clientContactPosition: '',
+                otherContactWays: '', // 其他联系方式
+                wechat: '', // 微信
                 clientContactType: '', // 是否是关键人
                 clientRemark: '',
                 // clientPrincipalSearch: '', // 条件筛选的负责人
@@ -221,6 +246,9 @@
                 taskLevelArr: config.taskLevelArr,
                 cleanUp: false,
                 exportParams: {},//导出参数
+                canAdd: false, // 可以新增吗
+                fetchData: {},
+                customizeCondition: {}
             }
         },
 
@@ -234,6 +262,7 @@
                 // 清空state
                 this.cancelClient()
             })
+            this.checkPermission()
         },
 
         computed: {
@@ -311,7 +340,7 @@
                     toastr.error('请选择客户评级！')
                     return
                 }
-                if (this.clientContactPhone.length !== 11) {
+                if (this.clientContactPhone && this.clientContactPhone.length !== 11) {
                     toastr.error('手机号码格式不对！');
                     return
                 }
@@ -333,6 +362,8 @@
                         phone: this.clientContactPhone,
                         position: this.clientContactPosition,
                         type: this.clientContactType,
+                        other_contact_ways: this.otherContactWays,
+                        wechat: this.wechat
                     },
                     client_rating: this.clientScale,
                     desc: this.clientRemark
@@ -350,17 +381,56 @@
             },
 
             customize: function (value) {
-                let _this = this
-                fetch('post', '/clients/filter?include=principal', value).then((params) => {
-                    _this.clientsInfo = params.data
-                    _this.total = params.meta.pagination.total;
-                    _this.total_pages = params.meta.pagination.total_pages;
-                    _this.current_page = params.meta.pagination.current_page
-                    _this.cleanUp = true
-                })
+                this.customizeCondition = value
+                this.fetchHandler('post', '/clients/filter', 'filter')
+                // let _this = this
+                // fetch('post', '/clients/filter?include=principal', value).then((params) => {
+                //     _this.clientsInfo = params.data
+                //     _this.total = params.meta.pagination.total;
+                //     _this.total_pages = params.meta.pagination.total_pages;
+                //     _this.current_page = params.meta.pagination.current_page
+                //     _this.cleanUp = true
+                // })
 
             },
-
+            fetchHandler(methods, url, type) {
+                let _this = this,
+                    fetchData = this.fetchData,
+                    newUrl
+                this.fetchData.include = 'include=principal'
+                if (type == 'filter') {
+                    fetchData = this.customizeCondition
+                    let keyword, status, principal_ids
+                    if (this.fetchData.keyword) {
+                        keyword = '&keyword=' + this.fetchData.keyword
+                    } else {
+                        keyword = ''
+                    }
+                    if (this.fetchData.status) {
+                        status = '&status=' + this.fetchData.status
+                    } else {
+                        status = ''
+                    }
+                    if (this.fetchData.principal_ids) {
+                        principal_ids = '&principal_ids=' + this.fetchData.principal_ids
+                    } else {
+                        principal_ids = ''
+                    }
+                    newUrl = url + '?' + this.fetchData.include + keyword + status + principal_ids
+                }
+                this.exportParams = {
+                    keyword: this.fetchData.keyword,
+                    status: this.fetchData.status,
+                    principal_ids: this.fetchData.principal_ids,
+                }
+                fetch(methods, newUrl || url, fetchData).then((response) => {
+                    _this.clientsInfo = response.data
+                    _this.total = response.meta.pagination.total;
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total_pages = response.meta.pagination.total_pages;
+                    _this.isLoading = false;
+                })
+            },
             redirectClientDetail: function (clientId) {
                 this.$router.push({path: 'clients/' + clientId});
             },
@@ -376,15 +446,20 @@
             changePrincipal: function (value) {
                 this.clientPrincipal = value
             },
+            filterGo() {
+                this.fetchData.keyword = this.companyName
+                this.fetchHandler('post', '/clients/filter', 'filter')
+                // this.fetchHandler('get', '/trails/filter')
 
+            },
             changePrincipalSelect(value) {
                 this.clientPrincipalIdSearch = value
-                this.getClients()
+                this.fetchHandler('post', '/clients/filter', 'filter')
             },
 
             changeClientLevelSelect(value) {
                 this.clientLevelSearch = value
-                this.getClients()
+                this.fetchHandler('post', '/clients/filter', 'filter')
             },
 
             changeClientScale: function (value) {
@@ -441,6 +516,8 @@
                 this.clientContact = ''
                 this.clientContactPhone = ''
                 this.clientContactPosition = ''
+                this.wechat = ''
+                this.otherContactWays = ''
                 this.clientContactType = ''
                 this.clientScale = ''
                 this.$refs.clientScale.setValue('')
@@ -450,7 +527,18 @@
             },
             goDetail(id) {
                 this.$router.push('/clients/' + id)
-            }
+            },
+            // 检察权限
+            checkPermission() {
+                const params = {
+                    url: '/clients',
+                    id: '',
+                    method: 'post'
+                }
+                fetch('get', '/console/checkpower', params).then(res => {
+                    this.canAdd = !!res.data.power
+                })
+            },
         }
     }
 </script>

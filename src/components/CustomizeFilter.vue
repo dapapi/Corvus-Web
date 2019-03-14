@@ -24,7 +24,7 @@
                             </div>
                             <div class="float-left col-md-1 pb-5">
                                 <i class="iconfont icon-guanbi font-size-18" aria-hidden="true" style="line-height: 36px;"
-                                   @click="delSelector('selector' + n)"></i>
+                                   @click="delSelector(n)"></i>
                             </div>
                         </div>
                     </div>
@@ -34,6 +34,8 @@
                     </div>
 
                 </div>
+                    <button class="btn btn-primary reset" type="submit" @click="reset">重制</button>
+
                 <div class="modal-footer">
                     <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
                     <button class="btn btn-primary" type="submit" @click="filter">确定</button>
@@ -54,6 +56,7 @@
             return {
                 conditionLength: 1,
                 selectorHidden: [],
+                selectorIdHidden:[],
                 conditionData: {},
                 customizeKeyWords: '',
                 sendFilterData:{
@@ -77,18 +80,34 @@
              })
             })
             
-            $(this.$el).on('hidden.bs.modal',function () {
-                _this.conditionLength = 0;
-                _this.selectorHidden = [];
-                _this.conditionData = {};
-                _this.customizeKeyWords = '';
-                setTimeout(function () {
-                    _this.conditionLength = 1;
-                }, 0);
-            })
+            // $(this.$el).on('hidden.bs.modal',function () {
+            //     _this.conditionLength = 0;
+            //     _this.selectorHidden = [];
+            //     _this.conditionData = {};
+            //     _this.customizeKeyWords = '';
+            //     setTimeout(function () {
+            //         _this.conditionLength = 1;
+            //     }, 0);
+            // })
         },
 
         methods: {
+            reset(){
+                this.selectorHidden = [],
+                this.selectorIdHidden = [],
+                this.conditionData = {},
+                this.customizeKeyWords = '',
+                this.sendFilterData = {
+                    'conditions':[]
+                },
+                this.conditionLength = 0
+                setTimeout(() => {
+                     this.conditionLength = 1
+                }, 1);
+                this.$emit('change',[])
+                // $('.modal').modal('hide');
+
+            },
             refresh: function () {
                 $('#condition').selectpicker('refresh');
             },
@@ -96,18 +115,41 @@
                 this.conditionLength += 1
             },
             delSelector: function (id) {
-                this.selectorHidden.push(id);
+                this.selectorHidden.push('selector'+id);
+                this.selectorIdHidden.push(id)
             },
             conditionChange: function (e) {
                 this.conditionData[e.n] = e
             },
             filter: function () {
-                this.$emit('change', this.sendFilterData);
+                let tempArr = {
+                    conditions:[]
+                }
+                console.log(this.sendFilterData.conditions.length);
+                for (let key = 0;key <= this.sendFilterData.conditions.length;key++) {
+                    if (this.selectorIdHidden.includes(key+1)) {
+                        continue  
+                    }else{
+                        tempArr.conditions.push(this.sendFilterData.conditions[key])
+                    }
+                }
+                this.$emit('change', tempArr);
                 $('.modal').modal('hide');
             },
+            setValue:function(value){
+                this.sendFilterData = value
+            },
             getCusData:function(data,n){
+                
                 this.sendFilterData.conditions[n-1]=data
             },
         }
     }
 </script>
+<style scope>
+    .reset{
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+    }
+</style>

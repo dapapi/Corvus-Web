@@ -7,12 +7,14 @@
                         class="iconfont icon-jiantou_xiayiye font-size-22 pr-5"></i>公海池</span>
             </h1>
             <div class="page-header-actions">
-                <import-and-export class="float-left" :type="'export'" :moduleName="'trails'" :params="exportParams">
-                    <a class="iconfont icon-daochu font-size-20 pr-20" aria-hidden="true" title="导出销售线索"></a>
-                </import-and-export>
-                <import-and-export class="float-left" :type="'import'" :moduleName="'trails'" >
-                    <a class="iconfont icon-daoru px-5 font-size-20 " aria-hidden="true" title="导入销售线索"></a>
-                </import-and-export>
+                <ImportAndExport class="float-left" :type="'export'" :moduleName="'trails'" :params="exportParams">
+                    <a class="iconfont icon-daochu font-size-20 pr-20 pointer-content" aria-hidden="true"
+                       title="导出线索"></a>
+                </ImportAndExport>
+                <ImportAndExport class="float-left" :type="'import'" :moduleName="'trails'">
+                    <a class="iconfont icon-daoru px-5 font-size-20 pointer-content" aria-hidden="true"
+                       title="导入线索"></a>
+                </ImportAndExport>
             </div>
         </div>
 
@@ -32,13 +34,13 @@
                         <selectors ref='principal_id' :options="memberList" multiple='true'
                                    @valuelistener="principalFilter" placeholder="请选择负责人"></selectors>
                     </div>
-                    <!-- <div class="col-md-3 example float-left">
+                    <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
                                 data-toggle="modal" data-target="#customizeContent"
                                 data-placement="right" title="">
                             自定义筛选
                         </button>
-                    </div> -->
+                    </div>
                 </div>
 
                 <div class="col-md-12">
@@ -73,7 +75,7 @@
                                 </template>
                             </td>
                             <td>
-                                <template>{{trail.last_follow_up_at}}</template>
+                                <template>{{ common.timeProcessing(trail.last_follow_up_at) }}</template>
                             </td>
                         </tr>
                         </tbody>
@@ -89,8 +91,8 @@
         </div>
 
 
-        <customize-filter :data="customizeInfo" :stararr='starsArr' @change="customize" :cleanup="cleanUp"
-                          @cleanupdone='cleanUp=false'></customize-filter>
+        <customize-filter :data="customizeInfo" :stararr='starsArr' @change="customize"
+        ></customize-filter>
         <AddClientType @change="changeTrailType"></AddClientType>
 
         <div class="modal fade" id="addTrail" aria-hidden="true" aria-labelledby="addLabelForm"
@@ -180,10 +182,24 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left require">联系人电话</div>
+                            <div class="col-md-2 text-right float-left">联系人电话</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" title="" placeholder="请输入联系电话"
                                        v-model="trailContactPhone" @blur='phoneValidate'>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">微信</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <input type="text" class="form-control" title="" placeholder="请输入微信号"
+                                       v-model="trailContactWechat" @blur='phoneValidate'>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">其他联系方式</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <input type="text" class="form-control" title="" placeholder="请输入其他联系方式"
+                                       v-model="trailContactEtc" @blur='phoneValidate'>
                             </div>
                         </div>
                         <div class="example" v-show="trailType != 4">
@@ -200,7 +216,7 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left require">预计订单收入</div>
+                            <div class="col-md-2 text-right float-left require">预计订单收入/元</div>
                             <div class="col-md-5 float-left pl-0 pr-0">
                                 <number-spinner @change="changeTrailFee" :min="0" :max="1000000000" :precision="2"
                                                 :value="0"></number-spinner>
@@ -239,6 +255,7 @@
     import {mapState} from 'vuex'
     import Cookies from 'js-cookie'
     import ImportAndExport from '@/components/ImportAndExport.vue'
+    import common from '../../assets/js/common'
 
     export default {
         components: {
@@ -246,6 +263,7 @@
         },
         data: function () {
             return {
+                common: common,
                 total: 0,
                 current_page: 1,
                 total_pages: 1,
@@ -316,7 +334,9 @@
                 cleanUp: false,
                 trailIsLocked: '',
                 exportParams: {},//导出参数
-                customizeCondition: {}
+                customizeCondition: {},
+                trailContactWechat: '',
+                trailContactEtc: ''
             }
         },
         created() {
@@ -439,9 +459,6 @@
                     } else {
                         return true;
                     }
-                } else if (!this.trailContactPhone) {
-                    toastr.error("手机号码为必填")
-                    return false;
                 } else {
                     return true
                 }
@@ -449,53 +466,81 @@
             redirectPublicTrail() {
                 this.$router.push({path: '/publictrails'})
             },
-            fetchHandler(methods, url) {
-                let _this = this
-                this.fetchData.include = 'principal,client,contact,recommendations,expectations'
-                console.log(this.fetchData)
+            fetchHandler(methods, url, type, pageNum = 1) {
+                this.isLoading = true
+                let _this = this,
+                    fetchData = this.fetchData,
+                    newUrl
+                this.fetchData.include = 'include=principal,client,contact,recommendations,expectations'
+                if (type == 'filter') {
+                    fetchData = this.customizeCondition
+                    let keyword, status, principal_ids, pagenumber
+                    if (this.fetchData.keyword) {
+                        keyword = '&keyword=' + this.fetchData.keyword
+                    } else {
+                        keyword = ''
+                    }
+                    if (this.fetchData.status) {
+                        status = '&status=' + this.fetchData.status
+                    } else {
+                        status = ''
+                    }
+                    if (this.fetchData.principal_ids) {
+                        principal_ids = '&principal_ids=' + this.fetchData.principal_ids
+                    } else {
+                        principal_ids = ''
+                    }
+                    pagenumber = '&page=' + pageNum
+                    newUrl = url + '?' + this.fetchData.include + keyword + status + principal_ids + pagenumber
+                }
+                // console.log(this.fetchData)
                 this.exportParams = {
                     keyword: this.fetchData.keyword,
                     status: this.fetchData.status,
                     principal_ids: this.fetchData.principal_ids,
                 }
-                fetch(methods, url, this.fetchData).then((response) => {
+                fetch(methods, newUrl || url, fetchData).then((response) => {
                     _this.trailsInfo = response.data
                     _this.total = response.meta.pagination.total;
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total_pages = response.meta.pagination.total_pages;
                     _this.isLoading = false;
                 })
-            },
+            }
+            ,
             filterGo() {
                 this.fetchData.keyword = this.trailFilter
-                // this.fetchHandler('post', '/trails/filter', 'filter')
-                this.fetchHandler('get', '/trails/filter')
+                this.fetchHandler('post', '/trails/filter', 'filter')
+                // this.fetchHandler('get', '/trails/filter')
 
-            },
+            }
+            ,
             progressStatusFilter(value) {
                 this.fetchData.status = value
-                // this.fetchHandler('post', '/trails/filter', 'filter')
-                this.fetchHandler('get', '/trails/filter')
+                this.fetchHandler('post', '/trails/filter', 'filter')
+                // this.fetchHandler('get', '/trails/filter')
             },
-            progressStatusFilter(value) {
-                this.fetchData.status = value
-                this.fetchHandler('get', '/trails/filter')
-            },
+            // progressStatusFilter(value) {
+            //     this.fetchData.status = value
+            //     this.fetchHandler('get', '/trails/filter')
+            // },
             getSales: function (pageNum = 1) {
                 let _this = this;
-                let data = {
-                    page: pageNum,
-                    include: 'principal,client,expectations',
-                };
-                Object.assign(data, this.fetchData)
-                fetch('get', '/trails', data).then(function (response) {
-                    _this.trailsInfo = response.data;
-                    _this.total = response.meta.pagination.total;
-                    _this.current_page = response.meta.pagination.current_page;
-                    _this.total_pages = response.meta.pagination.total_pages;
-                    _this.isLoading = false;
-                })
-            },
+                this.fetchHandler('post', '/trails/filter', 'filter', pageNum)
+                // let data = {
+                //     page: pageNum,
+                //     include: 'principal,client,expectations',
+                // };
+                // Object.assign(data, this.fetchData)
+                // fetch('post', '/trails/filter', data).then(function (response) {
+                //     _this.trailsInfo = response.data;
+                //     _this.total = response.meta.pagination.total;
+                //     _this.current_page = response.meta.pagination.current_page;
+                //     _this.total_pages = response.meta.pagination.total_pages;
+                //     _this.isLoading = false;
+                // })
+            }
+            ,
             getIndustries: function () {
                 let _this = this;
                 fetch('get', '/industries/all').then(function (response) {
@@ -507,13 +552,15 @@
                         })
                     }
                 })
-            },
+            }
+            ,
             getClients: function () {
                 let _this = this;
                 fetch('get', '/clients/all').then(function (response) {
                     _this.companyArr = response.data
                 })
-            },
+            }
+            ,
             getStars: function () {
                 if (this.starsArr.length > 0) {
                     return
@@ -526,16 +573,19 @@
                         })
                     }
                 })
-            },
+            }
+            ,
             customize: function (value) {
-                let _this = this
-                fetch('post', '/trails/filter?include=principal,client,contact,recommendations,expectations', value).then((params) => {
-                    _this.trailsInfo = params.data
-                    _this.total = params.meta.pagination.total;
-                    _this.total_pages = params.meta.pagination.total_pages;
-                    _this.current_page = params.meta.pagination.current_page
-                    _this.cleanUp = true
-                })
+                // let _this = this
+                this.customizeCondition = value
+                this.fetchHandler('post', '/trails/filter', 'filter')
+                // fetch('post', '/trails/filter?include=principal,client,contact,recommendations,expectations', value).then((params) => {
+                //     _this.trailsInfo = params.data
+                //     _this.total = params.meta.pagination.total;
+                //     _this.total_pages = params.meta.pagination.total_pages;
+                //     _this.current_page = params.meta.pagination.current_page
+                //     _this.cleanUp = true
+                // })
             },
             addTrail: function () {
                 let data = {
@@ -547,7 +597,9 @@
                     expectations: this.targetStars,
                     contact: {
                         name: this.trailContact,
-                        phone: this.trailContactPhone
+                        phone: this.trailContactPhone,
+                        wechat: this.trailContactWechat,
+                        other_contact_ways: this.trailContactEtc
                     },
                     fee: this.trailFee,
                     desc: this.trailDesc,
@@ -583,7 +635,8 @@
                         _this.cleanTempData()
                     })
                 }
-            },
+            }
+            ,
             cleanTempData() {
                 this.trailName = ''
                 this.brandName = ''
@@ -598,19 +651,24 @@
                 this.trailType = ''
                 this.priority = ''
                 this.cooperation = ''
-            },
+            }
+            ,
             redirectTrailDetail: function (trailId) {
                 this.$router.push({path: '/trails/' + trailId})
-            },
+            }
+            ,
             changeTrailOriginPerson(value) {
                 this.trailOriginPerson = value
-            },
+            }
+            ,
             changeTrailOrigin: function (value) {
                 this.trailOrigin = value
-            },
+            }
+            ,
             changeTrailOriginType: function (value) {
                 this.trailOrigin = value
-            },
+            }
+            ,
             changeCompanyName: function () {
                 let companyInfo = this.$store.state.companyInfo;
                 if (companyInfo.value) {
@@ -623,14 +681,16 @@
                         company: companyInfo.name
                     }
                 }
-            },
+            }
+            ,
             changePrincipal: function (value) {
                 if (this.$store.state.otherSlot.data) {
                     this.trailPrincipal = this.$store.state.otherSlot.data.name
                 } else {
                     this.trailPrincipal = ''
                 }
-            },
+            }
+            ,
             changeTargetStars: function (value) {
                 for (let i = 0; i < value.length; i++) {
                     let item = value[i].split('-');
@@ -640,7 +700,8 @@
                     };
                 }
                 this.targetStars = value
-            },
+            }
+            ,
             changeRecommendStars: function (value) {
                 for (let i = 0; i < value.length; i++) {
                     let item = value[i].split('-');
@@ -650,19 +711,24 @@
                     };
                 }
                 this.recommendStars = value
-            },
+            }
+            ,
             changeTrailFee: function (value) {
                 this.trailFee = value
-            },
+            }
+            ,
             changeCheckbox: function (e) {
                 this.trailIsLocked = Number(e.target.checked)
-            },
+            }
+            ,
             changeIndustry: function (value) {
                 this.industry = value
-            },
+            }
+            ,
             changePriority: function (value) {
                 this.priority = value
-            },
+            }
+            ,
             changeTrailType: function (value) {
                 let organization_id = JSON.parse(Cookies.get('user')).organization_id
                 if (value == 3) {
@@ -677,18 +743,22 @@
                 setTimeout(() => {
                     $('.selectpicker').selectpicker('refresh');
                 }, 500);
-            },
+            }
+            ,
             changeTrailStatus: function (value) {
                 this.trailStatus = value
-            },
+            }
+            ,
             changeCooperationType: function (value) {
                 this.cooperation = value
-            },
+            }
+            ,
             clearPrincipalFilter: function () {
                 this.fetchData.principal_ids = ''
                 this.fetchHandler('get', '/trails/filter')
                 this.$refs.principal_id.setValue('')
-            },
+            }
+            ,
             goDetail(id) {
                 this.$router.push({path: '/trails/' + id})
             }
@@ -719,17 +789,3 @@
         align-items: center;
     }
 </style>
-
-
-© 2019 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Help
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About

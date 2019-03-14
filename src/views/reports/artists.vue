@@ -6,7 +6,11 @@
             <div class="page-header-actions">
                 <ImportAndExport class="float-left" :type="'export'" :moduleName="'reportfrom/starreport'"
                                  :params="exportParams">
+<<<<<<< HEAD
                     <a class="iconfont icon-daochu font-size-20" aria-hidden="true" title="导出艺人报表"></a>
+=======
+                    <a class="iconfont icon-daochu font-size-20 pointer-content" aria-hidden="true" title="导出艺人报表"></a>
+>>>>>>> 1c08372853a6b19a91acddb47938ded32cb800c0
                 </ImportAndExport>
             </div>
         </div>

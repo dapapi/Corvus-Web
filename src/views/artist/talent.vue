@@ -72,7 +72,7 @@
                             <div class="col-md-3 example float-left">
                                 <selectors :options="signState" placeholder="请选择签约状态" @change="getSource"></selectors>
                             </div>
-		            <!--
+
                             <div class="col-md-3 example float-left">
                                 <button type="button" class="btn btn-default waves-effect waves-classic float-right"
                                         data-toggle="modal" data-target="#customizeContent"
@@ -80,7 +80,7 @@
                                         data-placement="right" title="">
                                     自定义筛选
                                 </button>
-                            </div> -->
+                            </div>
                         </div>
                         <table class="table table-hover is-indent ml-5" data-plugin="selectable"
                                data-selectable="selectable">
@@ -171,11 +171,11 @@
                                 </td>
                                 <td @click="redirectArtistDetail(artist.id)"
                                     v-if="artistsInfo.find(item=>item.sign_contract_status==2)&&artist.contracts">{{
-                                    artist.contracts.data.contract_start_date }}
+                                    common.timeProcessing(artist.contracts.data.contract_start_date, 'day') }}
                                 </td>
                                 <td @click="redirectArtistDetail(artist.id)"
                                     v-if="artistsInfo.find(item=>item.sign_contract_status==3)&&artist.contracts">{{
-                                    artist.contracts.data.contract_end_date}}
+                                    common.timeProcessing(artist.contracts.data.contract_end_date, 'day')}}
                                 </td>
                                 <td @click="redirectArtistDetail(artist.id)"
                                     v-if="artist.communication_status&&artistsInfo.find(item=>item.sign_contract_status==1)">
@@ -188,8 +188,8 @@
 
                                     </template>
                                 </td>
-                                <td @click="redirectArtistDetail(artist.id)">{{artist.created_at}}</td>
-                                <td @click="redirectArtistDetail(artist.id)">{{artist.last_follow_up_at}}</td>
+                                <td @click="redirectArtistDetail(artist.id)">{{common.timeProcessing(artist.created_at)}}</td>
+                                <td @click="redirectArtistDetail(artist.id)">{{common.timeProcessing(artist.last_follow_up_at)}}</td>
                             </tr>
                             </tbody>
 
@@ -215,7 +215,6 @@
                             <div class="col-md-3 example float-left">
                                 <selectors :options="signState" @change="typeFilter" placeholder="请选择签约状态"></selectors>
                             </div>
-		           <!--
                             <div class="col-md-3 example float-left">
                                 <button type="button" class="btn btn-default waves-effect waves-classic float-right"
                                         data-toggle="modal" data-target="#customizeContent"
@@ -223,7 +222,7 @@
                                         data-placement="right" title="">
                                     自定义筛选
                                 </button>
-                            </div> -->
+                            </div>
                         </div>
                         <table class="table table-hover is-indent ml-5" data-plugin="selectable"
                                data-selectable="selectable">
@@ -284,14 +283,14 @@
                                 <td @click="redirectBolggerDetail(artist.id)"
                                     v-if="bloggerInfo.find(item=>item.sign_contract_status!==1)">暂无
                                 </td>
-                                <td @click="redirectBolggerDetail(artist.id)">{{ artist.type.data.name }}</td>
+                                <td @click="redirectBolggerDetail(artist.id)" v-if=" artist.type">{{ artist.type.data.name }}</td>
                                 <td @click="redirectBolggerDetail(artist.id)"
-                                    v-if="bloggerInfo.find(item=>item.sign_contract_status==2)">{{
-                                    artist.contracts.data.contract_start_date }}
+                                    v-if="bloggerInfo.find(item=>item.sign_contract_status==2&&artist.contracts)">{{
+                                    common.timeProcessing(artist.contracts.data.contract_start_date, 'day') }}
                                 </td>
                                 <td @click="redirectBolggerDetail(artist.id)"
-                                    v-if="bloggerInfo.find(item=>item.sign_contract_status==3)">{{
-                                    artist.contracts.data.contract_end_date}}
+                                    v-if="bloggerInfo.find(item=>item.sign_contract_status==3&&artist.contracts)">{{
+                                    common.timeProcessing(artist.contracts.data.contract_end_date, 'day')}}
                                 </td>
                                 <td @click="redirectBolggerDetail(artist.id)"
                                     v-if="artist.communication_status&&bloggerInfo.find(item=>item.sign_contract_status==1)">
@@ -310,8 +309,8 @@
                                         {{v.name}}
                                     </span>
                                 </td>
-                                <td @click="redirectBolggerDetail(artist.id)">{{artist.created_at}}</td>
-                                <td @click="redirectBolggerDetail(artist.id)">{{artist.last_follow_up_at}}
+                                <td @click="redirectBolggerDetail(artist.id)">{{common.timeProcessing(artist.created_at)}}</td>
+                                <td @click="redirectBolggerDetail(artist.id)">{{common.timeProcessing(artist.last_follow_up_at)}}
                                 </td>
                             </tr>
 
@@ -333,7 +332,7 @@
         </div>
 
         <customize-filter :data="customizeContentType==='stars'?customizeInfoStars:customizeInfoBloggers"
-                          @change="customize"></customize-filter>
+                          @change="customize" ref="removeDate" :isint="true"></customize-filter>
 
         <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addBolgger" v-if="!isShow">
             <button type="button"
@@ -758,10 +757,12 @@
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
+    import common from '../../assets/js/common'
     import Cookies from 'js-cookie'
     export default {
         data: function () {
             return {
+                common: common,
                 customizeContentType: '',
                 total: 0,
                 current_page: 1,
@@ -915,7 +916,10 @@
                 isdilog: true,
                 exportParams: {},
                 customizeInfo:{},
-                customizeInfoId:''
+                customizeInfoId:'',
+                currentpagestatus:'',
+                currentcommunicationstatus:'',
+                currentpagename:''
             }
         },
         watch: {
@@ -965,6 +969,9 @@
                 if (signStatus) {
                     this.listData.sign_contract_status = signStatus
                 }
+                this.currentpagestatus = this.listData.sign_contract_status
+                this.currentcommunicationstatus = this.listData.communication_status
+                this.currentpagename = this.listData.name
                 this.listData.page = page
                 this.exportParams = {
                     name: this.listData.name,
@@ -972,6 +979,7 @@
                     communication_status: this.listData.communication_status, //沟通状态
                 }
                 fetch('get', '/stars', this.listData).then(function (response) {
+                    console.log(response)
                     if (response.data) {
                         _this.artistsInfo = response.data;
                     }
@@ -998,7 +1006,7 @@
                 //博主状态
                 if (signStatus) {
                     this.blogStatus = signStatus
-                    this.getBlogger()
+                    // this.getBlogger()
                 }
                 if(this.blogStatus){
                     data.status = '&status='+this.blogStatus
@@ -1008,14 +1016,14 @@
                 //沟通状态
                 if (this.blogCommunication) {
                     data.communication_status = '&communication_status='+this.blogCommunication
-                    this.getBlogger()
+                    // this.getBlogger()
                 }else{
                     data.communication_status = ''
                 }
                 //博主名称
                 if (this.blogName) {
                     data.name = '&name='+this.blogName
-                    this.getBlogger()
+                    // this.getBlogger()
                 }else{
                     data.name = ''
                 }
@@ -1073,6 +1081,7 @@
                 this.getBlogger()
             },
             customize: function (value) {
+                
                 let _this = this
                 let data = {
                     include: 'type,creator,affixes,publicity,operatelogs,contracts',
@@ -1097,17 +1106,31 @@
                 }
                 data.page = '&page='+this.current_page
                 this.customizeInfo = value
-                fetch('post', this.customizeContentType +'/filter?include=type,creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name ,value).then(function (params) {
-                // fetch('post', '/'+this.customizeContentType+'/filter', value).then((params) => {
-                    console.log(params)
-                    // _this.bloggerInfo =params.data
+                // this.customizeInfo.conditions.forEach(item=>{
+                //    if(item!=undefined){
+                //        if(item.id==1561909265){
+                //            console.log(new Date().getFullYear())
+                //        }
+                //    }
+                    
+                // })
+                
+                this.customizeInfo.sign_contract_status = this.currentpagestatus
+                fetch('post', this.customizeContentType +'/filter?include=creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name ,value).then(function (params) {
+
                     if (_this.customizeContentType == 'stars') {
                         _this.artistsInfo = params.data
+                        _this.current_page = params.meta.pagination.current_page;
+                        _this.total = params.meta.pagination.total;
+                        _this.total_pages = params.meta.pagination.total_pages;
+                        _this.cleanUp = true
                     } else if (_this.customizeContentType == 'bloggers') {
                         _this.bloggerInfo = params.data;
+                        _this.Bcurrent_page = params.meta.pagination.current_page;
+                        _this.Btotal = params.meta.pagination.total;
+                        _this.Btotal_pages = params.meta.pagination.total_pages;
                     }
-                    _this.total = params.meta.pagination.total;
-                    _this.cleanUp = true
+                    
                 })
             },
             changeArtistStatus: function (value) {
@@ -1304,12 +1327,13 @@
             tab: function (value) {
                 this.selectedArtistsArr = []
                 if (value == 0) {
-                    this.customizeInfo = ''
-                    this.getArtists()
-                    
+                    this.$refs.removeDate.setValue({conditions:[]})
+                    this.customizeInfo = {}
+                    this.getArtists()                  
                     this.isShow = true
                 } else if (value == 1) {
-                    this.customizeInfo = ''
+                    this.$refs.removeDate.setValue({conditions:[]})
+                    this.customizeInfo = {}
                     this.getBlogger()
                     this.isShow = false
                 }
