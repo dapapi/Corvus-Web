@@ -398,7 +398,7 @@
                                     <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                         <div class="col-md-3 float-left text-right pl-0">录入时间</div>
                                         <div class="col-md-9 float-left font-weight-bold">
-                                            {{ taskInfo.created_at }}
+                                            {{ common.timeProcessing(taskInfo.created_at) }}
                                         </div>
                                     </div>
                                     <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
@@ -410,7 +410,7 @@
                                     <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                         <div class="col-md-3 float-left text-right pl-0">最近更新时间</div>
                                         <div class="col-md-9 float-left font-weight-bold">
-                                            {{ taskInfo.operate ? taskInfo.operate.created_at : ''  }}
+                                            {{ taskInfo.operate ? common.timeProcessing(taskInfo.operate.created_at) : ''  }}
                                         </div>
                                     </div>
                                     <div class="card-text py-10 px-0 clearfix col-md-6 float-left" v-if="oldInfo.status === 2">
@@ -633,12 +633,14 @@
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
+    import common from '../../assets/js/common'
     import Cookies from 'js-cookie'
 
     export default {
 
         data: function () {
             return {
+                common: common,
                 taskId: this.$route.params.id,
                 changeInfo: {},
                 isEdit: false,

@@ -93,7 +93,7 @@
                                         元
                                     </template>
                                 </td>
-                                <td>{{ project.last_follow_up_at }}</td>
+                                <td>{{ common.timeProcessing(project.last_follow_up_at) }}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -126,6 +126,7 @@
     import config from '../../assets/js/config'
     import {mapState} from 'vuex'
     import Cookies from 'js-cookie'
+    import common from '../../assets/js/common'
 
     const projectStatusArr = [{name: '全部', value: ''}, ...config.projectStatusArr];
     const projectTypeArr = [{name: '全部', value: ''}, ...config.projectTypeArr];
@@ -134,6 +135,7 @@
 
         data: function () {
             return {
+                common: common,
                 total: 0,
                 current_page: 1,
                 total_pages: 1,

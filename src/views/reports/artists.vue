@@ -6,7 +6,7 @@
             <div class="page-header-actions">
                 <ImportAndExport class="float-left" :type="'export'" :moduleName="'reportfrom/starreport'"
                                  :params="exportParams">
-                    <i class="iconfont icon-daochu font-size-20 pointer-content" title="导出" aria-hidden="true"></i>
+                    <a class="iconfont icon-daochu font-size-20 pointer-content" aria-hidden="true" title="导出艺人报表"></a>
                 </ImportAndExport>
             </div>
         </div>

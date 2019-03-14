@@ -446,7 +446,7 @@
                     <div class="modal-body">
                         <div class="example">
                             <div class="col-md-12  pl-0">
-                                <p class="modal-title text-center">确认删除{{item.name}}</p>
+                                <p class="modal-title text-center">确认删除</p>
                             </div>
                         </div>
                     </div>
@@ -602,7 +602,6 @@
             getroleDate() {
                 let _this = this;
                 fetch('get', '/console/role').then(function (response) {
-                    console.log(response)
                     _this.roleDate = response.data;
                     _this.isLoading = false
                 });
@@ -624,7 +623,7 @@
             getgroupingDate() {
                 let _this = this;
                 fetch('get', '/console/group?Accept=application/vnd.Corvus.v1+json').then(function (response) {
-                   
+                    console.log(response)
                     _this.groupingDate = response.data;
                     response.data.forEach(item=>{
                        _this.idArray.push(item.id) 
@@ -641,7 +640,6 @@
             getmemberDate(id) {
                 let _this = this;
                 fetch('get', '/console/person/' + id).then(function (response) {
-                     console.log(response)
                     _this.memberDate = response.data;
                     let datas = []
                     _this.memberDate.forEach(item => {

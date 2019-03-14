@@ -139,7 +139,6 @@ export default {
         this.dataInit()
     },
     mounted(){
-        // console.log(window.history);
     },
     computed: {
         ...mapState([

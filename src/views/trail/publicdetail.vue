@@ -342,7 +342,7 @@
                                     </div>
                                     <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                         <div class="col-md-3 float-left text-right pl-0">录入时间</div>
-                                        <div class="col-md-9 float-left font-weight-bold">{{trailInfo.created_at}}
+                                        <div class="col-md-9 float-left font-weight-bold">{{common.timeProcessing(trailInfo.created_at)}}
                                         </div>
                                     </div>
                                     <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
@@ -354,8 +354,8 @@
                                     <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                         <div class="col-md-3 float-left text-right pl-0">最近更新时间</div>
                                         <div class="col-md-9 float-left font-weight-bold">
-                                            {{trailInfo.last_updated_at
-                                            ||trailInfo.last_follow_up_at }}
+                                            {{ common.timeProcessing(trailInfo.last_updated_at)
+                                            || common.timeProcessing(trailInfo.last_follow_up_at) }}
                                         </div>
                                     </div>
                                     <div v-if="trailInfo.progress_status === 0 && trailInfo.refused_user && trailInfo.refused_at">
@@ -368,7 +368,7 @@
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-3 float-left text-right pl-0">拒绝日期</div>
                                             <div class="col-md-9 float-left font-weight-bold">
-                                                {{trailInfo.refused_at}}
+                                                {{common.timeProcessing(trailInfo.refused_at)}}
                                             </div>
                                         </div>
                                     </div>
@@ -631,11 +631,13 @@
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
+    import common from '../../assets/js/common'
     import Cookies from 'js-cookie'
 
     export default {
         data: function () {
             return {
+                common: common,
                 total: 0,
                 current_page: 1,
                 total_pages: 1,

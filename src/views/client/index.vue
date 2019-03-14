@@ -5,7 +5,8 @@
             <h1 class="page-title">客户管理</h1>
             <div class="page-header-actions">
                 <ImportAndExport class="float-left" :type="'export'" :moduleName="'clients'" :params="exportParams">
-                    <i class="iconfont icon-daochu px-5 font-size-20 pr-20 pointer-content" title="导出" aria-hidden="true"></i>
+                    <i class="iconfont icon-daochu px-5 font-size-20 pr-20 pointer-content" title="导出"
+                       aria-hidden="true"></i>
                 </ImportAndExport>
                 <ImportAndExport class="float-left" :type="'import'" :moduleName="'clients'">
                     <i class="iconfont icon-daoru font-size-20 pointer-content" title="导入" aria-hidden="true"></i>
@@ -18,7 +19,7 @@
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
                         <input type="text" class="form-control" placeholder="请输入公司名称" v-model="companyName"
-                               @blur="getClients(1)">
+                               @keyup.enter='filterGo' @blur='filterGo'>
                     </div>
                     <div class="col-md-3 example float-left">
                         <selectors :options="userList" @change="changePrincipalSelect" placeholder="请选择负责人"
@@ -57,9 +58,10 @@
                                 <template v-if="client.grade === 1">直客</template>
                                 <template v-if="client.grade === 2">代理公司</template>
                             </td>
-                            <td>{{ client.principal?client.principal.data.name:'' }}</td>
-                            <td>{{ client.created_at?client.created_at:'' }}</td>
-                            <td>{{ client.last_follow_up_at?client.last_follow_up_at:'' }}</td>
+                            <td>{{ client.principal ? client.principal.data.name : '' }}</td>
+                            <td>{{ client.created_at ? common.timeProcessing(client.created_at) : '' }}</td>
+                            <td>{{ client.last_follow_up_at ? common.timeProcessing(client.last_follow_up_at) : '' }}
+                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -103,7 +105,7 @@
                                            @change="changeClientLevel"></selectors>
                             </div>
                         </div>
-                        
+
                         <div class="example">
                             <div class="col-md-2 text-right float-left">地区</div>
                             <div class="col-md-10 float-left pl-0 region">
@@ -145,7 +147,7 @@
                         <div class="example">
                             <div class="col-md-2 text-right float-left">微信</div>
                             <div class="col-md-10 float-left pl-0">
-                                <input type="text" class="form-control" title=""  v-model="wechat">
+                                <input type="text" class="form-control" title="" v-model="wechat">
                             </div>
                         </div>
                         <div class="example">
@@ -198,11 +200,13 @@
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
     import Cookies from 'js-cookie'
+    import common from '../../assets/js/common'
 
     const clientLevelArr = [{name: '全部', value: ''}, ...config.clientLevelArr]
     export default {
         data: function () {
             return {
+                common: common,
                 total: 0,
                 current_page: 0,
                 total_pages: 0,
@@ -236,6 +240,8 @@
                 cleanUp: false,
                 exportParams: {},//导出参数
                 canAdd: false, // 可以新增吗
+                fetchData: {},
+                customizeCondition: {}
             }
         },
 
@@ -366,19 +372,58 @@
                     _this.$router.push({path: 'clients/' + response.data.id});
                 })
             },
-        
+
             customize: function (value) {
-                let _this = this
-                fetch('post', '/clients/filter?include=principal', value).then((params) => {
-                    _this.clientsInfo = params.data
-                    _this.total = params.meta.pagination.total;
-                    _this.total_pages = params.meta.pagination.total_pages;
-                    _this.current_page = params.meta.pagination.current_page
-                    _this.cleanUp = true
-                })
+                this.customizeCondition = value
+                this.fetchHandler('post', '/clients/filter', 'filter')
+                // let _this = this
+                // fetch('post', '/clients/filter?include=principal', value).then((params) => {
+                //     _this.clientsInfo = params.data
+                //     _this.total = params.meta.pagination.total;
+                //     _this.total_pages = params.meta.pagination.total_pages;
+                //     _this.current_page = params.meta.pagination.current_page
+                //     _this.cleanUp = true
+                // })
 
             },
-
+            fetchHandler(methods, url, type) {
+                let _this = this,
+                    fetchData = this.fetchData,
+                    newUrl
+                this.fetchData.include = 'include=principal'
+                if (type == 'filter') {
+                    fetchData = this.customizeCondition
+                    let keyword, status, principal_ids
+                    if (this.fetchData.keyword) {
+                        keyword = '&keyword=' + this.fetchData.keyword
+                    } else {
+                        keyword = ''
+                    }
+                    if (this.fetchData.status) {
+                        status = '&status=' + this.fetchData.status
+                    } else {
+                        status = ''
+                    }
+                    if (this.fetchData.principal_ids) {
+                        principal_ids = '&principal_ids=' + this.fetchData.principal_ids
+                    } else {
+                        principal_ids = ''
+                    }
+                    newUrl = url + '?' + this.fetchData.include + keyword + status + principal_ids
+                }
+                this.exportParams = {
+                    keyword: this.fetchData.keyword,
+                    status: this.fetchData.status,
+                    principal_ids: this.fetchData.principal_ids,
+                }
+                fetch(methods, newUrl || url, fetchData).then((response) => {
+                    _this.clientsInfo = response.data
+                    _this.total = response.meta.pagination.total;
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total_pages = response.meta.pagination.total_pages;
+                    _this.isLoading = false;
+                })
+            },
             redirectClientDetail: function (clientId) {
                 this.$router.push({path: 'clients/' + clientId});
             },
@@ -394,15 +439,20 @@
             changePrincipal: function (value) {
                 this.clientPrincipal = value
             },
+            filterGo() {
+                this.fetchData.keyword = this.companyName
+                this.fetchHandler('post', '/clients/filter', 'filter')
+                // this.fetchHandler('get', '/trails/filter')
 
+            },
             changePrincipalSelect(value) {
                 this.clientPrincipalIdSearch = value
-                this.getClients()
+                this.fetchHandler('post', '/clients/filter', 'filter')
             },
 
             changeClientLevelSelect(value) {
                 this.clientLevelSearch = value
-                this.getClients()
+                this.fetchHandler('post', '/clients/filter', 'filter')
             },
 
             changeClientScale: function (value) {
@@ -472,7 +522,7 @@
                 this.$router.push('/clients/' + id)
             },
             // 检察权限
-            checkPermission () {
+            checkPermission() {
                 const params = {
                     url: '/clients',
                     id: '',
@@ -480,7 +530,6 @@
                 }
                 fetch('get', '/console/checkpower', params).then(res => {
                     this.canAdd = !!res.data.power
-                    console.log(this.res)
                 })
             },
         }

@@ -320,6 +320,7 @@
                 let _this = this,
                 fetchData = this.fetchData,
                 newUrl
+                
                 this.fetchData.include = 'include=principal,client,contact,recommendations,expectations'
                 if(type=='filter'){
                     fetchData = this.customizeCondition 
@@ -342,7 +343,6 @@
                     pagenumber = '&page=' + pageNum
                     newUrl = url+'?'+this.fetchData.include+keyword+number+type+pagenumber
                 }
-                // console.log(this.fetchData)
                 this.exportParams = {
                     keyword: this.fetchData.keyword,
                     status: this.fetchData.status,

@@ -245,7 +245,7 @@
                                             </template>
                                         </td>
                                         <td>{{ task.principal.data.name }}</td>
-                                        <td>{{ task.end_at }}</td>
+                                        <td>{{ common.timeProcessing(task.end_at) }}</td>
                                     </tr>
 
                                 </table>
@@ -287,7 +287,7 @@
                                     <tr v-for="(work,index) in artistWorksInfo" :key="index">
                                         <td>{{work.name}}</td>
                                         <td>{{work.director}}</td>
-                                        <td>{{work.release_time}}</td>
+                                        <td>{{common.timeProcessing(work.release_time)}}</td>
                                         <td>{{workTypeArr.find(item => item.value == work.works_type).name}}</td>
                                         <td>{{work.role}}</td>
                                         <td>{{work.co_star}}</td>
@@ -358,7 +358,7 @@
                                         <td>{{ bill.expense_type }}</td>
                                         <td>{{ bill.project_kd_name }}</td>
                                         <td>{{ bill.money }}</td>
-                                        <td>{{ bill.pay_rec_time }}</td>
+                                        <td>{{ common.timeProcessing(bill.pay_rec_time) }}</td>
                                         <td>{{ bill.action_user }}</td>
                                     </tr>
                                     </tbody>
@@ -468,11 +468,18 @@
                                                                       @change="(value) => changeArtistBaseInfo(value, 'sign_contract_other')"></ConditionalInput>
                                                 </div>
                                             </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height" style="height:64px;">
                                                 <div class="col-md-3 float-left text-right pl-0">地区</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditInput :content="artistInfo.star_location" :is-edit="isEdit"
                                                                @change="(value) => changeArtistBaseInfo(value, 'star_location')"></EditInput>
+                                                </div>
+                                            </div>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height" v-if="artistInfo.star_risk_point!=='undefined'">
+                                                <div class="col-md-3 float-left text-right pl-0">潜在风险点</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <editTextarea :content="artistInfo.star_risk_point" :is-edit="isEdit"
+                                                                  @change="(value) => changeArtistBaseInfo(value, 'star_risk_point')"></editTextarea>
                                                 </div>
                                             </div>
                                             <h5 class="pl-15 pt-10 clearfix col-md-12 float-left">联系信息</h5>
@@ -586,6 +593,7 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                          
                                         </div>
 
                                         <h5 class="pl-15 pt-10">更新信息</h5>
@@ -598,7 +606,7 @@
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-3 float-left text-right pl-0">录入时间</div>
                                             <div class="col-md-9 float-left font-weight-bold">
-                                                {{ artistInfo.created_at }}
+                                                {{ common.timeProcessing(artistInfo.created_at) }}
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
@@ -614,9 +622,9 @@
                                             <div class="col-md-3 float-left text-right pl-0">最近更新时间</div>
                                             <div class="col-md-9 float-left font-weight-bold">
                                                 <template v-if="artistInfo.last_follow_up_at">
-                                                    {{artistInfo.last_follow_up_at}}
+                                                    {{ common.timeProcessing(artistInfo.last_follow_up_at)}}
                                                 </template>
-                                                <template v-else>{{ artistInfo.created_at }}</template>
+                                                <template v-else>{{ common.timeProcessing(artistInfo.created_at) }}</template>
                                             </div>
                                         </div>
                                     </div>
@@ -908,26 +916,7 @@
                                 <AddMember type="add"></AddMember>
                             </div>
                         </div>
-                        <div class="my-10 clearfix"
-                             v-show="linkageSelectedIds.projects.length > 0 || linkageSelectedIds.tasks.length > 0">
-                            <div class="col-md-2 text-right float-left">关联资源</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <div class="clearfix" v-for="(id,index) in linkageSelectedIds.projects" :key="index">
-                                    <span class="float-left">
-                                        项目 - {{ allProjectsInfo.find(item => item.id == id).title }}
-                                    </span>
-                                    <span class="float-right icon iconfont icon-shanchu1"
-                                          @click="delNewScheduleLinkage('projects', id)"></span>
-                                </div>
-                                <div class="clearfix" v-for="(id,index) in linkageSelectedIds.tasks" :key="index">
-                                    <span class="float-left">
-                                        任务 - {{ allTasksInfo.find(item => item.id == id).title }}
-                                    </span>
-                                    <span class="float-right icon iconfont icon-shanchu1"
-                                          @click="delNewScheduleLinkage('tasks', id)"></span>
-                                </div>
-                            </div>
-                        </div>
+                       
                         <div v-show="showMore">
                             <div class="pt-10 mb-20 clearfix">
                                 <div class="col-md-2 text-right float-left line-fixed-height">资源</div>
@@ -1217,6 +1206,7 @@
     //项目列表include 头部三个项目单独接口  作品include 任务列表单独接口  头部三个任务include  
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
+    import common from '../../assets/js/common'
     import Cookies from 'js-cookie'
 
     import ApprovalGreatModule from '../../components/ApprovalGreatModule'
@@ -1224,6 +1214,7 @@
     export default {
         data: function () {
             return {
+                common: common,
                 artistId: '',
                 artistInfo: {},
                 taskTypeArr: [],
@@ -1390,6 +1381,7 @@
                 fetch('get', '/stars/' + this.artistId, data).then(function (response) {
 
                     _this.artistInfo = response.data;
+                    console.log(response.data)
                     _this.uploadUrl = _this.artistInfo.avatar
                     // _this.artistProjectsInfo = []
                     _this.artistTasksInfo = response.data.tasks.data//任务数据
@@ -1446,7 +1438,6 @@
                         }
                     }
                 })
-               
             }
 
             ,
@@ -1922,7 +1913,6 @@
                 this.doneTaskNum = 0
                 let _this = this
                 fetch('get', `/stars/${this.$route.params.id}/tasks`).then(response => {
-                    // console.log(response.data)
                     _this.allTaskList = response.data
                     if (_this.allTaskList.length > 0) {
                         for (let i = 0; i < _this.allTaskList.length; i++) {
@@ -2325,6 +2315,7 @@
                         this.changeArtistInfo.sign_contract_other_name
                     }
                 }
+                
                 if (JSON.stringify(this.changeArtistInfo) === "{}") {
                     this.isEdit = false;
                     return
@@ -2374,7 +2365,6 @@
                     data.person_ids.push(this.$store.state.participantsInfo[i].id)
 
                 }
-                console.log(data.del_person_ids,data.person_ids)
 
                 if (this.distributionType === 'broker') {
                     // data.type = 3

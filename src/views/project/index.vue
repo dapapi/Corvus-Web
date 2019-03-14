@@ -5,7 +5,7 @@
             <h1 class="page-title">项目管理</h1>
             <div class="page-header-actions">
                 <ImportAndExport class="float-left" :type="'export'" :moduleName="'projects'" :params="exportParams">
-                    <i class="iconfont icon-daochu px-5 font-size-20 pr-20 pointer-content" title="导出" aria-hidden="true"></i>
+                    <a class="iconfont icon-daochu px-5 font-size-20 pr-20 pointer-content" aria-hidden="true" title="导出项目管理"></a>
                 </ImportAndExport>
             </div>
         </div>
@@ -100,7 +100,7 @@
                                         元
                                     </template>
                                 </td>
-                                <td>{{ project.last_follow_up_at }}</td>
+                                <td>{{ common.timeProcessing(project.last_follow_up_at) }}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -131,6 +131,7 @@
 <script>
     import fetch from '../../assets/utils/fetch.js'
     import config from '../../assets/js/config'
+    import common from '../../assets/js/common'
     import {mapState} from 'vuex'
     import Cookies from 'js-cookie'
     import ImportAndExport from '../../components/ImportAndExport.vue'
