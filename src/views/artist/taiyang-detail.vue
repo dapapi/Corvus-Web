@@ -200,7 +200,7 @@
                                             <template v-if="item.contract_sharing_ratio">
                                                 {{item.contract_sharing_ratio}}
                                             </template>
-                                            <template>0</template>
+                                            <template v-if="!item.contract_sharing_ratio">0</template>
                                         </td>
                                     </tr>
                                 </table>

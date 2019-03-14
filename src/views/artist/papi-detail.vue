@@ -242,7 +242,7 @@
                                             <template v-if="item.relate_project_bills_resource">
                                                 {{item.relate_project_bills_resource}}
                                             </template>
-                                            <template>0</template>
+                                            <template v-if="!item.relate_project_bills_resource">0</template>
                                         </td>
                                     </tr>
                                 </table>
@@ -1561,6 +1561,7 @@
                      page:page
                  }).then(function (response) {
                     _this.ProjectsInfo  = response.data
+                    console.log(response.data)
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
