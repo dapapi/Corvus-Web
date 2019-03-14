@@ -111,6 +111,7 @@
 <script>
 import fetch from '@/assets/utils/fetch'
 import Cookies from 'js-cookie'
+import { mapMutations } from 'vuex'
 
 export default {
     name: 'Setting',
@@ -132,8 +133,12 @@ export default {
         this.getAccountInfo()
         this.getJobList()
         this.userInfo = JSON.parse(Cookies.get('user'))
+
     },
     methods: {
+        ...mapMutations ([
+            'setUserAvatar'
+        ]),
         savePassword () { // 保存密码
             if (!this.oldPwd) {
                 toastr.error('原密码不能为空！')
@@ -165,6 +170,12 @@ export default {
                 this.oldPwd = ''
                 this.newPwd = ''
                 toastr.success('密码修改成功')
+                setTimeout(() => {
+                    Cookies.remove('user');
+                    Cookies.remove('CORVUS-ACCESS-TOKEN');
+                    Cookies.remove('selectedCalendar');
+                    window.location.href = '/login'
+                }, 1000)
             })
         },
         // 获取个人信息
@@ -172,12 +183,18 @@ export default {
             fetch('get', '/users/my').then(res => {
                 this.userId = res.data.id
                 this.iconUrl = res.data.icon_url
+                
                 this.job = res.data.position ? res.data.position.id : ''
                 this.$nextTick(() => {
                     this.$refs.jobEl.setValue(this.job)
                 })
                 this.name = res.data.name
                 this.departmentId = res.data.department.id
+                // 修改个人信息
+                this.setUserAvatar(this.iconUrl)
+                this.userInfo.avatar = this.iconUrl
+                this.userInfo.nickname = this.name
+                Cookies.set('user', this.userInfo)
             })
         },
         // 获取职位列表
@@ -203,11 +220,12 @@ export default {
             }
             fetch('put', `/edit/data/${this.userId}`, params).then(res => {
                 toastr.success('设置成功！')
-                this.userInfo.avatar = this.iconUrl
-                this.userInfo.nickname = this.name
+                // this.setUserAvatar(this.iconUrl)
+                // this.userInfo.avatar = this.iconUrl
+                // this.userInfo.nickname = this.name
                 this.getAccountInfo()
                 this.getJobList()
-                Cookies.set('user', this.userInfo)
+                // Cookies.set('user', this.userInfo)
             })
         },
         // 上传头像
