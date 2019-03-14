@@ -146,7 +146,7 @@
 
         </div>
 
-        <customize-filter :data="customizeInfo" @change="customize"></customize-filter>
+        <customize-filter ref='customize' :data="customizeInfo" @change="customize"></customize-filter>
     </div>
 </template>
 <script>
@@ -263,6 +263,11 @@
                 return this.platformType
             },
             currentStatus:function(){
+                this.keyword = '',
+                this.number = '',
+                this.fetchData = {}
+                this.customizeCondition={},
+                this.$refs.customize.reset()
                 this.getField()
             }
         },
@@ -307,14 +312,14 @@
             //     this.fetchData.type = value
             //     this.fetchHandler('post', '/'+this.typeHandler+'/filter','filter')
             // },
-            fetchHandler(methods, url,type) {
+            fetchHandler(methods, url,type,pageNum = 1) {
                 let _this = this,
                 fetchData = this.fetchData,
                 newUrl
                 this.fetchData.include = 'include=principal,client,contact,recommendations,expectations'
                 if(type=='filter'){
                     fetchData = this.customizeCondition 
-                    let keyword,number,principal_ids
+                    let keyword,number,principal_ids,pagenumber
                     if(this.fetchData.keyword){
                         keyword = '&keyword='+this.fetchData.keyword
                     }else{
@@ -330,7 +335,8 @@
                     }else{
                         type = ''
                     }
-                    newUrl = url+'?'+this.fetchData.include+keyword+number+type
+                    pagenumber = '&page=' + pageNum
+                    newUrl = url+'?'+this.fetchData.include+keyword+number+type+pagenumber
                 }
                 // console.log(this.fetchData)
                 this.exportParams = {
@@ -352,19 +358,21 @@
                     _this.customizeInfo = params.data
                 })
             },
-            getProjects: function (pageNum = 1, signStatus) {
-                let _this = this
-                let data = {
-                    page: pageNum,
-                    // include: 'principal,trail.expectations',
-                    status:this.pageType
-                };
-                fetch('get', '/approvals_contract/'+this.currentStatus, data).then(response => {
-                    _this.pageList = response.data                    
-                   _this.total = response.meta.pagination.total;
-                        _this.current_page = response.meta.pagination.current_page;
-                        _this.total_pages = response.meta.pagination.total_pages;
-                })
+            getProjects: function (pageNum = 1) {
+                this.fetchHandler('post', '/trails/filter', 'filter',pageNum)
+
+                // let _this = this
+                // let data = {
+                //     page: pageNum,
+                //     // include: 'principal,trail.expectations',
+                //     status:this.pageType
+                // };
+                // fetch('get', '/approvals_contract/'+this.currentStatus, data).then(response => {
+                //     _this.pageList = response.data                    
+                //    _this.total = response.meta.pagination.total;
+                //         _this.current_page = response.meta.pagination.current_page;
+                //         _this.total_pages = response.meta.pagination.total_pages;
+                // })
             },
             //查询列表
             getList: function (params) {
