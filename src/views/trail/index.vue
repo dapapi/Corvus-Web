@@ -8,10 +8,10 @@
             </h1>
             <div class="page-header-actions">
                 <ImportAndExport class="float-left" :type="'export'" :moduleName="'trails'" :params="exportParams">
-                    <a class="iconfont icon-daochu font-size-20 pr-20 pointer-content" aria-hidden="true" title="导出公海池线索"></a>
+                    <a class="iconfont icon-daochu font-size-20 pr-20 pointer-content" aria-hidden="true" title="导出线索"></a>
                 </ImportAndExport>
                 <ImportAndExport class="float-left" :type="'import'" :moduleName="'trails'" >
-                    <a class="iconfont icon-daoru px-5 font-size-20 pointer-content" aria-hidden="true" title="导入公海池线索"></a>
+                    <a class="iconfont icon-daoru px-5 font-size-20 pointer-content" aria-hidden="true" title="导入线索"></a>
                 </ImportAndExport>
             </div>
         </div>
