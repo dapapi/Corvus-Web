@@ -19,30 +19,27 @@
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab" @click="getList('economic')">经纪合同</a>
                         </li>
-                        <!-- <i v-if="isShow"
-                           style="position: absolute;right:10px;top:10px;color: rgb(0, 176, 255);font-style: normal;"
-                           @click="getArtists(1,1)">签约中</i>
-                        <i v-if="!isShow"
-                           style="position: absolute;right:10px;top:10px;color: rgb(0, 176, 255);font-style: normal;"
-                           @click="getBlogger(1,1)">签约中</i> -->
                     </ul>
                 </div>
 
                 <div class="tab-content nav-tabs-animate bg-white">
-                    <div class="tab-pane animation-fade" id="forum-artist" role="tabpanel">
+                    <div class="tab-pane animation-fade active" id="forum-artist" role="tabpanel">
                         <div class="clearfix my-20">
                             <div class="col-md-3 example float-left">
-                                <input type="text" v-model="listData.name" class="form-control"
-                                       placeholder="请输入合同编号"
+                                <input type="text" v-model="number" class="form-control"
+                                       placeholder="请输入合同编号" @keyup.enter='filterGo(number)' @blur='filterGo(number)'
                                        >
                             </div>
                             <div class="col-md-3 example float-left">
-                                <selectors  placeholder="请选择项目类型"
-                                           ></selectors>
+                                <selectors  placeholder="请选择项目类型" @change="typeFilter"
+                                          :options='platformLists' ></selectors>
                             </div>
                             <div class="col-md-3 example float-left">
-                                <selectors  placeholder="请选择项目名称"
-                                          ></selectors>
+                                <!-- <selectors  placeholder="请选择项目名称"
+                                          ></selectors> -->
+                                <input type="text" class="form-control" @keyup.enter='filterGo(keyword)' @blur='filterGo(keyword)'
+                                       placeholder="请输入项目名称" v-model="keyword"
+                                       >
                             </div>
                             <div class="col-md-3 example float-left" >
                                 <button type="button" class="btn btn-default waves-effect waves-classic float-right"
@@ -65,7 +62,7 @@
                             <tbody>
 
                             <tr v-for="(item,index) in pageList" :key="index" class="pointer-content">
-                                <td @click="redirectContractDetail(item.form_instance_number)">{{ item.contract_number }}</td>
+                                <td @click="redirectContractDetail(item.form_instance_number)">{{item.contract_number}}</td>
                                 <td @click="redirectContractDetail(item.form_instance_number)">{{item.title}}</td>
                                 <td @click="redirectContractDetail(item.form_instance_number)">{{item.form_name}}</td>
                                 <td @click="redirectContractDetail(item.form_instance_number)">{{item.name}}</td>
@@ -82,23 +79,25 @@
                         <pagination :current_page="current_page" :total_pages="total_pages"
                                     :total="total"></pagination>
                     </div>
-                    <div class="tab-pane animation-fade active" id="forum-blogger" role="tabpanel">
+                    <div class="tab-pane animation-fade " id="forum-blogger" role="tabpanel">
                         <div class="clearfix my-20">
                             <div class="col-md-3 example float-left">
                                 <input type="text" class="form-control"  placeholder="请输入合同编号"
-                                       v-model="blogName" >
+                                       v-model="number" @keyup.enter='filterGo(number)' @blur='filterGo(number)' >
                             </div>
-                             <div class="col-md-3 example float-left" v-if="currentStatus == 'project'">
+                            <!-- <div class="col-md-3 example float-left" v-if="currentStatus == 'project'">
                                 <selectors  @change="typeFilter" 
                                            placeholder='请选择项目类型'></selectors>
-                            </div>
+                            </div> -->
                             <div class="col-md-3 example float-left" v-if="currentStatus == 'economic'">
-                                <selectors  @change="typeFilter" 
-                                           placeholder="请输入艺人名称'"></selectors>
+                                <!-- <selectors  @change="typeFilter" 
+                                           placeholder="请输入艺人名称'"></selectors> -->
+                               <input type="text" class="form-control" @keyup.enter='filterGo(keyword)' @blur='filterGo(keyword)'
+                                       placeholder="请输入项目名称" v-model="keyword"
+                                       >
                             </div> 
-                           
                             <div class="col-md-3 example float-left">
-                                <selectors  @change="CommunicationStatus"
+                                <selectors  @change="typeFilter" :options='talentArr'
                                            placeholder="请选择Talent"></selectors>
                             </div>
                             <div class="col-md-3 example float-left" >
@@ -112,13 +111,6 @@
                         <table class="table table-hover is-indent ml-5" data-plugin="selectable"
                                data-selectable="selectable">
                             <tr >
-                                <!-- <th class="w-50">
-                                        <span class="checkbox-custom checkbox-primary">
-                                            <input class="selectable-all" type="checkbox"
-                                                   @change="selectArtists('all')" v-model="selectAllBlogger">
-                                            <label></label>
-                                        </span>
-                                </th> -->
                                 <th class="cell-300" scope="col">合同编号</th>
                                 <th class="cell-300" scope="col">合同名称</th>
                                 <th class="cell-300" scope="col">合同类型</th>
@@ -154,7 +146,7 @@
 
         </div>
 
-        <customize-filter :data="customizeInfo" @change="customize"></customize-filter>
+        <customize-filter ref='customize' :data="customizeInfo" @change="customize"></customize-filter>
     </div>
 </template>
 <script>
@@ -171,18 +163,10 @@
                 total_pages: 1,
                 customizeInfo: {},
                 pageList: [],
-                artistStatus: '',
-                bolggerName: '',
-                weiboUrl: '',
                 weiboFansNum: '',
-                douyinId: '',
-                douyinFansNum: '',
-                xhsUrl: '',
-                xhsFansNum: '',
                 platformType: [],//平台类型
                 signIntention: '',
                 signCompany: '',
-                artistDesc: '',
                 artistTypeArr: [],
                 artistTypeId: '',
                 signCompanyName: '',
@@ -196,35 +180,35 @@
                 },
                 platformLists: [
                     {
-                        value: 1,
-                        name: '微博'
+                        value: '',
+                        name: '全部'
                     },
                     {
-                        value: 2,
-                        name: '抖音'
+                        value: '影视项目',
+                        name: '影视项目'
                     },
                     {
-                        value: 3,
-                        name: '小红书'
+                        value: '综艺项目',
+                        name: '综艺项目'
+                    },
+                    {
+                        value: '商务项目',
+                        name: '商务项目'
                     },
                 ],
-                platformList: [
+                talentArr: [
                     {
-                        value: 1,
-                        name: '微博'
+                        value: '',
+                        name: '全部'
                     },
                     {
-                        value: 2,
-                        name: '百科'
+                        value: '艺人',
+                        name: '艺人'
                     },
                     {
-                        value: 3,
-                        name: '抖音'
-                    },
-                    {
-                        value: 4,
-                        name: '其他'
-                    },
+                        value: '博主',
+                        name: '博主'
+                    }
                 ],
                 star_douyin_infos: {
                     url: '',
@@ -252,36 +236,17 @@
                     communication_status: '', //沟通状态
                     source: '', // 艺人来源
                 },
-                artistEmail: '',
-                artistPhone: '',
-                artistWeiXin: '',
-                artistsInfo: '',
-                artistStatus: '',
-                artistName: '',
-                artistGender: '',
-                artistBirthday: '',
-                artistSource: '',
                 artistType: '',
                 communicationStatus: '',
                 weiboUrl: '',
                 weiboFansNum: '',
-                douyinId: '',
-                douyinFansNum: '',
-                xhsUrl: '',
-                xhsFansNum: '',
                 // platform:[],
                 platformType: [],
                 signIntention: '',
                 signCompany: '',
                 sign_contract_other_name: '',
-                artistDesc: '',
                 baikeUrl: '',
                 baikeFansNum: '',
-                qitaUrl: '',
-                qitaFansNum: '',
-                artistScoutName: '',
-                artistLocation: '',
-                notSignReason: '',
                 selectAllStars: false,
                 bloggerInfo: '',
                 affixes: [],
@@ -291,6 +256,10 @@
                 currentStatus:'project',
                 customizeCondition:{},
                 fetchData: {},
+                contractFilter:'',
+                keyword:'',
+                number:'',
+
             }
         },
         watch: {
@@ -298,6 +267,11 @@
                 return this.platformType
             },
             currentStatus:function(){
+                this.keyword = '',
+                this.number = '',
+                this.fetchData = {}
+                this.customizeCondition={},
+                this.$refs.customize.reset()
                 this.getField()
             }
         },
@@ -327,30 +301,46 @@
             }
         },
         methods: {
-            fetchHandler(methods, url,type) {
+            filterGo(params) {
+                this.fetchData.keyword = this.keyword
+                this.fetchData.number = this.number
+                this.fetchHandler('post', '/'+this.typeHandler+'/filter', 'filter')
+                // this.fetchHandler('get', '/trails/filter')
+
+            },
+            typeFilter(value){
+                this.fetchData.type = value
+                this.fetchHandler('post', '/'+this.typeHandler+'/filter','filter')
+            },
+            // projectTypeFilter(value) {
+            //     this.fetchData.type = value
+            //     this.fetchHandler('post', '/'+this.typeHandler+'/filter','filter')
+            // },
+            fetchHandler(methods, url,type,pageNum = 1) {
                 let _this = this,
                 fetchData = this.fetchData,
                 newUrl
                 this.fetchData.include = 'include=principal,client,contact,recommendations,expectations'
                 if(type=='filter'){
                     fetchData = this.customizeCondition 
-                    let keyword,status,principal_ids
+                    let keyword,number,principal_ids,pagenumber
                     if(this.fetchData.keyword){
                         keyword = '&keyword='+this.fetchData.keyword
                     }else{
                         keyword = ''
                     }
-                    if(this.fetchData.status){
-                        status = '&status='+this.fetchData.status
+                    if(this.fetchData.number){
+                        number = '&number='+this.fetchData.number
                     }else{
-                        status = ''
+                        number = ''
                     }
-                     if(this.fetchData.principal_ids){
-                        principal_ids = '&principal_ids='+this.fetchData.principal_ids
+                     if(this.fetchData.type){
+                        type = '&type='+this.fetchData.type
                     }else{
-                        principal_ids = ''
+                        type = ''
                     }
-                    newUrl = url+'?'+this.fetchData.include+keyword+status+principal_ids
+                    pagenumber = '&page=' + pageNum
+                    newUrl = url+'?'+this.fetchData.include+keyword+number+type+pagenumber
                 }
                 // console.log(this.fetchData)
                 this.exportParams = {
@@ -359,7 +349,6 @@
                     principal_ids: this.fetchData.principal_ids,
                 }
                 fetch(methods, newUrl || url, fetchData).then((response) => {
-                    console.log(response);
                     _this.pageList = response.data
                     _this.total = response.meta.pagination.total;
                     _this.current_page = response.meta.pagination.current_page;
@@ -373,19 +362,21 @@
                     _this.customizeInfo = params.data
                 })
             },
-            getProjects: function (pageNum = 1, signStatus) {
-                let _this = this
-                let data = {
-                    page: pageNum,
-                    // include: 'principal,trail.expectations',
-                    status:this.pageType
-                };
-                fetch('get', '/approvals_contract/'+this.currentStatus, data).then(response => {
-                    _this.pageList = response.data                    
-                   _this.total = response.meta.pagination.total;
-                        _this.current_page = response.meta.pagination.current_page;
-                        _this.total_pages = response.meta.pagination.total_pages;
-                })
+            getProjects: function (pageNum = 1) {
+                this.fetchHandler('post', '/trails/filter', 'filter',pageNum)
+
+                // let _this = this
+                // let data = {
+                //     page: pageNum,
+                //     // include: 'principal,trail.expectations',
+                //     status:this.pageType
+                // };
+                // fetch('get', '/approvals_contract/'+this.currentStatus, data).then(response => {
+                //     _this.pageList = response.data                    
+                //    _this.total = response.meta.pagination.total;
+                //         _this.current_page = response.meta.pagination.current_page;
+                //         _this.total_pages = response.meta.pagination.total_pages;
+                // })
             },
             //查询列表
             getList: function (params) {
@@ -399,25 +390,6 @@
                     _this.isLoading = false;
                 })
             },
-            //获取博主类型
-            getBlogType() {
-                let _this = this
-                fetch('get', '/bloggers/gettype').then(function (response) {
-                    let data = {
-                        id: '',
-                        name: '全部'
-                    }
-                    _this.artistTypeArr = response.data
-                    _this.artistTypeArr.unshift(data)
-
-                })
-            },
-            //选择博主类型
-            typeFilter(value) {
-                this.blogType = value
-                // this.getBlogger()
-
-            },
             //沟通状态
             CommunicationStatus(value) {
                 this.blogCommunication = value
@@ -428,16 +400,6 @@
                  console.log(value);
                 this.customizeCondition = value
                 this.fetchHandler('post', '/'+this.typeHandler+'/filter','filter')
-                // fetch('post', '/trails/filter?include=principal,client,contact,recommendations,expectations', value).then((params) => {
-                //     _this.trailsInfo = params.data
-                //     _this.total = params.meta.pagination.total;
-                //     _this.total_pages = params.meta.pagination.total_pages;
-                //     _this.current_page = params.meta.pagination.current_page
-                //     _this.cleanUp = true
-                // })
-            },
-            changeArtistStatus: function (value) {
-                this.artistStatus = value
             },
             //头像
             getUploadUrl(value) {
@@ -470,10 +432,6 @@
             changeDouyinFansNum: function (value) {
                 this.star_douyin_infos.avatar = value
             },
-
-            changeXHSFansNum: function (value) {
-                this.star_xiaohongshu_infos.avatar = value
-            },
             changeArtistType: function (value) {
                 this.artistTypeId = value
             },
@@ -501,34 +459,6 @@
             changeMember: function (type) {
                 this.giveType = type
             },
-            //分配制作人
-            // giveProducer: function () {
-
-            //     let _this = this
-            //     let data = {}
-            //     data = {
-            //         person_ids: [],
-            //         del_person_ids: [],//删除
-            //         moduleable_ids: this.selectedArtistsArr,//
-            //         moduleable_type: 'blogger',
-            //         type: 4, //制作人
-            //     }
-            //     for (let i = 0; i < this.$store.state.participantsInfo.length; i++) {
-            //         data.person_ids.push(this.$store.state.participantsInfo[i].id)
-
-            //     }
-            //     fetch('post', 'distribution/person', data).then(function (response) {
-            //         if (_this.selectedArtistsArr.length == 0) {
-            //             return false
-            //         }
-            //         toastr.success('分配制作人成功')
-            //         $('#giveProducer').modal('hide')
-            //         _this.getBlogger()
-            //         _this.$store.state.participantsInfo = []
-            //         _this.selectedArtistsArr = []
-            //     })
-
-            // },
             judge() {
                 if (this.selectedArtistsArr.length == 0) {
                     toastr.error('请先选择博主，再进行分配')
@@ -623,18 +553,6 @@
                 this.signCompany = value
 
 
-            },
-
-            changeGender: function (value) {
-                this.artistGender = value
-            },
-
-            changeBirthday: function (value) {
-                this.artistBirthday = value
-            },
-
-            changeSource: function (value) {
-                this.artistSource = value
             },
             uploadAttachment: function (url, name, size) {
                 for (let i = 0; i < this.affixes.length; i++) {
