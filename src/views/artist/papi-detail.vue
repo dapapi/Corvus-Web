@@ -1492,7 +1492,7 @@
                 };
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
                     _this.artistInfo = response.data;
-                   
+                   console.log(response.data)
                     _this.uploadUrl = _this.artistInfo.avatar;
                     if (_this.artistInfo.intention) {
                         _this.artistInfo.intention = 1
@@ -1504,8 +1504,10 @@
                     } else {
                         _this.artistInfo.sign_contract_other = 2
                     }
-                    if(response.data.tasks.length>0){
+                    if(response.data.tasks){
                          _this.tasksInfo = response.data.tasks.data
+                         console.log(_this.tasksInfo )
+                         
                     }
                     //任务数据
                      //项目
