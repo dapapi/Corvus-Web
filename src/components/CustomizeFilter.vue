@@ -34,7 +34,7 @@
                     </div>
 
                 </div>
-                    <button class="btn btn-primary reset" type="submit" @click="reset">重制</button>
+                    <button class="btn btn-primary reset" type="submit" @click="reset">重置</button>
 
                 <div class="modal-footer">
                     <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>

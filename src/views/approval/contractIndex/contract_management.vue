@@ -53,7 +53,7 @@
                                data-selectable="selectable">
                             <tr>
                                 <th class="cell-300" scope="col">合同编号</th>
-                                <th class="cell-300" scope="col">项目名称</th>
+                                <th class="cell-300" scope="col">合同名称</th>
                                 <th class="cell-300" scope="col">合同类型</th>
                                 <th class="cell-300" scope="col">创建人</th>
                                 <th class="cell-300" scope="col">创建时间</th>
