@@ -383,6 +383,7 @@
             },
 
             customize: function (value) {
+                console.log(value)
                 this.customizeCondition = value
                 this.fetchHandler('post', '/clients/filter', 'filter')
                 // let _this = this
@@ -400,10 +401,8 @@
                     fetchData = this.fetchData,
                     newUrl
                 this.fetchData.include = 'include=principal'
-                console.log(this.clientPrincipalIdSearch)
                 if (type == 'filter') {
                     fetchData = this.customizeCondition
-                    this.customizeCondition.principal_ids=this.clientPrincipalIdSearch
                     let keyword, status, principal_ids
                     if (this.fetchData.keyword) {
                         keyword = '&keyword=' + this.fetchData.keyword
@@ -415,6 +414,9 @@
                     // } else {
                     //     principal_ids = ''
                     // }
+                    if (this.clientPrincipalIdSearch.length > 0) {
+                        this.customizeCondition.principal_ids = this.clientPrincipalIdSearch
+                    }
                     if (this.clientLevelSearch) {
                         status= '&grade=' + this.clientLevelSearch
                     } else {

@@ -1206,6 +1206,7 @@
                 //     data.name = ''
                 // }
                 // data.page = '&page='+this.current_page
+                console.log(value)
                 this.customizeCondition = value  
                 this.customizeCondition.sign_contract_status = this.currentpagestatus
                 console.log(this.customizeContentType)
