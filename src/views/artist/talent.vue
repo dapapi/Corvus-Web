@@ -206,7 +206,7 @@
                         <div class="clearfix my-20">
                             <div class="col-md-3 example float-left">
                                 <input type="text" class="form-control" placeholder="请输入博主昵称"
-                                       v-model="blogName" @blur='getBlogger()'>
+                                       v-model="blogName" @blur='getBloggerName'>
                             </div>
                             <div class="col-md-3 example float-left">
                                 <selectors :options="papiCommunicationStatusArr" @change="CommunicationStatus"
@@ -1081,6 +1081,10 @@
                     _this.artistTypeArr.unshift(data)
                 })
             },
+            getBloggerName(){
+                this.blogName = this.blogName 
+                this.fetchHandler('post', '/bloggers/filter','filter')
+            },
             //选择博主类型
             typeFilter(value) {
                 this.blogStatus = value
@@ -1094,12 +1098,12 @@
                 this.fetchHandler('post', '/bloggers/filter','filter')
             },
             fetchHandler(methods, url, type) {
-                console.log(url)
+                
                 let _this = this,
                     fetchData = this.fetchData,
                     newUrl
                 if(url == '/stars/filter'){
-                     this.fetchData.include = 'broker,creator,contracts'
+                     this.fetchData.include = 'include=broker,creator,contracts'
                     if (type == 'filter') {
                         fetchData = this.customizeCondition
                         let keyword, sign_contract_status, communication_status,page
@@ -1122,42 +1126,42 @@
                             page = ''
                         }
                         newUrl = url + '?' + this.fetchData.include + keyword + sign_contract_status + communication_status+page
-                       
-                }else{
+                    }    
+                }else if(url == '/bloggers/filter'){
                     this.fetchData.include = 'include=creator,affixes,publicity,operatelogs,contracts'
                     if (type == 'filter') {
                         fetchData = this.customizeCondition
                         let keyword, status, communication_status,page
-                        if (this.fetchData.keyword) {
+                        if (this.blogName) {
                             keyword = '&name='+this.blogName
                         } else {
-                            keyword = ''
+                            keyword = '&name='
                         }
-                        if (this.fetchData.status) {
+                        if (this.blogStatus) {
                             status = '&status='+this.blogStatus
                         } else {
                             status = ''
                         }
-                        if (this.fetchData.communication_status) {
+                        if (this.blogCommunication) {
                             communication_status = '&communication_status='+this.blogCommunication
                         } else {
                             communication_status = ''
                         }
-                        if (this.fetchData.page) {
+                        if (this.current_page) {
                             page = '&page='+this.current_page
                         } else {
                             page = ''
                         }
                         newUrl = url + '?' + this.fetchData.include + keyword + status + communication_status+page
                 }
+                // console.log(this.fetchData)
                
                 }
-                // console.log(this.fetchData)
-                this.exportParams = {
-                    keyword: this.fetchData.keyword,
-                    status: this.fetchData.status,
-                    principal_ids: this.fetchData.communication_status,
-                }
+                // this.exportParams = {
+                //     keyword: this.fetchData.keyword,
+                //     status: this.fetchData.status,
+                //     principal_ids: this.fetchData.communication_status,
+                // }
                 fetch(methods, newUrl || url, fetchData).then((response) => {
                          if (url == '/stars/filter') {
                         _this.artistsInfo = response.data
@@ -1177,10 +1181,8 @@
                     // _this.total_pages = response.meta.pagination.total_pages;
                     // _this.isLoading = false;
                 })
-                }
             },
             customize: function (value) {
-                
                 // let _this = this
                 // let data = {
                 //     include: 'type,creator,affixes,publicity,operatelogs,contracts',
@@ -1417,18 +1419,19 @@
                 }
             },
             tab: function (value) {
-                this.currentStatus = value
                 this.selectedArtistsArr = []
                 if (value == 'start') {
                     this.$refs.removeDate.setValue({conditions:[]})
-                    this.customizeInfo = {}
+                    this.customizeCondition = {}
                     this.getArtists()                  
                     this.isShow = true
+                    this.$refs.removeDate.reset()
                 } else if (value == 'bloggers') {
                     this.$refs.removeDate.setValue({conditions:[]})
-                    this.customizeInfo = {}
+                    this.customizeCondition  = {}
                     this.getBlogger()
                     this.isShow = false
+                    this.$refs.removeDate.reset()
                 }
             },
             giveBroker: function () {

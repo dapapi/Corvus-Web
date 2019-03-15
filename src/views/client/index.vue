@@ -81,7 +81,7 @@
         <customize-filter :data="customizeInfo" @change="customize" :cleanup="cleanUp"
                           @cleanupdone='cleanUp=false'></customize-filter>
 
-        <AddClientType :hidden="!canAdd" @change="showAddModal"/>
+        <AddClientType :hidden="power.client == 'false'" @change="showAddModal"/>
 
         <div class="modal fade" id="addClient" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
@@ -242,6 +242,7 @@
                 canAdd: false, // 可以新增吗
                 fetchData: {},
                 customizeCondition: {}
+                // canAdd: false, // 可以新增吗
             }
         },
 
@@ -255,13 +256,21 @@
                 // 清空state
                 this.cancelClient()
             })
-            this.checkPermission()
+            // this.checkPermission()
+            console.log(this.power)
         },
 
         computed: {
             ...mapState([
-                'userList'
+                'userList',
+                'power'
             ])
+        },
+
+        watch : {
+            power () {
+                console.log(this.power)
+            }
         },
 
         methods: {
@@ -391,25 +400,27 @@
                     fetchData = this.fetchData,
                     newUrl
                 this.fetchData.include = 'include=principal'
+                console.log(this.clientPrincipalIdSearch)
                 if (type == 'filter') {
                     fetchData = this.customizeCondition
+                    this.customizeCondition.principal_ids=this.clientPrincipalIdSearch
                     let keyword, status, principal_ids
                     if (this.fetchData.keyword) {
                         keyword = '&keyword=' + this.fetchData.keyword
                     } else {
                         keyword = ''
                     }
-                    if (this.fetchData.status) {
-                        status = '&status=' + this.fetchData.status
+                    // if (this.clientPrincipalIdSearch) {
+                    //     principal_ids = '&principal_ids=' + this.clientPrincipalIdSearch
+                    // } else {
+                    //     principal_ids = ''
+                    // }
+                    if (this.clientLevelSearch) {
+                        status= '&grade=' + this.clientLevelSearch
                     } else {
-                        status = ''
+                        status= ''
                     }
-                    if (this.fetchData.principal_ids) {
-                        principal_ids = '&principal_ids=' + this.fetchData.principal_ids
-                    } else {
-                        principal_ids = ''
-                    }
-                    newUrl = url + '?' + this.fetchData.include + keyword + status + principal_ids
+                    newUrl = url + '?' + this.fetchData.include + keyword + status 
                 }
                 this.exportParams = {
                     keyword: this.fetchData.keyword,
@@ -520,17 +531,6 @@
             },
             goDetail(id) {
                 this.$router.push('/clients/' + id)
-            },
-            // 检察权限
-            checkPermission() {
-                const params = {
-                    url: '/clients',
-                    id: '',
-                    method: 'post'
-                }
-                fetch('get', '/console/checkpower', params).then(res => {
-                    this.canAdd = !!res.data.power
-                })
             },
         }
     }

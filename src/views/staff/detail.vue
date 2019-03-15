@@ -2,7 +2,7 @@
     <!-- Page -->
     <div class="page">
 
-        <NavBack title="测试-测试部" href="/staff"></NavBack>
+        <NavBack :title="`${info.name}-${info.department?info.department:''}`"></NavBack>
 
         <div class="page-content container-fluid">
             <div class="panel col-md-12 clearfix py-5">

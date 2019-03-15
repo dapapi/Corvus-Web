@@ -69,7 +69,7 @@
 </template>
 
 <script>
-    import {mapState, mapGetters} from 'vuex'
+    import {mapState, mapGetters, mapMutations} from 'vuex'
     import Cookies from 'js-cookie'
 
     export default {
@@ -161,19 +161,28 @@
                 ],
                 pageRoute: '',
                 visible: false,
-                avatar: ''
+                // avatar: ''
             }
         },
         computed: {
             ...mapState([
                 'unReadMsg',
-                'canPassBack' // 能否进入后台
+                'canPassBack', // 能否进入后台
+                'avatar'
             ])
         },
-        mounted() {
-            if (Cookies.get('user')) {
-                this.avatar = JSON.parse(Cookies.get('user')).avatar;
+
+        created () {
+            if(Cookies.get('user')){
+                const avatar = JSON.parse(Cookies.get('user')).avatar;
+                const power = JSON.parse(Cookies.get('user')).power
+                this.setUserAvatar(avatar)
+                this.setUserPower(power)
             }
+        },
+
+        mounted() {
+            
             document.body.onclick = () => {
                 this.visible = false
             }
@@ -185,6 +194,10 @@
 
         },
         methods: {
+            ...mapMutations([
+                'setUserAvatar',
+                'setUserPower'
+            ]),
             showBackModel() {
                 this.visible = !this.visible
             },

@@ -239,10 +239,10 @@
                                         <td>{{item.company}}</td>
                                         <td>{{item.created_at}}</td>
                                         <td>
-                                            <template v-if="item.relate_project_bills_resource">
-                                                {{item.relate_project_bills_resource}}
+                                            <template v-if="item.contract_sharing_ratio">
+                                                {{item.contract_sharing_ratio}}
                                             </template>
-                                            <template>0</template>
+                                            <template v-if="!item.contract_sharing_ratio">>0</template>
                                         </td>
                                     </tr>
                                 </table>
@@ -1414,7 +1414,7 @@
                 _this.$refs.workReleaseTime.setValue('');
             })
             this.getTimes()
-            this.getArtistsBill()
+            // this.getArtistsBill()
             this.getResources();
             this.getPrivacy() //获取隐私设置
         },
@@ -1492,7 +1492,7 @@
                 };
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
                     _this.artistInfo = response.data;
-                   
+                   console.log(response.data)
                     _this.uploadUrl = _this.artistInfo.avatar;
                     if (_this.artistInfo.intention) {
                         _this.artistInfo.intention = 1
@@ -1504,8 +1504,10 @@
                     } else {
                         _this.artistInfo.sign_contract_other = 2
                     }
-                    if(response.data.tasks.length>0){
+                    if(response.data.tasks){
                          _this.tasksInfo = response.data.tasks.data
+                         console.log(_this.tasksInfo )
+                         
                     }
                     //任务数据
                      //项目
@@ -2140,9 +2142,9 @@
             //签约其他公司
             changeArtistSignStatus: function (value) {
                 if (value == 1) {
-                    this.artistInfo.sign_contract_other = true
+                    this.artistInfo.sign_contract_other = 1
                 } else {
-                    this.artistInfo.sign_contract_other = false
+                    this.artistInfo.sign_contract_other = 0
                 }
             },
             //平台id
@@ -2180,14 +2182,14 @@
                 let _this = this;
                 this.artistId = this.$route.params.id;
                 if (this.artistInfo.intention == 1) {
-                    this.artistInfo.intention = true
+                    this.artistInfo.intention = 1
                 } else {
-                    this.artistInfo.intention = false
+                    this.artistInfo.intention = 0
                 }
                 if (this.artistInfo.sign_contract_other == 1) {
-                    this.artistInfo.sign_contract_other = true
+                    this.artistInfo.sign_contract_other = 1
                 } else {
-                    this.artistInfo.sign_contract_other = false
+                    this.artistInfo.sign_contract_other = 0
                 }
                 this.changeArtistInfo = {
                     nickname: this.Namevalue,
