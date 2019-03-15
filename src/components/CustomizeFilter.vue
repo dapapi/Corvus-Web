@@ -125,7 +125,6 @@
                 let tempArr = {
                     conditions:[]
                 }
-                console.log(this.sendFilterData.conditions.length);
                 for (let key = 0;key <= this.sendFilterData.conditions.length;key++) {
                     if (this.selectorIdHidden.includes(key+1)) {
                         continue  
@@ -133,6 +132,7 @@
                         tempArr.conditions.push(this.sendFilterData.conditions[key])
                     }
                 }
+                console.log(tempArr)
                 this.$emit('change', tempArr);
                 $('.modal').modal('hide');
             },
@@ -140,7 +140,6 @@
                 this.sendFilterData = value
             },
             getCusData:function(data,n){
-                
                 this.sendFilterData.conditions[n-1]=data
             },
         }
