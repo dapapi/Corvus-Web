@@ -184,15 +184,15 @@
                         name: '全部'
                     },
                     {
-                        value: '影视项目',
+                        value: 1,
                         name: '影视项目'
                     },
                     {
-                        value: '综艺项目',
+                        value: 2,
                         name: '综艺项目'
                     },
                     {
-                        value: '商务项目',
+                        value: 3,
                         name: '商务项目'
                     },
                 ],
@@ -202,11 +202,11 @@
                         name: '全部'
                     },
                     {
-                        value: '艺人',
+                        value: 'stars',
                         name: '艺人'
                     },
                     {
-                        value: '博主',
+                        value: 'bloggers',
                         name: '博主'
                     }
                 ],
