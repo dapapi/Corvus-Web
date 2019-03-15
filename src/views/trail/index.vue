@@ -400,7 +400,7 @@
                 if (value) {
                     this.fetchData.principal_ids = value.join(',')
                 }
-                this.fetchHandler('get', '/trails/filter')
+                this.fetchHandler('post', '/trails/filter','filter')
             },
             phoneValidate() {
                 let phone = this.trailContactPhone
