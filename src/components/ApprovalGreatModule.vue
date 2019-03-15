@@ -117,7 +117,7 @@
         },
         computed: {
             isFree() {
-                if (this.formData) {
+                if (this.formData.change_type) {
                     if (this.formData.change_type.id === 223) {
                         return true
                     } else {

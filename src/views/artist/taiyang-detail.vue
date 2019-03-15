@@ -1384,18 +1384,18 @@
                 fetch('get', '/stars/' + this.artistId, data).then(function (response) {
 
                     _this.artistInfo = response.data;
-                    console.log(_this.artistInfo )
+                    
                     if(response.data.star_risk_point == "privacy"){
                          _this.artistInfo.star_risk_point = '**'
                         
                     }else{
                          _this.artistInfo.star_risk_point = response.data.star_risk_point
                     }
-                     console.log(_this.artistInfo.star_risk_point)
+                     
                     _this.uploadUrl = _this.artistInfo.avatar
                     // _this.artistProjectsInfo = []
                     _this.artistTasksInfo = response.data.tasks.data//任务数据
-                    console.log(_this.artistTasksInfo)
+          
 
                     _this.artistWorksInfo = response.data.works.data//作品数据
 
@@ -1436,7 +1436,7 @@
                 };
                 let _this = this;
                 fetch('get', '/stars/' + this.artistId, data).then(function (response) {
-                     console.log(response.data)
+                    
                     if (response.data.calendar) {
                         _this.calendarId.push(response.data.calendar.data.id)
                         _this.calendarName = response.data.calendar.data.title
@@ -1463,7 +1463,7 @@
                     include: 'calendar,participants,creator,material,affixes,project,task',
                 };
                 fetch('get', '/schedules/' + schedule.id, data).then(response => {
-                    console.log(response)
+                  
                     if (!response) {
                         this.scheduleData = schedule;
                         this.noPermission = true;
@@ -1932,7 +1932,7 @@
 
                         }
                     }
-                    // console.log(_this.doneTaskNum)
+                  
                     _this.taskNum = `${_this.doneTaskNum}/${response.meta.pagination.total}`
                 })
             },
@@ -2300,6 +2300,7 @@
                     value = value.value
                 }
                 this.changeArtistInfo[name] = value
+                console.log(this.changeArtistInfo )
             }
             ,
 

@@ -53,7 +53,7 @@
                                data-selectable="selectable">
                             <tr>
                                 <th class="cell-300" scope="col">合同编号</th>
-                                <th class="cell-300" scope="col">项目名称</th>
+                                <th class="cell-300" scope="col">合同名称</th>
                                 <th class="cell-300" scope="col">合同类型</th>
                                 <th class="cell-300" scope="col">创建人</th>
                                 <th class="cell-300" scope="col">创建时间</th>
@@ -184,15 +184,15 @@
                         name: '全部'
                     },
                     {
-                        value: '影视项目',
+                        value: 1,
                         name: '影视项目'
                     },
                     {
-                        value: '综艺项目',
+                        value: 2,
                         name: '综艺项目'
                     },
                     {
-                        value: '商务项目',
+                        value: 3,
                         name: '商务项目'
                     },
                 ],
@@ -202,11 +202,11 @@
                         name: '全部'
                     },
                     {
-                        value: '艺人',
+                        value: 'stars',
                         name: '艺人'
                     },
                     {
-                        value: '博主',
+                        value: 'bloggers',
                         name: '博主'
                     }
                 ],
