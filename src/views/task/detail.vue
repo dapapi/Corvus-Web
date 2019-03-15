@@ -897,45 +897,80 @@
                 if (this.changeInfo.principal_id == this.oldInfo.principal.data.id) {
                     delete this.changeInfo.principal_id
                 }
-                if (JSON.stringify(this.changeInfo) !== "{}") {
-                    fetch('put', '/tasks/' + this.taskId, this.changeInfo).then(() => {
-                        this.getTask();
-                        if (this.changeInfo.principal_id) {
-                            this.taskInfo.principal.data = this.$store.state.principalInfo
-                        }
-                        toastr.success('修改成功')
+                // 修改任务概况除参与人字段
+                const editTaskInfo = () => {
+                    return new Promise((res, rej) => {
+                        fetch('put', '/tasks/' + this.taskId, this.changeInfo).then(() => {
+                            // this.getTask();
+                            if (this.changeInfo.principal_id) {
+                                this.taskInfo.principal.data = this.$store.state.principalInfo
+                            }
+                            res(true)
+                        }).catch(() => {
+                            rej(false)
+                        })
                     })
                 }
-                if (this.changeParticipantInfo) {
-                    let changeInfo = this.changeParticipantInfo;
-                    let participant_ids = [];
+                // 修改参与人
+                const editParticipant = () => {
+                    return new Promise((res, rej) => {
 
-                    let flagInfo = this.flagParticipantsIdArr;
-                    let del_participant_ids = [];
-                    for (let j = 0; j < flagInfo.length; j++) {
-                        if (changeInfo.map(item => item.id).indexOf(flagInfo[j]) === -1) {
-                            del_participant_ids.push(flagInfo[j])
+                        let changeInfo = this.changeParticipantInfo;
+                        let participant_ids = [];
+
+                        let flagInfo = this.flagParticipantsIdArr;
+                        let del_participant_ids = [];
+                        for (let j = 0; j < flagInfo.length; j++) {
+                            if (changeInfo.map(item => item.id).indexOf(flagInfo[j]) === -1) {
+                                del_participant_ids.push(flagInfo[j])
+                            }
                         }
-                    }
-                    for (let j = 0; j < changeInfo.length; j++) {
-                        if (flagInfo.indexOf(changeInfo[j].id) === -1) {
-                            participant_ids.push(changeInfo[j].id)
+                        for (let j = 0; j < changeInfo.length; j++) {
+                            if (flagInfo.indexOf(changeInfo[j].id) === -1) {
+                                participant_ids.push(changeInfo[j].id)
+                            }
                         }
+                        let data = {};
+                        if (participant_ids.length > 0) {
+                            data.person_ids = participant_ids
+                        }
+                        if (del_participant_ids.length > 0) {
+                            data.del_person_ids = del_participant_ids
+                        }
+                        if (JSON.stringify(data) !== "{}") {
+                            fetch('post', '/tasks/' + this.taskId + '/participant', data).then(() => {
+                                // this.getTask();
+                                // toastr.success('修改成功')
+                                res(true)
+                            }).catch(() => {
+                                rej(false)
+                            })
+                        }
+                    })
+                }
+
+                const editAllInfo = async () => {
+                    
+                    let resInfo = true
+                    if (JSON.stringify(this.changeInfo) !== "{}") {
+                        resInfo = await editTaskInfo()
                     }
-                    let data = {};
-                    if (participant_ids.length > 0) {
-                        data.person_ids = participant_ids
+                    let resParticipant = true
+                    if (this.changeParticipantInfo) {
+                        resParticipant = await editParticipant()
                     }
-                    if (del_participant_ids.length > 0) {
-                        data.del_person_ids = del_participant_ids
-                    }
-                    if (JSON.stringify(data) !== "{}") {
-                        fetch('post', '/tasks/' + this.taskId + '/participant', data).then(() => {
-                            this.getTask();
-                            toastr.success('修改成功')
-                        })
+                    // return resInfo && resParticipant
+                    if (resInfo && resParticipant) {
+                        toastr.success('修改成功')
+                        this.getTask()
                     }
                 }
+                editAllInfo()
+                // editAllInfo().then(res => {
+                //     if (res) {
+                //         toastr.success('修改成功')
+                //     }
+                // })
                 this.isEdit = false;
             },
 
