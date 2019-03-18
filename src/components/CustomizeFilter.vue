@@ -125,7 +125,6 @@
                 let tempArr = {
                     conditions:[]
                 }
-                console.log(this.sendFilterData.conditions.length);
                 for (let key = 0;key <= this.sendFilterData.conditions.length;key++) {
                     if (this.selectorIdHidden.includes(key+1)) {
                         continue  

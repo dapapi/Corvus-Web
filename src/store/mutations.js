@@ -88,7 +88,6 @@ export default {
     },
     // 设置权限(新增)
     setUserPower (state, data) {
-        console.log(data)
         state.power = data
     }
 }

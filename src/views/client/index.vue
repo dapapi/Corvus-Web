@@ -257,7 +257,7 @@
                 this.cancelClient()
             })
             // this.checkPermission()
-            console.log(this.power)
+           
         },
 
         computed: {
@@ -383,7 +383,6 @@
             },
 
             customize: function (value) {
-                console.log(value)
                 this.customizeCondition = value
                 this.fetchHandler('post', '/clients/filter', 'filter')
                 // let _this = this
@@ -416,6 +415,8 @@
                     // }
                     if (this.clientPrincipalIdSearch.length > 0) {
                         this.customizeCondition.principal_ids = this.clientPrincipalIdSearch
+                    }else{
+                        this.customizeCondition.principal_ids = []
                     }
                     if (this.clientLevelSearch) {
                         status= '&grade=' + this.clientLevelSearch
@@ -464,6 +465,7 @@
             },
 
             changeClientLevelSelect(value) {
+               
                 this.clientLevelSearch = value
                 this.fetchHandler('post', '/clients/filter', 'filter')
             },

@@ -1492,7 +1492,6 @@
                 };
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
                     _this.artistInfo = response.data;
-                   console.log(response.data)
                     _this.uploadUrl = _this.artistInfo.avatar;
                     if (_this.artistInfo.intention) {
                         _this.artistInfo.intention = 1
@@ -1506,8 +1505,6 @@
                     }
                     if(response.data.tasks){
                          _this.tasksInfo = response.data.tasks.data
-                         console.log(_this.tasksInfo )
-                         
                     }
                     //任务数据
                      //项目
@@ -1561,7 +1558,6 @@
                      page:page
                  }).then(function (response) {
                     _this.ProjectsInfo  = response.data
-                    console.log(response.data)
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
@@ -1588,7 +1584,6 @@
                 };
                 let _this = this;
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
-                    console.log(response.data)
                     if (response.data.calendar) {
                         _this.calendarId.push(response.data.calendar.data.id)
                         _this.calendarName = response.data.calendar.data.title

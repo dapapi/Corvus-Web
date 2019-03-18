@@ -993,7 +993,6 @@
                     communication_status: this.listData.communication_status, //沟通状态
                 }
                 fetch('get', '/stars', this.listData).then(function (response) {
-                    console.log(response)
                     if (response.data) {
                         _this.artistsInfo = response.data;
                     }
@@ -1153,9 +1152,7 @@
                             page = ''
                         }
                         newUrl = url + '?' + this.fetchData.include + keyword + status + communication_status+page
-                }
-                // console.log(this.fetchData)
-               
+                }               
                 }
                 // this.exportParams = {
                 //     keyword: this.fetchData.keyword,
@@ -1208,7 +1205,6 @@
                 // data.page = '&page='+this.current_page
                 this.customizeCondition = value  
                 this.customizeCondition.sign_contract_status = this.currentpagestatus
-                console.log(this.customizeContentType)
                 this.fetchHandler('post', '/'+this.customizeContentType+'/filter','filter')
                 // fetch('post', this.customizeContentType +'/filter?include=creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name ,value).then(function (params) {
 
