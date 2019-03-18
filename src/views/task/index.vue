@@ -23,6 +23,9 @@
                     <div class="col-md-3 example float-left">
                         <Selectors :options="taskStatusArr" @change="changeTaskStatusSearch" placeholder="请选择任务状态"></Selectors>
                     </div>
+                     <div class="col-md-3 example float-left">
+                        <DropDepartment :data="department" :showUser="true" @change="selectDepartment"/>
+                    </div>
                     <!-- <div class="col-md-3 example float-left">
                         <button type="button"
                                 class="btn btn-default waves-effect waves-classic float-right"
@@ -320,6 +323,8 @@
                 linkIndex: 0, //
                 canLoadMore: false, // 关联资源是否可以加载更多
                 // canAdd: false, // 是否有权限添加
+                searchDepartment: '', // 搜索部门
+                searchUser: '', // 搜索部门成员
             };
         },
         created() {
@@ -327,7 +332,8 @@
         },
         computed: {
             ...mapState([
-                'power'
+                'power',
+                'department',
             ])
         },
         mounted() {
@@ -356,6 +362,15 @@
                     my:this.my,
                     include:"principal,pTask,tasks,resource.resourceable,resource.resource,participants"
                 };
+
+                if (this.searchDepartment) {
+                    params.department = this.searchDepartment
+                }
+
+                if (this.searchUser) {
+                    params.user = this.searchUser
+                }
+
                 let url = "/tasks";
 
                 if (this.taskNameSearch) {
@@ -658,6 +673,18 @@
                     return
                 }
                 $('#addTask').modal('show')
+            },
+            // 选择成员或部门
+            selectDepartment (data) {
+                console.log(data)
+                if (data.type === 'department') {
+                    this.searchUser = ''
+                    this.searchDepartment = data.id
+                } else if (data.type === 'user') {
+                    this.searchUser = data.id
+                    this.searchDepartment = ''
+                }
+                this.getTasks()
             }
         }
     };
