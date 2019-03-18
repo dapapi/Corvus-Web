@@ -182,7 +182,7 @@
         },
 
         mounted() {
-            
+
             document.body.onclick = () => {
                 this.visible = false
             }
