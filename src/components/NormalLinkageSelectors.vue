@@ -2,7 +2,9 @@
 
     <div class="row">
         <div class="float-left col-md-6 pl-0">
-            <select id="father" title="" :value="resource">
+            <select id="father" title="" :value="resource"  
+                :data-live-search="true"
+            >
                 <selectorsOptions v-for="(option, index) in data" v-bind:id="option.id" :index="index" :val="option.value"
                                   :key="option.id">
                     {{option.name}}
@@ -10,7 +12,7 @@
             </select>
         </div>
         <div class="float-left col-md-6 pl-0">
-            <select id="child" title="" :value="resourceable" ref="childSelect">
+            <select id="child" title="" :value="resourceable" ref="childSelect" :data-live-search="true">
                 <selectorsOptions v-for="option in newData[index].child" v-bind:id="option.id" :val="option.value"
                                   :key="option.id">
                     {{option.name}}
