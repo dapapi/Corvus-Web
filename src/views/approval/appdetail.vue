@@ -447,10 +447,12 @@
                     _this.trailInfo = params.data.trail
                     _this.detail_control = params.meta.detail_control
                     let tempArr = []
-                    for (const key in meta.contract_archive.archives.data) {
-                        tempArr.push(meta.contract_archive.archives.data[key].url)
+                    if(meta.contract_archive){
+                        for (const key in meta.contract_archive.archives.data) {
+                            tempArr.push(meta.contract_archive.archives.data[key].url)
+                        }
+                        _this.archivesArr = tempArr.join(',')
                     }
-                    _this.archivesArr = tempArr.join(',')
                 })
             },
             participantChange: function (value) {

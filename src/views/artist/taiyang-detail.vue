@@ -1382,7 +1382,6 @@
                 };
                 let _this = this;
                 fetch('get', '/stars/' + this.artistId, data).then(function (response) {
-
                     _this.artistInfo = response.data;
                     if(response.data.star_risk_point == "privacy"){
                          _this.artistInfo.star_risk_point = '**'
@@ -1395,12 +1394,7 @@
                     _this.artistTasksInfo = response.data.tasks.data//任务数据
 
                     _this.artistWorksInfo = response.data.works.data//作品数据
-
-
                     _this.affixes = response.data.affixes.data
-
-
-
                     _this.isLoading = false
                 })
 
@@ -1433,6 +1427,7 @@
                 };
                 let _this = this;
                 fetch('get', '/stars/' + this.artistId, data).then(function (response) {
+                    
                     if (response.data.calendar) {
                         _this.calendarId.push(response.data.calendar.data.id)
                         _this.calendarName = response.data.calendar.data.title
@@ -1459,6 +1454,7 @@
                     include: 'calendar,participants,creator,material,affixes,project,task',
                 };
                 fetch('get', '/schedules/' + schedule.id, data).then(response => {
+                  
                     if (!response) {
                         this.scheduleData = schedule;
                         this.noPermission = true;
@@ -1927,6 +1923,7 @@
 
                         }
                     }
+                  
                     _this.taskNum = `${_this.doneTaskNum}/${response.meta.pagination.total}`
                 })
             },
@@ -2294,6 +2291,7 @@
                     value = value.value
                 }
                 this.changeArtistInfo[name] = value
+                console.log(this.changeArtistInfo )
             }
             ,
 
