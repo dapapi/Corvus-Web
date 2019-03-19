@@ -334,7 +334,7 @@
         <customize-filter :data="customizeContentType==='stars'?customizeInfoStars:customizeInfoBloggers"
                           @change="customize" ref="removeDate" :isint="true"></customize-filter>
 
-        <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addBolgger" v-if="!isShow">
+        <div class="site-action" data-plugin="actionBtn" data-toggle="modal" @click='rightChecker("博主","addBolgger","blogger")' v-if="!isShow">
             <button type="button"
                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                 <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
@@ -469,7 +469,7 @@
                 </div>
             </div>
         </div>
-        <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addArtist" v-if="isShow">
+        <div class="site-action" data-plugin="actionBtn" data-toggle="modal" @click='rightChecker("艺人","addArtist","star")' v-if="isShow">
             <button type="button"
                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                 <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
@@ -951,6 +951,13 @@
             $('table').asSelectable();
         },
         methods: {
+            rightChecker(value,params,type){
+                if(this.$store.state.power[type] !=='true'){
+                    toastr.error('当前用户没有权限新增'+value)
+                    return
+                }
+                $('#'+params).modal('show')       
+            },
             getStarsField() {
                 let _this = this
                 fetch('get', '/stars/filter_fields').then((params) => {

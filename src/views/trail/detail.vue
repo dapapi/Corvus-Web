@@ -954,6 +954,10 @@
             },
 
             editBaseInfo: function () {
+                if(this.$store.state.power.trail !== 'true'){
+                    toastr.error('当前用户没有编辑销售线索的权限')
+                    return
+                }
                 this.isEdit = true;
                 this.changeInfo = {};
             },

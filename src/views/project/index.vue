@@ -294,6 +294,10 @@
             },
 
             changeProjectType: function (value) {
+                if(this.$store.state.power.project !=='true'){
+                    toastr.error('当前用户没有权限新增项目')
+                    return
+                }
                 let organization_id = JSON.parse(Cookies.get('user')).organization_id
                 if (value == 3) {
                     if (organization_id == 411) {
