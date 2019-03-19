@@ -2264,6 +2264,10 @@
             ,
 
             editBaseInfo: function () {
+                 if(this.$store.state.power.star !=='true'){
+                    toastr.error('当前用户没有权限编辑艺人')
+                    return
+                }
                 this.isEdit = true;
                 this.changeArtistInfo = {};
             }
