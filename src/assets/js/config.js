@@ -1322,8 +1322,26 @@ let config = {
               name: '/broadcast', //公告
               url: '/announcements/'
             },
+        ],
+        // 签署合同
+        signContractArr: [
+            { 
+                value: 1,
+                name: '北京泰洋明山文化传媒有限公司'
+            },
+            { 
+                value: 2,
+                name: '北京春雨听雷网络科技有限公司'
+            },
+            { 
+                value: 3,
+                name: '晓禾成川影视传媒（天津）有限公司'
+            },
+            { 
+                value: 4,
+                name: '天津朱迪蔻珠宝有限公司'
+            },
         ]
-
 
     }
 ;

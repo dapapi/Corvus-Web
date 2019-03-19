@@ -1463,14 +1463,18 @@
                     include: 'calendar,participants,creator,material,affixes,project,task',
                 };
                 fetch('get', '/schedules/' + schedule.id, data).then(response => {
-                  
+                    console.log(response)
                     if (!response) {
                         this.scheduleData = schedule;
                         this.noPermission = true;
                         return
                     }
                     this.noPermission = false;
+                    
                     this.scheduleData = response.data;
+                    
+                  
+                    
                     this.scheduleParticipants = JSON.parse(JSON.stringify(response.data.participants.data));
                     this.$store.dispatch('changeParticipantsInfo', {data: response.data.participants.data});
                 });
@@ -2300,7 +2304,6 @@
                     value = value.value
                 }
                 this.changeArtistInfo[name] = value
-                console.log(this.changeArtistInfo )
             }
             ,
 

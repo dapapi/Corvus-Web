@@ -22,37 +22,53 @@
                     <div class="col-md-3 example float-left">
                         <Selectors :options="taskStatusArr" @change="changeTaskStatusSearch" placeholder="请选择任务状态"></Selectors>
                     </div>
-                    <!--<div class="col-md-3 example float-left">-->
-                        <!--<button type="button"-->
-                                <!--class="btn btn-default waves-effect waves-classic float-right"-->
-                                <!--data-toggle="modal"-->
-                                <!--data-target="#customizeContent"-->
-                                <!--data-placement="right"-->
-                                <!--title>自定义筛选-->
-                        <!--</button>-->
-                    <!--</div>-->
+                     <div class="col-md-3 example float-left">
+                        <DropDepartment :data="department" :showUser="true" @change="selectDepartment"/>
+                    </div>
+                    <!-- <div class="col-md-3 example float-left">
+                        <button type="button"
+                                class="btn btn-default waves-effect waves-classic float-right"
+                                data-toggle="modal"
+                                data-target="#customizeContent"
+                                data-placement="right"
+                                title>自定义筛选
+                        </button>
+                    </div> -->
                 </div>
+
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                        <li class="nav-item" role="presentation" @click="getTasks(1)">
-                            <a class="nav-link active" data-toggle="tab" href="#forum-task"
-                                aria-controls="forum-base"
-                                aria-expanded="true" role="tab">所有任务</a>
+                        <li class="nav-item" role="presentation" @click="getMyTasks()">
+                            <a class="nav-link active"
+                               data-toggle="tab"
+                               href="#forum-task"
+                               aria-controls="forum-base"
+                               aria-expanded="true"
+                               role="tab">所有任务</a>
                         </li>
                         <li class="nav-item" role="presentation" @click="getMyTasks(3)">
-                            <a class="nav-link" data-toggle="tab" href="#forum-task"
-                                aria-controls="forum-present"
-                                aria-expanded="false" role="tab">我负责的</a>
+                            <a class="nav-link"
+                               data-toggle="tab"
+                               href="#forum-task"
+                               aria-controls="forum-present"
+                               aria-expanded="false"
+                               role="tab">我负责的</a>
                         </li>
                         <li class="nav-item" role="presentation" @click="getMyTasks(2)">
-                            <a class="nav-link" data-toggle="tab" href="#forum-task"
-                                aria-controls="forum-present"
-                                aria-expanded="false" role="tab">我参与的</a>
+                            <a class="nav-link"
+                               data-toggle="tab"
+                               href="#forum-task"
+                               aria-controls="forum-present"
+                               aria-expanded="false"
+                               role="tab">我参与的</a>
                         </li>
                         <li class="nav-item" role="presentation" @click="getMyTasks(1)">
-                            <a class="nav-link" data-toggle="tab" href="#forum-task"
-                                aria-controls="forum-present"
-                                aria-expanded="false" role="tab">我创建的</a>
+                            <a class="nav-link"
+                               data-toggle="tab"
+                               href="#forum-task"
+                               aria-controls="forum-present"
+                               aria-expanded="false"
+                               role="tab">我创建的</a>
                         </li>
                         <li class="nav-item" role="presentation" @click="getMyTasks(4)">
                             <a class="nav-link"
@@ -67,9 +83,11 @@
 
                 <div class="page-content tab-content nav-tabs-animate bg-white pb-0">
                     <div class="tab-pane animation-fade active" id="forum-task" role="tabpanel">
-                        <table class="table table-hover is-indent" data-plugin="animateList" data-animate="fade"
-                                data-child="tr"
-                                data-selectable="selectable">
+                        <table class="table table-hover is-indent"
+                               data-plugin="animateList"
+                               data-animate="fade"
+                               data-child="tr"
+                               data-selectable="selectable">
                             <tr class="animation-fade"
                                 style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                                 <th class="cell-300" scope="col">任务名称</th>
@@ -80,10 +98,9 @@
                                 <th class="cell-300" scope="col">截止时间</th>
                             </tr>
                             <tbody>
-                            <tr v-for="task in tasksInfo" :key="task.id" @click="taskDetail(task.id)">
+                            <tr v-for="(task, index) in tasksInfo" :key="index" @click="goDetail(task.id)">
                                 <td class="pointer-content">
-                                    <router-link :to="{name:'tasks/detail', params: {id: task.id}}">{{ task.title }}
-                                    </router-link>
+                                    {{ task.title }}
                                 </td>
                                 <td>{{task.resource ? task.resource.data.resource.data.title : ''}}
                                     <template v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.name">
@@ -99,9 +116,11 @@
                                         - {{ task.resource.data.resourceable.data.company }}
                                     </template>
                                 </td>
-                                <td>{{ task.type ? task.type.data ? task.type.data.title : '' : '' }}</td>
+                                <!-- <td>暂无</td> -->
+                                <td>{{ task.type ? task.type.data ? task.type.data.title : '' : '' }}
+                                </td>
                                 <td>
-                                    <template v-if="task.status === 1"><span style="color:#FF9800">进行中</span> </template>
+                                    <template v-if="task.status === 1"><span style="color:#FF9800">进行中</span></template>
                                     <template v-if="task.status === 2"><span style="color:#4CAF50">已完成</span></template>
                                     <template v-if="task.status === 3"><span style="color:#9E9E9E">已停止</span></template>
                                     <template v-if="task.status === 4"><span style="color:#F44336">延期</span></template>
@@ -113,20 +132,34 @@
                             </tr>
                             </tbody>
                         </table>
-                            <div style="margin: 6rem auto;width: 100px"  v-if="tasksInfo.length==0">
-                                <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
+                        <div style="margin: 6rem auto;width: 100px" v-if="tasksInfo.length === 0">
+                            <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
+                                 style="width: 100%">
                         </div>
-                        <template v-if="!taskStatus">
-                            <Pagination :current_page="current_page" :method="getTasks" :total_pages="total_pages"
+                        <Pagination :current_page="current_page"
+                                        :method="getTasks"
+                                        :total_pages="total_pages"
                                         :total="total"></Pagination>
-                        </template>
-                        <template v-else>
-                            <Pagination :current_page="current_page" :method="getOther" :total_pages="total_pages"
+                        <!-- <template v-if="!taskStatus && !taskFinishType">
+                            <Pagination :current_page="current_page"
+                                        :method="getTasks"
+                                        :total_pages="total_pages"
                                         :total="total"></Pagination>
-                        </template>
+                        </template> -->
+                        <!-- <template v-else>
+                            <Pagination :current_page="current_page"
+                                        :method="getMyTasks"
+                                        :total_pages="total_pages"
+                                        :total="total"></Pagination>
+                        </template> -->
                     </div>
                 </div>
-                <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addTask">
+            </div>
+        </div>
+
+        <CustomizeFilter :data="customizeInfo" @change="customize"></CustomizeFilter>
+
+        <div class="site-action" data-plugin="actionBtn" data-toggle="modal" @click="handleAdd">
             <button type="button"
                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                 <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
@@ -157,6 +190,7 @@
                             <div class="col-md-10 float-left">
                                 <normal-linkage-selectors ref="linkage" v-if="linkData.length>0" :myData="linkData"
                                                           :data="linkData"
+                                                          @loadMore="getMoreChildLinkData"
                                                           @change="addLinkage"></normal-linkage-selectors>
                             </div>
                         </div>
@@ -201,7 +235,9 @@
                                 <Datepicker ref="startTime" @change="changeStartTime"></Datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
-                                <TimeChoice @change="changeStartMinutes" ref="startMinutes"></TimeChoice>
+                                <!-- <Timepicker ref="startMinutes" :default="startMinutes"
+                                            @change="changeStartMinutes"></Timepicker> -->
+                                 <TimeChoice @change="changeStartMinutes" ref="startMinutes"></TimeChoice>
                             </div>
                         </div>
                         <div class="example">
@@ -210,6 +246,8 @@
                                 <Datepicker ref="endTime" @change="changeEndTime" :startDate="startTime"></Datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0">
+                                <!-- <Timepicker ref="endMinutes" :default="endMinutes"
+                                            @change="changeEndMinutes"></Timepicker> -->
                                 <TimeChoice @change="changeEndMinutes" ref="endMinutes"></TimeChoice>
                             </div>
                         </div>
@@ -233,22 +271,20 @@
                 </div>
             </div>
         </div>
-            </div>
-        </div>
     </div>
 </template>
+
 <script>
     import fetch from "../../assets/utils/fetch.js";
     import config from "../../assets/js/config";
     import Cookies from 'js-cookie'
-    import common from '../../assets/js/common'
+    import { mapState } from 'vuex'
 
     const taskStatusArr = [{name: "全部", value: ""}, ...config.taskStatusArr];
     export default {
         name: "",
         data() {
             return {
-                common: common,
                 total: 0,
                 current_page: 1,
                 total_pages: 1,
@@ -268,7 +304,7 @@
                 taskLevel: "",
                 taskTypeArr: [],
                 taskStatusArr: taskStatusArr,
-                priorityArr:config.priorityArr,
+                taskLevelArr: config.taskLevelArr,
                 customizeInfo: config.customizeInfo,
                 linkData: [],
                 taskNameSearch: "", // 搜索的任务名称
@@ -277,12 +313,27 @@
                 resourceType: "", // 资源type
                 resourceableId: "", // 资源id
                 user: {}, // 个人信息
-                isLoading:true,
-                my:''
+                isLoading: true,
+                priorityArr:config.priorityArr,
+                my: '',//tasks 筛选  3我负责的 2 我参与的 1我创建的 4我分配的
+                linkCurrentPage: 2, // 关联资源当前页数
+                linkTotalPage: 1, // 关联资源总页数
+                linkCode: '', // 关联资源父数据的code
+                linkIndex: 0, //
+                canLoadMore: false, // 关联资源是否可以加载更多
+                // canAdd: false, // 是否有权限添加
+                searchDepartment: '', // 搜索部门
+                searchUser: '', // 搜索部门成员
             };
         },
         created() {
             this.getLinkData()
+        },
+        computed: {
+            ...mapState([
+                'power',
+                'department',
+            ])
         },
         mounted() {
             this.getTasks();
@@ -297,16 +348,28 @@
                 // 清空state
                 this.closeAddTask()
             })
+            // this.checkPermission()
         },
 
         methods: {
+
+            //任务列表的请求都用url = /tasks  上下联动筛选
             getTasks(pageNum = 1) {
+                
                 let params = {
                     page: pageNum,
                     my:this.my,
-                    include:
-                        "principal,pTask,tasks,resource.resourceable,resource.resource,participants"
+                    include:"principal,pTask,tasks,resource.resourceable,resource.resource,participants"
                 };
+
+                if (this.searchDepartment) {
+                    params.department = this.searchDepartment
+                }
+
+                if (this.searchUser) {
+                    params.user = this.searchUser
+                }
+
                 let url = "/tasks";
 
                 if (this.taskNameSearch) {
@@ -318,27 +381,22 @@
                 if (this.taskTypeSearch) {
                     params.type_id = this.taskTypeSearch;
                 }
-
-                if (this.taskNameSearch || this.taskStatusSearch || this.taskTypeSearch) {
-                    url = "/tasks/filter";
-                }
-
                 fetch("get", url, params).then(response => {
                     this.tasksInfo = response.data;
-                    this.isLoading = false;
                     this.current_page = response.meta.pagination.current_page;
                     this.total = response.meta.pagination.total;
                     this.total_pages = response.meta.pagination.total_pages;
+                    this.isLoading = false;
                 });
             },
-
+            //任务我的筛选
             getMyTasks(my) {
                 this.my = my
                 this.getTasks(1)
                 
             },
-
             addTask() {
+              
                 // 校验
                 if (!this.taskName) {
                     toastr.error('请填写任务名称！')
@@ -490,8 +548,20 @@
             // 获取关联子资源数据
             getChildLinkData(url, index) {
                 if (url) {
-                    fetch('get', `/${url}`).then(res => {
+                    let data = {}
+                    this.linkCode = url
+                    this.linkIndex = index
+                    if (url === 'bloggers' || url === 'stars') {
+                        data.sign_contract_status = 2
+                    }
+                    fetch('get', `/${url === 'bloggers'? url + '/all' : url}`, data).then(res => {
                         const temp = this.linkData[index]
+                        if (res.meta && res.meta.pagination) {
+                            this.canLoadMore = true
+                            this.linkTotalPage = res.meta.pagination.total_pages
+                        } else {
+                            this.canLoadMore = false
+                        }
                         temp.child = res.data.map(n => {
                             return {
                                 name: n.name || n.nickname || n.title || n.company,
@@ -514,7 +584,44 @@
                     }]
                     this.resourceableId = temp.child[0].id
                     this.$set(this.linkData, index, temp)
+                    setTimeout(() => {
+                        this.$refs.linkage.refresh()
+                    }, 100)
+                }
+            },
+            // 关联子资源滚动到底加载更多
+            getMoreChildLinkData () {
+                const url = this.linkCode
+                const index = this.linkIndex
+                if (url && this.canLoadMore) {
                     
+                    if (this.linkCurrentPage >= this.linkTotalPage) {
+                        return
+                    }
+                    let data = {
+                        page: this.linkCurrentPage
+                    }
+                    if (url === 'bloggers' || url === 'stars') {
+                        data.sign_contract_status = 2
+                    }
+                    fetch('get', `/${url === 'bloggers'? url + '/all' : url}`, data).then(res => {
+                        this.linkCurrentPage = this.linkCurrentPage + 1
+                        const temp = this.linkData[index]
+                        // const temp = this.linkData
+                        const tempArr = res.data.map(n => {
+                            return {
+                                name: n.name || n.nickname || n.title || n.company,
+                                id: n.id,
+                                value: n.id,
+                            }
+                        })
+                        temp.child = [...temp.child, ...tempArr]
+                        this.resourceableId = temp.child[0].id
+                        this.$set(this.linkData, index, temp)
+                        setTimeout(() => {
+                            this.$refs.linkage.refresh()
+                        }, 100)
+                    })
                 }
             },
             // 获取任务类型列表
@@ -555,14 +662,33 @@
                 })
                 this.$store.commit('changeNewParticipantsInfo', [])
             },
-            // 跳转
-            taskDetail(taskId){
-                this.$router.push({path: '/tasks/' + taskId})
+            goDetail (id) {
+                this.$router.push('/tasks/' + id)
             },
+
+            handleAdd () {
+                if (this.power.task == 'false') {
+                    toastr.error('您没有新增任务的权限！')
+                    return
+                }
+                $('#addTask').modal('show')
+            },
+            // 选择成员或部门
+            selectDepartment (data) {
+                console.log(data)
+                if (data.type === 'department') {
+                    this.searchUser = ''
+                    this.searchDepartment = data.id
+                } else if (data.type === 'user') {
+                    this.searchUser = data.id
+                    this.searchDepartment = ''
+                }
+                this.getTasks()
+            }
         }
     };
 </script>
-<style>
+<style scoped lang="scss">
 .panel{
     box-shadow: 0 0 0 0;
 }
@@ -573,5 +699,25 @@
 table tbody tr {
     cursor: pointer;
 }
+ table td {
+        position: relative;
+        a:before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            display: inline-block;
+        }
+    }
+    table tbody tr {
+       cursor: pointer;
+    }
+
+    .modal-body .example {
+        display: flex;
+        align-items: center;
+    }
 </style>
 

@@ -1426,13 +1426,13 @@
                     this.customizeCondition = {}
                     this.getArtists()                  
                     this.isShow = true
-                    this.$refs.removeDate.reset()
+                    // this.$refs.removeDate.reset()
                 } else if (value == 'bloggers') {
                     this.$refs.removeDate.setValue({conditions:[]})
                     this.customizeCondition  = {}
                     this.getBlogger()
                     this.isShow = false
-                    this.$refs.removeDate.reset()
+                    // this.$refs.removeDate.reset()
                 }
             },
             giveBroker: function () {
