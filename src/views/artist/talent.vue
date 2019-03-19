@@ -8,8 +8,8 @@
                 <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" id="taskDropdown"
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
-                     role="menu" x-placement="bottom-end" v-if="!isShow">
-                    <ImportAndExport :type="'import'" :moduleName="'bloggers'">
+                     role="menu" x-placement="bottom-end" v-if="!isShow" ref="colse">
+                    <ImportAndExport :type="'import'" :moduleName="'bloggers'" @importFile="importFile">
                         <a class="dropdown-item" role="menuitem">导入</a>
                     </ImportAndExport>
                     <ImportAndExport :type="'export'" :moduleName="'bloggers'" :params="exportParams">
@@ -19,8 +19,8 @@
                        :data-target="selectedArtistsArr.length>0&&'#giveProducer'" @click="judge">分配制作人</a>
                 </div>
                 <div class="dropdown-menu  dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
-                     role="menu" x-placement="bottom-end" v-if="isShow">
-                    <ImportAndExport :type="'import'" :moduleName="'stars'">
+                     role="menu" x-placement="bottom-end" v-if="isShow" ref="colse">
+                    <ImportAndExport :type="'import'" :moduleName="'stars'" @importFile="importFile">
                         <a class="dropdown-item" role="menuitem">导入</a>
                     </ImportAndExport>
                     <ImportAndExport :type="'export'" :moduleName="'stars'" :params="exportParams">
@@ -928,16 +928,7 @@
         watch: {
             platformType: function () {
                 return this.platformType
-            }
-        },
-        computed:{
-            // typeHandler(){
-            //     if(this.currentStatus === 'start'){
-            //         return 'stars'
-            //     }else if(this.currentStatus === 'bloggers'){
-            //         return 'bloggers'
-            //     }
-            // },
+            }           
         },
         created() {
             this.getStarsField()
@@ -951,6 +942,9 @@
             $('table').asSelectable();
         },
         methods: {
+            importFile(){
+                this.$refs.colse.classList.remove('show')
+            },
             getStarsField() {
                 let _this = this
                 fetch('get', '/stars/filter_fields').then((params) => {
@@ -993,7 +987,6 @@
                     communication_status: this.listData.communication_status, //沟通状态
                 }
                 fetch('get', '/stars', this.listData).then(function (response) {
-                    console.log(response)
                     if (response.data) {
                         _this.artistsInfo = response.data;
                     }

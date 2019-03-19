@@ -1464,7 +1464,7 @@
                 };
                 fetch('get', '/schedules/' + schedule.id, data).then(response => {
                     console.log(response)
-                    if (!response) {
+                    if (response.data.length>0) {
                         this.scheduleData = schedule;
                         this.noPermission = true;
                         return

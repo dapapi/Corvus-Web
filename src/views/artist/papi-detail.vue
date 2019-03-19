@@ -1703,7 +1703,7 @@
                     include: 'calendar,participants,creator,material,affixes,project,task',
                 };
                 fetch('get', '/schedules/' + schedule.id, data).then(response => {
-                    if (!response) {
+                    if (response.data.length>0) {
                         this.scheduleData = schedule;
                         this.noPermission = true;
                         return
