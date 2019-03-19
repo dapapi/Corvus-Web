@@ -323,6 +323,22 @@
                                                               @change="changeTrailDesc"></editTextarea>
                                             </div>
                                         </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                            <div class="col-md-3 float-left text-right pl-0">微信</div>
+                                            <div class="col-md-9 float-left font-weight-bold"
+                                                 v-if="trailInfo.contact">
+                                                 <EditInput :content="trailInfo.contact.data.phone" :is-edit="isEdit"
+                                                           @change="changeTrailContactPhone"></EditInput>
+                                            </div>
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                            <div class="col-md-3 float-left text-right pl-0">其他联系方式</div>
+                                            <div class="col-md-9 float-left font-weight-bold"
+                                                 v-if="trailInfo.contact">
+                                                 <EditInput :content="trailInfo.contact.data.phone" :is-edit="isEdit"
+                                                           @change="changeTrailContactPhone"></EditInput>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <h5 class="pl-15 pt-10">更新信息</h5>
