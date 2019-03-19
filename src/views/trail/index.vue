@@ -730,6 +730,10 @@
             }
             ,
             changeTrailType: function (value) {
+                if(this.$store.state.power.trail !=='true'){
+                    toastr.error('当前用户没有权限新增销售线索')
+                    return
+                }
                 let organization_id = JSON.parse(Cookies.get('user')).organization_id
                 if (value == 3) {
                     if (organization_id == 411) {

@@ -2031,6 +2031,10 @@
                 })
             },
             editBaseInfo: function () {
+                 if(this.$store.state.power.blogger !=='true'){
+                    toastr.error('当前用户没有权限编辑博主')
+                    return
+                }
                 this.isEdit = true;
                 this.isStatrtEdit = false
                 this.changeInfo = [];

@@ -191,7 +191,6 @@
                             <div class="col-md-10 float-left">
                                 <normal-linkage-selectors ref="linkage" v-if="linkData.length>0" :myData="linkData"
                                                           :data="linkData"
-                                                          @loadMore="getMoreChildLinkData"
                                                           @change="addLinkage"></normal-linkage-selectors>
                             </div>
                         </div>
@@ -552,10 +551,13 @@
                     let data = {}
                     this.linkCode = url
                     this.linkIndex = index
-                    if (url === 'bloggers' || url === 'stars') {
+
+                    let _url = url.substr(0, url.length - 1) + '/related'
+                    if (url === 'bloggers') {
+                        _url = url + '/all'
                         data.sign_contract_status = 2
                     }
-                    fetch('get', `/${url === 'bloggers'? url + '/all' : url}`, data).then(res => {
+                    fetch('get', _url, data).then(res => {
                         const temp = this.linkData[index]
                         if (res.meta && res.meta.pagination) {
                             this.canLoadMore = true

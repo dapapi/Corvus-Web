@@ -239,6 +239,7 @@
                 taskLevelArr: config.taskLevelArr,
                 cleanUp: false,
                 exportParams: {},//导出参数
+                canAdd: false, // 可以新增吗
                 fetchData: {},
                 customizeCondition: {}
                 // canAdd: false, // 可以新增吗
@@ -400,10 +401,8 @@
                     fetchData = this.fetchData,
                     newUrl
                 this.fetchData.include = 'include=principal'
-                console.log(this.clientPrincipalIdSearch)
                 if (type == 'filter') {
                     fetchData = this.customizeCondition
-                    this.customizeCondition.principal_ids=this.clientPrincipalIdSearch
                     let keyword, status, principal_ids
                     if (this.fetchData.keyword) {
                         keyword = '&keyword=' + this.fetchData.keyword

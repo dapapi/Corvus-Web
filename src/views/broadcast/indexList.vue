@@ -15,8 +15,24 @@
         <div class="page-header page-header-bordered pb-30">
             <h1 class="page-title">{{titleHandler}}</h1>
         </div> 
+       
         <div class="page-content container-fluid">
+            
             <div class="panel " id="">
+                 <div class="col-md-12">
+                    <ul class="nav nav-tabs nav-tabs-line" role="tablist">
+                        <li class="nav-item active" role="presentation" @click="dataInit(2)">
+                            <a class="nav-link active" data-toggle="tab" href="#forum-artist"
+                               aria-controls="forum-base"
+                               aria-expanded="true" role="tab">未读</a>
+                        </li>
+                        <li class="nav-item" role="presentation" @click="dataInit(1)">
+                            <a class="nav-link" data-toggle="tab" href="#forum-artist"
+                               aria-controls="forum-present"
+                               aria-expanded="false" role="tab">已读</a>
+                        </li>
+                    </ul>
+                </div>
                 <div class="panel-body">
                     <div class="">
                         <div class="table-responsive">
@@ -94,10 +110,10 @@ export default {
 
          if(this.$route.path.split('/').pop() === 'receive'){
                 this.status = 1
-                this.dataInit()
+                this.dataInit(2)
             }else if(this.$route.path.split('/').pop() === 'send'){
                 this.status = 2
-                this.dataInit()
+                this.dataInit(2)
             }
     },
     computed: {
@@ -132,9 +148,9 @@ export default {
             })
         },
         //初始化数据
-        dataInit(){
+        dataInit(params){
             let _this = this
-                fetch('get', '/announcements?include=creator&status='+this.status).then(function (response) {
+                fetch('get', '/announcements?include=creator&status='+this.status+'&readflag='+params).then(function (response) {
                     _this.broadCastInfo = response.data
                     _this.isLoading = false
             })
