@@ -1492,7 +1492,6 @@
                 };
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
                     _this.artistInfo = response.data;
-                   console.log(response.data)
                     _this.uploadUrl = _this.artistInfo.avatar;
                     if (_this.artistInfo.intention) {
                         _this.artistInfo.intention = 1
@@ -1588,7 +1587,6 @@
                 };
                 let _this = this;
                 fetch('get', '/bloggers/' + this.artistId, data).then(function (response) {
-                    console.log(response.data)
                     if (response.data.calendar) {
                         _this.calendarId.push(response.data.calendar.data.id)
                         _this.calendarName = response.data.calendar.data.title
