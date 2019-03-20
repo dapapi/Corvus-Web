@@ -35,6 +35,7 @@ export default {
             type:Object
         }
     },
+   
     data(){
         return {
           getRandom:Math.round(Math.random() * 1000),
@@ -47,6 +48,7 @@ export default {
     methods:{
         //导入
         importFile:function(event){
+            
             this.header['Content-Type'] = 'multipart/form-data;boundary = ' + new Date().getTime()
             this.file = event.target.files[0];
             let importUrl = `${env.apiUrl}/${this.moduleName}/import`
@@ -54,6 +56,7 @@ export default {
             formData.append('file', this.file);
             //创建一个干净的axios对象
             var instance = axios.create();
+            this.$emit('importFile')
             instance.defaults.headers = this.header
             instance.post(importUrl, formData)
             .then(function (response) {
