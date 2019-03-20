@@ -30,7 +30,7 @@
             <div class="modal-dialog modal-lg modal-info">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <button type="button" class="bootbox-close-button close" data-dismiss="modal" aria-hidden="true" style="margin-top: 10px;" >
+                        <button type="button" class="bootbox-close-button close" data-dismiss="modal" aria-hidden="true" style="margin-top: 10px;" @click='clear'>
                             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="16" viewBox="0 0 12 16">
                                 <path fill-rule="evenodd" d="M7.48 8l3.75 3.75-1.48 1.48L6 9.48l-3.75 3.75-1.48-1.48L4.52 8 .77 4.25l1.48-1.48L6 6.52l3.75-3.75 1.48 1.48L7.48 8z"/>
                             </svg>
@@ -92,7 +92,7 @@
                     
                     <div class="modal-footer">
                         <button data-bb-handler="confirm" type="button" class="btn btn-primary" @click="sendNote">发布</button>
-                        <button data-bb-handler="cancel" type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button data-bb-handler="cancel" type="button" class="btn btn-default" data-dismiss="modal" @click='clear'>取消</button>
                     </div>
                 </div>
             </div>
@@ -187,6 +187,14 @@ export default {
         }
     },
     methods:{
+        clear(){
+            this.msg = ''
+            this.title = ''
+            this.scope = []
+            this.type = ''
+            this.$refs.scopeSelector.setValue(this.scope)            //设置默认值
+            this.$refs.classifySelector.setValue(this.type)
+        },
         uploadFile(e) {
             let file = e.target.files[0];
             let putExtra = null;
@@ -341,6 +349,7 @@ export default {
                     _this.type = ''
                     _this.text = ''
                     _this.$emit('refresh')
+                    _this.clear()
                 })
                 
             }
