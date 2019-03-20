@@ -23,6 +23,9 @@
                     <div class="col-md-3 example float-left">
                         <Selectors :options="taskStatusArr" @change="changeTaskStatusSearch" placeholder="请选择任务状态"></Selectors>
                     </div>
+                     <div class="col-md-3 example float-left">
+                        <DropDepartment :data="department" :showUser="true" @change="selectDepartment"/>
+                    </div>
                     <!-- <div class="col-md-3 example float-left">
                         <button type="button"
                                 class="btn btn-default waves-effect waves-classic float-right"
@@ -188,7 +191,6 @@
                             <div class="col-md-10 float-left">
                                 <normal-linkage-selectors ref="linkage" v-if="linkData.length>0" :myData="linkData"
                                                           :data="linkData"
-                                                          @loadMore="getMoreChildLinkData"
                                                           @change="addLinkage"></normal-linkage-selectors>
                             </div>
                         </div>
@@ -320,6 +322,8 @@
                 linkIndex: 0, //
                 canLoadMore: false, // 关联资源是否可以加载更多
                 // canAdd: false, // 是否有权限添加
+                searchDepartment: '', // 搜索部门
+                searchUser: '', // 搜索部门成员
             };
         },
         created() {
@@ -327,7 +331,8 @@
         },
         computed: {
             ...mapState([
-                'power'
+                'power',
+                'department',
             ])
         },
         mounted() {
@@ -356,6 +361,15 @@
                     my:this.my,
                     include:"principal,pTask,tasks,resource.resourceable,resource.resource,participants"
                 };
+
+                if (this.searchDepartment) {
+                    params.department = this.searchDepartment
+                }
+
+                if (this.searchUser) {
+                    params.user = this.searchUser
+                }
+
                 let url = "/tasks";
 
                 if (this.taskNameSearch) {
@@ -537,10 +551,13 @@
                     let data = {}
                     this.linkCode = url
                     this.linkIndex = index
-                    if (url === 'bloggers' || url === 'stars') {
+
+                    let _url = url.substr(0, url.length - 1) + '/related'
+                    if (url === 'bloggers') {
+                        _url = url + '/all'
                         data.sign_contract_status = 2
                     }
-                    fetch('get', `/${url === 'bloggers'? url + '/all' : url}`, data).then(res => {
+                    fetch('get', _url, data).then(res => {
                         const temp = this.linkData[index]
                         if (res.meta && res.meta.pagination) {
                             this.canLoadMore = true
@@ -658,6 +675,18 @@
                     return
                 }
                 $('#addTask').modal('show')
+            },
+            // 选择成员或部门
+            selectDepartment (data) {
+                console.log(data)
+                if (data.type === 'department') {
+                    this.searchUser = ''
+                    this.searchDepartment = data.id
+                } else if (data.type === 'user') {
+                    this.searchUser = data.id
+                    this.searchDepartment = ''
+                }
+                this.getTasks()
             }
         }
     };
