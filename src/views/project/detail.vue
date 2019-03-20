@@ -2288,6 +2288,10 @@
                 })
             },
             editBaseInfo: function () {
+                if(this.$store.state.power.project !=='true'){
+                    toastr.error('当前用户没有权限编辑项目')
+                    return
+                }
                 this.isEdit = true;
                 this.changeInfo = {};
                 this.addInfoArr = {};
