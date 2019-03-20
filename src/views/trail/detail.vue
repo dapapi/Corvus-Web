@@ -327,16 +327,16 @@
                                             <div class="col-md-3 float-left text-right pl-0">微信</div>
                                             <div class="col-md-9 float-left font-weight-bold"
                                                  v-if="trailInfo.contact">
-                                                 <EditInput :content="trailInfo.contact.data.phone" :is-edit="isEdit"
-                                                           @change="changeTrailContactPhone"></EditInput>
+                                                 <EditInput :content="trailInfo.contact.data.wechat" :is-edit="isEdit"
+                                                           @change="changeTrailContactWechat"></EditInput>
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                             <div class="col-md-3 float-left text-right pl-0">其他联系方式</div>
                                             <div class="col-md-9 float-left font-weight-bold"
                                                  v-if="trailInfo.contact">
-                                                 <EditInput :content="trailInfo.contact.data.phone" :is-edit="isEdit"
-                                                           @change="changeTrailContactPhone"></EditInput>
+                                                 <EditInput :content="trailInfo.contact.data.other_contact_ways" :is-edit="isEdit"
+                                                           @change="changeTrailContactOthers"></EditInput>
                                             </div>
                                         </div>
                                     </div>
@@ -836,10 +836,7 @@
                     } else {
                         return true;
                     }
-                } else if (!this.trailInfo.contact.data.phone) {
-                    toastr.error("手机号码为必填")
-                    return false;
-                } else {
+                }else {
                     return true
                 }
             },
@@ -1157,7 +1154,22 @@
             changeTrailContact: function (value) {
                 this.trailInfo.contact.data.name = value
             },
-
+            changeTrailContactWechat:function(value){
+                this.trailInfo.contact.data.wechat = value
+                if (this.changeInfo.contact) {
+                    this.changeInfo.contact.wechat = value
+                } else {
+                    Object.assign(this.changeInfo, {contact: {wechat: value}})
+                }
+            },
+            changeTrailContactOthers:function(value){
+                this.trailInfo.contact.data.other_contact_ways = value
+                if (this.changeInfo.contact) {
+                    this.changeInfo.contact.other_contact_ways = value
+                } else {
+                    Object.assign(this.changeInfo, {contact: {other_contact_ways: value}})
+                }
+            },
             changeTrailContactPhone: function (value) {
                 this.trailInfo.contact.data.phone = value
             },
