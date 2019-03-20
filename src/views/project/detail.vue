@@ -49,6 +49,9 @@
                             <div class="font-weight-bold float-left"
                                  v-if="projectInfo.trail && projectInfo.trail.data.expectations">
                                 <template v-for="artist in projectInfo.trail.data.expectations.data">
+                                    <template v-if="metaInfo.department_name.length > 0">
+                                        {{ metaInfo.department_name[0] }} -
+                                    </template>
                                     <template v-if="artist.name">
                                         {{ artist.name }}
                                     </template>
