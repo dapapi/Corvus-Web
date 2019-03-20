@@ -459,7 +459,7 @@ export default {
       this.submitDisable = true;
       const _this = this;
       fetch('post', '/projects', this.projectBaseInfo).then((response) => {
-        _this.submitDisable = true;
+        _this.submitDisable = false;
         $('#addProject').modal('hide');
         $('#selectProjectType').modal('hide');
         _this.$router.push({ path: `/projects/${response.data.id}` });
