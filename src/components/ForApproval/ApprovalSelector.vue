@@ -101,7 +101,7 @@ export default {
                 }
                 if(control_source){
                     if(control_source.to_sort_number && this.valueListener){
-                        this.defaultDataChecker()
+                        // this.defaultDataChecker()
                         this.$emit('directional',{to:control_source.to_sort_number,data:this.valueListener.id})
                     }
                 }
@@ -133,8 +133,22 @@ export default {
         methods: {
             defaultDataChecker(){
                 if(this.consdata[0].control_value){
-                        this.valueListener = this.consdata[0].control_value
-                        this.setValue(this.consdata[0].control_value.value)
+                        if(this.options[0] && this.options[0].id){
+                            if(this.options[0].title){
+                                this.setValue({ id: this.options.find(item => item.title === this.consdata[0].control_value).id,name:this.consdata[0].control_value})
+                                this.valueListener = { id: this.options.find(item => item.title === this.consdata[0].control_value).id,name:this.consdata[0].control_value}
+                            }else if(this.options[0].nickname){
+                                this.valueListener = { id: this.options.find(item => item.nickname === this.consdata[0].control_value).id,name:this.consdata[0].control_value}
+                                this.setValue(this.valueListener)
+                            }else if(this.options[0].name){
+                                this.valueListener = { id: this.options.find(item => item.nickname === this.consdata[0].control_value).id,name:this.consdata[0].control_value}
+                                this.setValue(this.valueListener)
+                            }
+                        }else{
+                            this.setValue(this.consdata[0].control_value.value)
+                            this.valueListener = this.consdata[0].control_value
+
+                        }
                         this.refresh()
                         this.$nextTick(() => {
                             this.refresh()  

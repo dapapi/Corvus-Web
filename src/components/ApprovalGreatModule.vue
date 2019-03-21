@@ -5,8 +5,8 @@
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click='clearSignal'>
+                            <span aria-hidden="true" >×</span>
                         </button>
                         <h4 class="modal-title" id="exampleModalTitle">{{pageInfo.title}}</h4>
                     </div>
@@ -153,7 +153,7 @@ export default {
     getRequiredArr() {
       for (const key in this.moduleInfo) {
         if (this.moduleInfo[key][0].required == 1 && !this.sendData.values.find(item => item.key == this.moduleInfo[key][0].id)) {
-          console.log(this.moduleInfo[key][0].id);
+        //   console.log(this.moduleInfo[key][0].id);
           toastr.error(`${this.moduleInfo[key][0].control_title}为必填`);
           return false;
         }
@@ -163,8 +163,8 @@ export default {
     approvalSubmit() {
       const _this = this;
       for (const key in this.sendData.values) {
-        console.log(this.sendData.values[key].value.length);
-        console.log(this.sendData.values[key].value.hasOwnProperty());
+        // console.log(this.sendData.values[key].value.length);
+        // console.log(this.sendData.values[key].value.hasOwnProperty());
         if (this.sendData.values[key].value.length === 0) {
           this.sendData.values.splice(key, 1);
         } else {
@@ -180,8 +180,13 @@ export default {
           $('#approval-great-module').modal('hide');
           _this.clearSignal();
           setTimeout(() => {
-            location.reload();
+            location.href = `/approval/${params.data.form_instance_number}`;
+            // location.reload();
+            // this.$router.push(`/approval/${params.data.form_instance_number}`);
           }, 1000);
+        }).catch((error) => {
+          _this.submitDisable = false;
+          console.log(error);
         });
       }
     },
