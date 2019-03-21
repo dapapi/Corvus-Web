@@ -128,7 +128,11 @@ export default {
         const tempArr = this.consdata[0].control_value.split(',');
         for (const j in tempArr) {
           this.$nextTick(() => {
-            this.valueListener.push({ id: params.find(item => item.name === tempArr[j]).id, name: params.find(item => item.name === tempArr[j]).name });
+            if (params[0].id) {
+              this.valueListener.push({ id: params.find(item => item.name === tempArr[j]).id, name: params.find(item => item.name === tempArr[j]).name });
+            }else {
+              this.valueListener.push(tempArr[j]);
+            }
             this.setValue(this.valueListener);
             this.$nextTick(() => {
               this.refresh();

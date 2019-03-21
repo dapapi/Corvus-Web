@@ -65,7 +65,7 @@
                 </div>
                 <div class="tab-pane animation-fade" :id="'forum-department' + this._uid" role="tabpanel">
                     <div v-for="department in departmentUsers" :key='department.id+Math.random()'>
-                        <departments-item :data="department" @change="memberChange" :type="type"
+                        <departments-item :data="department" @change="memberChange" :type="type" otherslot='otherslot'
                                           :multiple="multiple" :member-type="memberType"></departments-item>
                     </div>
                 </div>
@@ -76,37 +76,37 @@
 </template>
 
 <script>
-    import fetch from '../assets/utils/fetch.js'
-    import { mapState } from 'vuex'
+import fetch from '../assets/utils/fetch.js';
+import { mapState } from 'vuex';
 
-    export default {
-        props: ['multiple', 'member-type', 'type', 'otherslot','submit'],
-        data() {
-            return {
-                normalUsers: {},
-                departmentUsers: {},
-                teamShow: true,
-                searchKeyWord: '',
-                params: {
-                    type: this.type,
-                    data: ''
-                }
-            }
-        },
+export default {
+  props: ['multiple', 'member-type', 'type', 'otherslot', 'submit'],
+  data() {
+    return {
+      normalUsers: {},
+      departmentUsers: {},
+      teamShow: true,
+      searchKeyWord: '',
+      params: {
+        type: this.type,
+        data: '',
+      },
+    };
+  },
 
-        computed: {
-            ...mapState([
-                'department',
-                'userList'
-            ]),
+  computed: {
+    ...mapState([
+      'department',
+      'userList',
+    ]),
 
-            _department () {
-                return this.department
-            },
-            _userList () {
-                return this.userList
-            },
-            principalInfo: function () {
+    _department() {
+      return this.department;
+    },
+    _userList() {
+      return this.userList;
+    },
+    principalInfo () {
                 if (this.type === 'change') {
                     return this.$store.state.principalInfo
                 } else if (this.type === 'selector') {
@@ -118,7 +118,7 @@
                 }
             },
 
-            participantsInfo: function () {
+    participantsInfo () {
                 if (this.type === 'change') {
                     return this.$store.state.participantsInfo
                 } else if(this.type ==='collect'){
@@ -139,33 +139,33 @@
                 else {
                     return this.$store.state.newParticipantsInfo
                 }
-            }
-        },
-
-        mounted() {
-            if (this.department.length >0) {
-                this.departmentUsers = this.department
-            }
-            if (this.userList.length > 0) {
-                this.normalUsers = this.userList
-            }
-        },
-
-        watch: {
-            _department () {
-                this.departmentUsers = this.department
             },
-            _userList () {
-                this.normalUsers = this.userList
-            }
-        },
+  },
 
-        methods: {
-            closeTeam: function () {
+  mounted() {
+    if (this.department.length > 0) {
+      this.departmentUsers = this.department;
+    }
+    if (this.userList.length > 0) {
+      this.normalUsers = this.userList;
+    }
+  },
+
+  watch: {
+    _department() {
+      this.departmentUsers = this.department;
+    },
+    _userList() {
+      this.normalUsers = this.userList;
+    },
+  },
+
+  methods: {
+    closeTeam () {
                 this.teamShow = !this.teamShow
             },
 
-            selectAllMember: function () {
+    selectAllMember () {
                 let participantInfo = '';
                 if (this.type === 'change') {
                     participantInfo = this.$store.state.participantsInfo;
@@ -202,7 +202,7 @@
                 this.$emit('change', false)
             },
 
-            selectMember: function (user) {
+    selectMember (user) {
                 if (this.memberType === 'principal') {
                     this.params.data = user;
                     this.$store.dispatch('changePrincipal', this.params);
@@ -244,11 +244,11 @@
                 this.$emit('change', false)
             },
 
-            memberChange: function () {
+    memberChange () {
                 this.$emit('change', false)
-            }
-        }
-    }
+            },
+  },
+};
 </script>
 
 <style>
@@ -332,4 +332,3 @@
         font-weight: 400;
     }
 </style>
-
