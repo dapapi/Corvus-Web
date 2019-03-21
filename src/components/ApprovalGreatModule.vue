@@ -180,11 +180,13 @@ export default {
           $('#approval-great-module').modal('hide');
           _this.clearSignal();
           setTimeout(() => {
-            location.reload();
+            location.href = `/approval/${params.data.form_instance_number}`;
+            // location.reload();
+            // this.$router.push(`/approval/${params.data.form_instance_number}`);
           }, 1000);
         }).catch((error) => {
-            _this.submitDisable = false;
-            console.log(error);
+          _this.submitDisable = false;
+          console.log(error);
         });
       }
     },

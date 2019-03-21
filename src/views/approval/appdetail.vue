@@ -282,7 +282,7 @@
                 currentId: '',
                 isCurrentApprover: false,
                 roleUser: [],
-                indexData: {},
+                indexData: [],
                 formData: {},
                 previewUrl: '',
                 previewUrlArr: [],
@@ -291,6 +291,7 @@
                 msg:'',
                 archivesArr:'',
                 isDetail:true,
+                indexDataCommon:[],
 
             }
         },
@@ -344,6 +345,10 @@
                 let _this = this
                 fetch('get', '/approvals/contracts').then((params) => {
                     _this.indexData = params.data
+                    _this.isLoading = false
+                })
+                fetch('get', '/approvals/').then((params) => {
+                    _this.indexDataCommon = params.data
                     _this.isLoading = false
                 })
             },
@@ -401,10 +406,20 @@
 
             },
             addProject(value) {
+                // console.log(value);
                 this.projectType = value;
                 let _this = this
-                if (this.list.title.includes('合同')) {
-                    this.pullUp(this.indexData.find(item => item.form_id === this.projectType))
+                if (!this.list.id) {
+                    let Temp1 = this.indexData.find(item => item.form_id === this.projectType)
+                    let TempArr = [],Temp2
+                    for (const key in this.indexDataCommon) {
+                        for (const zed in this.indexDataCommon[key].forms.data) {
+                            TempArr.push(this.indexDataCommon[key].forms.data[zed])
+                        }
+                    }
+                    Temp2 = TempArr.find(item => item.form_id === this.projectType)
+                    let formData = Temp1 || Temp2
+                    this.pullUp(formData)
                 } else {
                     this.selectProjectType(function () {
                         _this.projectTypeTemp = _this.projectType
@@ -441,6 +456,7 @@
                 let _this = this
                 fetch('get', '/approval_instances/' + this.$route.params.id + '?include=principal,creator,fields,trail,detail_control').then((params) => {
                     let {meta} = params
+                    // console.log(params);
                     _this.list = params.data
                     _this.projectType = params.data.type
                     _this.info = meta

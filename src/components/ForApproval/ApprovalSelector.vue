@@ -133,11 +133,17 @@ export default {
         methods: {
             defaultDataChecker(){
                 if(this.consdata[0].control_value){
-                        if(this.options[0] && this.options[0].hasOwnProperty('id')){
-                            console.log(222);
-                            this.setValue({ id: this.options.find(item => item.title === this.consdata[0].control_value).id,name:this.consdata[0].control_value})
-                            this.valueListener = { id: this.options.find(item => item.title === this.consdata[0].control_value).id,name:this.consdata[0].control_value}
-            console.log({ id: this.options.find(item => item.title === this.consdata[0].control_value).id, title: this.consdata[0].control_value });
+                        if(this.options[0] && this.options[0].id){
+                            if(this.options[0].title){
+                                this.setValue({ id: this.options.find(item => item.title === this.consdata[0].control_value).id,name:this.consdata[0].control_value})
+                                this.valueListener = { id: this.options.find(item => item.title === this.consdata[0].control_value).id,name:this.consdata[0].control_value}
+                            }else if(this.options[0].nickname){
+                                this.valueListener = { id: this.options.find(item => item.nickname === this.consdata[0].control_value).id,name:this.consdata[0].control_value}
+                                this.setValue(this.valueListener)
+                            }else if(this.options[0].name){
+                                this.valueListener = { id: this.options.find(item => item.nickname === this.consdata[0].control_value).id,name:this.consdata[0].control_value}
+                                this.setValue(this.valueListener)
+                            }
                         }else{
                             this.setValue(this.consdata[0].control_value.value)
                             this.valueListener = this.consdata[0].control_value
