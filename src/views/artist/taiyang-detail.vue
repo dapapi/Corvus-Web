@@ -48,7 +48,7 @@
                                         <span>{{broker.department.name}}</span>
                                         <span v-if="broker.department.name">-</span>
                                         <span>{{ broker.name }}</span>
-                                        
+
                                     </span>
                                 </div>
                             </div>
@@ -63,7 +63,7 @@
                                         <span>{{publicity.department.name}}</span>
                                         <span v-if="publicity.company">-</span>
                                         <span>{{ publicity.name }}</span>
-                                        
+
                                     </span>
                                     <!-- <template v-for="publicity in artistInfo.publicity.data">
                                         {{ publicity.name }}
@@ -552,7 +552,7 @@
                                                                   @change="(value) => changeArtistBaseInfo(value, 'desc')"></editTextarea>
                                                 </div>
                                             </div>
-                                            
+
                                             <div v-show="isEdit"
                                                  class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                                 <div class="col-md-3 float-left text-right pl-0">附件类型</div>
@@ -583,9 +583,9 @@
                                                             <div class="col-md-2 p-0">
                                                                 <i class="iconfont icon-wenjian" style="color:#1e88e5;font-size:36px"></i>
                                                             </div>
-                                                            
+
                                                             <div class="col-md-10 mt-5">
-                                                                <span class="mr-20 single">{{attachmentTypeArr.find(item => item.value == attach.type).name}} - {{attach.title}}</span>     
+                                                                <span class="mr-20 single">{{attachmentTypeArr.find(item => item.value == attach.type).name}} - {{attach.title}}</span>
                                                                 <a data-toggle="modal" data-target='#docPreview'
                                                                 @click="previewFile(attach.url,attach.title)"
                                                                 class="iconfont icon-liulan  mr-15" style="color:#3f51b5"></a>
@@ -596,7 +596,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                          
+
                                         </div>
 
                                         <h5 class="pl-15 pt-10">更新信息</h5>
@@ -919,7 +919,7 @@
                                 <AddMember type="add"></AddMember>
                             </div>
                         </div>
-                       
+
                         <div v-show="showMore">
                             <div class="pt-10 mb-20 clearfix">
                                 <div class="col-md-2 text-right float-left line-fixed-height">资源</div>
@@ -1206,16 +1206,16 @@
 
 <script>
 
-    //项目列表include 头部三个项目单独接口  作品include 任务列表单独接口  头部三个任务include  
-    import fetch from '../../assets/utils/fetch.js'
-    import config from '../../assets/js/config'
-    import common from '../../assets/js/common'
-    import Cookies from 'js-cookie'
+// 项目列表include 头部三个项目单独接口  作品include 任务列表单独接口  头部三个任务include
+import fetch from '../../assets/utils/fetch.js';
+import config from '../../assets/js/config';
+import common from '../../assets/js/common';
+import Cookies from 'js-cookie';
 
-    import ApprovalGreatModule from '../../components/ApprovalGreatModule'
+import ApprovalGreatModule from '../../components/ApprovalGreatModule';
 
-    export default {
-        data: function () {
+export default {
+  data () {
             return {
                 common: common,
                 artistId: '',
@@ -1340,41 +1340,39 @@
             }
         },
 
-        created() {
-            this.getArtist()
-
-        },
-        components: {
-            ApprovalGreatModule
-        },
-        mounted() {
-
-            this.getTaskType();
-            this.getCalendar();
-            this.draw();
-            this.getArtistsBill()
-            this.getTaskDate()
-            this.getProjectList()
-            this.selectProjectLinkage();
-            this.getResources();
-            this.user = JSON.parse(Cookies.get('user'))
-            this.$store.commit('changeNewPrincipal', {
-                name: this.user.nickname,
-                id: this.user.id
-            })
-            let _this = this;
-            $('#distributionBroker').on('hidden.bs.modal', function () {
+  created() {
+    this.getArtist();
+  },
+  components: {
+    ApprovalGreatModule,
+  },
+  mounted() {
+    this.getTaskType();
+    this.getCalendar();
+    this.draw();
+    this.getArtistsBill();
+    this.getTaskDate();
+    this.getProjectList();
+    this.selectProjectLinkage();
+    this.getResources();
+    this.user = JSON.parse(Cookies.get('user'));
+    this.$store.commit('changeNewPrincipal', {
+      name: this.user.nickname,
+      id: this.user.id,
+    });
+    const _this = this;
+    $('#distributionBroker').on('hidden.bs.modal', () => {
                 _this.$store.commit('changeParticipantsInfo', [])
-            })
-            $('#changeSchedule').on('hidden.bs.modal', function () {
+            });
+    $('#changeSchedule').on('hidden.bs.modal', () => {
                 _this.initAddScheduleModal();
             });
-        },
+  },
 
-        methods: {
+  methods: {
 
-            //获取艺人信息
-            getArtist: function () {
+    // 获取艺人信息
+    getArtist () {
                 this.artistId = this.$route.params.id;
 
                 let data = {
@@ -1408,26 +1406,26 @@
                 })
 
             },
-            getProject(page = 1) {
-                let _this = this;
-                fetch('get', '/stars/' + this.artistId + '/project',{page:page}).then(function (response) {
+    getProject(page = 1) {
+      const _this = this;
+      fetch('get', `/stars/${  this.artistId  }/project`, { page }).then((response) => {
                    
                     _this.artistProjectsInfo = response.data
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
-                })
-            },
-            getWoks(page = 1) {
-                let _this = this;
-                fetch('get', '/stars/' + this.artistId + '/works').then(function (response) {
+                });
+    },
+    getWoks(page = 1) {
+      const _this = this;
+      fetch('get', `/stars/${  this.artistId  }/works`).then((response) => {
                     _this.artistWorksInfo = response.data
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total = response.meta.pagination.total;
                     _this.total_pages = response.meta.pagination.total_pages;
-                })
-            },
-            getCalendar: function () {
+                });
+    },
+    getCalendar () {
                 this.artistId = this.$route.params.id;
 
 
@@ -1448,17 +1446,15 @@
                         }
                     }
                 })
-            }
-
-            ,
-            ScheduleBox: function (value) {
+            },
+            
+            ScheduleBox (value) {
                 this.showScheduleModal(value)
-            }
-            ,
+            },            
             /*查看日历详情 --添加日历 -- 修改日历 */
 
             //获取日历详情
-            showScheduleModal: function (schedule) {
+            showScheduleModal (schedule) {
                 let data = {
                     include: 'calendar,participants,creator,material,affixes,project,task',
                 };
@@ -1475,9 +1471,8 @@
                     this.$store.dispatch('changeParticipantsInfo', {data: response.data.participants.data});
                 });
                 $('#checkSchedule').modal('show')
-            }
-            ,
-            addSchedule: function () {
+            },            
+            addSchedule () {
                 let startTime = '';
                 let endTime = '';
                 if (this.isScheduleAllday) {
@@ -1542,18 +1537,16 @@
                     $('#changeSchedule').modal('hide');
                     toastr.success('添加成功')
                 })
-            }
-            ,
-            showToast: function (clientX, clientY) {
+            },            
+            showToast (clientX, clientY) {
                 this.toastX = clientX - 100;
                 this.toastY = clientY - 25;
                 this.toastShow = true;
                 setTimeout(() => {
                     this.toastShow = false
                 }, 1000)
-            }
-            ,
-            changeSchedule: function () {
+            },            
+            changeSchedule () {
                 let startTime = '';
                 let endTime = '';
                 if (this.isScheduleAllday) {
@@ -1604,9 +1597,8 @@
                     $('#changeSchedule').modal('hide');
                     toastr.success('修改成功')
                 })
-            }
-            ,
-            taskcancel: function () {
+            },            
+            taskcancel () {
                 this.getTaskList()
                 this.getArtist()
                 this.setDefaultPrincipal()
@@ -1625,17 +1617,14 @@
                 this.$refs.taskEndDate.setValue('')
                 this.$refs.taskEndTime.setValue('0')
                 this.$refs.taskLevel.setValue('')
-            }
-            ,
-            selectScheduleCalendar: function (value) {
+            },            
+            selectScheduleCalendar (value) {
                 this.scheduleCalendar = value
-            }
-            ,
-            changeIsAllDay: function (e) {
+            },            
+            changeIsAllDay (e) {
                 this.isScheduleAllday = Number(e.target.checked);
-            }
-            ,
-            showAddScheduleModal: function (date) {
+            },            
+            showAddScheduleModal (date) {
                 if (this.calendarId.length > 0) {
                     this.$refs.scheduleStartDate.setValue(date);
                     this.$refs.scheduleEndDate.setValue(date);
@@ -1645,9 +1634,8 @@
                 } else {
                     toastr.error('该艺人无对应艺人日历，请先创建艺人日历')
                 }
-            }
-            ,
-            selectProjectLinkage: function (value) {
+            },            
+            selectProjectLinkage (value) {
                 this.linkageResource = value;
                 if (!this.allProjectsInfo) {
                     this.getAllProjects()
@@ -1655,71 +1643,60 @@
                 if (!this.allTasksInfo) {
                     this.getAllTasks()
                 }
-            }
-            ,
-            getAllProjects: function () {
+            },            
+            getAllProjects () {
                 fetch('get', '/projects/all').then(response => {
                     this.allProjectsInfo = response.data
                 })
-            }
-            ,
-            getAllTasks: function () {
+            },            
+            getAllTasks () {
                 fetch('get', '/tasksAll').then(response => {
                     this.allTasksInfo = response.data
                 })
-            }
-            ,
-            addLinkageResource: function () {
+            },            
+            addLinkageResource () {
                 $('#addLinkage').modal('hide');
-            }
-            ,
-            selectResource: function (type, value) {
+            },            
+            selectResource (type, value) {
                 let index = this.linkageSelectedIds[type].indexOf(value);
                 if (index > -1) {
                     this.linkageSelectedIds[type].splice(index, 1)
                 } else {
                     this.linkageSelectedIds[type].push(value)
                 }
-            }
-            ,
-            delNewScheduleLinkage: function (type, value) {
+            },            
+            delNewScheduleLinkage (type, value) {
                 let index = this.linkageSelectedIds[type].indexOf(value);
                 this.linkageSelectedIds[type].splice(index, 1)
-            }
-            ,
-            changeCalendarColor: function (value) {
+            },            
+            changeCalendarColor (value) {
                 this.checkColor = value;
-            }
-            ,
+            },            
             getResources(type) {
-                let data = {};
-                if (type) {
-                    data = {
-                        type: type
-                    };
-                }
-                fetch('get', '/materials/all', data).then(response => {
-                    if (type) {
-                        this.meetingRomeList = response.data;
-                    } else {
-                        this.allMeetingRomeList = response.data;
-                    }
-                })
-            }
-            ,
-            changeScheduleRepeat: function (value) {
+      let data = {};
+      if (type) {
+        data = {
+          type,
+        };
+      }
+      fetch('get', '/materials/all', data).then((response) => {
+        if (type) {
+          this.meetingRomeList = response.data;
+        } else {
+          this.allMeetingRomeList = response.data;
+        }
+      });
+    },            
+            changeScheduleRepeat (value) {
                 this.scheduleRepeat = value;
-            }
-            ,
-            isShowMore: function () {
+            },            
+            isShowMore () {
                 this.showMore = !this.showMore
-            }
-            ,
-            changeScheduleMaterial: function (value) {
+            },            
+            changeScheduleMaterial (value) {
                 this.scheduleMaterialId = value;
-            }
-            ,
-            fileUpload: function (url, name, size) {
+            },            
+            fileUpload (url, name, size) {
                 let data = {
                     title: name,
                     url: url,
@@ -1735,9 +1712,8 @@
                         this.scheduleData.affixes.data.push(response.data)
                     }
                 })
-            }
-            ,
-            changeScheduleParticipants: function (value) {
+            },            
+            changeScheduleParticipants (value) {
                 let data = {};
                 if (value) {
                     data.participant_del_ids = [value];
@@ -1760,9 +1736,8 @@
                     this.$refs.calendar.refresh();
                     this.scheduleParticipants = JSON.parse(JSON.stringify(this.$store.state.newParticipantsInfo));
                 })
-            }
-            ,
-            changeScheduleType: function (type) {
+            },            
+            changeScheduleType (type) {
                 this.scheduleType = type;
                 $('#checkSchedule').modal('hide');
                 setTimeout(function () {
@@ -1802,9 +1777,8 @@
                         }
                     }
                 }
-            }
-            ,
-            deleteToastr: function (type, calendar = null) {
+            },            
+            deleteToastr (type, calendar = null) {
                 this.delType = type;
                 if (calendar) {
                     this.delCalendarInfo = calendar
@@ -1812,21 +1786,19 @@
                 if (type === 'schedule') {
                     $('#checkSchedule').modal('hide');
                 }
-            }
-            ,
-            deleteSchedule: function () {
+            },            
+            deleteSchedule () {
                 fetch('delete', '/schedules/' + this.scheduleData.id).then(() => {
                     $('#delModel').modal('hide');
                     toastr.success('删除成功');
                     this.$refs.calendar.refresh()
                 })
             },
-            changeScheduleRemind: function (value) {
+    changeScheduleRemind (value) {
                 
                 this.scheduleRemind = value
-            }
-            ,
-            initAddScheduleModal: function () {
+            },            
+            initAddScheduleModal () {
                 this.showMore = false;
                 this.$store.dispatch('changeParticipantsInfo', {data: []});
                 this.scheduleName = '';
@@ -1857,12 +1829,11 @@
                 // this.$refs.scheduleNotice.setValue('0');
                 this.$refs.scheduleRemind.setValue('0');
                 // this.this.scheduleRemindDate = []
-            }
-            ,
+            },            
             /*查看日历详情 --添加日历 -- 修改日历 --结束*/
 
             //获取账单
-            getArtistsBill: function (page = 1, expense_type) {
+            getArtistsBill (page = 1, expense_type) {
               
                 let _this = this
                 if (expense_type) {
@@ -1885,10 +1856,9 @@
                         _this.expendituresum = response.meta.expendituresum.toFixed(2)//支出总和
                     }
                 })
-            }
-            ,
+            },            
 
-            getTaskType: function () {
+            getTaskType () {
                 let _this = this;
                 fetch('get', '/task_types').then(function (response) {
                     for (let i = 0; i < response.data.length; i++) {
@@ -1898,10 +1868,9 @@
                         })
                     }
                 })
-            }
-            ,
+            },            
             //获取任务列表
-            getTaskList: function (page = 1) {
+            getTaskList (page = 1) {
                
                 let _this = this
                 fetch('get', `/stars/${this.$route.params.id}/tasks/`,{
@@ -1919,7 +1888,7 @@
                     })
                 })
             },
-            getTaskDate: function () {
+    getTaskDate () {
                 this.doneTaskNum = 0
                 let _this = this
                 fetch('get', `/stars/${this.$route.params.id}/tasks`).then(response => {
@@ -1936,21 +1905,19 @@
                     _this.taskNum = `${_this.doneTaskNum}/${response.meta.pagination.total}`
                 })
             },
-            selectDate: function (value) {
+    selectDate (value) {
                 this.selectedDate = value;
                 this.$refs.meetingRoom.setDate(value)
-            }
-            ,
+            },            
             //获取三个项目
-            getProjectList: function () {
+            getProjectList () {
                 let _this = this
                 fetch('get', `/projects/star/${this.$route.params.id}`).then(response => {
                     _this.threeProjectList = response
                 })
-            }
-            ,
+            },            
             //粉丝数据
-            draw: function () {
+            draw () {
                 let myChart = echarts.init(document.getElementById('myChart'));
 
                 // 指定图表的配置项和数据
@@ -2027,60 +1994,50 @@
 
                 // 使用刚指定的配置项和数据显示图表。
                 myChart.setOption(option);
-            }
-            ,
-            getArtistWorks: function () {
+            },            
+            getArtistWorks () {
 
-            }
-            ,
-            run: function (res, callback) {
+            },            
+            run (res, callback) {
                 this.changeArtistBaseInfo(res, 'avatar')
                 return callback()
-            }
-            ,
+            },            
             //上传头像 ---修改头像
             getUploadUrl(res) {
-                let _this = this
-                if (!this.isEdit) {
-                    this.changeArtistInfo = {}
-                }
-                _this.uploadUrl = res
-                _this.run(res, function () {
+      const _this = this;
+      if (!this.isEdit) {
+        this.changeArtistInfo = {};
+      }
+      _this.uploadUrl = res;
+      _this.run(res, () => {
                     _this.changeArtist()
-                })
-            }
-            ,
-            changeTaskType: function (value) {
+                });
+    },            
+            changeTaskType (value) {
                 this.taskType = value
-            }
-            ,
+            },            
 
-            changeTaskLevel: function (value) {
+            changeTaskLevel (value) {
                 this.taskLevel = value
-            }
-            ,
+            },            
 
-            changeStartTime: function (value) {
+            changeStartTime (value) {
 
                 this.startTime = value
 
-            }
-            ,
+            },            
 
-            changeStartMinutes: function (value) {
+            changeStartMinutes (value) {
                 this.startMinutes = value
-            }
-            ,
+            },            
 
-            changeEndTime: function (value) {
+            changeEndTime (value) {
                 this.endTime = value
-            }
-            ,
+            },            
 
-            changeEndMinutes: function (value) {
+            changeEndMinutes (value) {
                 this.endMinutes = value
-            }
-            ,
+            },            
             //设置默认负责人
             // setDefault:function(){
             //     // let defaultParams = 
@@ -2089,7 +2046,7 @@
             // },
 
             //添加任务
-            addTask: function () {
+            addTask () {
                 let participant_ids = [];
                 let start, end, startMin, endMin
                 for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
@@ -2180,19 +2137,17 @@
                     _this.$refs.taskEndTime.setValue('0')
                     _this.$refs.taskLevel.setValue('')
                 })
-            }
-            ,
+            },            
             //设置默认负责人
             setDefaultPrincipal() {
-                this.$store.commit('changeNewPrincipal', {
-                    name: this.user.nickname,
-                    id: this.user.id
-                })
-                this.$store.commit('changeNewParticipantsInfo', [])
-            }
-            ,
+      this.$store.commit('changeNewPrincipal', {
+        name: this.user.nickname,
+        id: this.user.id,
+      });
+      this.$store.commit('changeNewParticipantsInfo', []);
+    },            
             //添加作品
-            addWork: function () {
+            addWork () {
                 if (!this.artistWorkName) {
                     toastr.error('请填写作品名称')
                     return false
@@ -2235,10 +2190,9 @@
                     _this.$refs.workType.setValue('')
                     _this.$refs.workTime.setValue('');
                 })
-            }
-            ,
+            },            
 
-            addPrivacy: function () {
+            addPrivacy () {
                 $('#addPrivacy').modal('hide')
                 this.$store.state.collectInfo = []
                 this.$store.state.payInfo = []
@@ -2246,35 +2200,30 @@
                 this.$store.state.divisionInfo = []
                 this.$store.state.incubationInfo = []
                 this.$store.state.billInfo = []
-            }
-            ,
+            },            
 
-            changeWorkReleaseTime: function (value) {
+            changeWorkReleaseTime (value) {
                 this.workReleaseTime = value
-            }
-            ,
+            },            
 
-            changeWorkType: function (value) {
+            changeWorkType (value) {
                 this.workType = value
-            }
-            ,
+            },            
 
-            editBaseInfo: function () {
+            editBaseInfo () {
                  if(this.$store.state.power.star !=='true'){
                     toastr.error('当前用户没有权限编辑艺人')
                     return
                 }
                 this.isEdit = true;
                 this.changeArtistInfo = {};
-            }
-            ,
+            },            
 
-            cancelEdit: function () {
+            cancelEdit () {
                 this.isEdit = false
-            }
-            ,
+            },            
             //修改基本信息
-            changeArtistBaseInfo: function (value, name) {
+            changeArtistBaseInfo (value, name) {
                 if (name === 'platform') {
                     value = value.join(',')
                 }
@@ -2305,10 +2254,9 @@
                 }
                 this.changeArtistInfo[name] = value
                 console.log(this.changeArtistInfo )
-            }
-            ,
+            },            
 
-            changeArtist: function () {
+            changeArtist () {
 
                 if (this.changeArtistInfo.intention || this.changeArtistInfo.hasOwnProperty("intention_desc")) {
                     if (this.$refs.condition.getSelectorValue() == 2) {
@@ -2343,19 +2291,17 @@
                     }
                     _this.getArtist();
                 })
-            }
-            ,
+            },            
 
-            distributionPerson: function (value) {
+            distributionPerson (value) {
 
                 this.distributionType = value;
                 if (this.artistInfo[value].data.length > 0) {
                     this.$store.state.participantsInfo = Object.assign([], this.artistInfo[value].data)
                 }
-            }
-            ,
+            },            
             //分配经理人和分配宣传人 
-            addDistributionPerson: function () {
+            addDistributionPerson () {
                 let toast,url
                 let data = {
                     person_ids: [],
@@ -2397,15 +2343,13 @@
                     _this.getArtist();
                     _this.$store.state.participantsInfo = []
                 })
-            }
-            ,
+            },            
             //获取附件类型
-            changeAttachmentType: function (value) {
+            changeAttachmentType (value) {
                 this.affixesType = value
-            }
-            ,
+            },            
             //上传附件
-            uploadAttachment: function (url, name, size) {
+            uploadAttachment (url, name, size) {
                 if (!this.affixesType) {
                     toastr.error('请选择上传附件类型');
                     return false
@@ -2428,20 +2372,17 @@
                 })
                 this.changeArtistBaseInfo(this.affixes, 'affix')
 
-            }
-            ,
+            },            
             //获取附件id
-            getAffixId: function (id) {
+            getAffixId (id) {
                 this.affixId = id
-            }
-            ,
-            previewFile: function (url, name) {
+            },            
+            previewFile (url, name) {
                 this.previewUrl = url
                 this.previewName = name
-            }
-            ,
+            },            
             //删除附件
-            deleteAffix: function () {
+            deleteAffix () {
                 let _this = this
                 fetch('delete', `/star/${this.$route.params.id}/affixes/${this.affixId}`).then(function (response) {
                     $('#affix').modal('hide');
@@ -2449,38 +2390,34 @@
                     _this.isEdit = false;
                     _this.getArtist();
                 })
-            }
-            ,
+            },            
             contractlist(status) {
-                this.isDetail = false
-                let _this = this;
-                this.isDetail = false
-                let data = {
-                    type: this.contractType
-                }
-                data.status = status
-                fetch('get', 'approvals/specific_contract', data).then(function (response) {
+      this.isDetail = false;
+      const _this = this;
+      this.isDetail = false;
+      const data = {
+        type: this.contractType,
+      };
+      data.status = status;
+      fetch('get', 'approvals/specific_contract', data).then((response) => {
                     _this.formDate = response.data
                     $('#approval-great-module').modal('show')
-                })
-            }
-            ,
-            filterProjectFee: function (value) {
+                });
+    },            
+            filterProjectFee (value) {
                 this.filterFee = value;
-            }
-            ,
-            toProject: function (id) {
+            },            
+            toProject (id) {
                 this.$router.push({path: '/projects/' + id});
 
-            }
-            ,
-            toTask: function (id) {
+            },            
+            toTask (id) {
                 this.$router.push({path: '/tasks/' + id});
-            }
+            },
 
-        },
-        filters: {
-            getWeek: function (date) {
+  },
+  filters: {
+    getWeek (date) {
                 let week = new Date(date).getDay();
                 let value = '';
                 switch (week) {
@@ -2508,7 +2445,7 @@
                 }
                 return value;
             },
-            jsGetAge: function (strBirthday) {
+    jsGetAge (strBirthday) {
                 if (strBirthday) {
                     var returnAge;
                     // 根据生日计算年龄（"1995-09-25"）
@@ -2557,8 +2494,8 @@
                     return strBirthday
                 }
             },
-        },
-    }
+  },
+};
 
 </script>
 
@@ -2578,7 +2515,7 @@
         left: 0;
         will-change: transform;
     }
-/* 
+/*
     . {
         height: 57px;
     } */
@@ -2737,4 +2674,3 @@
         background: #eee
     }
 </style>
-
