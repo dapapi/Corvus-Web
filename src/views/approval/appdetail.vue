@@ -219,13 +219,13 @@
                     </div>
                 </div>
             </div>
-         <DocPreview :url='$store.state.previewurl' detailpage='true' />
+         <DocPreview :url='$store.state.previewurl' :detailpage='isDetail' />
 
             <!-- <DocPreview :url='previewUrl' detailpage='true'/> -->
         </div>
         <BuildProject :project-type="projectTypeTemp" :project-fields-arr="projectFieldsArr" mode='detail'
                       :default-data='{fields:(info.fields && info.fields.data),list:list,trailInfo:trailInfo}'></BuildProject>
-        <ApprovalGreatModule :form-data='formData' singlemode='true' :default-data='detailData' :contract_id='$route.params.id'/>
+        <ApprovalGreatModule :form-data='formData' singlemode='true' :default-data='detailData' :contract_id='$route.params.id' :detailpage='isDetail'/>
         <ApprovalGoModal :mode='approvalMode' :id='list.form_instance_number' @approvaldone='approvalDone'/>
         <div class="modal fade  bootbox" id="docPreviewSelector" aria-labelledby="docPreviewPositionCenter" data-backdrop="static"
              role="dialog" tabindex="-1">
@@ -289,7 +289,9 @@
                 projectTypeTemp:'',
                 detail_control:{},
                 msg:'',
-                archivesArr:''
+                archivesArr:'',
+                isDetail:true,
+
             }
         },
 
