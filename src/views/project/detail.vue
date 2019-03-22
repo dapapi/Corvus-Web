@@ -49,13 +49,16 @@
                             <div class="font-weight-bold float-left"
                                  v-if="projectInfo.trail && projectInfo.trail.data.expectations">
                                 <template v-for="artist in projectInfo.trail.data.expectations.data">
-                                    <template v-if="metaInfo.department_name.length > 0">
-                                        {{ metaInfo.department_name[0] }} -
-                                    </template>
                                     <template v-if="artist.name">
+                                        <template v-if="artist.broker && artist.broker.data.length > 0">
+                                            {{ artist.broker.data[0].department.name }} -
+                                        </template>
                                         {{ artist.name }}
                                     </template>
                                     <template v-else>
+                                        <template v-if="artist.publicity && artist.publicity.data.length > 0">
+                                            {{ artist.publicity.data[0].department.name }} -
+                                        </template>
                                         {{ artist.nickname }}
                                     </template>
                                 </template>
@@ -1765,7 +1768,7 @@
 
             getProject: function () {
                 let data = {
-                    include: 'principal,participants,tasks,creator,fields,trail.expectations,trail.client,relate_tasks,relate_projects,type',
+                    include: 'principal,participants,tasks,creator,fields,trail.expectations.broker,trail.expectations.publicity,trail.client,relate_tasks,relate_projects,type',
                 };
                 fetch('get', '/projects/' + this.projectId, data).then(response => {
                     this.oldInfo = JSON.parse(JSON.stringify(response));
