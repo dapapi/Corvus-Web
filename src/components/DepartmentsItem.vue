@@ -52,150 +52,168 @@
 </template>
 
 <script>
-export default {
-  name: 'departments-item',
-  props: ['data', 'select-hidden', 'multiple', 'member-type', 'type', 'otherslot'],
-  data() {
-    return {
-      departmentsShow: false,
-      total: 0,
-      params: {
-        type: this.type,
-        data: '',
-      },
-    };
-  },
+    export default {
+        name: "departments-item",
+        props: ['data', 'select-hidden', 'multiple', 'member-type', 'type','otherslot'],
+        data() {
+            return {
+                departmentsShow: false,
+                total: 0,
+                params: {
+                    type: this.type,
+                    data: ''
+                }
+            }
+        },
 
-  computed: {
-    principalInfo() {
-      if (this.type === 'change') {
-        return this.$store.state.principalInfo;
-      } if (this.type === 'selector') {
-        return this.$store.state.selectPrincipalInfo;
-      } if (this.otherslot) {
-        return this.$store.state.otherSlot;
-      }
-      return this.$store.state.newPrincipalInfo;
-    },
+        computed: {
+            principalInfo () {
+                if (this.type === 'change') {
+                    return this.$store.state.principalInfo
+                } else if (this.type === 'selector') {
+                    return this.$store.state.selectPrincipalInfo
+                }else if(this.otherslot){
+                    return this.$store.state.otherSlot
+                } else {
+                    return this.$store.state.newPrincipalInfo
+                }
+            },
 
-    participantsInfo() {
-      if (this.type === 'change') {
-        return this.$store.state.participantsInfo;
-      } if (this.type === 'collect') {
-        return this.$store.state.collectInfo;
-      } if (this.type === 'pay') {
-        return this.$store.state.payInfo;
-      } if (this.type === 'contract') {
-        return this.$store.state.contractInfo;
-      } if (this.type === 'division') {
-        return this.$store.state.divisionInfo;
-      } if (this.type === 'incubation') {
-        return this.$store.state.incubationInfo;
-      } if (this.type === 'bill') {
-        return this.$store.state.billInfo;
-      } if (this.otherslot) {
-        return this.$store.state.otherSlot;
-      }
+            participantsInfo () {
+                if (this.type === 'change') {
+                    return this.$store.state.participantsInfo
+                } else if(this.type ==='collect'){
+                    return this.$store.state.collectInfo
+                }else if(this.type === 'pay'){
+                    return this.$store.state.payInfo
+                }else if(this.type === 'contract'){
+                    return this.$store.state.contractInfo
+                }else if(this.type === 'division'){
+                    return this.$store.state.divisionInfo
+                }else if(this.type === 'incubation'){
+                    return this.$store.state.incubationInfo
+                }else if(this.type === 'bill'){
+                    return this.$store.state.billInfo
+                }else if(this.otherslot){
+                    return this.$store.state.otherSlot
+                }
+                else {
+                    return this.$store.state.newParticipantsInfo
+                }
+            },
+        },
 
-      return this.$store.state.newParticipantsInfo;
-    },
-  },
+        mounted() {
+            this.total = this.memberNum(this.data);
+        },
 
-  mounted() {
-    this.total = this.memberNum(this.data);
-  },
+        methods: {
+            departmentClose: function () {
+                this.departmentsShow = !this.departmentsShow
+            },
 
-  methods: {
-    departmentClose() {
-      this.departmentsShow = !this.departmentsShow;
-    },
+            memberChange: function (value) {
+                if (this.memberType === 'principal') {
+                    this.$emit('change', false)
+                }
+            },
 
-    memberChange(value) {
-      if (this.memberType === 'principal') {
-        this.$emit('change', false);
-      }
-    },
+            selectMember: function (user) {
+                if (this.memberType === 'principal') {
+                    this.params.data = user;
+                    this.$store.dispatch('changePrincipal', this.params);
+                    this.$emit('change', false)
+                } else if (this.memberType === 'participant') {
+                    let participantInfo = '';
+                    if (this.type === 'change') {
+                        participantInfo = this.$store.state.participantsInfo;
+                    }else if(this.type ==='collect'){
+                        participantInfo = this.$store.state.collectInfo
+                    }else if(this.type === 'pay'){
+                        participantInfo = this.$store.state.payInfo
+                    }else if(this.type === 'contract'){
+                        participantInfo = this.$store.state.contractInfo
+                    }else if(this.type === 'division'){
+                        participantInfo = this.$store.state.divisionInfo
+                    }else if(this.type === 'incubation'){
+                        participantInfo = this.$store.state.incubationInfo
+                    }else if(this.type === 'bill'){
+                        participantInfo = this.$store.state.billInfo
+                    } else if(this.otherslot){
+                        participantInfo = this.$store.state.otherSlot
+                    }
+                    else {
+                        participantInfo = this.$store.state.newParticipantsInfo;
+                    }
+                    if (!participantInfo.find(item => item.id == user.id)) {
+                        participantInfo.push(user)
+                    } else {
+                        participantInfo.splice(participantInfo.map(item => item.id).indexOf(user.id), 1)
+                    }
+                    this.params.data = participantInfo;
+                     if(this.otherslot){
+                    this.$store.dispatch('changeOtherSlot', this.params.data);
+                }else{
+                    this.$store.dispatch('changeParticipantsInfo', this.params);
+                }
+                    // this.$store.dispatch('changeParticipantsInfo', this.params);
+                }
+            },
 
-    selectMember(user) {
-      if (this.memberType === 'principal') {
-        this.params.data = user;
-        this.$store.dispatch('changePrincipal', this.params);
-        this.$emit('change', false);
-      } else if (this.memberType === 'participant') {
-        let participantInfo = '';
-        if (this.type === 'change') {
-          participantInfo = this.$store.state.participantsInfo;
-        } else if (this.type === 'collect') {
-          participantInfo = this.$store.state.collectInfo;
-        } else if (this.type === 'pay') {
-          participantInfo = this.$store.state.payInfo;
-        } else if (this.type === 'contract') {
-          participantInfo = this.$store.state.contractInfo;
-        } else if (this.type === 'division') {
-          participantInfo = this.$store.state.divisionInfo;
-        } else if (this.type === 'incubation') {
-          participantInfo = this.$store.state.incubationInfo;
-        } else if (this.type === 'bill') {
-          participantInfo = this.$store.state.billInfo;
-        } else {
-          participantInfo = this.$store.state.newParticipantsInfo;
+            selectAllMember: function () {
+                this.checkMember(this.data)
+            },
+
+            checkMember: function (data) {
+                let participantInfo = '';
+                if (this.type === 'change') {
+                    participantInfo = this.$store.state.participantsInfo;
+                } else if(this.type ==='collect'){
+                    participantInfo = this.$store.state.collectInfo
+                }else if(this.type === 'pay'){
+                    participantInfo = this.$store.state.payInfo
+                }else if(this.type === 'contract'){
+                    participantInfo = this.$store.state.contractInfo
+                }else if(this.type === 'division'){
+                    participantInfo = this.$store.state.divisionInfo
+                }else if(this.type === 'incubation'){
+                    participantInfo = this.$store.state.incubationInfo
+                }else if(this.type === 'bill'){
+                    participantInfo = this.$store.state.billInfo
+                }else if(this.otherslot){
+                    participantInfo = this.$store.state.otherSlot
+                }
+                else {
+                    participantInfo = this.$store.state.newParticipantsInfo;
+                }
+                for (let i = 0; i < data.users.data.length; i++) {
+                    let user = data.users.data[i];
+                    if (!participantInfo.find(item => item.id == user.id)) {
+                        participantInfo.push(user)
+                    }
+                }
+                for (let i = 0; i < data.departments.data.length; i++) {
+                    this.checkMember(data.departments.data[i])
+                }
+                this.params.data = participantInfo;
+                if(this.otherslot){
+                    this.$store.dispatch('changeOtherSlot', this.params.data);
+                }else{
+                    this.$store.dispatch('changeParticipantsInfo', this.params);
+                }
+                // this.$store.dispatch('changeParticipantsInfo', this.params);
+            },
+
+            memberNum: function (data) {
+                let firstLevelUsers = data.users.data.length;
+                let nextLevelUsers = 0;
+                for (let i = 0; i < data.departments.data.length; i++) {
+                    nextLevelUsers += this.memberNum(data.departments.data[i])
+                }
+                return firstLevelUsers + nextLevelUsers;
+            }
         }
-        if (!participantInfo.find(item => item.id == user.id)) {
-          participantInfo.push(user);
-        } else {
-          participantInfo.splice(participantInfo.map(item => item.id).indexOf(user.id), 1);
-        }
-        this.params.data = participantInfo;
-        this.$store.dispatch('changeParticipantsInfo', this.params);
-      }
-    },
-
-    selectAllMember() {
-      this.checkMember(this.data);
-    },
-
-    checkMember(data) {
-      let participantInfo = '';
-      if (this.type === 'change') {
-        participantInfo = this.$store.state.participantsInfo;
-      } else if (this.type === 'collect') {
-        participantInfo = this.$store.state.collectInfo;
-      } else if (this.type === 'pay') {
-        participantInfo = this.$store.state.payInfo;
-      } else if (this.type === 'contract') {
-        participantInfo = this.$store.state.contractInfo;
-      } else if (this.type === 'division') {
-        participantInfo = this.$store.state.divisionInfo;
-      } else if (this.type === 'incubation') {
-        participantInfo = this.$store.state.incubationInfo;
-      } else if (this.type === 'bill') {
-        participantInfo = this.$store.state.billInfo;
-      } else {
-        participantInfo = this.$store.state.newParticipantsInfo;
-      }
-      for (let i = 0; i < data.users.data.length; i++) {
-        const user = data.users.data[i];
-        if (!participantInfo.find(item => item.id == user.id)) {
-          participantInfo.push(user);
-        }
-      }
-      for (let i = 0; i < data.departments.data.length; i++) {
-        this.checkMember(data.departments.data[i]);
-      }
-      this.params.data = participantInfo;
-      this.$store.dispatch('changeParticipantsInfo', this.params);
-    },
-
-    memberNum(data) {
-      const firstLevelUsers = data.users.data.length;
-      let nextLevelUsers = 0;
-      for (let i = 0; i < data.departments.data.length; i++) {
-        nextLevelUsers += this.memberNum(data.departments.data[i]);
-      }
-      return firstLevelUsers + nextLevelUsers;
-    },
-  },
-};
+    }
 </script>
 
 <style scoped>

@@ -61,7 +61,7 @@ export default {
         document.getElementsByTagName('body')[0].classList.add('modal-open');
       });
     } else {
-      console.log(this.detailpage);
+      // console.log(this.detailpage);
     }
   },
   watch: {

@@ -44,27 +44,11 @@ export default {
 
   mounted() {
     this.sourceChecker();
-    // if(!this.multiple){
-    //     let self = this;
-    //     $(this.$el).selectpicker().on('hidden.bs.select', function () {
-    //         console.log($(this).val());
-    //         self.$emit('change', $(this).val(), $(this)[0].selectedOptions[0].label, $(this)[0].selectedOptions[0].id);
-    //         // 可以通过调用select方法，去改变父组件传过来的changeKey
-    //         if (self.changeKey) {
-    //             self.$emit('select', self.changeKey, $(this).val(), $(this)[0].selectedOptions[0].label)
-    //         }
-    //     });
-    // }else{
-    //     $(this.$el).selectpicker()
-    // }
   },
   update() {
     this.refresh();
   },
   watch: {
-    n(value) {
-
-    },
     consdata() {
       this.sourceChecker();
     },
@@ -130,7 +114,7 @@ export default {
           this.$nextTick(() => {
             if (params[0].id) {
               this.valueListener.push({ id: params.find(item => item.name === tempArr[j]).id, name: params.find(item => item.name === tempArr[j]).name });
-            }else {
+            } else {
               this.valueListener.push(tempArr[j]);
             }
             this.setValue(this.valueListener);
@@ -138,8 +122,6 @@ export default {
               this.refresh();
             });
           });
-          //     console.log(tempArr[j]);
-          //     console.log(params.find(item=>item.name === tempArr[j]).id);
           //    this.valueListener.push(params.find(item=>item.name === tempArr[j]).id)
         }
         //     else{
@@ -168,7 +150,7 @@ export default {
               _this.defaultDataChecker(params.data);
             }
             _this.$nextTick(() => {
-              _this.defaultDataChecker();
+              _this.defaultDataChecker(params.data);
             });
           }
         });
