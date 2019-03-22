@@ -141,7 +141,7 @@ export default {
                                 this.valueListener = { id: this.options.find(item => item.nickname === this.consdata[0].control_value).id,name:this.consdata[0].control_value}
                                 this.setValue(this.valueListener)
                             }else if(this.options[0].name){
-                                this.valueListener = { id: this.options.find(item => item.nickname === this.consdata[0].control_value).id,name:this.consdata[0].control_value}
+                                this.valueListener = { id: this.options.find(item => item.name === this.consdata[0].control_value).id,name:this.consdata[0].control_value}
                                 this.setValue(this.valueListener)
                             }
                         }else{
