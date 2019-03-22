@@ -45,20 +45,6 @@ export default {
         mounted() {
             this.sourceChecker()
             this.defaultDataChecker()
-            // if(!this.multiple){
-            //     let self = this;
-            //     $(this.$el).selectpicker().on('hidden.bs.select', function () {
-            //         console.log($(this).val());
-            //         self.$emit('change', $(this).val(), $(this)[0].selectedOptions[0].label, $(this)[0].selectedOptions[0].id);
-            //         // 可以通过调用select方法，去改变父组件传过来的changeKey
-            //         if (self.changeKey) {
-            //             self.$emit('select', self.changeKey, $(this).val(), $(this)[0].selectedOptions[0].label)
-            //         }
-            //     });
-            // }else{
-            //     $(this.$el).selectpicker()
-            // }
-           
         },
         update(){
             this.refresh()
@@ -78,8 +64,11 @@ export default {
                         fetch('get',this.consdata[0].control_source.url+'?'+this.consdata[0].control_source.parameters+'='+value.data).then((params) => {
                             _this.options = params.data
                             _this.$nextTick(() => {
-                                _this.valueListener={name:_this.options[0].title,id:_this.options[0].client_id}                        
-                                _this.refresh()
+                                if(_this.options[0].title && _this.options[0].client_id){
+                                    _this.valueListener={name:_this.options[0].title,id:_this.options[0].client_id}                        
+                                }else{
+                                    _this.defaultDataChecker()
+                                }
                                 _this.$nextTick(() => {
                                     _this.refresh()
                                 })
@@ -101,7 +90,6 @@ export default {
                 }
                 if(control_source){
                     if(control_source.to_sort_number && this.valueListener){
-                        // this.defaultDataChecker()
                         this.$emit('directional',{to:control_source.to_sort_number,data:this.valueListener.id})
                     }
                 }
@@ -122,6 +110,7 @@ export default {
                 })
             },
             clear:function(value){
+                console.log('clear');
                 if(value===true){
                     this.setValue('')
                     this.valueListener = []
@@ -137,16 +126,25 @@ export default {
                             if(this.options[0].title){
                                 this.setValue({ id: this.options.find(item => item.title === this.consdata[0].control_value).id,name:this.consdata[0].control_value})
                                 this.valueListener = { id: this.options.find(item => item.title === this.consdata[0].control_value).id,name:this.consdata[0].control_value}
+                                console.log('title',this.valueListener);
+                                return
                             }else if(this.options[0].nickname){
                                 this.valueListener = { id: this.options.find(item => item.nickname === this.consdata[0].control_value).id,name:this.consdata[0].control_value}
                                 this.setValue(this.valueListener)
+                                console.log('nickname',this.valueListener);
+                                return
                             }else if(this.options[0].name){
                                 this.valueListener = { id: this.options.find(item => item.name === this.consdata[0].control_value).id,name:this.consdata[0].control_value}
                                 this.setValue(this.valueListener)
+                                console.log('name',this.valueListener);
+                                return
+                                // console.log(this.consdata[0].control_title,this.valueListener);
                             }
                         }else{
                             this.setValue(this.consdata[0].control_value.value)
                             this.valueListener = this.consdata[0].control_value
+                                console.log('else',this.valueListener);
+
 
                         }
                         this.refresh()
@@ -154,22 +152,6 @@ export default {
                             this.refresh()  
                         })
                 }
-                // if(this.defaultData && this.consdata){
-                //     for (const i in this.defaultData) {
-                //         if(params){
-                //             this.$nextTick(() => {
-                //                 this.valueListener = params.find(item=>item.title === this.defaultData[i].key).id
-                //             })
-                //         }else{
-                //             if (this.defaultData[i].key === this.consdata[0].control_title) {
-                //                 this.$nextTick(() => {
-                //                     this.valueListener = this.defaultData[i].values.data.value
-                //                     this.setValue(this.defaultData[i].values.data.value)
-                //                 })
-                //             }
-                //         }
-                //     }
-                // }
             },
             sourceChecker(){
                 let _this = this
@@ -183,15 +165,6 @@ export default {
                             _this.$nextTick(() => {
                                 _this.defaultDataChecker()
                             })
-                            // if(_this.defaultData){
-                            //     if(params.data[0].id){
-                            //         // _this.valueListener = params.data.find(item=>item.title === _this.defaultData)
-                            //         _this.defaultDataChecker()
-                            //     }
-                            //     _this.$nextTick(() => {
-                            //         _this.defaultDataChecker()
-                            //     })
-                            // }
                         })
                     }
                 }else{
