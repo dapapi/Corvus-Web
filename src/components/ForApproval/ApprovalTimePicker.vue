@@ -51,16 +51,17 @@ export default {
       const { id } = this.consdata[0];
       const { related_field } = this.consdata[0];
       this.$emit('change', { key: id, value: `${this.ymd} ${this.hms}`, type: related_field });
-      this.$emit('changestarttime', { type: this.consdata[0].control_source.flag, value: `${this.ymd} ${this.hms}` });
+      if (this.consdata[0].control_source) {
+        this.$emit('changestarttime', { type: this.consdata[0].control_source.flag, value: `${this.ymd} ${this.hms}` });
+      }
     },
   },
   watch: {
     defaultDate(value) {
-      console.log(value);
       this.change(value);
     },
     startDate(newValue) {
-      if (this.consdata[0].control_source.flag === 'end_time') {
+      if (this.consdata[0].control_source && this.consdata[0].control_source.flag === 'end_time') {
         this.start_date = newValue;
       }
     },

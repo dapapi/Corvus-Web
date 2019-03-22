@@ -1379,31 +1379,28 @@ export default {
         include: 'publicity,broker,creator,tasks,affixes,trails.project.principal,works,trails.client,relate_project_bills_resource,',
       };
       const _this = this;
-      fetch('get', `/stars/${  this.artistId}`, data).then((response) => {
+      fetch('get', `/stars/${this.artistId}`, data).then((response) => {
+        _this.artistInfo = response.data;
 
-                    _this.artistInfo = response.data;
-                    
-                    if(response.data.star_risk_point == "privacy"){
-                         _this.artistInfo.star_risk_point = '**'
-                        
-                    }else{
-                         _this.artistInfo.star_risk_point = response.data.star_risk_point
-                    }
-                     
-                    _this.uploadUrl = _this.artistInfo.avatar
-                    // _this.artistProjectsInfo = []
-                    _this.artistTasksInfo = response.data.tasks.data//任务数据
-          
+        if (response.data.star_risk_point == 'privacy') {
+          _this.artistInfo.star_risk_point = '**';
+        } else {
+          _this.artistInfo.star_risk_point = response.data.star_risk_point;
+        }
 
-                    _this.artistWorksInfo = response.data.works.data//作品数据
+        _this.uploadUrl = _this.artistInfo.avatar;
+        // _this.artistProjectsInfo = []
+        _this.artistTasksInfo = response.data.tasks.data;// 任务数据
 
 
-                    _this.affixes = response.data.affixes.data
+        _this.artistWorksInfo = response.data.works.data;// 作品数据
 
 
+        _this.affixes = response.data.affixes.data;
 
-                    _this.isLoading = false
-                });
+
+        _this.isLoading = false;
+      });
     },
     getProject(page = 1) {
       const _this = this;
@@ -1416,7 +1413,7 @@ export default {
     },
     getWoks(page = 1) {
       const _this = this;
-      fetch('get', `/stars/${this.artistId }/works`).then((response) => {
+      fetch('get', `/stars/${this.artistId}/works`).then((response) => {
         _this.artistWorksInfo = response.data;
         _this.current_page = response.meta.pagination.current_page;
         _this.total = response.meta.pagination.total;
@@ -1431,19 +1428,18 @@ export default {
         include: 'calendar,schedule,schedule.creator',
       };
       const _this = this;
-      fetch('get', `/stars/${  this.artistId}`, data).then((response) => {
-                    
-                    if (response.data.calendar) {
-                        _this.calendarId.push(response.data.calendar.data.id)
-                        _this.calendarName = response.data.calendar.data.title
-                    }
-                    //日程展示
-                    if (response.data.schedule) {
-                        for (let i = 0; i < response.data.schedule.data.length; i++) {
-                            _this.scheduleShow.push(response.data.schedule.data[i])
-                        }
-                    }
-                });
+      fetch('get', `/stars/${this.artistId}`, data).then((response) => {
+        if (response.data.calendar) {
+          _this.calendarId.push(response.data.calendar.data.id);
+          _this.calendarName = response.data.calendar.data.title;
+        }
+        // 日程展示
+        if (response.data.schedule) {
+          for (let i = 0; i < response.data.schedule.data.length; i++) {
+            _this.scheduleShow.push(response.data.schedule.data[i]);
+          }
+        }
+      });
     },
 
     ScheduleBox(value) {
@@ -1456,7 +1452,7 @@ export default {
       const data = {
         include: 'calendar,participants,creator,material,affixes,project,task',
       };
-      fetch('get', `/schedules/${  schedule.id}`, data).then((response) => {
+      fetch('get', `/schedules/${schedule.id}`, data).then((response) => {
         if (!response) {
           this.scheduleData = schedule;
           this.noPermission = true;
@@ -1476,8 +1472,8 @@ export default {
         startTime = this.startTime;
         endTime = this.endTime;
       } else {
-        startTime = `${this.startTime  } ${  this.startMinutes}`;
-        endTime = `${this.endTime  } ${  this.endMinutes}`;
+        startTime = `${this.startTime} ${this.startMinutes}`;
+        endTime = `${this.endTime} ${this.endMinutes}`;
 
         if (startTime > endTime) {
           toastr.error('开始时间不能晚于截止时间');
@@ -1549,8 +1545,8 @@ export default {
         startTime = this.startTime;
         endTime = this.endTime;
       } else {
-        startTime = `${this.startTime  } ${  this.startMinutes}`;
-        endTime = `${this.endTime  } ${  this.endMinutes}`;
+        startTime = `${this.startTime} ${this.startMinutes}`;
+        endTime = `${this.endTime} ${this.endMinutes}`;
       }
       const data = {
         title: this.scheduleName,
@@ -1588,7 +1584,7 @@ export default {
         data.task_ids = this.linkageSelectedIds.tasks;
       }
 
-      fetch('put', `/schedules/${  this.scheduleData.id}`, data).then(() => {
+      fetch('put', `/schedules/${this.scheduleData.id}`, data).then(() => {
         this.$refs.calendar.refresh();
         $('#changeSchedule').modal('hide');
         toastr.success('修改成功');
@@ -1699,7 +1695,7 @@ export default {
         size,
         type: 1,
       };
-      fetch('post', `/schedules/${  this.scheduleData.id  }/affix`, data).then((response) => {
+      fetch('post', `/schedules/${this.scheduleData.id}/affix`, data).then((response) => {
         toastr.success('上传成功');
         if (this.scheduleData.affixes) {
           this.scheduleData.affixes.data.push(response.data);
@@ -1728,7 +1724,7 @@ export default {
           }
         }
       }
-      fetch('put', `/schedules/${  this.scheduleData.id}`, data).then(() => {
+      fetch('put', `/schedules/${this.scheduleData.id}`, data).then(() => {
         this.$refs.calendar.refresh();
         this.scheduleParticipants = JSON.parse(JSON.stringify(this.$store.state.newParticipantsInfo));
       });
@@ -1737,8 +1733,8 @@ export default {
       this.scheduleType = type;
       $('#checkSchedule').modal('hide');
       setTimeout(() => {
-                    $('#changeSchedule').modal('show');
-                }, 400);
+        $('#changeSchedule').modal('show');
+      }, 400);
       if (type === 'edit') {
         this.scheduleName = this.scheduleData.title;
         this.scheduleCalendar = this.scheduleData.calendar.data.id;
@@ -1746,12 +1742,12 @@ export default {
         const startMinutes = this.scheduleData.start_at.split(' ')[1].split(':');
         this.$refs.scheduleStartMinute.setValue(startMinutes);
         this.startTime = this.scheduleData.start_at.split(' ')[0];
-        this.startMinutes = `${startMinutes[0]  }:${  startMinutes[1]}`;
+        this.startMinutes = `${startMinutes[0]}:${startMinutes[1]}`;
         this.$refs.scheduleEndDate.setValue(this.scheduleData.end_at.split(' ')[0]);
         const endMinutes = this.scheduleData.end_at.split(' ')[1].split(':');
         this.$refs.scheduleEndMinute.setValue(endMinutes);
         this.endTime = this.scheduleData.end_at.split(' ')[0];
-        this.endMinutes = `${endMinutes[0]  }:${  endMinutes[1]}`;
+        this.endMinutes = `${endMinutes[0]}:${endMinutes[1]}`;
         this.isAllday = this.scheduleData.is_allday;
         this.eventDesc = this.scheduleData.desc;
         this.eventPlace = this.scheduleData.position;
@@ -1784,7 +1780,7 @@ export default {
       }
     },
     deleteSchedule() {
-      fetch('delete', `/schedules/${  this.scheduleData.id}`).then(() => {
+      fetch('delete', `/schedules/${this.scheduleData.id}`).then(() => {
         $('#delModel').modal('hide');
         toastr.success('删除成功');
         this.$refs.calendar.refresh();
@@ -1825,7 +1821,7 @@ export default {
       this.$refs.scheduleRemind.setValue('0');
       // this.this.scheduleRemindDate = []
     },
-    /*查看日历详情 --添加日历 -- 修改日历 --结束 */
+    /* 查看日历详情 --添加日历 -- 修改日历 --结束 */
 
     // 获取账单
     getArtistsBill(page = 1, expense_type) {
@@ -1855,13 +1851,13 @@ export default {
     getTaskType() {
       const _this = this;
       fetch('get', '/task_types').then((response) => {
-                    for (let i = 0; i < response.data.length; i++) {
-                        _this.taskTypeArr.push({
-                            value: response.data[i].id,
-                            name: response.data[i].title
-                        })
-                    }
-                });
+        for (let i = 0; i < response.data.length; i++) {
+          _this.taskTypeArr.push({
+            value: response.data[i].id,
+            name: response.data[i].title,
+          });
+        }
+      });
     },
     // 获取任务列表
     getTaskList(page = 1) {
@@ -2038,10 +2034,10 @@ export default {
     // 添加任务
     addTask() {
       const participant_ids = [];
-      let start, 
-end, 
-startMin, 
-endMin;
+      let start,
+        end,
+        startMin,
+        endMin;
       for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
         participant_ids.push(this.$store.state.newParticipantsInfo[i].id);
       }
@@ -2097,8 +2093,8 @@ endMin;
         title: this.taskName,
         principal_id: this.$store.state.newPrincipalInfo.id,
         participant_ids,
-        start_at: `${this.startTime  } ${  this.startMinutes}`,
-        end_at: `${this.endTime  } ${  this.endMinutes}`,
+        start_at: `${this.startTime} ${this.startMinutes}`,
+        end_at: `${this.endTime} ${this.endMinutes}`,
         resource_type: 2,
         resourceable_id: this.artistId,
         priority: this.taskLevel,
@@ -2107,29 +2103,29 @@ endMin;
       };
       const _this = this;
       fetch('post', '/tasks', data).then((response) => {
-                    toastr.success('创建成功');
-                    _this.allTaskList.push(response.data)
-                    $('#addTask').modal('hide');
-                    _this.getTaskList()
-                    _this.getTaskDate()
-                    _this.getArtist()
-                    _this.setDefaultPrincipal()
-                    _this.$store.state.newParticipantsInfo = []
-                    _this.taskType = ''
-                    _this.taskName = ''
-                    _this.taskLevel = ''
-                    _this.startTime = ''
-                    _this.endTime = ''
-                    _this.startMinutes = ''
-                    _this.endMinutes = ''
-                    _this.taskIntroduce = ''
-                    _this.$refs.taskType.setValue('')
-                    _this.$refs.taskStartTime.setValue('0')
-                    _this.$refs.taskStartDate.setValue('')
-                    _this.$refs.taskEndDate.setValue('')
-                    _this.$refs.taskEndTime.setValue('0')
-                    _this.$refs.taskLevel.setValue('')
-                });
+        toastr.success('创建成功');
+        _this.allTaskList.push(response.data);
+        $('#addTask').modal('hide');
+        _this.getTaskList();
+        _this.getTaskDate();
+        _this.getArtist();
+        _this.setDefaultPrincipal();
+        _this.$store.state.newParticipantsInfo = [];
+        _this.taskType = '';
+        _this.taskName = '';
+        _this.taskLevel = '';
+        _this.startTime = '';
+        _this.endTime = '';
+        _this.startMinutes = '';
+        _this.endMinutes = '';
+        _this.taskIntroduce = '';
+        _this.$refs.taskType.setValue('');
+        _this.$refs.taskStartTime.setValue('0');
+        _this.$refs.taskStartDate.setValue('');
+        _this.$refs.taskEndDate.setValue('');
+        _this.$refs.taskEndTime.setValue('0');
+        _this.$refs.taskLevel.setValue('');
+      });
     },
     // 设置默认负责人
     setDefaultPrincipal() {
@@ -2171,18 +2167,18 @@ endMin;
       };
       const _this = this;
       fetch('post', `/stars/${this.$route.params.id}/works`, data).then((response) => {
-                    toastr.success('新增成功');
-                    $('#addWork').modal('hide');
-                    _this.artistWorksInfo.push(response.data)
-                    _this.artistWorkName = ''
-                    _this.artistWorkDirector = ''
-                    _this.character = ''
-                    _this.coActor = ''
-                    _this.workReleaseTime = ''
-                    _this.workType = ''
-                    _this.$refs.workType.setValue('')
-                    _this.$refs.workTime.setValue('');
-                });
+        toastr.success('新增成功');
+        $('#addWork').modal('hide');
+        _this.artistWorksInfo.push(response.data);
+        _this.artistWorkName = '';
+        _this.artistWorkDirector = '';
+        _this.character = '';
+        _this.coActor = '';
+        _this.workReleaseTime = '';
+        _this.workType = '';
+        _this.$refs.workType.setValue('');
+        _this.$refs.workTime.setValue('');
+      });
     },
 
     addPrivacy() {
@@ -2274,13 +2270,13 @@ endMin;
         return;
       }
       const _this = this;
-      fetch('put', `/stars/${  this.artistId}`, this.changeArtistInfo).then((response) => {
-                    toastr.success('修改成功');
-                    if (_this.isEdit) {
-                        _this.isEdit = false;
-                    }
-                    _this.getArtist();
-                });
+      fetch('put', `/stars/${this.artistId}`, this.changeArtistInfo).then((response) => {
+        toastr.success('修改成功');
+        if (_this.isEdit) {
+          _this.isEdit = false;
+        }
+        _this.getArtist();
+      });
     },
 
     distributionPerson(value) {
@@ -2292,7 +2288,7 @@ endMin;
     // 分配经理人和分配宣传人
     addDistributionPerson() {
       let toast,
- url;
+        url;
       const data = {
         person_ids: [],
         del_person_ids: [],
@@ -2324,11 +2320,11 @@ endMin;
       }
       const _this = this;
       fetch('post', url, data).then((response) => {
-                    toastr.success(toast)
-                    $('#distributionBroker').modal('hide');
-                    _this.getArtist();
-                    _this.$store.state.participantsInfo = []
-                });
+        toastr.success(toast);
+        $('#distributionBroker').modal('hide');
+        _this.getArtist();
+        _this.$store.state.participantsInfo = [];
+      });
     },
     // 获取附件类型
     changeAttachmentType(value) {
@@ -2368,11 +2364,11 @@ endMin;
     deleteAffix() {
       const _this = this;
       fetch('delete', `/star/${this.$route.params.id}/affixes/${this.affixId}`).then((response) => {
-                    $('#affix').modal('hide');
-                    toastr.success('删除成功');
-                    _this.isEdit = false;
-                    _this.getArtist();
-                });
+        $('#affix').modal('hide');
+        toastr.success('删除成功');
+        _this.isEdit = false;
+        _this.getArtist();
+      });
     },
     contractlist(status) {
       this.isDetail = false;
@@ -2391,10 +2387,10 @@ endMin;
       this.filterFee = value;
     },
     toProject(id) {
-      this.$router.push({ path: `/projects/${  id}` });
+      this.$router.push({ path: `/projects/${id}` });
     },
     toTask(id) {
-      this.$router.push({ path: `/tasks/${  id}` });
+      this.$router.push({ path: `/tasks/${id}` });
     },
 
   },
@@ -2428,54 +2424,48 @@ endMin;
       return value;
     },
     jsGetAge(strBirthday) {
-                if (strBirthday) {
-                    var returnAge;
-                    // 根据生日计算年龄（"1995-09-25"）
-                    //以下五行是为了获取出生年月日，如果是从身份证上获取需要稍微改变一下
-                    var strBirthdayArr = strBirthday.split("-");
-                    var birthYear = strBirthdayArr[0];
-                    var birthMonth = strBirthdayArr[1];
-                    var birthDay = strBirthdayArr[2];
+      if (strBirthday) {
+        let returnAge;
+        // 根据生日计算年龄（"1995-09-25"）
+        // 以下五行是为了获取出生年月日，如果是从身份证上获取需要稍微改变一下
+        const strBirthdayArr = strBirthday.split('-');
+        const birthYear = strBirthdayArr[0];
+        const birthMonth = strBirthdayArr[1];
+        const birthDay = strBirthdayArr[2];
 
-                    var d = new Date();
-                    var nowYear = d.getFullYear();
-                    var nowMonth = d.getMonth() + 1;
-                    var nowDay = d.getDate();
+        const d = new Date();
+        const nowYear = d.getFullYear();
+        const nowMonth = d.getMonth() + 1;
+        const nowDay = d.getDate();
 
-                    if (nowYear == birthYear) {
-                        returnAge = 0;//同年 则为0岁
-                    }
-                    else {
-                        var ageDiff = nowYear - birthYear; //年之差
-                        if (ageDiff > 0) {
-                            if (nowMonth == birthMonth) {
-                                var dayDiff = nowDay - birthDay;//日之差
-                                if (dayDiff < 0) {
-                                    returnAge = ageDiff - 1;
-                                }
-                                else {
-                                    returnAge = ageDiff;
-                                }
-                            }
-                            else {
-                                var monthDiff = nowMonth - birthMonth;//月之差
-                                if (monthDiff < 0) {
-                                    returnAge = ageDiff - 1;
-                                }
-                                else {
-                                    returnAge = ageDiff;
-                                }
-                            }
-                        }
-                        else {
-                            returnAge = -1;//返回-1 表示出生日期输入错误 晚于今天
-                        }
-                    }
-                    return returnAge;//返回周岁年龄
-                } 
-                    return strBirthday
-                
-            },
+        if (nowYear == birthYear) {
+          returnAge = 0;// 同年 则为0岁
+        } else {
+          const ageDiff = nowYear - birthYear; // 年之差
+          if (ageDiff > 0) {
+            if (nowMonth == birthMonth) {
+              const dayDiff = nowDay - birthDay;// 日之差
+              if (dayDiff < 0) {
+                returnAge = ageDiff - 1;
+              } else {
+                returnAge = ageDiff;
+              }
+            } else {
+              const monthDiff = nowMonth - birthMonth;// 月之差
+              if (monthDiff < 0) {
+                returnAge = ageDiff - 1;
+              } else {
+                returnAge = ageDiff;
+              }
+            }
+          } else {
+            returnAge = -1;// 返回-1 表示出生日期输入错误 晚于今天
+          }
+        }
+        return returnAge;// 返回周岁年龄
+      }
+      return strBirthday;
+    },
   },
 };
 
