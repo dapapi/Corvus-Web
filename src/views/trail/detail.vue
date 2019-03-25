@@ -821,7 +821,7 @@ export default {
                 } if (!this.trailInfo.title) {
                     toastr.error("线索名称为必填")
                     return false;
-                } else if (!this.trailInfo.contact.data.name) {
+                } if (!this.trailInfo.contact.data.name) {
                     toastr.error("联系人为必填")
                     return false;
                 } else if (this.trailInfo.contact.data.phone) {
@@ -913,6 +913,7 @@ export default {
       }
       if (this.changeInfo.contact.id) {
         // this.changeInfo.resource_type = Number(this.changeInfo.resource_type)
+        this.changeInfo.contact.name = this.changeInfo.contact.id;
       } else {
         this.changeInfo.contact.id = this.trailInfo.contact.data.name;
         this.changeInfo.contact.name = this.trailInfo.contact.data.name;

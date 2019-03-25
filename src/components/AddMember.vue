@@ -2,7 +2,7 @@
     <div class="addMember">
         <ul class="addMember-items">
             <li class="addMember-item" v-for="(member,index) in selectMemberArr" :key="member.id" :style="otherslot?'display:flex':''">
-                <Avatar :imgUrl="member.icon_url"/>
+                <Avatar :imgUrl="member.icon_url" :title='member.name'/>
                 <span class="addMember-remove" @click="removeMember(member.id)" :class="otherslot?'addmember-other':''">
                     <i class="md-minus-circle"></i>
                 </span>
@@ -23,34 +23,34 @@
 </template>
 
 <script>
-    export default {
-        name: "",
-        props: ['type','otherslot'],
-        data() {
-            return {
-                isMemberShow: false,
-            }
-        },
-        mounted() {
-            this.globalClick(this.removeSelect);
-        },
+export default {
+  name: '',
+  props: ['type', 'otherslot'],
+  data() {
+    return {
+      isMemberShow: false,
+    };
+  },
+  mounted() {
+    this.globalClick(this.removeSelect);
+  },
 
-        computed: {
-            //collectInfo:[],//收款金额
-            //payInfo:[],//付款金额
-            //contractInfo:[],//合同类型
-            //divisionInfo:[],//分成比例
-            //incubationInfo:[],//孵化期
-            //billInfo:[],//账单
-            selectMemberArr: function () {
+  computed: {
+    // collectInfo:[],//收款金额
+    // payInfo:[],//付款金额
+    // contractInfo:[],//合同类型
+    // divisionInfo:[],//分成比例
+    // incubationInfo:[],//孵化期
+    // billInfo:[],//账单
+    selectMemberArr() {
                 if (this.type === 'change') {
 
                     return this.$store.state.participantsInfo
-                }else if(this.type ==='collect'){
+                }if(this.type ==='collect'){
                     return this.$store.state.collectInfo
-                }else if(this.type === 'pay'){
+                }if(this.type === 'pay'){
                     return this.$store.state.payInfo
-                }else if(this.type === 'contract'){
+                }if(this.type === 'contract'){
                     return this.$store.state.contractInfo
                 }else if(this.type === 'division'){
                     return this.$store.state.divisionInfo
@@ -65,76 +65,73 @@
                     
                     return this.$store.state.newParticipantsInfo
                 }
-            }
-        },
-
-        methods: {
-
-            showMember: function () {
-                this.isMemberShow = true;
             },
+  },
 
-            removeSelect: function (event) {
-                // alert(9999)
-                let tag = document.getElementById("selectStaff" + this._uid);
-                if (tag) {
-                    // alert(222)
-                    if (!tag.contains(event.target)) {
-                        // alert(333)
-                        this.isMemberShow = false;
-                    }
-                }
-            },
+  methods: {
 
-            removeMember: function (userId) {
-                //collectInfo:[],//收款金额
-                //payInfo:[],//付款金额
-                //contractInfo:[],//合同类型
-                //divisionInfo:[],//分成比例
-                //incubationInfo:[],//孵化期
-                //billInfo:[],//账单
-                let participantInfo = '';
-                if (this.type === 'change') {
-                    participantInfo = this.$store.state.participantsInfo;
-                    
-                }else if(this.type === 'collect'){
-                    participantInfo = this.$store.state.collectInfo;
-                }else if(this.type === 'pay'){
-                    participantInfo = this.$store.state.payInfo;
-                }else if(this.type === 'contract'){
-                    participantInfo = this.$store.state.contractInfo;
-                }else if(this.type === 'division'){
-                    participantInfo = this.$store.state.divisionInfo;
-                }else if(this.type === 'incubation'){
-                    participantInfo = this.$store.state.incubationInfo;
-                }else if(this.type === 'bill'){
-                    participantInfo = this.$store.state.billInfo;
-                }else if(this.otherslot){
-                    participantInfo = this.$store.state.otherSlot
-                }
-                    
-                else {
-                    participantInfo = this.$store.state.newParticipantsInfo;
-                }
-                participantInfo.splice(participantInfo.map(item => item.id).indexOf(userId), 1);
-                let params = {
-                    type: this.type,
-                    data: participantInfo
-                };
-                if(this.otherslot){
-                    this.$store.dispatch('changeOtherSlot', params.data);
-                }else{
-                    this.$store.dispatch('changeParticipantsInfo', params);
-                }
-                this.$emit('change', userId)
-            },
+    showMember() {
+      this.isMemberShow = true;
+    },
 
-            changeSelectedMember: function () {
-                this.$emit('change', false)
-            }
-
+    removeSelect(event) {
+      // alert(9999)
+      const tag = document.getElementById(`selectStaff${this._uid}`);
+      if (tag) {
+        // alert(222)
+        if (!tag.contains(event.target)) {
+          // alert(333)
+          this.isMemberShow = false;
         }
-    }
+      }
+    },
+
+    removeMember(userId) {
+      // collectInfo:[],//收款金额
+      // payInfo:[],//付款金额
+      // contractInfo:[],//合同类型
+      // divisionInfo:[],//分成比例
+      // incubationInfo:[],//孵化期
+      // billInfo:[],//账单
+      let participantInfo = '';
+      if (this.type === 'change') {
+        participantInfo = this.$store.state.participantsInfo;
+      } else if (this.type === 'collect') {
+        participantInfo = this.$store.state.collectInfo;
+      } else if (this.type === 'pay') {
+        participantInfo = this.$store.state.payInfo;
+      } else if (this.type === 'contract') {
+        participantInfo = this.$store.state.contractInfo;
+      } else if (this.type === 'division') {
+        participantInfo = this.$store.state.divisionInfo;
+      } else if (this.type === 'incubation') {
+        participantInfo = this.$store.state.incubationInfo;
+      } else if (this.type === 'bill') {
+        participantInfo = this.$store.state.billInfo;
+      } else if (this.otherslot) {
+        participantInfo = this.$store.state.otherSlot;
+      } else {
+        participantInfo = this.$store.state.newParticipantsInfo;
+      }
+      participantInfo.splice(participantInfo.map(item => item.id).indexOf(userId), 1);
+      const params = {
+        type: this.type,
+        data: participantInfo,
+      };
+      if (this.otherslot) {
+        this.$store.dispatch('changeOtherSlot', params.data);
+      } else {
+        this.$store.dispatch('changeParticipantsInfo', params);
+      }
+      this.$emit('change', userId);
+    },
+
+    changeSelectedMember() {
+      this.$emit('change', false);
+    },
+
+  },
+};
 
 </script>
 <style scoped>
