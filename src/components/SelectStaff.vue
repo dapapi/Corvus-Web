@@ -65,7 +65,7 @@
                 </div>
                 <div class="tab-pane animation-fade" :id="'forum-department' + this._uid" role="tabpanel">
                     <div v-for="department in departmentUsers" :key='department.id+Math.random()'>
-                        <departments-item :data="department" @change="memberChange" :type="type" otherslot='otherslot'
+                        <departments-item :data="department" @change="memberChange" :type="type" :otherslot='otherslot'
                                           :multiple="multiple" :member-type="memberType"></departments-item>
                     </div>
                 </div>
@@ -76,8 +76,8 @@
 </template>
 
 <script>
-import fetch from '../assets/utils/fetch.js';
 import { mapState } from 'vuex';
+import fetch from '../assets/utils/fetch.js';
 
 export default {
   props: ['multiple', 'member-type', 'type', 'otherslot', 'submit'],
@@ -106,10 +106,10 @@ export default {
     _userList() {
       return this.userList;
     },
-    principalInfo () {
+    principalInfo() {
                 if (this.type === 'change') {
                     return this.$store.state.principalInfo
-                } else if (this.type === 'selector') {
+                } if (this.type === 'selector') {
                     return this.$store.state.selectPrincipalInfo
                 }else if(this.otherslot){
                     return this.$store.state.otherSlot
@@ -118,10 +118,10 @@ export default {
                 }
             },
 
-    participantsInfo () {
+    participantsInfo() {
                 if (this.type === 'change') {
                     return this.$store.state.participantsInfo
-                } else if(this.type ==='collect'){
+                } if(this.type ==='collect'){
                     return this.$store.state.collectInfo
                 }else if(this.type === 'pay'){
                     return this.$store.state.payInfo
@@ -161,92 +161,89 @@ export default {
   },
 
   methods: {
-    closeTeam () {
-                this.teamShow = !this.teamShow
-            },
+    closeTeam() {
+      this.teamShow = !this.teamShow;
+    },
 
-    selectAllMember () {
-                let participantInfo = '';
-                if (this.type === 'change') {
-                    participantInfo = this.$store.state.participantsInfo;
-                } else if(this.type ==='collect'){
-                    participantInfo = this.$store.state.collectInfo
-                }else if(this.type === 'pay'){
-                    participantInfo = this.$store.state.payInfo
-                }else if(this.type === 'contract'){
-                    participantInfo = this.$store.state.contractInfo
-                }else if(this.type === 'division'){
-                    participantInfo = this.$store.state.divisionInfo
-                }else if(this.type === 'incubation'){
-                    participantInfo = this.$store.state.incubationInfo
-                }else if(this.type === 'bill'){
-                    participantInfo = this.$store.state.billInfo
-                }
-                else if(this.otherslot){
-                    participantInfo = this.$store.state.otherSlot
-                }
-                else {
-                    participantInfo = this.$store.state.newParticipantsInfo;
-                }
-                for (let i = 0; i < this.normalUsers.length; i++) {
-                    if (!participantInfo.find(item => item.id == this.normalUsers[i].id)) {
-                        participantInfo.push(this.normalUsers[i])
-                    }
-                }
-                this.params.data = participantInfo;
-                if(this.otherslot){
-                    this.$store.dispatch('changeOtherSlot', this.params.data);
-                }else{
-                    this.$store.dispatch('changeParticipantsInfo', this.params);
-                }
-                this.$emit('change', false)
-            },
+    selectAllMember() {
+      let participantInfo = '';
+      if (this.type === 'change') {
+        participantInfo = this.$store.state.participantsInfo;
+      } else if (this.type === 'collect') {
+        participantInfo = this.$store.state.collectInfo;
+      } else if (this.type === 'pay') {
+        participantInfo = this.$store.state.payInfo;
+      } else if (this.type === 'contract') {
+        participantInfo = this.$store.state.contractInfo;
+      } else if (this.type === 'division') {
+        participantInfo = this.$store.state.divisionInfo;
+      } else if (this.type === 'incubation') {
+        participantInfo = this.$store.state.incubationInfo;
+      } else if (this.type === 'bill') {
+        participantInfo = this.$store.state.billInfo;
+      } else if (this.otherslot) {
+        participantInfo = this.$store.state.otherSlot;
+      } else {
+        participantInfo = this.$store.state.newParticipantsInfo;
+      }
+      for (let i = 0; i < this.normalUsers.length; i++) {
+        if (!participantInfo.find(item => item.id == this.normalUsers[i].id)) {
+          participantInfo.push(this.normalUsers[i]);
+        }
+      }
+      this.params.data = participantInfo;
+      if (this.otherslot) {
+        this.$store.dispatch('changeOtherSlot', this.params.data);
+      }else {
+        this.$store.dispatch('changeParticipantsInfo', this.params);
+      }
+      this.$emit('change', false);
+    },
 
-    selectMember (user) {
-                if (this.memberType === 'principal') {
-                    this.params.data = user;
-                    this.$store.dispatch('changePrincipal', this.params);
-                } else if (this.memberType === 'participant') {
-                    let participantInfo = '';
-                    if (this.type === 'change') {
-                        participantInfo = this.$store.state.participantsInfo;
-                    } else if(this.type ==='collect'){
-                        participantInfo = this.$store.state.collectInfo
-                    }else if(this.type === 'pay'){
-                        participantInfo = this.$store.state.payInfo
-                    }else if(this.type === 'contract'){
-                        participantInfo = this.$store.state.contractInfo
-                    }else if(this.type === 'division'){
-                        participantInfo = this.$store.state.divisionInfo
-                    }else if(this.type === 'incubation'){
-                        participantInfo = this.$store.state.incubationInfo
-                    }else if(this.type === 'bill'){
-                        participantInfo = this.$store.state.billInfo
-                    } else if(this.otherslot){
-                        participantInfo = this.$store.state.otherSlot
-                    }
-                    else {
-                        participantInfo = this.$store.state.newParticipantsInfo;
-                    }
+    selectMember(user) {
+      if (this.memberType === 'principal') {
+        this.params.data = user;
+        this.$store.dispatch('changePrincipal', this.params);
+      } else if (this.memberType === 'participant') {
+        let participantInfo = '';
+        if (this.type === 'change') {
+          participantInfo = this.$store.state.participantsInfo;
+        } else if (this.type === 'collect') {
+          participantInfo = this.$store.state.collectInfo;
+        } else if (this.type === 'pay') {
+          participantInfo = this.$store.state.payInfo;
+        } else if (this.type === 'contract') {
+          participantInfo = this.$store.state.contractInfo;
+        } else if (this.type === 'division') {
+          participantInfo = this.$store.state.divisionInfo;
+        } else if (this.type === 'incubation') {
+          participantInfo = this.$store.state.incubationInfo;
+        } else if (this.type === 'bill') {
+          participantInfo = this.$store.state.billInfo;
+        } else if (this.otherslot) {
+          participantInfo = this.$store.state.otherSlot;
+        } else {
+          participantInfo = this.$store.state.newParticipantsInfo;
+        }
 
-                    if (participantInfo.find(item => item.id == user.id)) {
-                        participantInfo.splice(participantInfo.map(item => item.id).indexOf(user.id), 1)
-                    } else {
-                        participantInfo.push(user)
-                    }
-                    this.params.data = participantInfo;
-                    if(this.otherslot){
-                    this.$store.dispatch('changeOtherSlot', this.params.data);
-                }else{
-                    this.$store.dispatch('changeParticipantsInfo', this.params);
-                }
-                }
-                this.$emit('change', false)
-            },
+        if (participantInfo.find(item => item.id == user.id)) {
+          participantInfo.splice(participantInfo.map(item => item.id).indexOf(user.id), 1);
+        } else {
+          participantInfo.push(user);
+        }
+        this.params.data = participantInfo;
+        if (this.otherslot) {
+          this.$store.dispatch('changeOtherSlot', this.params.data);
+        }else {
+          this.$store.dispatch('changeParticipantsInfo', this.params);
+        }
+      }
+      this.$emit('change', false);
+    },
 
-    memberChange () {
-                this.$emit('change', false)
-            },
+    memberChange() {
+      this.$emit('change', false);
+    },
   },
 };
 </script>

@@ -30,6 +30,7 @@
                            <i class="md-chevron-left"></i>回到主任务
                             </span>
                         </template>
+                        <i v-if="oldInfo.privacy" class="iconfont icon-zhuansimi" style="font-size: 20px; color: #F44336; float: right;"></i>
                     </h4>
                     <div class="card-text clearfix example">
                         <div class="float-left pl-0 pr-2 col-md-1">
