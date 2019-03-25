@@ -293,7 +293,7 @@
         background: #fff;
         position: absolute;
         top: 10px;
-        left: 101px;
+        left: 80px;
         z-index: 100000;
         border: 1px solid #f7f7f7;
     }
