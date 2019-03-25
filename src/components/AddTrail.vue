@@ -27,12 +27,12 @@
                     <div class="example">
                         <div class="col-md-2 text-right float-left require">公司名称</div>
                         <div class="col-md-10 float-left pl-0">
-                            <!-- <edit-company @change="changeCompanyName"></edit-company> -->
                             <div class="float-left col-md-6 pl-0">
-                                <input type="text" v-model="companyInfo.company" :disabled="true" class="form-control" />
+                                <input type="text" v-model="companyInfo.company" :disabled="true" class="form-control"/>
                             </div>
                             <div class="float-left col-md-6 pl-0">
-                                <selectors :options="clientLevelArr" :default="companyInfo.grade" :disabled="true"></selectors>
+                                <selectors :options="clientLevelArr" :default="companyInfo.grade"
+                                           :disabled="true"></selectors>
                             </div>
                         </div>
                     </div>
@@ -115,7 +115,8 @@
                     <div class="example">
                         <div class="col-md-2 text-right float-left require">预计订单收入</div>
                         <div class="col-md-5 float-left pl-0 pr-0">
-                            <NumberSpinner @change="changeTrailFee" :min="0" :max="1000000000" :precision="2" :value="0"></NumberSpinner>
+                            <NumberSpinner @change="changeTrailFee" :min="0" :max="1000000000" :precision="2"
+                                           :value="0"></NumberSpinner>
                         </div>
                         <div class="col-md-3 float-left" v-if="trailType == 4">
                             <div class="checkbox-custom checkbox-primary">
@@ -134,7 +135,8 @@
                 <div class="modal-footer">
                     <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click='cleanTempData'>取消
                     </button>
-                    <button class="btn btn-primary" type="submit" @click="addTrail">确定</button>
+                    <button class="btn btn-primary" type="submit" :disable="isAddButtonDisable" @click="addTrail">确定
+                    </button>
                 </div>
 
             </div>
@@ -154,7 +156,6 @@
         data() {
             return {
                 trailName: '',
-                // trailType: '',
                 cooperationTypeArr: config.cooperationTypeArr,
                 priorityArr: config.priorityArr,
                 brandName: '',
@@ -165,7 +166,6 @@
                 salesProgressText: '未确定合作',
                 trailDesc: '',
                 cooperation: '',
-                // selectCompany: '',
                 trailOriginPerson: '',
                 trailOrigin: '',
                 industry: '',
@@ -178,6 +178,7 @@
                 currentUser: {},
                 starsArr: [],
                 clientLevelArr: config.clientLevelArr,
+                isAddButtonDisable: false,
             }
         },
 
@@ -280,7 +281,7 @@
             },
 
             addTrail: function () {
-
+                this.isAddButtonDisable = true;
                 let data = {
                     title: this.trailName,
                     brand: this.brandName,
@@ -320,13 +321,13 @@
                 if (organization_id !== 411) {
                     data.lock = this.trailIsLocked
                 }
-                let _this = this;
                 if (this.trailTypeValidate()) {
-                    fetch('post', '/trails', data).then(function (response) {
+                    fetch('post', '/trails', data).then(() => {
+                        this.isAddButtonDisable = false;
                         $('#addTrail').modal('hide');
                         // 回调
-                        _this.$emit('ok')
-                        _this.cleanTempData()
+                        this.$emit('ok')
+                        this.cleanTempData()
 
                     })
                 }
@@ -422,7 +423,7 @@
                 }
             },
             // 获取行业
-            getIndustries () {
+            getIndustries() {
                 let _this = this;
                 fetch('get', '/industries/all').then(function (response) {
                     for (let i = 0; i < response.data.length; i++) {

@@ -7,15 +7,22 @@
                     <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
                         <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                     </button>
-                    <h4 class="modal-title">新增任务</h4>
+                    <h4 class="modal-title">{{ this.name ? this.name : '新增任务' }}</h4>
                 </div>
                 <div class="modal-body">
                     <div class="example">
                         <div class="col-md-2 text-right float-left">关联资源</div>
-                        <div class="col-md-10 float-left">
-                            <NormalLinkageSelectors ref="linkage" v-if="linkData.length > 0" :myData="linkData"
-                                                    :data="linkData" @change="addLinkage"></NormalLinkageSelectors>
-                        </div>
+                        <template v-if="this.resource_title">
+                            <div class="col-md-10 float-left pl-0">
+                                {{ this.resource_name }} - {{ this.resource_title }}
+                            </div>
+                        </template>
+                        <template v-else>
+                            <div class="col-md-10 float-left">
+                                <NormalLinkageSelectors ref="linkage" v-if="linkData.length > 0" :myData="linkData"
+                                                        :data="linkData" @change="addLinkage"></NormalLinkageSelectors>
+                            </div>
+                        </template>
                     </div>
                     <div class="example">
                         <div class="col-md-2 text-right float-left require">任务类型</div>
@@ -76,7 +83,8 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                    <button class="btn btn-primary" type="submit" @click="addTask" :disabled="isAddButtonDisable">确定</button>
+                    <button class="btn btn-primary" type="submit" @click="addTask" :disabled="isAddButtonDisable">确定
+                    </button>
                 </div>
             </div>
         </div>
@@ -90,6 +98,7 @@
 
     export default {
         name: "AddTask",
+        props: ["name", "isChild", "taskFatherId", "resourceable_id", "resource_type", "resource_title", "resource_name", "lock_status"],
         data() {
             return {
                 taskType: "",
@@ -109,10 +118,25 @@
                 isAddButtonDisable: false
             }
         },
+        watch: {
+            resourceable_id(newValue) {
+                this.resourceableId = newValue;
+            },
+        },
         mounted() {
-            this.getLinkData();
+            this.resourceType = this.resource_type;
+            if (!this.resource_name) {
+                this.getLinkData();
+            }
+            if (this.resourceable_id) {
+                this.resourceableId = this.resourceable_id
+            }
             this.getTaskType();
             this.user = JSON.parse(Cookies.get('user'));
+            this.$store.commit('changeNewPrincipal', {
+                name: this.user.nickname,
+                id: this.user.id
+            });
             $('#addTask').on('hidden.bs.modal', () => {
                 this.closeAddTask()
             })
@@ -352,13 +376,28 @@
                 if (this.resourceableId) {
                     data.resourceable_id = this.resourceableId
                 }
+                if (this.lock_status) {
+                    data.lock_status = Number(this.lock_status)
+                }
 
-                fetch('post', '/tasks', data).then(res => {
-                    this.isAddButtonDisable = false;
-                    toastr.success("创建成功");
-                    $("#addTask").modal("hide");
-                    this.$router.push({path: '/tasks/' + res.data.id});
-                })
+                if (this.isChild) {
+                    fetch('post', '/tasks/' + this.taskFatherId + '/subtask', data).then(response => {
+                        toastr.success('添加成功');
+                        $('#addTask').modal('hide');
+                        this.$emit('success', response)
+                    })
+                } else {
+                    fetch('post', '/tasks', data).then(response => {
+                        this.isAddButtonDisable = false;
+                        toastr.success("创建成功");
+                        $("#addTask").modal("hide");
+                        if (this.resource_name) {
+                            this.$emit('success', response)
+                        } else {
+                            this.$router.push({path: '/tasks/' + response.data.id});
+                        }
+                    })
+                }
             },
         }
     }
