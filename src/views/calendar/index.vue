@@ -189,8 +189,6 @@
                                 <datepicker @change="changeStartTime" ref="scheduleStartDate"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-show="!isScheduleAllday">
-                                <!-- <timepicker :default="startMinutes" @change="changeStartMinutes"
-                                            ref="scheduleStartMinute"></timepicker> -->
                                 <TimeChoice @change="changeStartMinutes" ref="scheduleStartMinute"></TimeChoice>
                             </div>
                         </div>
@@ -201,8 +199,6 @@
                                             :startDate="startTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-show="!isScheduleAllday">
-                                <!-- <timepicker :default="endMinutes" @change="changeEndMinutes"
-                                            ref="scheduleEndMinute"></timepicker> -->
                                 <TimeChoice @change="changeEndMinutes" ref="scheduleEndMinute"></TimeChoice>
                             </div>
                         </div>
@@ -303,7 +299,7 @@
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="cancelSchedule">取消
                         </button>
                         <template v-if="scheduleType === 'add'">
-                            <button class="btn btn-primary" type="submit" @click="addSchedule">确定</button>
+                            <button class="btn btn-primary" type="submit" :disable="isAddButtonDisable" @click="addSchedule">确定</button>
                         </template>
                         <template v-if="scheduleType === 'edit'">
                             <button class="btn btn-primary" type="submit" @click="changeSchedule">确定</button>
@@ -476,7 +472,9 @@
                         <div class="modal-footer">
                             <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
                             <template v-if="calendarActionType === 'add'">
-                                <button class="btn btn-primary" type="submit" @click="addCalendar">确定</button>
+                                <button class="btn btn-primary" type="submit" :disable="isAddCalendarButtonDisable"
+                                        @click="addCalendar">确定
+                                </button>
                             </template>
                             <template v-else>
                                 <button class="btn btn-primary" type="submit" @click="changeCalendar">确定</button>
@@ -701,6 +699,8 @@
                 conditionLength: 0,
                 selectorHidden: [],
                 calendarTitle: '',
+                isAddButtonDisable: false,
+                isAddCalendarButtonDisable: false,
             }
         },
         mounted() {
@@ -1237,6 +1237,7 @@
                         }
                     }
                 }
+                this.isAddButtonDisable = true;
                 let data = {
                     title: this.scheduleName,
                     calendar_id: this.scheduleCalendar,
@@ -1267,6 +1268,7 @@
                     data.task_ids = this.linkageSelectedIds.tasks;
                 }
                 fetch('post', '/schedules', data).then(() => {
+                    this.isAddButtonDisable = false;
                     this.$refs.calendar.refresh();
                     $('#changeSchedule').modal('hide');
                     toastr.success('添加成功')
@@ -1343,6 +1345,7 @@
             },
 
             addCalendar: function () {
+                this.isAddCalendarButtonDisable = true;
                 let data = {
                     title: this.scheduleName,
                     color: this.checkColor,
@@ -1362,6 +1365,7 @@
                     }
                 }
                 fetch('post', '/calendars', data).then(response => {
+                    this.isAddCalendarButtonDisable = false;
                     $('#addCalendar').modal('hide');
                     this.calendarList.push(response.data);
                     toastr.success('添加成功')
