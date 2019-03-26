@@ -61,7 +61,8 @@
                                                              style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
                                                             {{ calendar.title }}
                                                         </div>
-                                                        <div class="float-right position-relative">
+                                                        <div class="float-right position-relative"
+                                                             v-show="!calendar.starable_type || (calendar.starable_type && calendar.principal_id == userInfo.id)">
                                                             <i class="iconfont icon-gengduo1" aria-hidden="true"
                                                                id="taskDropdown"
                                                                data-toggle="dropdown" aria-expanded="false"></i>
@@ -299,7 +300,9 @@
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="cancelSchedule">取消
                         </button>
                         <template v-if="scheduleType === 'add'">
-                            <button class="btn btn-primary" type="submit" :disable="isAddButtonDisable" @click="addSchedule">确定</button>
+                            <button class="btn btn-primary" type="submit" :disable="isAddButtonDisable"
+                                    @click="addSchedule">确定
+                            </button>
                         </template>
                         <template v-if="scheduleType === 'edit'">
                             <button class="btn btn-primary" type="submit" @click="changeSchedule">确定</button>
@@ -464,9 +467,15 @@
                             </div>
                         </div>
                         <div class="example">
+                            <div class="col-md-2 text-right float-left">负责人</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <InputSelectors placeholder="请选择负责人" @change="principalChange"></InputSelectors>
+                            </div>
+                        </div>
+                        <div class="example">
                             <div class="col-md-2 text-right float-left">参与人</div>
                             <div class="col-md-10 float-left pl-0">
-                                <add-member></add-member>
+                                <AddMember></AddMember>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -701,6 +710,7 @@
                 calendarTitle: '',
                 isAddButtonDisable: false,
                 isAddCalendarButtonDisable: false,
+                principal: '',
             }
         },
         mounted() {
@@ -708,34 +718,21 @@
             this.getCalendarList();
             this.getResources();
             this.selectProjectLinkage();
-            let _this = this;
-            $('#addCalendar').on('hidden.bs.modal', function () {
-                _this.$store.dispatch('changeParticipantsInfo', {data: []});
-                _this.starId = '';
-                _this.starFlag = '';
-                _this.scheduleName = '';
-                _this.checkColor = '';
-                _this.calendarVisible = 1;
-                _this.$refs.linkageStar.setValue('');
-                _this.$refs.visibleSelector.setValue('');
-
-            });
-
-            $('#changeSchedule').on('hidden.bs.modal', function () {
-                _this.initAddScheduleModal();
-            });
-
-            $('#checkSchedule').on('hide.bs.modal', function () {
-                if (_this.scheduleType !== 'edit') {
-                    _this.$store.dispatch('changeParticipantsInfo', {data: []});
-                }
-                _this.getScheduleFinish = false
-            });
-
-            $('#addMembers').on('hidden.bs.modal', function () {
-                _this.$store.dispatch('changeParticipantsInfo', {type: 'change', data: []});
-            });
-            $('#addCalendar').on('show.bs.modal', () => {
+            $('#addCalendar').on('hidden.bs.modal', () => {
+                this.$store.dispatch('changeParticipantsInfo', {data: []});
+                this.starId = '';
+                this.starFlag = '';
+                this.scheduleName = '';
+                this.checkColor = '';
+                this.calendarVisible = 1;
+                this.$refs.linkageStar.setValue('');
+                this.$refs.visibleSelector.setValue('');
+                this.$store.commit('changeNewPrincipal', {
+                    name: this.userInfo.nickname,
+                    id: this.userInfo.id
+                });
+                this.principal = this.userInfo.id;
+            }).on('show.bs.modal', () => {
                 this.$store.dispatch('changeParticipantsInfo', {
                     data: [{
                         icon_url: this.userInfo.avatar,
@@ -743,9 +740,29 @@
                     }]
                 });
             });
+
+            $('#changeSchedule').on('hidden.bs.modal', () => {
+                this.initAddScheduleModal();
+            });
+
+            $('#checkSchedule').on('hide.bs.modal', () => {
+                if (this.scheduleType !== 'edit') {
+                    this.$store.dispatch('changeParticipantsInfo', {data: []});
+                }
+                this.getScheduleFinish = false
+            });
+
+            $('#addMembers').on('hidden.bs.modal', () => {
+                this.$store.dispatch('changeParticipantsInfo', {type: 'change', data: []});
+            });
             this.globalClick(this.removeSelector);
             this.initCalendar();
             this.userInfo = JSON.parse(Cookies.get('user'));
+            this.$store.commit('changeNewPrincipal', {
+                name: this.userInfo.nickname,
+                id: this.userInfo.id
+            });
+            this.principal = this.userInfo.id;
         },
 
         watch: {
@@ -861,9 +878,15 @@
                     this.calendarVisible = response.data.privacy;
                     this.$refs.visibleSelector.setValue(response.data.privacy);
                     this.$store.dispatch('changeParticipantsInfo', {data: response.data.participants.data});
+                    let principalInfo = {};
+                    if (response.data.principal) {
+                        principalInfo = response.data.principal.data;
+                        this.principal = response.data.principal.data.id
+                    }
+                    this.$store.dispatch('changePrincipal', {data: principalInfo});
                     if (response.data.starable) {
                         let starId = response.data.starable.data.id;
-                        let starFlag = response.data.starable.data.flag
+                        let starFlag = response.data.starable.data.flag;
                         this.starId = starId;
                         this.starFlag = starFlag;
                         this.$refs.linkageStar.setValue(starFlag + '-' + starId)
@@ -923,6 +946,12 @@
                 this.$router.replace({path: '/tasks/' + taskId});
             },
 
+            principalChange(value) {
+                if (value) {
+                    this.principal = value.id;
+                }
+            },
+
             selectProjectLinkage: function (value) {
                 this.linkageResource = value;
                 if (!this.allProjectsInfo) {
@@ -971,19 +1000,6 @@
                 fetch('delete', '/schedules/' + this.scheduleData.id + '/affixes/' + affixId).then(() => {
                     toastr.success('删除成功');
                     this.scheduleData.affixes.data.splice(this.scheduleData.affixes.data.map(item => item.id).indexOf(affixId), 1)
-                })
-            },
-
-            delScheduleLinkage: function (type, value) {
-                let url = '';
-                if (type === 'project') {
-                    url = '/schedules/' + this.scheduleData.id + '/projects/' + value
-                } else if (type === 'task') {
-                    url = '/schedules/' + this.scheduleData.id + '/tasks/' + value
-                }
-                fetch('delete', url).then(() => {
-                    toastr.success('删除成功');
-                    this.scheduleData[type].data.splice(this.scheduleData[type].data.map(item => item.id).indexOf(value), 1)
                 })
             },
 
@@ -1350,6 +1366,7 @@
                     title: this.scheduleName,
                     color: this.checkColor,
                     privacy: this.calendarVisible,
+                    principal_id: this.principal
                 };
                 if (this.starId) {
                     data.star = {
@@ -1377,6 +1394,7 @@
                     title: this.scheduleName,
                     color: this.checkColor,
                     privacy: this.calendarVisible,
+                    principal_id: this.principal,
                 };
 
                 if (this.starId) {
