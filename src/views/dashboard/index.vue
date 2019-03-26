@@ -165,6 +165,7 @@
 </template>
 
 <script>
+    import fetch from '../../assets/utils/fetch.js'
     export default {
         name: "home",
         data() {
@@ -172,8 +173,8 @@
                 urlData: [
                     {
                         id: 1,
-                        name: '商务仪表盘',
-                        url: '/dashboard/commerce',
+                        name: '',
+                        url: '',
                         type: 'link',
                         isSelected: false,
                         level: 1,
@@ -186,9 +187,27 @@
                 
             }
         },
+        mounted(){
+            this.getDashboard()
+        },
         methods:{
             department:function(value){
                 this.departmentDate = value
+            },
+            getDashboard:function(){
+                let _this = this
+                fetch('get', '/dashboards').then(function (response) {   
+                    response.data.forEach(item=>{
+                        _this.urlData.forEach(data=>{   
+                            data.id = item.id
+                            data.name = item.name
+                            data.url = '/dashboard/' +  data.id 
+                        })
+                       
+                    })
+                    
+                })
+                console.log(_this.urlData)
             }
         }
     }

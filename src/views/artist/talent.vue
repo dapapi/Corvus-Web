@@ -332,7 +332,7 @@
         </div>
 
         <customize-filter :data="customizeContentType==='stars'?customizeInfoStars:customizeInfoBloggers"
-                          @change="customize" ref="removeDate" :isint="true"></customize-filter>
+                          @change="customize" ref="customize" :isint="true"></customize-filter>
 
         <div class="site-action" data-plugin="actionBtn" data-toggle="modal" @click='rightChecker("博主","addBolgger","blogger")' v-if="!isShow">
             <button type="button"
@@ -1206,10 +1206,8 @@
                 //     data.name = ''
                 // }
                 // data.page = '&page='+this.current_page
-                console.log(value)
                 this.customizeCondition = value  
                 this.customizeCondition.sign_contract_status = this.currentpagestatus
-                console.log(this.customizeContentType)
                 this.fetchHandler('post', '/'+this.customizeContentType+'/filter','filter')
                 // fetch('post', this.customizeContentType +'/filter?include=creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name ,value).then(function (params) {
 
@@ -1422,18 +1420,18 @@
             tab: function (value) {
                 this.selectedArtistsArr = []
                 if (value == 'start') {
-                    this.$refs.removeDate.setValue({conditions:[]})
+                    this.$refs.customize.setValue({conditions:[]})
                     this.customizeCondition = {}
                     this.getArtists()                  
                     this.isShow = true
-                    // this.$refs.removeDate.reset()
+                   
                 } else if (value == 'bloggers') {
-                    this.$refs.removeDate.setValue({conditions:[]})
+                    this.$refs.customize.setValue({conditions:[]})
                     this.customizeCondition  = {}
                     this.getBlogger()
                     this.isShow = false
-                    // this.$refs.removeDate.reset()
                 }
+                this.$refs.customize.reset()
             },
             giveBroker: function () {
                 let url, toast, data
