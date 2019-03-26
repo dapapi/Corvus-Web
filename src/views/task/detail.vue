@@ -126,8 +126,8 @@
                             <button type="button" class="btn btn-primary" data-plugin="actionBtn"
                                 data-toggle="modal"
                                 v-if="questionInfo.reviewanswer
-                                    && principalId === user.id 
-                                    && hasAnsweredArr.length > 0 
+                                    && principalId === user.id
+                                    && hasAnsweredArr.length > 0
                                     && hasAnsweredArr.length === questionInfo.reviewanswer.data.length
                                     && !questionInfo.excellent
                                 "
@@ -351,7 +351,7 @@
                                                                 :content="taskInfo.start_at[1]" :is-edit="isEdit"
                                                                 @change="(value) => changeTaskInfo(value, 'start_minutes')"></EditTimeChoice>
                                                 </div>
-                                                
+
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-8">
@@ -631,768 +631,749 @@
 </template>
 
 <script>
-    import fetch from '../../assets/utils/fetch.js'
-    import config from '../../assets/js/config'
-    import common from '../../assets/js/common'
-    import Cookies from 'js-cookie'
-    import { mapState } from 'vuex'
+import Cookies from 'js-cookie';
+import { mapState } from 'vuex';
+import fetch from '../../assets/utils/fetch.js';
+import config from '../../assets/js/config';
+import common from '../../assets/js/common';
 
-    export default {
+export default {
 
-        data: function () {
-            return {
-                common: common,
-                taskId: this.$route.params.id,
-                changeInfo: {},
-                isEdit: false,
-                total: 0,
-                current_page: 0,
-                total_pages: 0,
-                taskInfo: {},
-                participantsArr: [],
-                flagParticipantsIdArr: [],
-                changeParticipantInfo: '',
-                newChildTask: {},
-                taskName: '',
-                taskIntroduce: '',
-                taskType: '',
-                principal: '',
-                participants: '',
-                taskLevel: 1,
-                startTime: '',
-                endTime: '',
-                startMinutes: '00:00',
-                endMinutes: '00:00',
-                taskLevelArr: config.taskLevelArr,
-                taskTypeArr: [],
-                customizeInfo: config.customizeInfo,
-                priorityArr: config.priorityArr,
-                taskStatusArr: config.taskStatusArr.push({name: '全部', value: ''}),
-                oldInfo: '',
-                linkData: [],
-                resourceType: '', // 资源type
-                resourceableId: '', // 资源id
-                user: {}, // 个人信息
-                attachmentId: '', // 附件id
-                // routerId: this.$route.params.id || '',// 路由
-                questionData: [], // 问卷列表
-                answerList: [], // 答题列表
-                questionInfo: {
-                    reviewanswer: [], // 部门人员列表
-                }, // 问卷信息
-                hasAnsweredArr: [], // 答过题的人
-                pushReason: '', // 推荐原因
-                principalId: '', // 负责人id
-                questionId: '', // 问卷id
-                visible: false, // 是否展示问卷
-                isLoading: true,
-                tabIndex: 0,
-                canSend: true, // 是否可以提交问卷
-                questionMemberList: [], // 问卷评优团人员
-                previewUrl: '', // 附件地址
-                previewName: '', // 附件名字
-                linkCurrentPage: 2, // 关联资源当前页数
-                linkTotalPage: 1, // 关联资源总页数
-                linkCode: '', // 关联资源父数据的code
-                linkIndex: 0, //
-                canLoadMore: false, // 关联资源是否可以加载更多
-                canEdit: false, // 是否可以编辑
-            }
-        },
+  data() {
+    return {
+      common,
+      taskId: this.$route.params.id,
+      changeInfo: {},
+      isEdit: false,
+      total: 0,
+      current_page: 0,
+      total_pages: 0,
+      taskInfo: {},
+      participantsArr: [],
+      flagParticipantsIdArr: [],
+      changeParticipantInfo: '',
+      newChildTask: {},
+      taskName: '',
+      taskIntroduce: '',
+      taskType: '',
+      principal: '',
+      participants: '',
+      taskLevel: 1,
+      startTime: '',
+      endTime: '',
+      startMinutes: '00:00',
+      endMinutes: '00:00',
+      taskLevelArr: config.taskLevelArr,
+      taskTypeArr: [],
+      customizeInfo: config.customizeInfo,
+      priorityArr: config.priorityArr,
+      taskStatusArr: config.taskStatusArr.push({ name: '全部', value: '' }),
+      oldInfo: '',
+      linkData: [],
+      resourceType: '', // 资源type
+      resourceableId: '', // 资源id
+      user: {}, // 个人信息
+      attachmentId: '', // 附件id
+      // routerId: this.$route.params.id || '',// 路由
+      questionData: [], // 问卷列表
+      answerList: [], // 答题列表
+      questionInfo: {
+        reviewanswer: [], // 部门人员列表
+      }, // 问卷信息
+      hasAnsweredArr: [], // 答过题的人
+      pushReason: '', // 推荐原因
+      principalId: '', // 负责人id
+      questionId: '', // 问卷id
+      visible: false, // 是否展示问卷
+      isLoading: true,
+      tabIndex: 0,
+      canSend: true, // 是否可以提交问卷
+      questionMemberList: [], // 问卷评优团人员
+      previewUrl: '', // 附件地址
+      previewName: '', // 附件名字
+      linkCurrentPage: 2, // 关联资源当前页数
+      linkTotalPage: 1, // 关联资源总页数
+      linkCode: '', // 关联资源父数据的code
+      linkIndex: 0, //
+      canLoadMore: false, // 关联资源是否可以加载更多
+      canEdit: false, // 是否可以编辑
+    };
+  },
 
-        mounted() {
-            
-            this.getTask();
-            $('#addChildTask').on('show.bs.modal', function () {
-                // this.showChildTask = true;
-                this.isEdit = false;
-            })
-            this.user = JSON.parse(Cookies.get('user'))
-            // 负责人默认值的设置
-            this.$store.commit('changeNewPrincipal', {
-                name: this.user.nickname,
-                id: this.user.id
-            })
-            this.getTaskType()
-            $('#addChildTask').on('hidden.bs.modal', () => {
-                // 清空state
-                this.closeAddTask()
-            })
+  mounted() {
+    this.getTask();
+    $('#addChildTask').on('show.bs.modal', function () {
+      // this.showChildTask = true;
+      this.isEdit = false;
+    });
+    this.user = JSON.parse(Cookies.get('user'));
+    // 负责人默认值的设置
+    this.$store.commit('changeNewPrincipal', {
+      name: this.user.nickname,
+      id: this.user.id,
+    });
+    this.getTaskType();
+    $('#addChildTask').on('hidden.bs.modal', () => {
+      // 清空state
+      this.closeAddTask();
+    });
 
-            $('#push-reason').on('hidden.bs.modal', () => {
-                this.pushReason = ''
-            })
-            // 请求问卷
-            this.getQuestionId()
+    $('#push-reason').on('hidden.bs.modal', () => {
+      this.pushReason = '';
+    });
+    // 请求问卷
+    this.getQuestionId();
 
-            // this.checkPermission()
-            // this.checkAddPermission()
-        },
+    // this.checkPermission()
+    // this.checkAddPermission()
+  },
 
-        watch: {
-            'taskInfo.participants.data': {
-                handler(newValue, oldValue) {
-                    if (newValue && oldValue) {
-                        this.changeParticipantInfo = newValue
-                    }
-                },
-                deep: true
-            },
-            routerId(id) {
-                this.taskId = id
-                setTimeout(() => {
-                    this.getTask();
-                }, 100)
-                $('#taskTab a:first').tab('show')
-            },
-            resourceType () {
-                console.log(this.resourceType)
-            }
-        },
-
-        computed: {
-            ...mapState([
-                'power'
-            ]),
-            routerId() {
-                return this.$route.params.id
-            },
-        },
-
-        methods: {
-
-            getTask: function () {
-
-                let data = {
-                    include: 'creator,principal,pTask,tasks.type,resource.resourceable,resource.resource,affixes,participants',
-                };
-
-                fetch('get', '/tasks/' + this.taskId, data).then(response => {
-                    if (response.data.affixes) {
-                        for (let i = 0; i < response.data.affixes.data.length; i++) {
-                            let size = response.data.affixes.data[i].size;
-                            response.data.affixes.data[i].size = this.unitConversion(size)
-                        }
-                    }
-
-                    this.canEdit = response.data.power == 'true'
-
-                    this.oldInfo = JSON.parse(JSON.stringify(response.data));
-                    this.taskInfo = response.data;
-                    this.taskInfo.start_at = this.taskInfo.start_at.split(' ');
-                    this.taskInfo.end_at = this.taskInfo.end_at.split(' ');
-                    this.taskInfo.start_at[1] = this.taskInfo.start_at[1].split(':')[0] + ':' + this.taskInfo.start_at[1].split(':')[1]
-                    this.taskInfo.end_at[1] = this.taskInfo.end_at[1].split(':')[0] + ':' + this.taskInfo.end_at[1].split(':')[1]
-                    for (let i = 0; i < response.data.participants.data.length; i++) {
-                        this.flagParticipantsIdArr.push(response.data.participants.data[i].id)
-                    }
-                    let params = {
-                        type: 'change',
-                        data: response.data.participants.data
-                    };
-                    this.$store.dispatch('changeParticipantsInfo', params);
-                    params.data = response.data.principal.data;
-                    this.$store.dispatch('changePrincipal', params);
-                    this.isLoading = false;
-                    this.getLinkData()
-                    this.resourceType =  this.oldInfo.resource && this.oldInfo.resource.data.resource.data.type // 资源type
-                    this.resourceableId = this.oldInfo.resource && this.oldInfo.resource.data.resourceable.data.id // 资源id
-                })
-            },
-
-            changeTaskInfo: function (value, name) {
-                
-                switch (name) {
-                    case 'principal_id':
-                        value = this.$store.state.principalInfo.id;
-                        break;
-                    case 'start_minutes':
-                    this.changeInfo.start_at = ''
-                        if (this.changeInfo.start_at) {
-                            this.changeInfo.start_at = this.changeInfo.start_at + ' ' + value
-                        } else {
-                            this.changeInfo.start_at = this.taskInfo.start_at[0] + ' ' + value
-                        }
-                        break;
-                    case 'end_minutes':
-                    this.changeInfo.end_at = ''
-                        if (this.changeInfo.end_at) {
-                            this.changeInfo.end_at = this.changeInfo.end_at + ' ' + value
-                        } else {
-                            this.changeInfo.end_at = this.taskInfo.end_at[0] + ' ' + value
-                        }
-                        return
-                }
-                this.changeInfo[name] = value
-            },
-
-            editBaseInfo: function () {
-                if (!this.canEdit) {
-                    toastr.error('您没有编辑任务的权限！')
-                    return
-                }
-                this.isEdit = true;
-                this.changeInfo = {};
-            },
-
-            customize: function (value) {
-                console.log(value)
-            },
-
-            cancelEdit: function () {
-                this.isEdit = false;
-                this.getTask();
-            },
-
-            changeTaskStatus: function (status) {
-                fetch('put', '/tasks/' + this.taskId + '/status', {status: status}).then(() => {
-                    if (status === 2) {
-                        toastr.success("完成任务成功");
-                    } else if (status === 3) {
-                        toastr.success("暂停任务成功");
-                    } else if (status === 1) {
-                        toastr.success("激活任务成功");
-                    }
-                    this.taskInfo.status = status;
-                    this.getTask();
-                })
-            },
-
-            privacyTask: function (value) {
-                fetch('post', '/task/secret/' + this.taskId, {privacy: value}).then(() => {
-                    toastr.success(this.taskInfo.privacy ? '转公开成功!' : '转私密成功!');
-                    this.getTask()
-                })
-            },
-
-            shouleDeleteTask () {
-                $("#delTask").modal();
-            },
-
-            deleteTask: function () {
-                fetch('delete', '/tasks/' + this.taskId).then(() => {
-                    toastr.success("删除任务成功");
-                    this.$router.push({path: '/tasks'})
-                })
-            },
-
-            unitConversion: function (size) {
-                if (size < 1024) {
-                    size = size + "B"
-                } else if (size < 1024 * 1024) {
-                    size = (size / 1024).toFixed(2) + "KB"
-                } else if (size < 1024 * 1024 * 1024) {
-                    size = (size / (1024 * 1024)).toFixed(2) + "MB"
-                } else {
-                    size = (size / (1024 * 1024 * 1024)).toFixed(2) + "GB"
-                }
-                let sizeStr = size + "";
-                let index = sizeStr.indexOf(".");
-                let dou = sizeStr.substr(index + 1, 2);
-                if (dou === "00") {
-                    size = sizeStr.substring(0, index) + sizeStr.substr(index + 3, 2)
-                }
-                return size
-            },
-
-            changeTaskBaseInfo: function () {
-                if (this.changeInfo.principal_id == this.oldInfo.principal.data.id) {
-                    delete this.changeInfo.principal_id
-                }
-                // 修改任务概况除参与人字段
-                const editTaskInfo = () => {
-                    return new Promise((res, rej) => {
-                        fetch('put', '/tasks/' + this.taskId, this.changeInfo).then(() => {
-                            // this.getTask();
-                            if (this.changeInfo.principal_id) {
-                                this.taskInfo.principal.data = this.$store.state.principalInfo
-                            }
-                            res(true)
-                        }).catch(() => {
-                            rej(false)
-                        })
-                    })
-                }
-                // 修改参与人
-                const editParticipant = () => {
-                    return new Promise((res, rej) => {
-
-                        let changeInfo = this.changeParticipantInfo;
-                        let participant_ids = [];
-
-                        let flagInfo = this.flagParticipantsIdArr;
-                        let del_participant_ids = [];
-                        for (let j = 0; j < flagInfo.length; j++) {
-                            if (changeInfo.map(item => item.id).indexOf(flagInfo[j]) === -1) {
-                                del_participant_ids.push(flagInfo[j])
-                            }
-                        }
-                        for (let j = 0; j < changeInfo.length; j++) {
-                            if (flagInfo.indexOf(changeInfo[j].id) === -1) {
-                                participant_ids.push(changeInfo[j].id)
-                            }
-                        }
-                        let data = {};
-                        if (participant_ids.length > 0) {
-                            data.person_ids = participant_ids
-                        }
-                        if (del_participant_ids.length > 0) {
-                            data.del_person_ids = del_participant_ids
-                        }
-                        if (JSON.stringify(data) !== "{}") {
-                            fetch('post', '/tasks/' + this.taskId + '/participant', data).then(() => {
-                                // this.getTask();
-                                // toastr.success('修改成功')
-                                res(true)
-                            }).catch(() => {
-                                rej(false)
-                            })
-                        }
-                    })
-                }
-
-                const editAllInfo = async () => {
-                    
-                    let resInfo = true
-                    if (JSON.stringify(this.changeInfo) !== "{}") {
-                        resInfo = await editTaskInfo()
-                    }
-                    let resParticipant = true
-                    if (this.changeParticipantInfo) {
-                        resParticipant = await editParticipant()
-                    }
-                    // return resInfo && resParticipant
-                    if (resInfo && resParticipant) {
-                        toastr.success('修改成功')
-                        this.getTask()
-                    }
-                }
-                editAllInfo()
-                // editAllInfo().then(res => {
-                //     if (res) {
-                //         toastr.success('修改成功')
-                //     }
-                // })
-                this.isEdit = false;
-            },
-
-            uploadAttachment: function (url, name, size) {
-                let _this = this;
-                let data = {
-                    title: name,
-                    url: url,
-                    size: size,
-                    type: 1
-                };
-                fetch('post', '/tasks/' + this.taskId + '/affix', data).then(function (response) {
-                    toastr.success("上传成功");
-                    response.data.size = _this.unitConversion(response.data.size);
-                    _this.taskInfo.affixes.data.push(response.data)
-                })
-            },
-
-            deleteAttachment: function () {
-                fetch('delete', '/tasks/' + this.taskId + '/affixes/' + this.attachmentId, this.changeInfo).then(response => {
-                    toastr.success("删除成功");
-                    let index = this.taskInfo.affixes.data.indexOf(this.taskInfo.affixes.data.find(item => item.id == this.attachmentId));
-                    this.taskInfo.affixes.data.splice(index, 1);
-                })
-            },
-
-            downloadAttachment: function (attachmentId, attachmentUrl) {
-                window.open(attachmentUrl, '_blank');
-            },
-            // 添加子任务
-            addChildTask: function () {
-                if (!this.taskName) {
-                    toastr.error('请填写任务名称！')
-                    return
-                }
-                if (!this.taskType) {
-                    toastr.error('请选择任务类型！')
-                    return
-                }
-                if (!this.$store.state.newPrincipalInfo.id) {
-                    toastr.error('请选择负责人！')
-                    return
-                }
-                if (!this.taskLevel) {
-                    toastr.error('请选择任务优先级！')
-                    return
-                }
-                if (!this.startTime || !this.endTime) {
-                    toastr.error('请选择时间!')
-                    return
-                }
-                if ((this.startTime + " " + this.startMinutes) > (this.endTime + " " + this.endMinutes)) {
-                    toastr.error('开始时间不能晚于截止时间');
-                    return
-                }
-                let participant_ids = [];
-                for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
-                    participant_ids.push(this.$store.state.newParticipantsInfo[i].id)
-                }
-                let data = {
-                    title: this.taskName,
-                    type: this.taskType,
-                    principal_id: this.$store.state.newPrincipalInfo.id,
-                    participant_ids: participant_ids,
-                    priority: this.taskLevel,
-                    start_at: this.startTime + ' ' + this.startMinutes,
-                    end_at: this.endTime + ' ' + this.endMinutes,
-                    desc: this.taskIntroduce,
-                };
-                if (this.resourceType) {
-                    data.resource_type = this.resourceType
-                }
-                if (this.resourceableId) {
-                    data.resourceable_id = this.resourceableId
-                }
-                let self = this
-                fetch('post', '/tasks/' + this.taskId + '/subtask', data).then(function (response) {
-                    toastr.success('添加成功');
-                    $('#addChildTask').modal('hide');
-                    self.getTask();
-                })
-            },
-            addTaskType: function (value) {
-                this.taskType = value
-            },
-
-            addPrincipal: function (value) {
-                this.principal = value
-            },
-
-            addParticipant: function (value) {
-                let flagArr = [];
-                for (let i = 0; i < value.length; i++) {
-                    flagArr.push(value[i].id)
-                }
-                this.participants = flagArr
-            },
-
-            addTaskLevel: function (value) {
-                this.taskLevel = value
-            },
-
-            addStartTime: function (value) {
-                this.startTime = value
-            },
-
-            addEndTime: function (value) {
-                this.endTime = value
-            },
-
-            addLinkage: function (type, value, id, index) {
-                if (type === 'father') {
-                    this.getChildLinkData(value, index)
-                    this.resourceType = id
-                    this.changeInfo.resourceable_id = this.resourceableId
-                    this.changeInfo.resource_type = id
-                    this.changeInfo.code = this.linkCode
-                } else if (type === 'child') {
-                    this.resourceableId = value
-                    this.changeInfo.resourceable_id = value
-                    this.changeInfo.resource_type = this.resourceType
-                    this.changeInfo.code = this.linkCode
-                }
-            },
-
-            addStartMinutes: function (value) {
-                this.startMinutes = value
-            },
-
-            addEndMinutes: function (value) {
-                this.endMinutes = value
-            },
-            redirectTaskDetail: function (taskId) {
-                this.$router.push({path: '/tasks/' + taskId, force: true})
-                // this.$router.replace({path: '/tasks/' + taskId})
-            },
-            // 获取关联父资源数据
-            getLinkData() {
-                fetch('get', '/resources').then(res => {
-                    this.linkData = res.data.map((n, i) => {
-                        return {
-                            name: n.title,
-                            id: n.type,
-                            value: n.code,
-                            // type: n.type,
-                            child: []
-                        }
-                    })
-                    this.linkData.unshift({
-                        name: '暂不关联任何资源',
-                        id: '',
-                        value: '',
-                        // type: n.type,
-                        child: []
-                    })
-                    if (this.linkData[0].child.length === 0) {
-                        this.getChildLinkData('', 0)
-                    }
-                    if (this.oldInfo && this.oldInfo.resource && this.oldInfo.resource.data.resource.data.code) {
-                        this.getChildLinkData(this.oldInfo.resource.data.resource.data.code, 0)
-                    }
-                })
-            },
-            // 获取关联子资源数据
-            getChildLinkData(url, index) {
-                if (url) {
-                    let data = {}
-                    this.linkCode = url
-                    this.linkIndex = index
-                    if (url === 'bloggers' || url === 'stars') {
-                        data.sign_contract_status = 2
-                    }
-                    fetch('get', `/${url === 'bloggers' ? url + '/all' : url}`, data).then(res => {
-                        const temp = this.linkData[index]
-                        if (res.meta && res.meta.pagination) {
-                            this.canLoadMore = true
-                            this.linkTotalPage = res.meta.pagination.total_pages
-                        } else {
-                            this.canLoadMore = false
-                        }
-                        temp.child = res.data.map(n => {
-                            return {
-                                name: n.name || n.nickname || n.title || n.company,
-                                id: n.id,
-                                value: n.id,
-                            }
-                        })
-                        this.resourceableId = temp.child[0].id
-                        this.$set(this.linkData, index, temp)
-                        setTimeout(() => {
-                            this.$refs.linkage.refresh()
-                        }, 100)
-                    })
-                } else {
-                    const temp = this.linkData[index]
-                    temp.child = [{
-                        name: '暂不关联任何资源',
-                        id: '',
-                        value: '',
-                    }]
-                    this.resourceableId = temp.child[0].id
-                    this.$set(this.linkData, index, temp)
-                    setTimeout(() => {
-                        this.$refs.linkage.refresh()
-                    }, 100)
-                }
-
-            },
-            // 关联子资源滚动到底加载更多
-            getMoreChildLinkData () {
-                const url = this.linkCode
-                const index = this.linkIndex
-                if (url && this.canLoadMore) {
-                    
-                    if (this.linkCurrentPage >= this.linkTotalPage) {
-                        return
-                    }
-                    let data = {
-                        page: this.linkCurrentPage
-                    }
-                    if (url === 'bloggers' || url === 'stars') {
-                        data.sign_contract_status = 2
-                    }
-                    fetch('get', `/${url === 'bloggers'? url + '/all' : url}`, data).then(res => {
-                        this.linkCurrentPage = this.linkCurrentPage + 1
-                        const temp = this.linkData[index]
-                        // const temp = this.linkData
-                        const tempArr = res.data.map(n => {
-                            return {
-                                name: n.name || n.nickname || n.title || n.company,
-                                id: n.id,
-                                value: n.id,
-                            }
-                        })
-                        temp.child = [...temp.child, ...tempArr]
-                        this.resourceableId = temp.child[0].id
-                        this.$set(this.linkData, index, temp)
-                        setTimeout(() => {
-                            this.$refs.linkage.refresh()
-                        }, 100)
-                    })
-                }
-            },
-            // 获取任务类型列表
-            getTaskType() {
-                fetch('get', '/task_types').then(res => {
-                    const data = res.data
-                    this.taskTypeArr = data.map(n => {
-                        return {name: n.title, value: n.id}
-                    })
-                    this.taskTypeArr.unshift({name: '全部', value: ''})
-                })
-            },
-            setDelInfo(id) {
-                this.attachmentId = id
-            },
-            // 关闭新增任务
-            closeAddTask() {
-                this.taskName = ''
-                this.taskLevel = ''
-                this.$refs.taskLevel.setValue('1')
-                this.taskType = ''
-                this.$refs.taskType.setValue('')
-                this.startTime = ''
-                this.endTime = ''
-                this.startMinutes = ''
-                this.endMinutes = ''
-                this.taskIntroduce = ''
-                this.$refs.startTime.setValue('')
-                this.$refs.startMinutes.setValue('0')
-                this.$refs.endTime.setValue('')
-                this.$refs.endMinutes.setValue('0')
-                this.linkData = []
-                this.getLinkData()
-                this.setDefaultPrincipal()
-            },
-            // 设置默认负责人
-            setDefaultPrincipal() {
-                this.$store.commit('changeNewPrincipal', {
-                    name: this.user.nickname,
-                    id: this.user.id
-                })
-                this.$store.commit('changeNewParticipantsInfo', [])
-            },
-            // 获取问卷内容 
-            getQuestionData(id) {
-                fetch('get', `/reviewquestionnaires/${id}/show?include=sum,creator,production,reviewanswer.users`).then(res => {
-                    this.questionInfo = res.data[0]
-                    // 如果res为空表示无权限访问问卷
-                    if (!this.questionInfo) {
-                        return
-                    }
-                    for (const n of this.questionInfo.reviewanswer.data) {
-                        if (n.user_id === this.user.id) {
-                            this.visible = true
-                            fetch('get', `/reviews/${id}/questions/?include=items,selectrows.creator`).then(res => {
-                                // if (res.meta.error) {
-                                // 此处为问卷过期判断
-                                // }
-                                this.questionData = res.data
-                                this.answerList = new Array(this.questionData.length)
-                                res.data.map(n => {
-                                    n.selectrows.data.map(m => {
-                                        if (m.creator.data.is_department_principal === 1) {
-                                            this.principalId = m.creator.data.id
-                                        }
-                                        if (!~this.hasAnsweredArr.indexOf(m.creator.data.id)) {
-                                            this.hasAnsweredArr.push(m.creator.data.id)
-                                        }
-                                    })
-                                })
-                            })
-                            break
-                        } else {
-                            this.visible = false
-                        }
-                    }
-                })
-            },
-            // 试卷提交
-            submit() {
-                let canSubmit = true
-                const params = {
-                    review_question_item: {}
-                }
-
-                for (const n of this.answerList) {
-                    if (!n || isNaN(n.value)) {
-                        canSubmit = false
-                        break
-                    }
-                    params.review_question_item[n.review_question_id] = n.id
-                }
-                if (!canSubmit) {
-                    toastr.error('您有未作答题目，请作答完成后提交！')
-                    return
-                }
-                if (this.canSend) {
-                    this.canSend = false
-                    fetch('post', `/reviews/${this.questionId}/store/Answer`, params).then(res => {
-                        toastr.success('问卷提交成功！')
-                        this.getQuestionId()
-                    })
-                }
-            },
-            // 推优原因提交
-            submitPush() {
-                if (!this.pushReason) {
-                    toastr.error('请填写推优原因！')
-                    return
-                }
-                const params = {
-                    excellent: this.pushReason,
-                    excellent_sum: this.questionInfo.sum.data[0].truncate
-                }
-                fetch('post', `/reviewquestionnaires/${this.questionId}/create/excellent`, params).then(res => {
-                    $("#push-reason").modal("hide");
-                    toastr.success('推优成功！')
-                    this.getQuestionId()
-                    // this.addQuestionTask() // 2019.02.12注释 暂时不需要前端新增任务 由后台创建
-                })
-            },
-            // 根据任务id获取是否有问卷
-            getQuestionId() {
-                fetch('get', `/bloggers/${this.taskId}/taskblogger`).then(res => {
-                    if (res.data) {
-                        this.questionId = res.data.id
-                        this.getQuestionData(res.data.id)
-                        this.getQuestionMember()
-                    }
-                })
-            },
-            // 打开视频链接
-            openUrl (url) {
-                if (url) {
-                    let _url = url.data[0].link
-                    if (_url.indexOf('http') < 0) {
-                        _url = '//' + _url
-                    }
-                    window.open(_url)
-                }
-            },
-            // 新增评审任务（推优后，新增一个任务）
-            addQuestionTask () {
-                let data = {
-                    // resource_type: this.resourceType ,
-                    // resourceable_id: this.resourceableId,
-                    type: this.taskTypeArr.find(n => n.name === '视频评分').id,
-                    title: '评优团视频评分任务-视频评分',
-                    principal_id: this.questionMemberList[0].user_id,
-                    participant_ids: this.questionMemberList.map(n => n.user_id),
-                    priority: 2,
-                    start_at: moment(new Date()).format('YYYY-MM-DD HH:MM'),
-                    end_at: moment(new Date()).add(7, 'days').format('YYYY-MM-DD HH:MM'),
-                    desc: '评优团视频评分任务'
-                }
-                fetch('post', '/tasks', data).then(res => {
-                    // toastr.success("评优团视频评分任务创建成功!")
-                })
-            },
-            // 获取品优团成员
-            getQuestionMember () {
-                fetch('get', '/data_dictionary/appraising/448').then(res => {
-                    this.questionMemberList = res.data
-                })
-            },
-            // 预览附件
-            previewFile (url, name) {
-                this.previewUrl = url
-                this.previewName = name
-            },
-            handleChildTask () {
-                if (this.power.task == 'false') {
-                    toastr.error('您没有权限新增子任务！')
-                    return
-                }
-                $('#addChildTask').modal('show')
-            }
+  watch: {
+    'taskInfo.participants.data': {
+      handler(newValue, oldValue) {
+        if (newValue && oldValue) {
+          this.changeParticipantInfo = newValue;
         }
-    }
+      },
+      deep: true,
+    },
+    routerId(id) {
+      this.taskId = id;
+      setTimeout(() => {
+        this.getTask();
+      }, 100);
+      $('#taskTab a:first').tab('show');
+    },
+    resourceType() {
+      console.log(this.resourceType);
+    },
+  },
+
+  computed: {
+    ...mapState([
+      'power',
+    ]),
+    routerId() {
+      return this.$route.params.id;
+    },
+  },
+
+  methods: {
+
+    getTask() {
+      const data = {
+        include: 'creator,principal,pTask,tasks.type,resource.resourceable,resource.resource,affixes,participants',
+      };
+
+      fetch('get', `/tasks/${this.taskId}`, data).then((response) => {
+        if (response.data.affixes) {
+          for (let i = 0; i < response.data.affixes.data.length; i++) {
+            const size = response.data.affixes.data[i].size;
+            response.data.affixes.data[i].size = this.unitConversion(size);
+          }
+        }
+
+        this.canEdit = response.data.power == 'true';
+
+        this.oldInfo = JSON.parse(JSON.stringify(response.data));
+        this.taskInfo = response.data;
+        this.taskInfo.start_at = this.taskInfo.start_at.split(' ');
+        this.taskInfo.end_at = this.taskInfo.end_at.split(' ');
+        this.taskInfo.start_at[1] = `${this.taskInfo.start_at[1].split(':')[0] }:${this.taskInfo.start_at[1].split(':')[1]}`;
+        this.taskInfo.end_at[1] = `${this.taskInfo.end_at[1].split(':')[0]}:${this.taskInfo.end_at[1].split(':')[1]}`;
+        for (let i = 0; i < response.data.participants.data.length; i++) {
+          this.flagParticipantsIdArr.push(response.data.participants.data[i].id);
+        }
+        const params = {
+          type: 'change',
+          data: response.data.participants.data,
+        };
+        this.$store.dispatch('changeParticipantsInfo', params);
+        params.data = response.data.principal.data;
+        this.$store.dispatch('changePrincipal', params);
+        this.isLoading = false;
+        this.getLinkData();
+        this.resourceType = this.oldInfo.resource && this.oldInfo.resource.data.resource.data.type; // 资源type
+        this.resourceableId = this.oldInfo.resource && this.oldInfo.resource.data.resourceable.data.id; // 资源id
+      });
+    },
+
+    changeTaskInfo(value, name) {
+      switch (name) {
+        case 'principal_id':
+          value = this.$store.state.principalInfo.id;
+          break;
+        case 'start_minutes':
+          this.changeInfo.start_at = '';
+          if (this.changeInfo.start_at) {
+            this.changeInfo.start_at = `${this.changeInfo.start_at} ${ value}`;
+          } else {
+            this.changeInfo.start_at = `${this.taskInfo.start_at[0] } ${ value}`;
+          }
+          break;
+        case 'end_minutes':
+          this.changeInfo.end_at = '';
+          if (this.changeInfo.end_at) {
+            this.changeInfo.end_at = `${this.changeInfo.end_at } ${value}`;
+          } else {
+            this.changeInfo.end_at = `${this.taskInfo.end_at[0]} ${value}`;
+          }
+          return;
+      }
+      this.changeInfo[name] = value;
+    },
+
+    editBaseInfo() {
+      if (this.$store.state.power.task.add !== 'true') {
+        toastr.error('您没有编辑任务的权限！');
+        return;
+      }
+      this.isEdit = true;
+      this.changeInfo = {};
+    },
+
+    customize(value) {
+      console.log(value);
+    },
+
+    cancelEdit() {
+      this.isEdit = false;
+      this.getTask();
+    },
+
+    changeTaskStatus(status) {
+      fetch('put', `/tasks/${ this.taskId}/status`, { status }).then(() => {
+        if (status === 2) {
+          toastr.success('完成任务成功');
+        } else if (status === 3) {
+          toastr.success('暂停任务成功');
+        } else if (status === 1) {
+          toastr.success('激活任务成功');
+        }
+        this.taskInfo.status = status;
+        this.getTask();
+      });
+    },
+
+    privacyTask(value) {
+      fetch('post', `/task/secret/${this.taskId}`, { privacy: value }).then(() => {
+        toastr.success(this.taskInfo.privacy ? '转公开成功!' : '转私密成功!');
+        this.getTask();
+      });
+    },
+
+    shouleDeleteTask() {
+      $('#delTask').modal();
+    },
+
+    deleteTask() {
+      fetch('delete', `/tasks/${this.taskId}`).then(() => {
+        toastr.success('删除任务成功');
+        this.$router.push({ path: '/tasks' });
+      });
+    },
+
+    unitConversion(size) {
+      if (size < 1024) {
+        size += 'B';
+      } else if (size < 1024 * 1024) {
+        size = `${(size / 1024).toFixed(2) }KB`;
+      } else if (size < 1024 * 1024 * 1024) {
+        size = `${(size / (1024 * 1024)).toFixed(2)}MB`;
+      } else {
+        size = `${(size / (1024 * 1024 * 1024)).toFixed(2) }GB`;
+      }
+      const sizeStr = `${size}`;
+      const index = sizeStr.indexOf('.');
+      const dou = sizeStr.substr(index + 1, 2);
+      if (dou === '00') {
+        size = sizeStr.substring(0, index) + sizeStr.substr(index + 3, 2);
+      }
+      return size;
+    },
+
+    changeTaskBaseInfo() {
+      if (this.changeInfo.principal_id == this.oldInfo.principal.data.id) {
+        delete this.changeInfo.principal_id;
+      }
+      // 修改任务概况除参与人字段
+      const editTaskInfo = () => new Promise((res, rej) => {
+        fetch('put', `/tasks/${  this.taskId}`, this.changeInfo).then(() => {
+          // this.getTask();
+          if (this.changeInfo.principal_id) {
+            this.taskInfo.principal.data = this.$store.state.principalInfo;
+          }
+          res(true);
+        }).catch(() => {
+          rej(false);
+        });
+      });
+      // 修改参与人
+      const editParticipant = () => new Promise((res, rej) => {
+        const changeInfo = this.changeParticipantInfo;
+        const participant_ids = [];
+
+        const flagInfo = this.flagParticipantsIdArr;
+        const del_participant_ids = [];
+        for (let j = 0; j < flagInfo.length; j++) {
+          if (changeInfo.map(item => item.id).indexOf(flagInfo[j]) === -1) {
+            del_participant_ids.push(flagInfo[j]);
+          }
+        }
+        for (let j = 0; j < changeInfo.length; j++) {
+          if (flagInfo.indexOf(changeInfo[j].id) === -1) {
+            participant_ids.push(changeInfo[j].id);
+          }
+        }
+        const data = {};
+        if (participant_ids.length > 0) {
+          data.person_ids = participant_ids;
+        }
+        if (del_participant_ids.length > 0) {
+          data.del_person_ids = del_participant_ids;
+        }
+        if (JSON.stringify(data) !== '{}') {
+          fetch('post', `/tasks/${  this.taskId  }/participant`, data).then(() => {
+            // this.getTask();
+            // toastr.success('修改成功')
+            res(true);
+          }).catch(() => {
+            rej(false);
+          });
+        }
+      });
+
+      const editAllInfo = async () => {
+        let resInfo = true;
+        if (JSON.stringify(this.changeInfo) !== '{}') {
+          resInfo = await editTaskInfo();
+        }
+        let resParticipant = true;
+        if (this.changeParticipantInfo) {
+          resParticipant = await editParticipant();
+        }
+        // return resInfo && resParticipant
+        if (resInfo && resParticipant) {
+          toastr.success('修改成功');
+          this.getTask();
+        }
+      };
+      editAllInfo();
+      // editAllInfo().then(res => {
+      //     if (res) {
+      //         toastr.success('修改成功')
+      //     }
+      // })
+      this.isEdit = false;
+    },
+
+    uploadAttachment(url, name, size) {
+      const _this = this;
+      const data = {
+        title: name,
+        url,
+        size,
+        type: 1,
+      };
+      fetch('post', `/tasks/${ this.taskId}/affix`, data).then((response) => {
+        toastr.success('上传成功');
+        response.data.size = _this.unitConversion(response.data.size);
+        _this.taskInfo.affixes.data.push(response.data);
+      });
+    },
+
+    deleteAttachment() {
+      fetch('delete', `/tasks/${this.taskId}/affixes/${this.attachmentId}`, this.changeInfo).then((response) => {
+        toastr.success('删除成功');
+        const index = this.taskInfo.affixes.data.indexOf(this.taskInfo.affixes.data.find(item => item.id == this.attachmentId));
+        this.taskInfo.affixes.data.splice(index, 1);
+      });
+    },
+
+    downloadAttachment(attachmentId, attachmentUrl) {
+      window.open(attachmentUrl, '_blank');
+    },
+    // 添加子任务
+    addChildTask() {
+      if (!this.taskName) {
+        toastr.error('请填写任务名称！');
+        return;
+      }
+      if (!this.taskType) {
+        toastr.error('请选择任务类型！');
+        return;
+      }
+      if (!this.$store.state.newPrincipalInfo.id) {
+        toastr.error('请选择负责人！');
+        return;
+      }
+      if (!this.taskLevel) {
+        toastr.error('请选择任务优先级！');
+        return;
+      }
+      if (!this.startTime || !this.endTime) {
+        toastr.error('请选择时间!');
+        return;
+      }
+      if ((`${this.startTime} ${this.startMinutes}`) > (`${this.endTime} ${this.endMinutes}`)) {
+        toastr.error('开始时间不能晚于截止时间');
+        return;
+      }
+      const participant_ids = [];
+      for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
+        participant_ids.push(this.$store.state.newParticipantsInfo[i].id);
+      }
+      const data = {
+        title: this.taskName,
+        type: this.taskType,
+        principal_id: this.$store.state.newPrincipalInfo.id,
+        participant_ids,
+        priority: this.taskLevel,
+        start_at: `${this.startTime } ${this.startMinutes}`,
+        end_at: `${this.endTime} ${this.endMinutes}`,
+        desc: this.taskIntroduce,
+      };
+      if (this.resourceType) {
+        data.resource_type = this.resourceType;
+      }
+      if (this.resourceableId) {
+        data.resourceable_id = this.resourceableId;
+      }
+      const self = this;
+      fetch('post', `/tasks/${this.taskId }/subtask`, data).then((response) => {
+        toastr.success('添加成功');
+        $('#addChildTask').modal('hide');
+        self.getTask();
+      });
+    },
+    addTaskType(value) {
+      this.taskType = value;
+    },
+
+    addPrincipal(value) {
+      this.principal = value;
+    },
+
+    addParticipant(value) {
+      const flagArr = [];
+      for (let i = 0; i < value.length; i++) {
+        flagArr.push(value[i].id);
+      }
+      this.participants = flagArr;
+    },
+
+    addTaskLevel(value) {
+      this.taskLevel = value;
+    },
+
+    addStartTime(value) {
+      this.startTime = value;
+    },
+
+    addEndTime(value) {
+      this.endTime = value;
+    },
+
+    addLinkage(type, value, id, index) {
+      if (type === 'father') {
+        this.getChildLinkData(value, index);
+        this.resourceType = id;
+        this.changeInfo.resourceable_id = this.resourceableId;
+        this.changeInfo.resource_type = id;
+        this.changeInfo.code = this.linkCode;
+      } else if (type === 'child') {
+        this.resourceableId = value;
+        this.changeInfo.resourceable_id = value;
+        this.changeInfo.resource_type = this.resourceType;
+        this.changeInfo.code = this.linkCode;
+      }
+    },
+
+    addStartMinutes(value) {
+      this.startMinutes = value;
+    },
+
+    addEndMinutes(value) {
+      this.endMinutes = value;
+    },
+    redirectTaskDetail(taskId) {
+      this.$router.push({ path: `/tasks/${taskId}`, force: true });
+      // this.$router.replace({path: '/tasks/' + taskId})
+    },
+    // 获取关联父资源数据
+    getLinkData() {
+      fetch('get', '/resources').then((res) => {
+        this.linkData = res.data.map((n, i) => ({
+          name: n.title,
+          id: n.type,
+          value: n.code,
+          // type: n.type,
+          child: [],
+        }));
+        this.linkData.unshift({
+          name: '暂不关联任何资源',
+          id: '',
+          value: '',
+          // type: n.type,
+          child: [],
+        });
+        if (this.linkData[0].child.length === 0) {
+          this.getChildLinkData('', 0);
+        }
+        if (this.oldInfo && this.oldInfo.resource && this.oldInfo.resource.data.resource.data.code) {
+          this.getChildLinkData(this.oldInfo.resource.data.resource.data.code, 0);
+        }
+      });
+    },
+    // 获取关联子资源数据
+    getChildLinkData(url, index) {
+      if (url) {
+        const data = {};
+        this.linkCode = url;
+        this.linkIndex = index;
+        if (url === 'bloggers' || url === 'stars') {
+          data.sign_contract_status = 2;
+        }
+        fetch('get', `/${url === 'bloggers' ? `${url}/all` : url}`, data).then((res) => {
+          const temp = this.linkData[index];
+          if (res.meta && res.meta.pagination) {
+            this.canLoadMore = true;
+            this.linkTotalPage = res.meta.pagination.total_pages;
+          } else {
+            this.canLoadMore = false;
+          }
+          temp.child = res.data.map(n => ({
+            name: n.name || n.nickname || n.title || n.company,
+            id: n.id,
+            value: n.id,
+          }));
+          this.resourceableId = temp.child[0].id;
+          this.$set(this.linkData, index, temp);
+          setTimeout(() => {
+            this.$refs.linkage.refresh();
+          }, 100);
+        });
+      } else {
+        const temp = this.linkData[index];
+        temp.child = [{
+          name: '暂不关联任何资源',
+          id: '',
+          value: '',
+        }];
+        this.resourceableId = temp.child[0].id;
+        this.$set(this.linkData, index, temp);
+        setTimeout(() => {
+          this.$refs.linkage.refresh();
+        }, 100);
+      }
+    },
+    // 关联子资源滚动到底加载更多
+    getMoreChildLinkData() {
+      const url = this.linkCode;
+      const index = this.linkIndex;
+      if (url && this.canLoadMore) {
+        if (this.linkCurrentPage >= this.linkTotalPage) {
+          return;
+        }
+        const data = {
+          page: this.linkCurrentPage,
+        };
+        if (url === 'bloggers' || url === 'stars') {
+          data.sign_contract_status = 2;
+        }
+        fetch('get', `/${url === 'bloggers' ? `${url}/all` : url}`, data).then((res) => {
+          this.linkCurrentPage = this.linkCurrentPage + 1;
+          const temp = this.linkData[index];
+          // const temp = this.linkData
+          const tempArr = res.data.map(n => ({
+            name: n.name || n.nickname || n.title || n.company,
+            id: n.id,
+            value: n.id,
+          }));
+          temp.child = [...temp.child, ...tempArr];
+          this.resourceableId = temp.child[0].id;
+          this.$set(this.linkData, index, temp);
+          setTimeout(() => {
+            this.$refs.linkage.refresh();
+          }, 100);
+        });
+      }
+    },
+    // 获取任务类型列表
+    getTaskType() {
+      fetch('get', '/task_types').then((res) => {
+        const data = res.data;
+        this.taskTypeArr = data.map(n => ({ name: n.title, value: n.id }));
+        this.taskTypeArr.unshift({ name: '全部', value: '' });
+      });
+    },
+    setDelInfo(id) {
+      this.attachmentId = id;
+    },
+    // 关闭新增任务
+    closeAddTask() {
+      this.taskName = '';
+      this.taskLevel = '';
+      this.$refs.taskLevel.setValue('1');
+      this.taskType = '';
+      this.$refs.taskType.setValue('');
+      this.startTime = '';
+      this.endTime = '';
+      this.startMinutes = '';
+      this.endMinutes = '';
+      this.taskIntroduce = '';
+      this.$refs.startTime.setValue('');
+      this.$refs.startMinutes.setValue('0');
+      this.$refs.endTime.setValue('');
+      this.$refs.endMinutes.setValue('0');
+      this.linkData = [];
+      this.getLinkData();
+      this.setDefaultPrincipal();
+    },
+    // 设置默认负责人
+    setDefaultPrincipal() {
+      this.$store.commit('changeNewPrincipal', {
+        name: this.user.nickname,
+        id: this.user.id,
+      });
+      this.$store.commit('changeNewParticipantsInfo', []);
+    },
+    // 获取问卷内容
+    getQuestionData(id) {
+      fetch('get', `/reviewquestionnaires/${id}/show?include=sum,creator,production,reviewanswer.users`).then((res) => {
+        this.questionInfo = res.data[0];
+        // 如果res为空表示无权限访问问卷
+        if (!this.questionInfo) {
+          return;
+        }
+        for (const n of this.questionInfo.reviewanswer.data) {
+          if (n.user_id === this.user.id) {
+            this.visible = true;
+            fetch('get', `/reviews/${id}/questions/?include=items,selectrows.creator`).then((res) => {
+              // if (res.meta.error) {
+              // 此处为问卷过期判断
+              // }
+              this.questionData = res.data;
+              this.answerList = new Array(this.questionData.length);
+              res.data.map((n) => {
+                n.selectrows.data.map((m) => {
+                  if (m.creator.data.is_department_principal === 1) {
+                    this.principalId = m.creator.data.id;
+                  }
+                  if (!~this.hasAnsweredArr.indexOf(m.creator.data.id)) {
+                    this.hasAnsweredArr.push(m.creator.data.id);
+                  }
+                });
+              });
+            });
+            break;
+          } else {
+            this.visible = false;
+          }
+        }
+      });
+    },
+    // 试卷提交
+    submit() {
+      let canSubmit = true;
+      const params = {
+        review_question_item: {},
+      };
+
+      for (const n of this.answerList) {
+        if (!n || isNaN(n.value)) {
+          canSubmit = false;
+          break;
+        }
+        params.review_question_item[n.review_question_id] = n.id;
+      }
+      if (!canSubmit) {
+        toastr.error('您有未作答题目，请作答完成后提交！');
+        return;
+      }
+      if (this.canSend) {
+        this.canSend = false;
+        fetch('post', `/reviews/${this.questionId}/store/Answer`, params).then((res) => {
+          toastr.success('问卷提交成功！');
+          this.getQuestionId();
+        });
+      }
+    },
+    // 推优原因提交
+    submitPush() {
+      if (!this.pushReason) {
+        toastr.error('请填写推优原因！');
+        return;
+      }
+      const params = {
+        excellent: this.pushReason,
+        excellent_sum: this.questionInfo.sum.data[0].truncate,
+      };
+      fetch('post', `/reviewquestionnaires/${this.questionId}/create/excellent`, params).then((res) => {
+        $('#push-reason').modal('hide');
+        toastr.success('推优成功！');
+        this.getQuestionId();
+        // this.addQuestionTask() // 2019.02.12注释 暂时不需要前端新增任务 由后台创建
+      });
+    },
+    // 根据任务id获取是否有问卷
+    getQuestionId() {
+      fetch('get', `/bloggers/${this.taskId}/taskblogger`).then((res) => {
+        if (res.data) {
+          this.questionId = res.data.id;
+          this.getQuestionData(res.data.id);
+          this.getQuestionMember();
+        }
+      });
+    },
+    // 打开视频链接
+    openUrl(url) {
+      if (url) {
+        let _url = url.data[0].link;
+        if (_url.indexOf('http') < 0) {
+          _url = `//${_url}`;
+        }
+        window.open(_url);
+      }
+    },
+    // 新增评审任务（推优后，新增一个任务）
+    addQuestionTask() {
+      const data = {
+        // resource_type: this.resourceType ,
+        // resourceable_id: this.resourceableId,
+        type: this.taskTypeArr.find(n => n.name === '视频评分').id,
+        title: '评优团视频评分任务-视频评分',
+        principal_id: this.questionMemberList[0].user_id,
+        participant_ids: this.questionMemberList.map(n => n.user_id),
+        priority: 2,
+        start_at: moment(new Date()).format('YYYY-MM-DD HH:MM'),
+        end_at: moment(new Date()).add(7, 'days').format('YYYY-MM-DD HH:MM'),
+        desc: '评优团视频评分任务',
+      };
+      fetch('post', '/tasks', data).then((res) => {
+        // toastr.success("评优团视频评分任务创建成功!")
+      });
+    },
+    // 获取品优团成员
+    getQuestionMember() {
+      fetch('get', '/data_dictionary/appraising/448').then((res) => {
+        this.questionMemberList = res.data;
+      });
+    },
+    // 预览附件
+    previewFile(url, name) {
+      this.previewUrl = url;
+      this.previewName = name;
+    },
+    handleChildTask() {
+      if (this.$store.state.power.task.add !== 'true') {
+        toastr.error('您没有权限新增子任务！');
+        return;
+      }
+      $('#addChildTask').modal('show');
+    },
+  },
+};
 </script>
 
 <style scoped>

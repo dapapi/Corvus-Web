@@ -129,19 +129,19 @@
 </template>
 
 <script>
-    import fetch from '../../assets/utils/fetch.js'
-    import config from '../../assets/js/config'
-    import common from '../../assets/js/common'
-    import {mapState} from 'vuex'
-    import Cookies from 'js-cookie'
-    import ImportAndExport from '../../components/ImportAndExport.vue'
+import fetch from '../../assets/utils/fetch.js';
+import config from '../../assets/js/config';
+import common from '../../assets/js/common';
+import { mapState } from 'vuex';
+import Cookies from 'js-cookie';
+import ImportAndExport from '../../components/ImportAndExport.vue';
 
-    const projectStatusArr = [{name: '全部', value: ''}, ...config.projectStatusArr];
-    const projectTypeArr = [{name: '全部', value: ''}, ...config.projectTypeArr];
+const projectStatusArr = [{ name: '全部', value: '' }, ...config.projectStatusArr];
+const projectTypeArr = [{ name: '全部', value: '' }, ...config.projectTypeArr];
 
-    export default {
+export default {
 
-        data: function () {
+  data () {
             return {
                 common: common,
                 total: 0,
@@ -174,56 +174,56 @@
             }
         },
 
-        mounted() {
-            this.getField()
-            this.getClients();
-            // this.getFilterProjects();
-            this.getMyProjects('my_principal')
-            if (this.userList.length > 0) {
-                for (let i = 0; i < this.userList.length; i++) {
-                    this.allUsers.push({
-                        name: this.userList[i].name,
-                        value: this.userList[i].id
-                    })
-                }
-            }
-        },
+  mounted() {
+    this.getField();
+    this.getClients();
+    // this.getFilterProjects();
+    this.getMyProjects('my_principal');
+    if (this.userList.length > 0) {
+      for (let i = 0; i < this.userList.length; i++) {
+        this.allUsers.push({
+          name: this.userList[i].name,
+          value: this.userList[i].id,
+        });
+      }
+    }
+  },
 
-        computed: {
-            ...mapState([
-                'userList'
-            ]),
-            _userList() {
-                return this.userList
-            }
-        },
-        components: {
-            ImportAndExport
-        },
-        watch: {
-            _userList() {
-                for (let i = 0; i < this.userList.length; i++) {
-                    this.allUsers.push({
-                        name: this.userList[i].name,
-                        value: this.userList[i].id
-                    })
-                }
-            }
-        },
+  computed: {
+    ...mapState([
+      'userList',
+    ]),
+    _userList() {
+      return this.userList;
+    },
+  },
+  components: {
+    ImportAndExport,
+  },
+  watch: {
+    _userList() {
+      for (let i = 0; i < this.userList.length; i++) {
+        this.allUsers.push({
+          name: this.userList[i].name,
+          value: this.userList[i].id,
+        });
+      }
+    },
+  },
 
-        methods: {
-            getField() {
-                let _this = this
-                fetch('get', '/projects/filter_fields').then((params) => {
-                    _this.customizeInfo = params.data
-                })
-            },
-            getMyProjects: function (value) {
+  methods: {
+    getField() {
+      const _this = this;
+      fetch('get', '/projects/filter_fields').then((params) => {
+        _this.customizeInfo = params.data;
+      });
+    },
+    getMyProjects (value) {
                 this.getProjectStatus = value;
                 this.getFilterProjects();
             },
 
-            getProjectSearch: function (type, value) {
+    getProjectSearch (type, value) {
                 if (type === 'principal_ids') {
                     this.principal_ids = value.join(',');
                 } else if (type === 'project_type') {
@@ -232,7 +232,7 @@
                 this.getFilterProjects();
             },
 
-            getFilterProjects: function (pageNum = 1) {
+    getFilterProjects (pageNum = 1) {
                 let data = {
                     page: pageNum,
                     include: 'principal,trail.expectations'
@@ -263,7 +263,7 @@
                 })
             },
 
-            getClients: function () {
+    getClients () {
                 let _this = this;
                 fetch('get', '/clients/all').then(function (response) {
                     for (let i = 0; i < response.data.length; i++) {
@@ -277,11 +277,11 @@
                 })
             },
 
-            redirectDetail: function (projectId) {
+    redirectDetail (projectId) {
                 this.$router.push({path: '/projects/' + projectId})
             },
 
-            customize: function (value) {
+    customize (value) {
                 let _this = this
                 fetch('post', '/projects/filter?include=principal,trail.expectations', value).then((params) => {
                     _this.projectsInfo = params.data
@@ -293,8 +293,8 @@
 
             },
 
-            changeProjectType: function (value) {
-                if(this.$store.state.power.project !=='true'){
+    changeProjectType (value) {
+                if(this.$store.state.power.project.add !=='true'){
                     toastr.error('当前用户没有权限新增项目')
                     return
                 }
@@ -312,7 +312,7 @@
                 $('#addProject').modal('show');
             },
 
-            selectProjectType: function () {
+    selectProjectType () {
                 this.projectFieldsArr = [];
                 if (this.projectType == 5) {
                     return
@@ -338,12 +338,12 @@
                 });
             },
 
-            addInfo: function (value, name) {
+    addInfo (value, name) {
                 this.addInfoArr[name] = value
             },
 
-        }
-    }
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -357,4 +357,3 @@
         cursor: pointer;
     }
 </style>
-

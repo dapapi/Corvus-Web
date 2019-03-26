@@ -196,346 +196,348 @@
 </template>
 
 <script>
-    import {mapState} from 'vuex'
-    import fetch from '../../assets/utils/fetch.js'
-    import config from '../../assets/js/config'
-    import Cookies from 'js-cookie'
-    import common from '../../assets/js/common'
+import { mapState } from 'vuex';
+import Cookies from 'js-cookie';
+import fetch from '../../assets/utils/fetch.js';
+import config from '../../assets/js/config';
+import common from '../../assets/js/common';
 
-    const clientLevelArr = [{name: '全部', value: ''}, ...config.clientLevelArr]
-    export default {
-        data: function () {
-            return {
-                common: common,
-                total: 0,
-                current_page: 0,
-                total_pages: 0,
-                customizeInfo: {},
-                clientTypeArr: config.clientTypeArr,
-                clientLevelArr: clientLevelArr,
-                keyMasterArr: config.isKeyMasterArr,
-                clientsInfo: [],
-                clientScaleArr: config.clientScaleArr,
-                clientType: '',
-                clientName: '',
-                clientLevel: '',
-                clientAddressDetail: '',
-                clientPrincipal: '',
-                clientContact: '',
-                clientContactPhone: '',
-                clientContactPosition: '',
-                otherContactWays: '', // 其他联系方式
-                wechat: '', // 微信
-                clientContactType: '', // 是否是关键人
-                clientRemark: '',
-                // clientPrincipalSearch: '', // 条件筛选的负责人
-                clientPrincipalIdSearch: [], // 负责人id
-                clientLevelSearch: '', // 条件筛选的公司级别
-                companyName: '', // 公司名称
-                user: {}, // 个人信息
-                ragion: {}, // 区域
-                clientScale: '',
-                isLoading: true,
-                taskLevelArr: config.taskLevelArr,
-                cleanUp: false,
-                exportParams: {},//导出参数
-                canAdd: false, // 可以新增吗
-                fetchData: {},
-                customizeCondition: {}
-                // canAdd: false, // 可以新增吗
-            }
+const clientLevelArr = [{ name: '全部', value: '' }, ...config.clientLevelArr];
+export default {
+  data() {
+    return {
+      common,
+      total: 0,
+      current_page: 0,
+      total_pages: 0,
+      customizeInfo: {},
+      clientTypeArr: config.clientTypeArr,
+      clientLevelArr,
+      keyMasterArr: config.isKeyMasterArr,
+      clientsInfo: [],
+      clientScaleArr: config.clientScaleArr,
+      clientType: '',
+      clientName: '',
+      clientLevel: '',
+      clientAddressDetail: '',
+      clientPrincipal: '',
+      clientContact: '',
+      clientContactPhone: '',
+      clientContactPosition: '',
+      otherContactWays: '', // 其他联系方式
+      wechat: '', // 微信
+      clientContactType: '', // 是否是关键人
+      clientRemark: '',
+      // clientPrincipalSearch: '', // 条件筛选的负责人
+      clientPrincipalIdSearch: [], // 负责人id
+      clientLevelSearch: '', // 条件筛选的公司级别
+      companyName: '', // 公司名称
+      user: {}, // 个人信息
+      ragion: {}, // 区域
+      clientScale: '',
+      isLoading: true,
+      taskLevelArr: config.taskLevelArr,
+      cleanUp: false,
+      exportParams: {}, // 导出参数
+      canAdd: false, // 可以新增吗
+      fetchData: {},
+      customizeCondition: {},
+      // canAdd: false, // 可以新增吗
+    };
+  },
+
+  mounted() {
+    this.getField();
+    this.getClients();
+    this.user = JSON.parse(Cookies.get('user'));
+    // 清除负责人默认值的设置
+    this.clearDefaultPrincipal();
+    $('#addClient').on('hidden.bs.modal', () => {
+      // 清空state
+      this.cancelClient();
+    });
+    // this.checkPermission()
+    console.log(this.power);
+  },
+
+  computed: {
+    ...mapState([
+      'userList',
+      'power',
+    ]),
+  },
+
+  watch: {
+    power() {
+      console.log(this.power);
+    },
+  },
+
+  methods: {
+    getField() {
+      const _this = this;
+      fetch('get', '/clients/filter_fields').then((params) => {
+        _this.customizeInfo = params.data;
+      });
+    },
+    getClients(pageNum = 1) {
+      const params = {
+        page: pageNum,
+        include: 'principal',
+      };
+
+      let url = '/clients';
+
+      if (this.companyName) {
+        params.keyword = this.companyName;
+      }
+      if (this.clientLevelSearch) {
+        params.grade = this.clientLevelSearch;
+      }
+      if (this.clientPrincipalIdSearch.length > 0) {
+        params.principal_ids = this.clientPrincipalIdSearch;
+      }
+      this.exportParams = {
+        keyword: this.companyName,
+        grade: this.clientLevelSearch,
+        principal_ids: this.clientPrincipalIdSearch,
+      };
+      if (this.companyName || this.clientLevelSearch || this.clientPrincipalIdSearch.length > 0) {
+        url = '/clients/filter';
+      }
+
+      fetch('get', url, params).then((response) => {
+        this.clientsInfo = response.data;
+        this.current_page = response.meta.pagination.current_page;
+        this.total = response.meta.pagination.total;
+        this.total_pages = response.meta.pagination.total_pages;
+        this.isLoading = false;
+      });
+    },
+
+    addClient() {
+      if (!this.clientName) {
+        toastr.error('请输入公司名称！');
+        return;
+      }
+      if (!this.clientLevel) {
+        toastr.error('请选择公司级别！');
+        return;
+      }
+      if (!this.clientType) {
+        toastr.error('请选择客户类型！');
+        return;
+      }
+      if (!this.clientContact) {
+        toastr.error('请填写联系人！');
+        return;
+      }
+      if (!this.clientContactType) {
+        toastr.error('请选择关键决策人！');
+        return;
+      }
+      if (!this.clientScale) {
+        toastr.error('请选择客户评级！');
+        return;
+      }
+      if (this.clientContactPhone && this.clientContactPhone.length !== 11) {
+        toastr.error('手机号码格式不对！');
+        return;
+      }
+      if (!this.clientContactPosition) {
+        toastr.error('请填写联系人职位！');
+        return;
+      }
+      const data = {
+        type: this.clientType,
+        company: this.clientName,
+        grade: this.clientLevel,
+        province: this.ragion.province || '',
+        city: this.ragion.city || '',
+        district: this.ragion.district || '',
+        principal_id: this.$store.state.newPrincipalInfo.id,
+        address: this.clientAddressDetail,
+        contact: {
+          name: this.clientContact,
+          phone: this.clientContactPhone,
+          position: this.clientContactPosition,
+          type: this.clientContactType,
+          other_contact_ways: this.otherContactWays,
+          wechat: this.wechat,
         },
+        client_rating: this.clientScale,
+        desc: this.clientRemark,
+      };
+      if (!data.principal_id) {
+        toastr.error('请选择负责人！');
+      }
 
-        mounted() {
-            this.getField()
-            this.getClients();
-            this.user = JSON.parse(Cookies.get('user'))
-            // 清除负责人默认值的设置
-            this.clearDefaultPrincipal()
-            $('#addClient').on('hidden.bs.modal', () => {
-                // 清空state
-                this.cancelClient()
-            })
-            // this.checkPermission()
-            console.log(this.power)
-        },
+      const _this = this;
+      fetch('post', '/clients', data).then((response) => {
+        toastr.success('创建成功');
+        $('#addClient').modal('hide');
+        _this.$router.push({ path: `clients/${  response.data.id}` });
+      });
+    },
 
-        computed: {
-            ...mapState([
-                'userList',
-                'power'
-            ])
-        },
-
-        watch : {
-            power () {
-                console.log(this.power)
-            }
-        },
-
-        methods: {
-            getField() {
-                let _this = this
-                fetch('get', '/clients/filter_fields').then((params) => {
-                    _this.customizeInfo = params.data
-                })
-            },
-            getClients: function (pageNum = 1) {
-                const params = {
-                    page: pageNum,
-                    include: 'principal',
-                };
-
-                let url = '/clients'
-
-                if (this.companyName) {
-                    params.keyword = this.companyName
-                }
-                if (this.clientLevelSearch) {
-                    params.grade = this.clientLevelSearch
-                }
-                if (this.clientPrincipalIdSearch.length > 0) {
-                    params.principal_ids = this.clientPrincipalIdSearch
-                }
-                this.exportParams = {
-                    keyword: this.companyName,
-                    grade: this.clientLevelSearch,
-                    principal_ids: this.clientPrincipalIdSearch
-                }
-                if (this.companyName || this.clientLevelSearch || this.clientPrincipalIdSearch.length > 0) {
-                    url = '/clients/filter'
-                }
-
-                fetch('get', url, params).then(response => {
-                    this.clientsInfo = response.data;
-                    this.current_page = response.meta.pagination.current_page;
-                    this.total = response.meta.pagination.total;
-                    this.total_pages = response.meta.pagination.total_pages;
-                    this.isLoading = false;
-                })
-            },
-
-            addClient: function () {
-
-
-                if (!this.clientName) {
-                    toastr.error('请输入公司名称！');
-                    return
-                }
-                if (!this.clientLevel) {
-                    toastr.error('请选择公司级别！');
-                    return
-                }
-                if (!this.clientType) {
-                    toastr.error('请选择客户类型！')
-                    return
-                }
-                if (!this.clientContact) {
-                    toastr.error('请填写联系人！')
-                    return
-                }
-                if (!this.clientContactType) {
-                    toastr.error('请选择关键决策人！')
-                    return
-                }
-                if (!this.clientScale) {
-                    toastr.error('请选择客户评级！')
-                    return
-                }
-                if (this.clientContactPhone && this.clientContactPhone.length !== 11) {
-                    toastr.error('手机号码格式不对！');
-                    return
-                }
-                if (!this.clientContactPosition) {
-                    toastr.error('请填写联系人职位！')
-                    return
-                }
-                let data = {
-                    type: this.clientType,
-                    company: this.clientName,
-                    grade: this.clientLevel,
-                    province: this.ragion.province || '',
-                    city: this.ragion.city || '',
-                    district: this.ragion.district || '',
-                    principal_id: this.$store.state.newPrincipalInfo.id,
-                    address: this.clientAddressDetail,
-                    contact: {
-                        name: this.clientContact,
-                        phone: this.clientContactPhone,
-                        position: this.clientContactPosition,
-                        type: this.clientContactType,
-                        other_contact_ways: this.otherContactWays,
-                        wechat: this.wechat
-                    },
-                    client_rating: this.clientScale,
-                    desc: this.clientRemark
-                };
-                if (!data.principal_id) {
-                    toastr.error('请选择负责人！')
-                }
-
-                let _this = this;
-                fetch('post', '/clients', data).then(function (response) {
-                    toastr.success('创建成功');
-                    $("#addClient").modal("hide");
-                    _this.$router.push({path: 'clients/' + response.data.id});
-                })
-            },
-
-            customize: function (value) {
-                console.log(value)
-                this.customizeCondition = value
-                this.fetchHandler('post', '/clients/filter', 'filter')
-                // let _this = this
-                // fetch('post', '/clients/filter?include=principal', value).then((params) => {
-                //     _this.clientsInfo = params.data
-                //     _this.total = params.meta.pagination.total;
-                //     _this.total_pages = params.meta.pagination.total_pages;
-                //     _this.current_page = params.meta.pagination.current_page
-                //     _this.cleanUp = true
-                // })
-
-            },
-            fetchHandler(methods, url, type) {
-                let _this = this,
-                    fetchData = this.fetchData,
-                    newUrl
-                this.fetchData.include = 'include=principal'
-                if (type == 'filter') {
-                    fetchData = this.customizeCondition
-                    let keyword, status, principal_ids
-                    if (this.fetchData.keyword) {
-                        keyword = '&keyword=' + this.fetchData.keyword
-                    } else {
-                        keyword = ''
-                    }
-                    // if (this.clientPrincipalIdSearch) {
-                    //     principal_ids = '&principal_ids=' + this.clientPrincipalIdSearch
-                    // } else {
-                    //     principal_ids = ''
-                    // }
-                    if (this.clientPrincipalIdSearch.length > 0) {
-                        this.customizeCondition.principal_ids = this.clientPrincipalIdSearch
-                    }
-                    if (this.clientLevelSearch) {
-                        status= '&grade=' + this.clientLevelSearch
-                    } else {
-                        status= ''
-                    }
-                    newUrl = url + '?' + this.fetchData.include + keyword + status 
-                }
-                this.exportParams = {
-                    keyword: this.fetchData.keyword,
-                    status: this.fetchData.status,
-                    principal_ids: this.fetchData.principal_ids,
-                }
-                fetch(methods, newUrl || url, fetchData).then((response) => {
-                    _this.clientsInfo = response.data
-                    _this.total = response.meta.pagination.total;
-                    _this.current_page = response.meta.pagination.current_page;
-                    _this.total_pages = response.meta.pagination.total_pages;
-                    _this.isLoading = false;
-                })
-            },
-            redirectClientDetail: function (clientId) {
-                this.$router.push({path: 'clients/' + clientId});
-            },
-
-            changeClientType: function (value) {
-                this.clientType = value;
-            },
-
-            changeClientLevel: function (value) {
-                this.clientLevel = value
-            },
-
-            changePrincipal: function (value) {
-                this.clientPrincipal = value
-            },
-            filterGo() {
-                this.fetchData.keyword = this.companyName
-                this.fetchHandler('post', '/clients/filter', 'filter')
-                // this.fetchHandler('get', '/trails/filter')
-
-            },
-            changePrincipalSelect(value) {
-                this.clientPrincipalIdSearch = value
-                this.fetchHandler('post', '/clients/filter', 'filter')
-            },
-
-            changeClientLevelSelect(value) {
-                this.clientLevelSearch = value
-                this.fetchHandler('post', '/clients/filter', 'filter')
-            },
-
-            changeClientScale: function (value) {
-                this.clientScale = value
-            },
-            // 选择地区
-            changeAreaData(val) {
-                if (val.area.name) {
-                    this.ragion.province = val.province.name
-                    this.ragion.city = val.city.name !== '市辖区' ? val.city.name : val.province.name
-                    this.ragion.district = val.area.name
-                }
-            },
-            // show add
-            showAddModal(val) {
-                let organization_id = JSON.parse(Cookies.get('user')).organization_id
-                if (val == 3) {
-                    if (organization_id == 411) {
-                        val = 3
-                    } else if (organization_id == 412) {
-                        val = 4
-                    }
-                }
-                this.setDefaultPrincipal()
-                $('#addClient').modal()
-                this.clientType = val
-            },
-            // 关键决策人
-            changeContactClientType(val) {
-                this.clientContactType = val
-            },
-            // 设置默认负责人
-            setDefaultPrincipal() {
-                this.$store.commit('changeNewPrincipal', {
-                    name: this.user.nickname,
-                    id: this.user.id
-                })
-            },
-            // 清空默认负责人
-            clearDefaultPrincipal() {
-                this.$store.commit('changeNewPrincipal', {name: '', id: ''})
-            },
-            // 关闭弹窗
-            cancelClient() {
-                this.clientType = ''
-                this.clientName = ''
-                this.clientLevel = ''
-                this.clientContactType = ''
-                this.$refs.clientLevel.setValue('')
-                this.$refs.clientContactType.setValue('')
-                this.$refs.region.reset()
-                this.ragion.province = {}
-                // principal_id: this.$store.state.newPrincipalInfo.id,
-                this.clientContact = ''
-                this.clientContactPhone = ''
-                this.clientContactPosition = ''
-                this.wechat = ''
-                this.otherContactWays = ''
-                this.clientContactType = ''
-                this.clientScale = ''
-                this.$refs.clientScale.setValue('')
-                this.clientRemark = ''
-                this.clientAddressDetail = ''
-                this.clearDefaultPrincipal()
-            },
-            goDetail(id) {
-                this.$router.push('/clients/' + id)
-            },
+    customize(value) {
+      console.log(value);
+      this.customizeCondition = value;
+      this.fetchHandler('post', '/clients/filter', 'filter');
+      // let _this = this
+      // fetch('post', '/clients/filter?include=principal', value).then((params) => {
+      //     _this.clientsInfo = params.data
+      //     _this.total = params.meta.pagination.total;
+      //     _this.total_pages = params.meta.pagination.total_pages;
+      //     _this.current_page = params.meta.pagination.current_page
+      //     _this.cleanUp = true
+      // })
+    },
+    fetchHandler(methods, url, type) {
+      let _this = this,
+        fetchData = this.fetchData,
+        newUrl;
+      this.fetchData.include = 'include=principal';
+      if (type == 'filter') {
+        fetchData = this.customizeCondition;
+        let keyword,
+          status,
+          principal_ids;
+        if (this.fetchData.keyword) {
+          keyword = `&keyword=${this.fetchData.keyword}`;
+        } else {
+          keyword = '';
         }
-    }
+        // if (this.clientPrincipalIdSearch) {
+        //     principal_ids = '&principal_ids=' + this.clientPrincipalIdSearch
+        // } else {
+        //     principal_ids = ''
+        // }
+        if (this.clientPrincipalIdSearch.length > 0) {
+          this.customizeCondition.principal_ids = this.clientPrincipalIdSearch;
+        }
+        if (this.clientLevelSearch) {
+          status = `&grade=${this.clientLevelSearch}`;
+        } else {
+          status = '';
+        }
+        newUrl = `${url}?${this.fetchData.include}${keyword}${status}`;
+      }
+      this.exportParams = {
+        keyword: this.fetchData.keyword,
+        status: this.fetchData.status,
+        principal_ids: this.fetchData.principal_ids,
+      };
+      fetch(methods, newUrl || url, fetchData).then((response) => {
+        _this.clientsInfo = response.data;
+        _this.total = response.meta.pagination.total;
+        _this.current_page = response.meta.pagination.current_page;
+        _this.total_pages = response.meta.pagination.total_pages;
+        _this.isLoading = false;
+      });
+    },
+    redirectClientDetail(clientId) {
+      this.$router.push({ path: `clients/${clientId}` });
+    },
+
+    changeClientType(value) {
+      this.clientType = value;
+    },
+
+    changeClientLevel(value) {
+      this.clientLevel = value;
+    },
+
+    changePrincipal(value) {
+      this.clientPrincipal = value;
+    },
+    filterGo() {
+      this.fetchData.keyword = this.companyName;
+      this.fetchHandler('post', '/clients/filter', 'filter');
+      // this.fetchHandler('get', '/trails/filter')
+    },
+    changePrincipalSelect(value) {
+      this.clientPrincipalIdSearch = value;
+      this.fetchHandler('post', '/clients/filter', 'filter');
+    },
+
+    changeClientLevelSelect(value) {
+      this.clientLevelSearch = value;
+      this.fetchHandler('post', '/clients/filter', 'filter');
+    },
+
+    changeClientScale(value) {
+      this.clientScale = value;
+    },
+    // 选择地区
+    changeAreaData(val) {
+      if (val.area.name) {
+        this.ragion.province = val.province.name;
+        this.ragion.city = val.city.name !== '市辖区' ? val.city.name : val.province.name;
+        this.ragion.district = val.area.name;
+      }
+    },
+    // show add
+    showAddModal(val) {
+      const organization_id = JSON.parse(Cookies.get('user')).organization_id;
+      if (val == 3) {
+        if (organization_id == 411) {
+          val = 3;
+        } else if (organization_id == 412) {
+          val = 4;
+        }
+      }
+      if (this.$store.state.power.client.add !== 'true') {
+        toastr.error('当前用户没有新增客户的权限');
+        return;
+      }
+      this.setDefaultPrincipal();
+      $('#addClient').modal();
+      this.clientType = val;
+    },
+    // 关键决策人
+    changeContactClientType(val) {
+      this.clientContactType = val;
+    },
+    // 设置默认负责人
+    setDefaultPrincipal() {
+      this.$store.commit('changeNewPrincipal', {
+        name: this.user.nickname,
+        id: this.user.id,
+      });
+    },
+    // 清空默认负责人
+    clearDefaultPrincipal() {
+      this.$store.commit('changeNewPrincipal', { name: '', id: '' });
+    },
+    // 关闭弹窗
+    cancelClient() {
+      this.clientType = '';
+      this.clientName = '';
+      this.clientLevel = '';
+      this.clientContactType = '';
+      this.$refs.clientLevel.setValue('');
+      this.$refs.clientContactType.setValue('');
+      this.$refs.region.reset();
+      this.ragion.province = {};
+      // principal_id: this.$store.state.newPrincipalInfo.id,
+      this.clientContact = '';
+      this.clientContactPhone = '';
+      this.clientContactPosition = '';
+      this.wechat = '';
+      this.otherContactWays = '';
+      this.clientContactType = '';
+      this.clientScale = '';
+      this.$refs.clientScale.setValue('');
+      this.clientRemark = '';
+      this.clientAddressDetail = '';
+      this.clearDefaultPrincipal();
+    },
+    goDetail(id) {
+      this.$router.push(`/clients/${id}`);
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

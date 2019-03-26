@@ -824,7 +824,7 @@ export default {
                 } if (!this.trailInfo.contact.data.name) {
                     toastr.error("联系人为必填")
                     return false;
-                } else if (this.trailInfo.contact.data.phone) {
+                } if (this.trailInfo.contact.data.phone) {
                     let phone = this.trailInfo.contact.data.phone
                     if (!(/^1(3|4|5|7|8)\d{9}$/.test(phone))) {
                         // alert("手机号码有误，请重填");  
@@ -833,9 +833,9 @@ export default {
                     } 
                         return true;
                     
-                }else {
-                    return true
                 }
+                    return true
+                
             },
 
     getTrail() {
@@ -911,7 +911,7 @@ export default {
           this.changeInfo.resource_type = Number(this.oldInfo.resource_type);
         }
       }
-      if (this.changeInfo.contact.id) {
+      if (this.changeInfo.contact && this.changeInfo.contact.id) {
         // this.changeInfo.resource_type = Number(this.changeInfo.resource_type)
         this.changeInfo.contact.name = this.changeInfo.contact.id;
       } else {
@@ -953,7 +953,7 @@ export default {
     },
 
     editBaseInfo() {
-      if (this.$store.state.power.trail !== 'true') {
+      if (this.$store.state.power.trail.add !== 'true') {
         toastr.error('当前用户没有编辑销售线索的权限');
         return;
       }

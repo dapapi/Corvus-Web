@@ -458,7 +458,7 @@
                                     <td>{{ contact.position }}</td>
                                     <td>{{ clientInfo.principal?clientInfo.principal.data.name:'' }}</td>
                                     <td>
-                                        
+
                                         <span class="pr-10 d-block float-left pointer-content"
                                               style="color: #b9b9b9;"
                                               data-plugin="actionBtn" data-toggle="modal"
@@ -771,534 +771,540 @@
 
 <script>
 
-    import fetch from '../../assets/utils/fetch.js'
-    import config from '../../assets/js/config'
-    import Cookies from 'js-cookie'
-    import common from '../../assets/js/common'
-    import { mapState } from 'vuex'
+import Cookies from 'js-cookie';
+import { mapState } from 'vuex';
+import fetch from '../../assets/utils/fetch.js';
+import config from '../../assets/js/config';
+import common from '../../assets/js/common';
 
-    export default {
-        data: function () {
-            return {
-                common: common,
-                total: 0,
-                current_page: 1,
-                total_pages: 1,
-                changeInfo: {},
-                clientTypeArr: config.clientTypeArr,
-                clientLevelArr: config.clientLevelArr,
-                clientScaleArr: config.clientScaleArr,
-                keyMasterArr: config.isKeyMasterArr,
-                taskTypeArr: [],
-                priorityArr: config.priorityArr,
-                multiple: false,
-                taskType: '',
-                taskName: '',
-                taskPrincipal: '',
-                taskParticipant: '',
-                taskIntroduce: '',
-                taskStartTime: '',
-                startMinutes: '00:00',
-                endMinutes: '00:00',
-                taskEndTime: '',
-                taskLevel: '',
-                isEdit: false,
-                clientInfo: {},
-                clientInfoCopy: {},
-                clientTasksInfo: [],
-                clientTrailsInfo: [],
-                clientContactsInfo: [],
-                contactName: '',
-                contactPhone: '',
-                contactPosition: '',
-                clientProjectsInfo: '',
-                taskPrincipalId: '', // 负责人
-                participantIds: [], // 参与人
-                isEditContact: true,
-                editConfig: {
-                    position: '',
-                    name: '',
-                    phone: '',
-                    type: '', // 是否是关键人
-                    wechat: '',  // 微信
-                    other_contact_ways: '' // 其他联系方式
-                }, // 修改的联系人信息
-                contactId: '', // 联系人id
-                user: {},
-                isLoading: true,
-                clientContractsInfo: [],
-                taskLevelArr: config.taskLevelArr,
-                trailType: '', // 线索类型
-                companyInfo: {}, // 公司信息
-                companyId: '', // 公司id
-                // canAddTrail: false, // 是否可以添加销售线索
-                // canAddTask: false, // 是否可以添加任务
-                canEditClient: false, // 是否可以添加任务
-                canAddContact: true, // 是否可以新增联系人
-                isDisabled: true, // 联系人是否可以编辑
-            }
-        },
-        beforeMount() {
-            this.clientId = this.$route.params.id;
-        },
-        mounted() {
-            let _this = this;
-            setTimeout(function () {
-                _this.getClient();
-                _this.getClientTrail();
-                _this.getClientProject();
-            }, 100);
-            this.user = JSON.parse(Cookies.get('user'))
-            this.setDefaultPrincipal()
-            this.getTaskType()
-            $('#addTask').on('hidden.bs.modal', () => {
-                // 清空state
-                this.cancleTask()
-            })
-            $('#addContact').on('hidden.bs.modal', () => {
-                // 清空state
-                this.cancleContact()
-            })
-            $('#seeContact').on('hidden.bs.modal', () => {
-                // 清空state
-                this.cancleContact()
-            })
+export default {
+  data() {
+    return {
+      common,
+      total: 0,
+      current_page: 1,
+      total_pages: 1,
+      changeInfo: {},
+      clientTypeArr: config.clientTypeArr,
+      clientLevelArr: config.clientLevelArr,
+      clientScaleArr: config.clientScaleArr,
+      keyMasterArr: config.isKeyMasterArr,
+      taskTypeArr: [],
+      priorityArr: config.priorityArr,
+      multiple: false,
+      taskType: '',
+      taskName: '',
+      taskPrincipal: '',
+      taskParticipant: '',
+      taskIntroduce: '',
+      taskStartTime: '',
+      startMinutes: '00:00',
+      endMinutes: '00:00',
+      taskEndTime: '',
+      taskLevel: '',
+      isEdit: false,
+      clientInfo: {},
+      clientInfoCopy: {},
+      clientTasksInfo: [],
+      clientTrailsInfo: [],
+      clientContactsInfo: [],
+      contactName: '',
+      contactPhone: '',
+      contactPosition: '',
+      clientProjectsInfo: '',
+      taskPrincipalId: '', // 负责人
+      participantIds: [], // 参与人
+      isEditContact: true,
+      editConfig: {
+        position: '',
+        name: '',
+        phone: '',
+        type: '', // 是否是关键人
+        wechat: '', // 微信
+        other_contact_ways: '', // 其他联系方式
+      }, // 修改的联系人信息
+      contactId: '', // 联系人id
+      user: {},
+      isLoading: true,
+      clientContractsInfo: [],
+      taskLevelArr: config.taskLevelArr,
+      trailType: '', // 线索类型
+      companyInfo: {}, // 公司信息
+      companyId: '', // 公司id
+      // canAddTrail: false, // 是否可以添加销售线索
+      // canAddTask: false, // 是否可以添加任务
+      canEditClient: false, // 是否可以添加任务
+      canAddContact: true, // 是否可以新增联系人
+      isDisabled: true, // 联系人是否可以编辑
+    };
+  },
+  beforeMount() {
+    this.clientId = this.$route.params.id;
+  },
+  mounted() {
+    const _this = this;
+    setTimeout(() => {
+      _this.getClient();
+      _this.getClientTrail();
+      _this.getClientProject();
+    }, 100);
+    this.user = JSON.parse(Cookies.get('user'));
+    this.setDefaultPrincipal();
+    this.getTaskType();
+    $('#addTask').on('hidden.bs.modal', () => {
+      // 清空state
+      this.cancleTask();
+    });
+    $('#addContact').on('hidden.bs.modal', () => {
+      // 清空state
+      this.cancleContact();
+    });
+    $('#seeContact').on('hidden.bs.modal', () => {
+      // 清空state
+      this.cancleContact();
+    });
 
-            this.getClientTask() // 为了默认展示任务数量 先在这里请求
-        },
-        computed: {
-            ...mapState([
-                'power'
-            ]),
-            completeNum() {
-                return this.clientTasksInfo.filter(n => n.status === 2).length
-            }
-        },
+    this.getClientTask(); // 为了默认展示任务数量 先在这里请求
+  },
+  computed: {
+    ...mapState([
+      'power',
+    ]),
+    completeNum() {
+      return this.clientTasksInfo.filter(n => n.status === 2).length;
+    },
+  },
 
-        watch: {
-            'clientInfo.company': function (newValue, oldValue) {
-                if (oldValue === undefined) {
-                    return
-                }
-                this.changeInfo.company = newValue
-            },
-            'clientInfo.type': function (newValue, oldValue) {
-                if (oldValue === undefined) {
-                    return
-                }
-                this.changeInfo.type = newValue
-            },
-            'clientInfo.grade': function (newValue, oldValue) {
-                if (oldValue === undefined) {
-                    return
-                }
-                this.changeInfo.grade = newValue
-            },
-            'clientInfo.size': function (newValue, oldValue) {
-                if (oldValue === undefined) {
-                    return
-                }
-                this.changeInfo.size = newValue
-            },
-            'clientInfo.address': function (newValue, oldValue) {
-                if (oldValue === undefined) {
-                    return
-                }
-                this.changeInfo.address = newValue
-            },
-            'clientInfo.desc': function (newValue, oldValue) {
-                if (oldValue === undefined) {
-                    return
-                }
-                this.changeInfo.desc = newValue
-            },
-        },
+  watch: {
+    'clientInfo.company': function (newValue, oldValue) {
+      if (oldValue === undefined) {
+        return;
+      }
+      this.changeInfo.company = newValue;
+    },
+    'clientInfo.type': function (newValue, oldValue) {
+      if (oldValue === undefined) {
+        return;
+      }
+      this.changeInfo.type = newValue;
+    },
+    'clientInfo.grade': function (newValue, oldValue) {
+      if (oldValue === undefined) {
+        return;
+      }
+      this.changeInfo.grade = newValue;
+    },
+    'clientInfo.size': function (newValue, oldValue) {
+      if (oldValue === undefined) {
+        return;
+      }
+      this.changeInfo.size = newValue;
+    },
+    'clientInfo.address': function (newValue, oldValue) {
+      if (oldValue === undefined) {
+        return;
+      }
+      this.changeInfo.address = newValue;
+    },
+    'clientInfo.desc': function (newValue, oldValue) {
+      if (oldValue === undefined) {
+        return;
+      }
+      this.changeInfo.desc = newValue;
+    },
+  },
 
-        methods: {
+  methods: {
 
-            getClient: function () {
-                fetch('get', '/clients/' + this.clientId, {include: 'principal,creator,tasks'}).then(response => {
-                    this.clientInfo = response.data;
-                    this.clientInfoCopy = JSON.parse(JSON.stringify(response.data))
-                    this.canEditClient = response.data.power == 'true'
-                    let params = {
-                        type: 'change',
-                        data: response.data.principal.data
-                    };
-                    this.$store.dispatch('changePrincipal', params);
-                    this.isLoading = false
+    getClient() {
+      fetch('get', `/clients/${this.clientId}`, { include: 'principal,creator,tasks' }).then((response) => {
+        this.clientInfo = response.data;
+        this.clientInfoCopy = JSON.parse(JSON.stringify(response.data));
+        this.canEditClient = response.data.power == 'true';
+        const params = {
+          type: 'change',
+          data: response.data.principal.data,
+        };
+        this.$store.dispatch('changePrincipal', params);
+        this.isLoading = false;
 
-                    this.companyInfo = {
-                        company: this.clientInfoCopy.company,
-                        grade: this.clientInfoCopy.grade
-                    }
-                })
-            },
+        this.companyInfo = {
+          company: this.clientInfoCopy.company,
+          grade: this.clientInfoCopy.grade,
+        };
+      });
+    },
 
-            getClientTrail: function () {
-                let data = {
-                    type: 'clients',
-                    id: this.clientId,
-                    include: 'principal,client'
-                };
-                fetch('get', '/trails/search', data).then(response => {
-                    this.clientTrailsInfo = response.data;
-                    this.total = response.meta.pagination.total;
-                    this.current_page = response.meta.pagination.current_page;
-                    this.total_pages = response.meta.pagination.total_pages;
-                })
-            },
+    getClientTrail() {
+      const data = {
+        type: 'clients',
+        id: this.clientId,
+        include: 'principal,client',
+      };
+      fetch('get', '/trails/search', data).then((response) => {
+        this.clientTrailsInfo = response.data;
+        this.total = response.meta.pagination.total;
+        this.current_page = response.meta.pagination.current_page;
+        this.total_pages = response.meta.pagination.total_pages;
+      });
+    },
 
-            getClientTask: function () {
-                // if (this.clientTasksInfo.length > 0) {
-                //     return
-                // }
-                let data = {
-                    type: 'clients',
-                    id: this.clientId,
-                    include: 'principal'
-                };
-                fetch('get', '/clients/' + this.clientId + '/tasks', data).then(response => {
-                    this.clientTasksInfo = response.data;
-                    this.total = response.meta.pagination.total;
-                    this.current_page = response.meta.pagination.current_page;
-                    this.total_pages = response.meta.pagination.total_pages;
-                })
-            },
+    getClientTask() {
+      // if (this.clientTasksInfo.length > 0) {
+      //     return
+      // }
+      const data = {
+        type: 'clients',
+        id: this.clientId,
+        include: 'principal',
+      };
+      fetch('get', `/clients/${this.clientId}/tasks`, data).then((response) => {
+        this.clientTasksInfo = response.data;
+        this.total = response.meta.pagination.total;
+        this.current_page = response.meta.pagination.current_page;
+        this.total_pages = response.meta.pagination.total_pages;
+      });
+    },
 
-            getClientProject: function () {
-                let data = {
-                    include: 'principal,trail.expectations,trail.client'
-                };
-                fetch('get', `/clients/${this.clientId}/projects`, data).then(response => {
-                    this.clientProjectsInfo = response.data;
-                    this.total = response.meta.pagination.total;
-                    this.current_page = response.meta.pagination.current_page;
-                    this.total_pages = response.meta.pagination.total_pages;
-                })
-            },
+    getClientProject() {
+      const data = {
+        include: 'principal,trail.expectations,trail.client',
+      };
+      fetch('get', `/clients/${this.clientId}/projects`, data).then((response) => {
+        this.clientProjectsInfo = response.data;
+        this.total = response.meta.pagination.total;
+        this.current_page = response.meta.pagination.current_page;
+        this.total_pages = response.meta.pagination.total_pages;
+      });
+    },
 
-            getClientContact: function () {
-                fetch('get', '/clients/' + this.clientId + '/contacts').then(response => {
-                    this.clientContactsInfo = response.data;
-                    this.total = response.meta.pagination.total;
-                    this.current_page = response.meta.pagination.current_page;
-                    this.total_pages = response.meta.pagination.total_pages;
-                })
-            },
+    getClientContact() {
+      fetch('get', `/clients/${this.clientId}/contacts`).then((response) => {
+        this.clientContactsInfo = response.data;
+        this.total = response.meta.pagination.total;
+        this.current_page = response.meta.pagination.current_page;
+        this.total_pages = response.meta.pagination.total_pages;
+      });
+    },
 
-            getClientContract: function () {
-                fetch('get', '/clients/' + this.clientId + '/contracts').then(response => {
-                    this.clientContractsInfo = response.data;
-                    this.total = response.meta.pagination.total;
-                    this.current_page = response.meta.pagination.current_page;
-                    this.total_pages = response.meta.pagination.total_pages;
-                })
-            },
+    getClientContract() {
+      fetch('get', `/clients/${this.clientId}/contracts`).then((response) => {
+        this.clientContractsInfo = response.data;
+        this.total = response.meta.pagination.total;
+        this.current_page = response.meta.pagination.current_page;
+        this.total_pages = response.meta.pagination.total_pages;
+      });
+    },
 
-            addContact: function () {
-                if (!this.editConfig.name) {
-                    toastr.error('请输入联系人！')
-                    return
-                }
-                if (this.editConfig.phone && this.editConfig.phone.length !== 11) {
-                    toastr.error('手机号码格式不对！')
-                    return
-                }
+    addContact() {
+      if (!this.editConfig.name) {
+        toastr.error('请输入联系人！');
+        return;
+      }
+      if (this.editConfig.phone && this.editConfig.phone.length !== 11) {
+        toastr.error('手机号码格式不对！');
+        return;
+      }
 
-                if (!this.editConfig.type) {
-                    toastr.error('请选择关键决策人！')
-                    return
-                }
-                if (!this.editConfig.position) {
-                    toastr.error('请输入职位！')
-                    return
-                }
-                let data = {
-                    name: this.editConfig.name || '',
-                    phone: this.editConfig.phone,
-                    position: this.editConfig.position,
-                    type: this.editConfig.type,
-                    wechat: this.editConfig.wechat,
-                    other_contact_ways: this.editConfig.other_contact_ways
-                };
+      if (!this.editConfig.type) {
+        toastr.error('请选择关键决策人！');
+        return;
+      }
+      if (!this.editConfig.position) {
+        toastr.error('请输入职位！');
+        return;
+      }
+      const data = {
+        name: this.editConfig.name || '',
+        phone: this.editConfig.phone,
+        position: this.editConfig.position,
+        type: this.editConfig.type,
+        wechat: this.editConfig.wechat,
+        other_contact_ways: this.editConfig.other_contact_ways,
+      };
 
-                fetch(this.isEditContact ? 'post' : 'put', `/clients/${this.clientId}/contacts${!this.isEditContact ? '/' + this.editConfig.id : ''}`, data).then(response => {
-                    this.getClientContact();
-                    this.getClient();
-                    toastr.success(this.isEditContact ? '添加成功！' : '修改成功')
-                    $('#addContact').modal('hide')
-                })
-            },
+      fetch(this.isEditContact ? 'post' : 'put', `/clients/${this.clientId}/contacts${!this.isEditContact ? `/${this.editConfig.id}` : ''}`, data).then((response) => {
+        this.getClientContact();
+        this.getClient();
+        toastr.success(this.isEditContact ? '添加成功！' : '修改成功');
+        $('#addContact').modal('hide');
+      });
+    },
 
-            delContact() {
-                fetch('delete', `/clients/${this.clientId}/contacts/${this.contactId}`).then(() => {
-                    toastr.success('删除成功')
-                    this.getClientContact()
-                })
-            },
+    delContact() {
+      fetch('delete', `/clients/${this.clientId}/contacts/${this.contactId}`).then(() => {
+        toastr.success('删除成功');
+        this.getClientContact();
+      });
+    },
 
-            changeClientBaseInfo: function () {
-                fetch('put', '/clients/' + this.clientId, this.changeInfo).then(() => {
-                    this.isEdit = false;
-                    toastr.success('修改成功')
-                    this.getClient();
-                    this.getClientTrail();
-                })
-            },
+    changeClientBaseInfo() {
+      fetch('put', `/clients/${this.clientId}`, this.changeInfo).then(() => {
+        this.isEdit = false;
+        toastr.success('修改成功');
+        this.getClient();
+        this.getClientTrail();
+      });
+    },
 
-            editBaseInfo: function () {
-                if (!this.canEditClient) {
-                    toastr.error('您没有编辑概况的权限！')
-                    return
-                }
-                this.isEdit = true;
-                this.changeInfo = {};
-            },
+    editBaseInfo() {
+      if (!this.canEditClient) {
+        toastr.error('您没有编辑概况的权限！');
+        return;
+      }
+      if (this.$store.state.power.client.add !== 'true') {
+        toastr.error('当前用户没有编辑客户的权限');
+        return;
+      }
+      this.isEdit = true;
+      this.changeInfo = {};
+    },
 
-            cancelEdit: function () {
-                this.isEdit = false;
-                this.getClient()
-            },
+    cancelEdit() {
+      this.isEdit = false;
+      this.getClient();
+    },
 
-            changeClientType: function (value) {
-                this.clientInfo.type = value
-            },
+    changeClientType(value) {
+      this.clientInfo.type = value;
+    },
 
-            changeClientName: function (value) {
-                this.clientInfo.company = value
-            },
+    changeClientName(value) {
+      this.clientInfo.company = value;
+    },
 
-            changeClientAddress: function (value) {
-                this.clientInfo.address = value
-            },
+    changeClientAddress(value) {
+      this.clientInfo.address = value;
+    },
 
-            changeClientLevel: function (value) {
-                this.changeInfo.client_rating = value
-            },
+    changeClientLevel(value) {
+      this.changeInfo.client_rating = value;
+    },
 
-            changeClientGrade: function (value) {
-                this.clientInfo.grade = value
-            },
+    changeClientGrade(value) {
+      this.clientInfo.grade = value;
+    },
 
-            changeClientScale: function (value) {
-                this.clientInfo.size = value
-            },
+    changeClientScale(value) {
+      this.clientInfo.size = value;
+    },
 
-            changeClientDesc: function (value) {
-                this.clientInfo.desc = value
-            },
+    changeClientDesc(value) {
+      this.clientInfo.desc = value;
+    },
 
-            addTask: function () {
-                if (!this.taskType) {
-                    toastr.error('请选择任务类型')
-                    return
-                }
-                if (!this.taskName) {
-                    toastr.error('请填写任务名称')
-                    return
-                }
-                if (!this.taskPrincipalId) {
-                    toastr.error('请选择负责人')
-                    return
-                }
-                if (!this.taskLevel) {
-                    toastr.error('请选择任务优先级')
-                    return
-                }
-                if (!this.taskStartTime) {
-                    toastr.error('请选择开始时间')
-                    return
-                }
+    addTask() {
+      if (!this.taskType) {
+        toastr.error('请选择任务类型');
+        return;
+      }
+      if (!this.taskName) {
+        toastr.error('请填写任务名称');
+        return;
+      }
+      if (!this.taskPrincipalId) {
+        toastr.error('请选择负责人');
+        return;
+      }
+      if (!this.taskLevel) {
+        toastr.error('请选择任务优先级');
+        return;
+      }
+      if (!this.taskStartTime) {
+        toastr.error('请选择开始时间');
+        return;
+      }
 
-                if (!this.taskEndTime) {
-                    toastr.error('请选择截止时间')
-                    return
-                }
+      if (!this.taskEndTime) {
+        toastr.error('请选择截止时间');
+        return;
+      }
 
-                if (this.taskStartTime > this.taskEndTime) {
-                    toastr.error('开始时间不能晚于截止时间')
-                    return
-                }
-
-
-                this.setDefaultPrincipal()
-                let data = {
-                    resource_type: 4,
-                    resourceable_id: this.clientId,
-                    title: this.taskName,
-                    type: this.taskType,
-                    principal_id: this.taskPrincipalId, // 负责人 principal_id
-                    priority: this.taskLevel,
-                    start_at: this.taskStartTime + ' ' + this.startMinutes,
-                    end_at: this.taskEndTime + ' ' + this.endMinutes,
-                    desc: this.taskIntroduce,
-                    participant_ids: this.participantIds
-                };
+      if (this.taskStartTime > this.taskEndTime) {
+        toastr.error('开始时间不能晚于截止时间');
+        return;
+      }
 
 
-                fetch('post', '/tasks', data).then(response => {
-                    toastr.success('创建成功');
-                    $('#addTask').modal('hide');
-                    this.editConfig = {}
-                    this.getClientTask()
-                    this.getClient();
-                    this.getClientTrail();
-                    this.getClientProject()
-                })
-            },
+      this.setDefaultPrincipal();
+      const data = {
+        resource_type: 4,
+        resourceable_id: this.clientId,
+        title: this.taskName,
+        type: this.taskType,
+        principal_id: this.taskPrincipalId, // 负责人 principal_id
+        priority: this.taskLevel,
+        start_at: `${this.taskStartTime} ${this.startMinutes}`,
+        end_at: `${this.taskEndTime} ${this.endMinutes}`,
+        desc: this.taskIntroduce,
+        participant_ids: this.participantIds,
+      };
 
-            changeTaskType: function (value) {
-                this.taskType = value
-            },
 
-            taskPrincipalChange: function (value) {
-                this.taskPrincipalId = value.id
-            },
+      fetch('post', '/tasks', data).then((response) => {
+        toastr.success('创建成功');
+        $('#addTask').modal('hide');
+        this.editConfig = {};
+        this.getClientTask();
+        this.getClient();
+        this.getClientTrail();
+        this.getClientProject();
+      });
+    },
 
-            taskParticipantChange: function (value) {
-                const _arr = this.$store.state.newParticipantsInfo.map(n => n.id)
-                this.participantIds = _arr
-            },
+    changeTaskType(value) {
+      this.taskType = value;
+    },
 
-            changeStartTime: function (value) {
-                this.taskStartTime = value
-            },
-            changeStartMinutes: function (value) {
-                this.startMinutes = value
-            },
-            changeEndTime: function (value) {
-                this.taskEndTime = value
-            },
-            changeEndMinutes: function (value) {
-                this.endMinutes = value
-            },
-            changeTaskLevel: function (value) {
-                this.taskLevel = value
-            },
-            selectPrincipal(value) {
-                this.changeInfo.principal_id = value
-            },
-            changeEditStatus(value, config) {
-                if (!this.canAddContact && value) {
-                    toastr.error('您没有新增联系人的权限！')
-                    return
-                }
-                $('#addContact').modal('show')
-                this.$refs.contact.setValue(config ? config.type : '')
-                this.editConfig = config || {
-                    position: '',
-                    name: '',
-                    phone: '',
-                    type: '',
-                    wechat: '',
-                    other_contact_ways: ''
-                }
-                this.isEditContact = value
-            },
-            seeContact(config) {
-                this.editConfig = config || {
-                    position: '',
-                    name: '',
-                    phone: '',
-                    type: '',
-                    other_contact_ways: ''
-                }
-                $('#seeContact').modal('show')
-            },
-            // 获取任务类型列表
-            getTaskType() {
-                fetch('get', '/task_types').then(res => {
-                    const data = res.data
-                    this.taskTypeArr = data.map(n => {
-                        return {name: n.title, value: n.id}
-                    })
-                    this.taskTypeArr.unshift({name: '全部', value: ''})
-                })
-            },
-            // 获取要删除的信息
-            setDelInfo(id) {
-                this.contactId = id
-            },
-            // 选择地区
-            changeAreaData(val) {
-                if (val.area.name) {
-                    this.changeInfo.province = val.province.name
-                    this.changeInfo.city = val.city.name !== '市辖区' ? val.city.name : val.province.name
-                    this.changeInfo.district = val.area.name
-                }
-            },
-            // 关键决策人
-            changeContactClientType(val) {
-                this.editConfig.type = val
-            },
-            // 关闭添加任务弹出层
-            cancleTask() {
-                this.taskName = ''
-                this.taskType = ''
-                this.$refs.taskType.setValue('')
-                // principal_id: this.taskPrincipalId, // 负责人 principal_id
-                this.taskLevel = ''
-                this.$refs.taskLevel.setValue(1)
-                this.taskIntroduce = ''
-                this.$refs.startTime.setValue('')
-                this.$refs.endTime.setValue('')
-                this.taskStartTime = ''
-                this.taskEndTime = ''
-                this.setDefaultPrincipal()
-                // participant_ids: this.participantIds
-            },
-            // 关闭新增联系人
-            cancleContact() {
-                this.editConfig = {
-                    position: '',
-                    name: '',
-                    phone: '',
-                    type: '',
-                    wechat: '',
-                    other_contact_ways: ''
-                }
-                this.$refs.contact.setValue('')
-            },
-            // 设置默认负责人
-            setDefaultPrincipal() {
-                this.$store.commit('changeNewPrincipal', {
-                    name: this.user.nickname,
-                    id: this.user.id
-                })
-                this.$store.commit('changeNewParticipantsInfo', [])
-            },
-            linkTo(url) {
-                this.$router.push(url)
-            },
-            // 新增销售线索时的线索类型
-            changeTrailType(type) {
-                this.trailType = type
-                $('#addTrail').modal('show')
-                // 
-            },
-            // 新增销售线索类型成功后的回调
-            addTrailCallBack() {
-                this.getClientTrail()
-            },
-            // 跳转
-            redirectContract(id) {
-                // TODO 没有合同编号
-                this.$router.push({
-                    name: 'approval/detail',
-                    params: {id: id}
-                })
-            },
-            // 任务弹层
-            handleTask () {
-                if (this.power == 'false') {
-                    toastr.error('您没有新建任务的权限！')
-                    return
-                }
-                $('#addTask').modal('show')
-            },
-        }
-    }
+    taskPrincipalChange(value) {
+      this.taskPrincipalId = value.id;
+    },
+
+    taskParticipantChange(value) {
+      const _arr = this.$store.state.newParticipantsInfo.map(n => n.id);
+      this.participantIds = _arr;
+    },
+
+    changeStartTime(value) {
+      this.taskStartTime = value;
+    },
+    changeStartMinutes(value) {
+      this.startMinutes = value;
+    },
+    changeEndTime(value) {
+      this.taskEndTime = value;
+    },
+    changeEndMinutes(value) {
+      this.endMinutes = value;
+    },
+    changeTaskLevel(value) {
+      this.taskLevel = value;
+    },
+    selectPrincipal(value) {
+      this.changeInfo.principal_id = value;
+    },
+    changeEditStatus(value, config) {
+      if (!this.canAddContact && value) {
+        toastr.error('您没有新增联系人的权限！');
+        return;
+      }
+      $('#addContact').modal('show');
+      this.$refs.contact.setValue(config ? config.type : '');
+      this.editConfig = config || {
+        position: '',
+        name: '',
+        phone: '',
+        type: '',
+        wechat: '',
+        other_contact_ways: '',
+      };
+      this.isEditContact = value;
+    },
+    seeContact(config) {
+      this.editConfig = config || {
+        position: '',
+        name: '',
+        phone: '',
+        type: '',
+        other_contact_ways: '',
+      };
+      $('#seeContact').modal('show');
+    },
+    // 获取任务类型列表
+    getTaskType() {
+      fetch('get', '/task_types').then((res) => {
+        const data = res.data;
+        this.taskTypeArr = data.map(n => ({ name: n.title, value: n.id }));
+        this.taskTypeArr.unshift({ name: '全部', value: '' });
+      });
+    },
+    // 获取要删除的信息
+    setDelInfo(id) {
+      this.contactId = id;
+    },
+    // 选择地区
+    changeAreaData(val) {
+      if (val.area.name) {
+        this.changeInfo.province = val.province.name;
+        this.changeInfo.city = val.city.name !== '市辖区' ? val.city.name : val.province.name;
+        this.changeInfo.district = val.area.name;
+      }
+    },
+    // 关键决策人
+    changeContactClientType(val) {
+      this.editConfig.type = val;
+    },
+    // 关闭添加任务弹出层
+    cancleTask() {
+      this.taskName = '';
+      this.taskType = '';
+      this.$refs.taskType.setValue('');
+      // principal_id: this.taskPrincipalId, // 负责人 principal_id
+      this.taskLevel = '';
+      this.$refs.taskLevel.setValue(1);
+      this.taskIntroduce = '';
+      this.$refs.startTime.setValue('');
+      this.$refs.endTime.setValue('');
+      this.taskStartTime = '';
+      this.taskEndTime = '';
+      this.setDefaultPrincipal();
+      // participant_ids: this.participantIds
+    },
+    // 关闭新增联系人
+    cancleContact() {
+      this.editConfig = {
+        position: '',
+        name: '',
+        phone: '',
+        type: '',
+        wechat: '',
+        other_contact_ways: '',
+      };
+      this.$refs.contact.setValue('');
+    },
+    // 设置默认负责人
+    setDefaultPrincipal() {
+      this.$store.commit('changeNewPrincipal', {
+        name: this.user.nickname,
+        id: this.user.id,
+      });
+      this.$store.commit('changeNewParticipantsInfo', []);
+    },
+    linkTo(url) {
+      this.$router.push(url);
+    },
+    // 新增销售线索时的线索类型
+    changeTrailType(type) {
+      if (this.$store.state.power.trail.add !== 'true') {
+        toastr.error('当前用户没有新增销售悬索的权限');
+        return;
+      }
+      this.trailType = type;
+      $('#addTrail').modal('show');
+      //
+    },
+    // 新增销售线索类型成功后的回调
+    addTrailCallBack() {
+      this.getClientTrail();
+    },
+    // 跳转
+    redirectContract(id) {
+      // TODO 没有合同编号
+      this.$router.push({
+        name: 'approval/detail',
+        params: { id },
+      });
+    },
+    // 任务弹层
+    handleTask() {
+      if (this.$store.state.power.task.add !== 'true') {
+        toastr.error('您没有新建任务的权限！');
+        return;
+      }
+      $('#addTask').modal('show');
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

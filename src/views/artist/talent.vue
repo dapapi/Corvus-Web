@@ -952,7 +952,7 @@
         },
         methods: {
             rightChecker(value,params,type){
-                if(this.$store.state.power[type] !=='true'){
+                if(this.$store.state.power[type].add !=='true'){
                     toastr.error('当前用户没有权限新增'+value)
                     return
                 }

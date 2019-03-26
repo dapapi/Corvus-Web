@@ -2200,7 +2200,7 @@ export default {
     },
 
     editBaseInfo() {
-      if (this.$store.state.power.star !== 'true') {
+      if (this.$store.state.power.star.add !== 'true') {
         toastr.error('当前用户没有权限编辑艺人');
         return;
       }

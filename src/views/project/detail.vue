@@ -659,7 +659,7 @@
                                         </div>
                                     </div>
                                     <div class="py-20" v-if="projectInfo.title">
-                                        
+
                                         <div class="clearfix">
                                             <h5 class="pl-15">基本资料</h5>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
@@ -850,7 +850,7 @@
                                             </div>
                                         </div>
 
-                                        
+
                                         <h5 class="pl-15 pt-10">更新信息</h5>
                                         <div class="clearfix">
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
@@ -1539,13 +1539,13 @@
 </template>
 
 <script>
-    import fetch from '../../assets/utils/fetch.js'
-    import config from '../../assets/js/config'
-    import common from '../../assets/js/common'
-    import Cookies from 'js-cookie'
+import fetch from '../../assets/utils/fetch.js';
+import config from '../../assets/js/config';
+import common from '../../assets/js/common';
+import Cookies from 'js-cookie';
 
-    export default {
-        data: function () {
+export default {
+  data () {
             return {
                 common: common,
                 total: 0,
@@ -1683,84 +1683,84 @@
             }
         },
 
-        mounted() {
-            this.projectId = this.$route.params.id;
-            this.getPrivacy(); //获取隐私设置列表
-            this.getProject();
-            this.getClients();
-            this.getTaskType();
-            this.getProjectTasking();
-            this.getProjectTasks();
-            this.getProjectProgress();
-            this.user = JSON.parse(Cookies.get('user'));
-            $('#addPaybackTime').on('hidden.bs.modal', () => {
-                this.projectReturnDesc = '';
-                this.$refs.paybackMoney.setValue('0');
-                this.$refs.paybackTime.setValue();
-                this.projectReturnData = {};
-            });
+  mounted() {
+    this.projectId = this.$route.params.id;
+    this.getPrivacy(); // 获取隐私设置列表
+    this.getProject();
+    this.getClients();
+    this.getTaskType();
+    this.getProjectTasking();
+    this.getProjectTasks();
+    this.getProjectProgress();
+    this.user = JSON.parse(Cookies.get('user'));
+    $('#addPaybackTime').on('hidden.bs.modal', () => {
+      this.projectReturnDesc = '';
+      this.$refs.paybackMoney.setValue('0');
+      this.$refs.paybackTime.setValue();
+      this.projectReturnData = {};
+    });
 
-            $('#addPayback').on('hidden.bs.modal', () => {
-                this.$refs.paybackMoney1.setValue('0');
-                this.$refs.paybackTime1.setValue();
-                this.$refs.payMethod.setValue('');
-                this.projectReturnData = {};
-            });
+    $('#addPayback').on('hidden.bs.modal', () => {
+      this.$refs.paybackMoney1.setValue('0');
+      this.$refs.paybackTime1.setValue();
+      this.$refs.payMethod.setValue('');
+      this.projectReturnData = {};
+    });
 
-            $('#addInvoice').on('hidden.bs.modal', () => {
-                this.$refs.paybackMoney2.setValue('0');
-                this.$refs.paybackTime2.setValue();
-                this.$refs.payMethod1.setValue('');
-                this.projectReturnData = {};
-            });
+    $('#addInvoice').on('hidden.bs.modal', () => {
+      this.$refs.paybackMoney2.setValue('0');
+      this.$refs.paybackTime2.setValue();
+      this.$refs.payMethod1.setValue('');
+      this.projectReturnData = {};
+    });
 
-            $('#addBill').on('hidden.bs.modal', () => {
-                this.cancelChangeBill();
-            });
+    $('#addBill').on('hidden.bs.modal', () => {
+      this.cancelChangeBill();
+    });
 
-            $('#addTask').on('hidden.bs.modal', () => {
-                this.taskName = '';
-                this.taskLevel = '';
-                this.$refs.taskLevel.setValue('');
-                this.taskType = '';
-                this.$refs.taskType.setValue('');
-                this.startTime = '';
-                this.endTime = '';
-                this.startMinutes = '';
-                this.endMinutes = '';
-                this.taskIntroduce = '';
-                this.$refs.startTime.setValue('');
-                this.$refs.startMinutes.setValue('0');
-                this.$refs.endTime.setValue('');
-                this.$refs.endMinutes.setValue('0');
-                this.$store.commit('changeNewPrincipal', {});
-                this.$store.commit('changeNewParticipantsInfo', [])
-            })
-        },
+    $('#addTask').on('hidden.bs.modal', () => {
+      this.taskName = '';
+      this.taskLevel = '';
+      this.$refs.taskLevel.setValue('');
+      this.taskType = '';
+      this.$refs.taskType.setValue('');
+      this.startTime = '';
+      this.endTime = '';
+      this.startMinutes = '';
+      this.endMinutes = '';
+      this.taskIntroduce = '';
+      this.$refs.startTime.setValue('');
+      this.$refs.startMinutes.setValue('0');
+      this.$refs.endTime.setValue('');
+      this.$refs.endMinutes.setValue('0');
+      this.$store.commit('changeNewPrincipal', {});
+      this.$store.commit('changeNewParticipantsInfo', []);
+    });
+  },
 
-        watch: {
-            projectReturnDesc: function (newValue) {
+  watch: {
+    projectReturnDesc (newValue) {
                 this.addProjectReturn(newValue, 'desc')
             },
-            routerId(id) {
-                this.projectId = id;
-                setTimeout(() => {
-                    this.getProject();
-                }, 100);
-            }
-        },
-        computed: {
-            completeNum() {
-                return this.projectTasksInfo.filter(n => n.status === 2).length
-            },
-            routerId() {
-                return this.$route.params.id
-            },
-        },
+    routerId(id) {
+      this.projectId = id;
+      setTimeout(() => {
+        this.getProject();
+      }, 100);
+    },
+  },
+  computed: {
+    completeNum() {
+      return this.projectTasksInfo.filter(n => n.status === 2).length;
+    },
+    routerId() {
+      return this.$route.params.id;
+    },
+  },
 
-        methods: {
+  methods: {
 
-            getProject: function () {
+    getProject () {
                 let data = {
                     include: 'principal,participants,tasks,creator,fields,trail.expectations,trail.client,relate_tasks,relate_projects,type',
                 };
@@ -1830,8 +1830,8 @@
                     this.getStars()
                 })
             },
-            //隐私设置
-            setPrivacy: function () {
+    // 隐私设置
+    setPrivacy () {
 
                 let data = {
                     fee: this.$store.state.payInfo, //预计订单收入
@@ -1855,7 +1855,7 @@
                     $('#addPrivacy').modal('hide')
                 })
             },
-            getPrivacy: function () {
+    getPrivacy () {
                 let data = {
                     project_id: this.$route.params.id
                 };
@@ -1884,7 +1884,7 @@
                 })
             },
 
-            getApprovalsFormData: function () {
+    getApprovalsFormData () {
                 let data = {
                     type: 'projects'
                 };
@@ -1900,14 +1900,14 @@
                 })
             },
 
-            cancelPrivacy: function () {
+    cancelPrivacy () {
                 this.$store.state.divisionInfo = [];
                 this.$store.state.payInfo = [];
                 this.$store.state.contractInfo = [];
                 this.$store.state.collectInfo = []
             },
 
-            getStars: function () {
+    getStars () {
                 if (this.starsArr.length > 0) {
                     return
                 }
@@ -1922,7 +1922,7 @@
                 })
             },
 
-            getClients: function () {
+    getClients () {
                 let _this = this;
                 fetch('get', '/clients/all').then(function (response) {
                     for (let i = 0; i < response.data.length; i++) {
@@ -1936,7 +1936,7 @@
                 })
             },
 
-            getProjectTasks: function () {
+    getProjectTasks () {
                 fetch('get', '/projects/' + this.projectId + '/tasks').then(response => {
                     this.projectTasksInfo = response.data;
                     this.total = response.meta.pagination.total;
@@ -1945,7 +1945,7 @@
                 })
             },
 
-            getProjectTasking: function () {
+    getProjectTasking () {
                 let data = {
                     status: 1,
                 };
@@ -1954,7 +1954,7 @@
                 })
             },
 
-            getProjectBill: function () {
+    getProjectBill () {
                 fetch('get', '/projects/' + this.projectId + '/bill').then(response => {
                     this.projectBillsInfo = response.data;
                     this.projectBillMetaInfo = JSON.parse(JSON.stringify(response.meta));
@@ -1979,7 +1979,7 @@
                 });
             },
 
-            addProjectBill: function () {
+    addProjectBill () {
                 let data = {
                     expenses: this.billExpenses,
                     my_divide: this.myDivide,
@@ -1992,7 +1992,7 @@
                 })
             },
 
-            changeProjectBill: function () {
+    changeProjectBill () {
                 let data = {
                     expenses: this.billExpenses,
                     my_divide: this.myDivide,
@@ -2005,7 +2005,7 @@
                 })
             },
 
-            cancelChangeBill: function () {
+    cancelChangeBill () {
                 this.myDivide = this.projectBillMetaInfo.my_divide;
                 this.billExpenses = this.projectBillMetaInfo.expenses;
                 if (this.projectBillMetaInfo.divide) {
@@ -2023,7 +2023,7 @@
                 }
             },
 
-            getProjectContract: function (callback) {
+    getProjectContract (callback) {
                 fetch('get', '/approvals_contract/projectList', {project_id: this.projectId}).then(response => {
                     this.projectContractInfo = response.data;
                     this.total = response.meta.pagination.total;
@@ -2035,7 +2035,7 @@
                 });
             },
 
-            getProjectReturned: function (contractId) {
+    getProjectReturned (contractId) {
                 this.contractId = contractId;
                 let data = {
                     include: 'money.type,practicalsum,invoicesum',
@@ -2052,7 +2052,7 @@
                 });
             },
 
-            getProjectsReturned: function () {
+    getProjectsReturned () {
                 if (!this.projectContractInfo) {
                     this.getProjectContract((data) => {
                         this.getProjectReturned(data[0].form_instance_number);
@@ -2082,12 +2082,12 @@
                 })
             },
 
-            changeProjectProgress: function (status) {
+    changeProjectProgress (status) {
                 this.projectProgress = status;
                 $('#changeProjectProgress').modal('show')
             },
 
-            addProjectProgress: function () {
+    addProjectProgress () {
                 fetch('put', '/projects/' + this.projectId + '/course', {status: this.projectProgress}).then(response => {
                     let flagInfo = this.projectProgressInfo.find(item => item.status == this.projectProgress);
                     flagInfo['finisher'] = response.data.user;
@@ -2100,7 +2100,7 @@
                 })
             },
 
-            getProjectProgress: function () {
+    getProjectProgress () {
                 fetch('get', '/projects/' + this.projectId + '/course').then(response => {
                     if (response.data.length > 0) {
                         let courses = response.data;
@@ -2123,14 +2123,14 @@
                 })
             },
 
-            addProjectReturn: function (value, name) {
+    addProjectReturn (value, name) {
                 if (name === 'principal_id') {
                     value = this.$store.state.newPrincipalInfo.id
                 }
                 this.projectReturnData[name] = value
             },
 
-            addProjectPayback: function () {
+    addProjectPayback () {
                 this.projectReturnData.contract_id = this.contractId;
                 this.projectReturnData.principal_id = this.user.id;
                 this.projectReturnData.issue_name = this.paybackLength;
@@ -2141,7 +2141,7 @@
                 })
             },
 
-            editProjectPayback: function () {
+    editProjectPayback () {
                 fetch('put', '/returned/money/' + this.projectReturnId, this.projectReturnData).then(() => {
                     $('#addPaybackTime').modal('hide');
                     $('#addPayback').modal('hide');
@@ -2151,18 +2151,18 @@
                 })
             },
 
-            delProjectPayback: function (paybackId) {
+    delProjectPayback (paybackId) {
                 this.delPaybackId = paybackId
             },
 
-            delProjectPaybackCallback: function () {
+    delProjectPaybackCallback () {
                 fetch('delete', '/returned/money/' + this.delPaybackId).then(() => {
                     toastr.success('删除成功');
                     this.getProjectReturned(this.contractId)
                 })
             },
 
-            editProjectPaybackTime: function (type, payback) {
+    editProjectPaybackTime (type, payback) {
                 this.isEditProjectPayback = type;
                 if (type) {
                     this.projectReturnName = payback.issue_name;
@@ -2173,7 +2173,7 @@
                 }
             },
 
-            addProjectPaybackTime: function () {
+    addProjectPaybackTime () {
                 if (!this.projectReturnData.project_returned_money_type_id) {
                     toastr.error('请选择票据类型或付款方式')
                     return
@@ -2188,15 +2188,15 @@
                 })
             },
 
-            redirectContract: function (contractId) {
+    redirectContract (contractId) {
                 this.$router.push({path: '/approval/' + contractId})
             },
 
-            selectedPaybackTime: function (payback) {
+    selectedPaybackTime (payback) {
                 this.paybackTime = payback;
             },
 
-            editProjectPaybackRecording: function (recording, payback, type) {
+    editProjectPaybackRecording (recording, payback, type) {
                 this.isEditProjectPaybackTime = true;
                 this.projectReturnName = recording.issue_name;
                 this.projectReturnDesc = recording.desc;
@@ -2213,33 +2213,33 @@
                 this.paybackTime = payback;
             },
 
-            setTaskPrincipal: function () {
+    setTaskPrincipal () {
                 this.$store.dispatch('changePrincipal', {data: {id: this.user.id, name: this.user.nickname}})
             },
 
-            redirectTask: function (taskId) {
+    redirectTask (taskId) {
                 this.$router.push({path: '/tasks/' + taskId})
             },
 
-            redirectTrail: function (trailId) {
+    redirectTrail (trailId) {
                 this.$router.push({path: '/trails/' + trailId})
             },
 
-            redirectProject: function (projectId) {
+    redirectProject (projectId) {
                 this.$router.push({path: '/projects/' + projectId})
             },
 
-            filterProjectFee: function (value) {
+    filterProjectFee (value) {
                 this.filterFee = value;
             },
 
-            changeTrailOrigin: function (value) {
+    changeTrailOrigin (value) {
                 this.trailInfo.resource = '';
                 this.email = '';
                 this.changeInfo.resource_type = value;
             },
 
-            addTask: function () {
+    addTask () {
                 let participant_ids = [];
                 for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
                     participant_ids.push(this.$store.state.newParticipantsInfo[i].id)
@@ -2265,7 +2265,7 @@
                 })
             },
 
-            getTaskType: function () {
+    getTaskType () {
                 fetch('get', '/task_types').then(response => {
                     for (let i = 0; i < response.data.length; i++) {
                         this.taskTypeArr.push({
@@ -2276,19 +2276,19 @@
                 })
             },
 
-            getAllProjects: function () {
+    getAllProjects () {
                 fetch('get', '/projects/all').then(response => {
                     this.allProjectsInfo = response.data
                 })
             },
 
-            getAllTasks: function () {
+    getAllTasks () {
                 fetch('get', '/tasksAll').then(response => {
                     this.allTasksInfo = response.data
                 })
             },
-            editBaseInfo: function () {
-                if(this.$store.state.power.project !=='true'){
+    editBaseInfo () {
+                if(this.$store.state.power.project.add !=='true'){
                     toastr.error('当前用户没有权限编辑项目')
                     return
                 }
@@ -2297,7 +2297,7 @@
                 this.addInfoArr = {};
             },
 
-            changeProjectBaseInfo: function (value, name) {
+    changeProjectBaseInfo (value, name) {
                 switch (name) {
                     case 'principal_id':
                         if (value === this.projectInfo.principal.data.id) {
@@ -2418,7 +2418,7 @@
                 this.changeInfo[name] = value
             },
 
-            changeProjectInfo: function () {
+    changeProjectInfo () {
                 let data = this.changeInfo;
                 if (data.start_at) {
                     if (data.end_at && (data.start_at > data.end_at)) {
@@ -2471,7 +2471,7 @@
                 })
             },
 
-            cancelEdit: function () {
+    cancelEdit () {
                 this.projectInfo = this.oldInfo.data;
                 let fieldsArr = this.oldInfo.meta.fields.data;
                 this.metaInfo = this.oldInfo.meta;
@@ -2519,43 +2519,43 @@
                 this.addInfoArr = {};
             },
 
-            changeTaskType: function (value) {
+    changeTaskType (value) {
                 this.taskType = value
             },
 
-            principalChange: function (value) {
+    principalChange (value) {
 
             },
 
-            participantChange: function (value) {
+    participantChange (value) {
 
             },
 
-            changeTaskLevel: function (value) {
+    changeTaskLevel (value) {
                 this.taskLevel = value
             },
 
-            changeStartTime: function (value) {
+    changeStartTime (value) {
                 this.startTime = value
             },
 
-            changeStartMinutes: function (value) {
+    changeStartMinutes (value) {
                 this.startMinutes = value
             },
 
-            changeEndMinutes: function (value) {
+    changeEndMinutes (value) {
                 this.endMinutes = value
             },
 
-            changeEndTime: function (value) {
+    changeEndTime (value) {
                 this.endTime = value
             },
 
-            doWithdrawal: function (value) {
+    doWithdrawal (value) {
 
             },
 
-            addInfo: function (value, name) {
+    addInfo (value, name) {
                 if (name === this.cooperationKeyId) {
                     this.cooperationOther = value;
                 }
@@ -2565,7 +2565,7 @@
                 this.addInfoArr[name] = value
             },
 
-            changeToastrText: function (status) {
+    changeToastrText (status) {
                 if (status === 2) {
                     this.changeProjectStatusText = '完成 " ' + this.projectInfo.title + ' " 项目吗？'
                 } else if (status === 3) {
@@ -2576,7 +2576,7 @@
                 this.projectChangeStatus = status
             },
 
-            changeProjectStatus: function () {
+    changeProjectStatus () {
                 let _this = this;
                 fetch('put', '/projects/' + this.projectId + '/status', {status: this.projectChangeStatus}).then(function () {
                     toastr.success('修改成功');
@@ -2584,7 +2584,7 @@
                 })
             },
 
-            selectProjectLinkage: function (value) {
+    selectProjectLinkage (value) {
                 this.linkageResource = value;
                 if (!this.allProjectsInfo) {
                     this.getAllProjects()
@@ -2594,7 +2594,7 @@
                 }
             },
 
-            selectResource: function (type, value) {
+    selectResource (type, value) {
                 let index = this.linkageSelectedIds[type].indexOf(value);
                 if (index > -1) {
                     this.linkageSelectedIds[type].splice(index, 1)
@@ -2603,17 +2603,17 @@
                 }
             },
 
-            addLinkageResource: function () {
+    addLinkageResource () {
                 let _this = this;
                 fetch('post', '/projects/' + this.projectId + '/relates', this.linkageSelectedIds).then(function () {
                     toastr.success('关联成功');
                     $('#addLinkage').modal('hide');
                     _this.getProject()
                 })
-            }
+            },
 
-        }
-    }
+  },
+};
 </script>
 
 <style lang="scss" scoped>

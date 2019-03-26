@@ -1,7 +1,7 @@
-import fetch from '../assets/utils/fetch'
+import fetch from '../assets/utils/fetch';
 
 export default {
-    changeParticipantsInfo: function (data, params) {
+  changeParticipantsInfo (data, params) {
 
         //collectInfo:[],//收款金额
             //payInfo:[],//付款金额
@@ -33,7 +33,7 @@ export default {
         
     },
 
-    changePrincipal: function (data, params) {
+  changePrincipal (data, params) {
         if (params.type === 'change') {
             data.commit('changePrincipal', params.data)
         } else if (params.type === 'selector') {
@@ -43,63 +43,63 @@ export default {
         }
     },
 
-    changeCompany: function (data, params) {
+  changeCompany (data, params) {
         data.commit('changeCompany', params)
     },
-    changeOtherSlot: function(data,params){
+  changeOtherSlot(data,params){
         data.commit('changeOtherSlot',params)
     },
-    changeUnReadMsg:function(data,params){
+  changeUnReadMsg(data,params){
         data.commit('changeUnReadMsg', params)
     },
-    changeIsSelected:function(data,params){
+  changeIsSelected(data,params){
        
         data.commit('changeIsSelected',params)
     },
-    changeIsExpanded: function (data, params) {
+  changeIsExpanded (data, params) {
         data.commit('changeIsExpanded', params)
     },
-    changePreview:function(data,params){
+  changePreview(data,params){
         data.commit('changePreview',params)
     },
-    // 获取部门数据
-    getDepartment ({commit}) {
-        fetch('get', '/departments').then(res => {
-            commit('setDepartment', res.data)
-        })
-    },
-    // 获取用户列表
-    getUserList ({commit}) {
-        fetch('get', '/user/all').then(res => {
-            commit('setUserList', res.data)
-        })
-    },
-    // 获取模块权限
-    getModuleRole ({commit}) {
-        fetch('get','console/getpowermodel').then(res => {
-            let canPassBack = false
-            if (res.length > 0) {
-                for (const n of res) {
-                    if (n.code === 'back') {
-                        canPassBack = true
-                        break
-                    }
-                }
-            }
-            commit('setPassBack', canPassBack)
-        })
-    },
-    getModuleList({commit}){
-        fetch('get', `/getmodules`).then((res) => {
-          
-          let num = 0
-          let data = {}
-          for (let i = 0; i < res.data.length; i++) {
-            num = num + res.data[i].unread
+  // 获取部门数据
+  getDepartment({ commit }) {
+    fetch('get', '/departments').then((res) => {
+      commit('setDepartment', res.data);
+    });
+  },
+  // 获取用户列表
+  getUserList({ commit }) {
+    fetch('get', '/user/all').then((res) => {
+      commit('setUserList', res.data);
+    });
+  },
+  // 获取模块权限
+  getModuleRole({ commit }) {
+    fetch('get', 'console/getpowermodel').then((res) => {
+      let canPassBack = false;
+      if (res.length > 0) {
+        for (const n of res) {
+          if (n.code === 'back') {
+            canPassBack = true;
+            break;
           }
-          data.num = num
-          data.moduleList = res.data
-          commit('setModule',data)
-        })
-    }
+        }
+      }
+      commit('setPassBack', canPassBack);
+    });
+  },
+  getModuleList({ commit }) {
+    fetch('get', '/getmodules').then((res) => {
+      let num = 0;
+      const data = {};
+      for (let i = 0; i < res.data.length; i++) {
+        num += res.data[i].unread;
+      }
+      data.num = num;
+      data.moduleList = res.data;
+      commit('setModule', data);
+    });
+  },
 }
+;
