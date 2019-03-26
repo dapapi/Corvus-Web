@@ -268,7 +268,13 @@
                             <div class="col-md-8 example">
                                 <div class="col-md-2 text-right float-left">签署合同</div>
                                 <div class="col-md-6 float-left pl-0">
-                                    <EditInput :content="detail.contract" :isEdit="editDetail" @change="item => changeState('detail.contract', item)" />
+                                    <!-- <EditInput :content="detail.contract" :isEdit="editDetail" @change="item => changeState('detail.contract', item)" /> -->
+                                    <EditSelector
+                                        :options="signContractArr" 
+                                        :isEdit="editDetail" 
+                                        :content="detail.contract"
+                                        @change="item => changeState('detail.contract', item)"
+                                    />
                                 </div>
                             </div>
                             <div class="col-md-8 example">
@@ -511,7 +517,7 @@ import config from '../../assets/js/config'
 import { mapState, mapActions } from 'vuex'
 const { workPlaceArr, employment, hireShape,
         positiveStateArr, schoolRecordArr,
-        incomeTaxTypeArr, genderArr
+        incomeTaxTypeArr, genderArr, signContractArr
     } = config
 import { toHump, toLine } from '../../assets/utils/tool'
 
@@ -530,6 +536,7 @@ export default {
             genderArr: genderArr,
             positiveStateArr: positiveStateArr,
             incomeTaxTypeArr: incomeTaxTypeArr,
+            signContractArr: signContractArr,
             schoolRecordArr: schoolRecordArr, // 学历
             // iconUrlCopy: '', // 头像原始url
             info: {

@@ -323,6 +323,23 @@
                                                               @change="changeTrailDesc"></editTextarea>
                                             </div>
                                         </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                            <div class="col-md-3 float-left text-right pl-0">微信</div>
+                                            <div class="col-md-9 float-left font-weight-bold"
+                                                 v-if="trailInfo.contact">
+                                                <EditInput :content="trailInfo.contact.data.wechat" :is-edit="isEdit"
+                                                           @change="changeTrailContactWechat"></EditInput>
+                                            </div>
+                                        </div>
+                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                            <div class="col-md-3 float-left text-right pl-0">其他联系方式</div>
+                                            <div class="col-md-9 float-left font-weight-bold"
+                                                 v-if="trailInfo.contact">
+                                                <EditInput :content="trailInfo.contact.data.other_contact_ways"
+                                                           :is-edit="isEdit"
+                                                           @change="changeTrailContactOthers"></EditInput>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <h5 class="pl-15 pt-10">更新信息</h5>
@@ -464,81 +481,8 @@
             </div>
         </div>
 
-        <div class="modal fade" id="addTask" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1" data-backdrop="static">
-            <div class="modal-dialog modal-simple">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
-                        </button>
-                        <h4 class="modal-title">新增任务</h4>
-                    </div>
-                    <div class="modal-body">
-
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">关联资源</div>
-                            <div class="col-md-10 float-left">
-                                销售线索 - {{ trailInfo.title }}
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left require">任务类型</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskTypeArr" @change="changeTaskType"></selectors>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left require">任务名称</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <input type="text" class="form-control" placeholder="请输入任务名称" v-model="taskName">
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left require">负责人</div>
-                            <div class="col-md-5 float-left pl-0">
-                                <input-selectors :placeholder="currentUser.name || '请选择负责人'"
-                                                 @change="principalChange"></input-selectors>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">参与人</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <add-member @change="taskParticipantChange"></add-member>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left pl-0 require">任务优先级</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskLevelArr" @change="changeTaskLevel"></selectors>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left require">开始时间</div>
-                            <div class="col-md-4 float-left pl-0">
-                                <datepicker @change="changeStartTime"></datepicker>
-                            </div>
-                            <div class="col-md-2 text-right float-left require">截止时间</div>
-                            <div class="col-md-4 float-left pl-0">
-                                <datepicker @change="changeEndTime" :startDate="startTime"></datepicker>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">任务说明</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <textarea class="form-control" name="taskDescription" id="" cols="30"
-                                          rows="5" title="" v-model="taskIntroduce"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" type="submit" @click="addTask">确定</button>
-                    </div>
-
-                </div>
-            </div>
-        </div>
+        <addTask :resourceable_id="trailId" resource_type="5" :resource_title="trailName"
+                 resource_name="销售线索" :lock_status="trailInfo.lock_status" @success="addTask"></addTask>
 
         <div class="modal fade" id="refuseTrail" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
@@ -601,14 +545,14 @@
 </template>
 
 <script>
-    import fetch from '../../assets/utils/fetch.js'
-    import config from '../../assets/js/config'
-    import common from "../../assets/js/common";
+    import fetch from '../../assets/utils/fetch.js';
+    import config from '../../assets/js/config';
+    import common from '../../assets/js/common';
 
     export default {
-        data: function () {
+        data() {
             return {
-                common: common,
+                common,
                 total: 0,
                 current_page: 1,
                 total_pages: 1,
@@ -656,15 +600,15 @@
                 currentUser: {},
                 principalName: '',
                 lockUser: {},
-                startTime: ''
-            }
+                startTime: '',
+                trailName: '',
+            };
         },
         created() {
-            this.getAllType()
+            this.getAllType();
             this.getTrail();
-            this.getTrailTask()
-            this.getCurrentUser()
-
+            this.getTrailTask();
+            this.getCurrentUser();
         },
         mounted() {
             this.getStars();
@@ -674,138 +618,139 @@
             getResourceType() {
                 for (const key in this.trailOriginArr) {
                     if (this.trailOriginArr[key].value == this.trailInfo.resource_type) {
-                        return this.trailOriginArr[key].name
+                        return this.trailOriginArr[key].name;
                     }
                 }
             },
             getClientLevel() {
                 for (const key in this.clientLevelArr) {
                     if (this.clientLevelArr[key].value == this.trailInfo.client.data.grade) {
-                        return this.clientLevelArr[key].name
+                        return this.clientLevelArr[key].name;
                     }
                 }
-            }
+            },
         },
         watch: {
             'trailInfo.type': function () {
                 if (this.trailInfo.type === 4) {
-                    this.trailOriginArr = config.trailBloggerOrigin
-                    this.getStars()
+                    this.trailOriginArr = config.trailBloggerOrigin;
+                    this.getStars();
                     this.$nextTick(() => {
                         $('.selectpicker').selectpicker('render');
                         $('.selectpicker').selectpicker('refresh');
-                    })
+                    });
                 }
-
             },
             'trailInfo.resource': function (newValue, oldValue) {
                 if (oldValue) {
                     if (newValue != this.oldInfo.resource) {
-                        this.changeInfo.resource = newValue
+                        this.changeInfo.resource = newValue;
                     }
                 }
             },
             'trailInfo.priority': function (newValue) {
-                this.changeInfo.priority = newValue
+                this.changeInfo.priority = newValue;
             },
             'trailInfo.title': function (newValue) {
-                this.changeInfo.title = newValue
+                this.changeInfo.title = newValue;
             },
             'trailInfo.principal.data': {
                 handler(newValue, oldValue) {
                     if (oldValue) {
                         if (newValue != oldValue.id) {
-                            this.changeInfo.principal_id = this.$store.state.principalInfo.id
+                            this.changeInfo.principal_id = this.$store.state.principalInfo.id;
                         }
                     }
                 },
-                deep: true
+                deep: true,
             },
             'trailInfo.brand': function (newValue) {
-                this.changeInfo.brand = newValue
+                this.changeInfo.brand = newValue;
             },
             'trailInfo.client.data.company': function (newValue) {
                 if (this.changeInfo.client) {
-                    this.changeInfo.client.data.company = newValue
+                    this.changeInfo.client.data.company = newValue;
                 } else {
                     this.changeInfo.client = {
                         data: {
-                            company: newValue
-                        }
-                    }
+                            company: newValue,
+                        },
+                    };
                 }
-
             },
             'trailInfo.contact.data.name': function (newValue) {
                 if (this.changeInfo.contact) {
-                    this.changeInfo.contact.name = newValue
+                    this.changeInfo.contact.name = newValue;
                 } else {
                     this.changeInfo.contact = {
                         data: {
-                            name: newValue
-                        }
-                    }
+                            name: newValue,
+                        },
+                    };
                 }
             },
             'trailInfo.desc': function (newValue) {
-                this.changeInfo.desc = newValue
+                this.changeInfo.desc = newValue;
             },
             'trailInfo.resource_type': function (newValue) {
-                this.changeInfo.resource_type = newValue
+                this.changeInfo.resource_type = newValue;
             },
             'trailInfo.contact.data.phone': function (newValue) {
                 if (this.changeInfo.contact) {
-                    this.changeInfo.contact.phone = newValue
+                    this.changeInfo.contact.phone = newValue;
                 } else {
                     this.changeInfo.contact = {
-                        phone: newValue
-                    }
+                        phone: newValue,
+                    };
                 }
             },
             'trailInfo.industry_id': function (newValue) {
-                this.changeInfo.industry_id = newValue
+                this.changeInfo.industry_id = newValue;
             },
             'trailInfo.expectations': function (newValue) {
-                this.changeInfo.expectations = newValue
+                this.changeInfo.expectations = newValue;
             },
             'trailInfo.recommendations': function (newValue) {
-                this.changeInfo.recommendations = newValue
+                this.changeInfo.recommendations = newValue;
             },
-            'trailStatus': function (newValue) {
-                this.changeInfo.status = Number(newValue)
+            trailStatus(newValue) {
+                this.changeInfo.status = Number(newValue);
             },
             'trailInfo.cooperation_type': function (newValue) {
-                this.changeInfo.cooperation_type = Number(newValue)
+                this.changeInfo.cooperation_type = Number(newValue);
             },
             'trailInfo.lock_status': function (newValue) {
-                this.changeInfo.lock_status = newValue
-            }
+                this.changeInfo.lock_status = newValue;
+            },
         },
 
         methods: {
             changeTrailOriginPerson(value) {
-                this.changeInfo.resource = value.id
+                this.changeInfo.resource = value.id;
             },
             changeEmail(value) {
-                this.changeInfo.resource = value
+                this.changeInfo.resource = value;
             },
             getAllType() {
-                let _this = this
+                const _this = this;
                 fetch('get', '/task_types').then((response) => {
-                    _this.taskTypeArr = response.data
-                })
+                    _this.taskTypeArr = response.data;
+                });
             },
             trailTypeValidate() {
                 if (!this.trailInfo.principal) {
                     toastr.error("负责人为必填");
                     return false;
-                } else if (!this.trailInfo.fee) {
+                }
+                if (!this.trailInfo.fee) {
                     toastr.error("费用为必填")
                     return false;
-                } else if (!this.trailInfo.client.data.company) {
+                }
+                if (!this.trailInfo.client.data.company) {
                     toastr.error("公司名称为必填")
                     return false;
-                } else if (!this.trailInfo.title) {
+                }
+                if (!this.trailInfo.title) {
                     toastr.error("线索名称为必填")
                     return false;
                 } else if (!this.trailInfo.contact.data.name) {
@@ -817,158 +762,164 @@
                         // alert("手机号码有误，请重填");  
                         toastr.error("请输入正确的手机号码");
                         return false;
-                    } else {
-                        return true;
                     }
-                } else if (!this.trailInfo.contact.data.phone) {
-                    toastr.error("手机号码为必填")
-                    return false;
+                    return true;
+
                 } else {
                     return true
                 }
             },
 
-            getTrail: function () {
+            getTrail() {
                 this.trailId = this.$route.params.id;
-                let data = {
+                const data = {
                     include: 'principal,client,lockuser,contact,starexpectations,bloggerexpectations,starrecommendations,bloggerrecommendations,project',
                 };
-                fetch('get', '/trails/' + this.trailId, data).then(response => {
-                    this.lockUser = response.data.lockuser
+                fetch('get', `/trails/${this.trailId}`, data).then((response) => {
+                    this.lockUser = response.data.lockuser;
                     this.trailType = response.data.type;
                     this.trailInfo = response.data;
+                    this.trailName = response.data.title;
                     this.oldInfo = JSON.parse(JSON.stringify(response.data));
                     this.selectedExpectationsArr = [];
                     this.selectedRecommendationsArr = [];
                     for (let i = 0; i < this.trailInfo.starexpectations.data.length; i++) {
-                        this.selectedExpectationsArr.push(this.trailInfo.starexpectations.data[i].flag + '-' + this.trailInfo.starexpectations.data[i].id)
+                        this.selectedExpectationsArr.push(`${this.trailInfo.starexpectations.data[i].flag}-${this.trailInfo.starexpectations.data[i].id}`);
                     }
                     for (let i = 0; i < this.trailInfo.bloggerexpectations.data.length; i++) {
-                        this.selectedExpectationsArr.push(this.trailInfo.bloggerexpectations.data[i].flag + '-' + this.trailInfo.bloggerexpectations.data[i].id)
+                        this.selectedExpectationsArr.push(`${this.trailInfo.bloggerexpectations.data[i].flag}-${this.trailInfo.bloggerexpectations.data[i].id}`);
                     }
                     for (let i = 0; i < this.trailInfo.starrecommendations.data.length; i++) {
-                        this.selectedRecommendationsArr.push(this.trailInfo.starrecommendations.data[i].flag + '-' + this.trailInfo.starrecommendations.data[i].id)
+                        this.selectedRecommendationsArr.push(`${this.trailInfo.starrecommendations.data[i].flag}-${this.trailInfo.starrecommendations.data[i].id}`);
                     }
                     for (let i = 0; i < this.trailInfo.bloggerrecommendations.data.length; i++) {
-                        this.selectedRecommendationsArr.push(this.trailInfo.bloggerrecommendations.data[i].flag + '-' + this.trailInfo.bloggerrecommendations.data[i].id)
+                        this.selectedRecommendationsArr.push(`${this.trailInfo.bloggerrecommendations.data[i].flag}-${this.trailInfo.bloggerrecommendations.data[i].id}`);
                     }
                     if (response.data.principal) {
-                        let params = {
+                        const params = {
                             type: 'change',
-                            data: response.data.principal.data
+                            data: response.data.principal.data,
                         };
                         this.$store.dispatch('changePrincipal', params);
                     }
-                    this.isLoading = false
+                    this.isLoading = false;
                     this.$nextTick(() => {
-                        this.$store.state.newPrincipalInfo.id = Number(this.trailInfo.resource)
+                        this.$store.state.newPrincipalInfo.id = Number(this.trailInfo.resource);
                         if (this.trailInfo.principal) {
-                            this.$store.state.principalInfo = this.trailInfo.principal.data
+                            this.$store.state.principalInfo = this.trailInfo.principal.data;
                         }
-                    })
+                    });
                     if (this.trailInfo.principal) {
-                        this.principalName = this.trailInfo.principal.data.name
+                        this.principalName = this.trailInfo.principal.data.name;
                     }
-                })
+                });
             },
 
-            getIndustries: function () {
-                let _this = this;
-                fetch('get', '/industries/all').then(function (response) {
+            getIndustries() {
+                const _this = this;
+                fetch('get', '/industries/all').then((response) => {
                     for (let i = 0; i < response.data.length; i++) {
                         _this.industriesArr.push({
                             id: response.data[i].id,
                             name: response.data[i].name,
-                            value: response.data[i].id
-                        })
+                            value: response.data[i].id,
+                        });
                     }
-                })
+                });
             },
-            changeTrailOrigin: function (value) {
+            changeTrailOrigin(value) {
                 this.trailInfo.resource = '';
                 this.changeInfo.resource_type = value;
-                this.trailOrigin = value
+                this.trailOrigin = value;
             },
 
-            changeTrailBaseInfo: function () {
+            changeTrailBaseInfo() {
                 if (this.changeInfo.resource_type) {
-                    this.changeInfo.resource_type = Number(this.changeInfo.resource_type)
+                    this.changeInfo.resource_type = Number(this.changeInfo.resource_type);
                 } else {
-                    this.changeInfo.resource_type = Number(this.oldInfo.resource_type)
+                    this.changeInfo.resource_type = Number(this.oldInfo.resource_type);
                 }
                 if (this.changeInfo.hasOwnProperty('resource') && this.changeInfo.resource != this.oldInfo.resource) {
                     if (!this.changeInfo.resource_type) {
-                        this.changeInfo.resource_type = Number(this.oldInfo.resource_type)
+                        this.changeInfo.resource_type = Number(this.oldInfo.resource_type);
                     }
                 }
+                if (this.changeInfo.contact.id) {
+                    // this.changeInfo.resource_type = Number(this.changeInfo.resource_type)
+                } else {
+                    this.changeInfo.contact.id = this.trailInfo.contact.data.name;
+                    this.changeInfo.contact.name = this.trailInfo.contact.data.name;
+                }
                 if (this.trailTypeValidate()) {
-                    let data = this.changeInfo;
-                    if (JSON.stringify(this.changeInfo) === "{}") {
-                        this.isEdit = false
-                        return
+                    const data = this.changeInfo;
+                    if (JSON.stringify(this.changeInfo) === '{}') {
+                        this.isEdit = false;
+                        return;
                     }
                     if ([1, 2, 3, 4, 5].includes(this.trailOrigin)) {
                         if (!this.changeInfo.resource && !this.oldInfo.resource) {
-                            toastr.error('线索来源不能为空')
-                            return
-                        } else {
-                            if (!this.changeInfo.resource) {
-                                this.changeInfo.resource = this.oldInfo.resource
-                            }
+                            toastr.error('线索来源不能为空');
+                            return;
+                        }
+                        if (!this.changeInfo.resource) {
+                            this.changeInfo.resource = this.oldInfo.resource;
                         }
                     }
-                    fetch('put', '/trails/' + this.trailId, data).then(() => {
+                    fetch('put', `/trails/${this.trailId}`, data).then(() => {
                         toastr.success('修改成功');
-                        this.isEdit = false
-                        this.getTrail()
-                    })
+                        this.isEdit = false;
+                        this.getTrail();
+                    });
                 }
             },
-            getStars: function () {
-                fetch('get', '/starandblogger', {sign_contract_status: 2}).then(response => {
+            getStars() {
+                fetch('get', '/starandblogger', {sign_contract_status: 2}).then((response) => {
                     this.starsArr = [];
                     for (let i = 0; i < response.data.length; i++) {
                         this.starsArr.push({
                             name: response.data[i].name,
-                            value: response.data[i].flag + '-' + response.data[i].id,
-                        })
+                            value: `${response.data[i].flag}-${response.data[i].id}`,
+                        });
                     }
-
-                })
+                });
             },
 
-            editBaseInfo: function () {
+            editBaseInfo() {
+                if (this.$store.state.power.trail !== 'true') {
+                    toastr.error('当前用户没有编辑销售线索的权限');
+                    return;
+                }
                 this.isEdit = true;
                 this.changeInfo = {};
             },
 
-            cancelEdit: function () {
+            cancelEdit() {
                 this.getTrail();
                 this.isEdit = false;
                 this.trailInfo = JSON.parse(JSON.stringify(this.oldInfo));
                 for (let i = 0; i < this.trailInfo.starexpectations.data.length; i++) {
-                    this.selectedExpectationsArr.push(this.trailInfo.starexpectations.data[i].flag + '-' + this.trailInfo.starexpectations.data[i].id)
+                    this.selectedExpectationsArr.push(`${this.trailInfo.starexpectations.data[i].flag}-${this.trailInfo.starexpectations.data[i].id}`);
                 }
                 for (let i = 0; i < this.trailInfo.bloggerexpectations.data.length; i++) {
-                    this.selectedExpectationsArr.push(this.trailInfo.bloggerexpectations.data[i].flag + '-' + this.trailInfo.bloggerexpectations.data[i].id)
+                    this.selectedExpectationsArr.push(`${this.trailInfo.bloggerexpectations.data[i].flag}-${this.trailInfo.bloggerexpectations.data[i].id}`);
                 }
                 for (let i = 0; i < this.trailInfo.starrecommendations.data.length; i++) {
-                    this.selectedRecommendationsArr.push(this.trailInfo.starrecommendations.data[i].flag + '-' + this.trailInfo.starrecommendations.data[i].id)
+                    this.selectedRecommendationsArr.push(`${this.trailInfo.starrecommendations.data[i].flag}-${this.trailInfo.starrecommendations.data[i].id}`);
                 }
                 for (let i = 0; i < this.trailInfo.bloggerrecommendations.data.length; i++) {
-                    this.selectedRecommendationsArr.push(this.trailInfo.bloggerrecommendations.data[i].flag + '-' + this.trailInfo.bloggerrecommendations.data[i].id)
+                    this.selectedRecommendationsArr.push(`${this.trailInfo.bloggerrecommendations.data[i].flag}-${this.trailInfo.bloggerrecommendations.data[i].id}`);
                 }
                 if (this.trailInfo.principal) {
-                    let params = {
+                    const params = {
                         type: 'change',
-                        data: this.trailInfo.principal.data
+                        data: this.trailInfo.principal.data,
                     };
                     this.$store.dispatch('changePrincipal', params);
                 }
             },
 
-            getTrailTask: function () {
-                fetch('get', '/trails/' + this.trailId + '/tasks').then(response => {
+            getTrailTask() {
+                fetch('get', `/trails/${this.trailId}/tasks`).then((response) => {
                     this.trailTasksInfo = response.data;
                     this.total = response.meta.pagination.total;
                     this.current_page = response.meta.pagination.current_page;
@@ -977,269 +928,237 @@
                     let n = 0;
                     for (const key in response.data) {
                         if (response.data[key].status == 2) {
-                            n++
+                            n++;
                         }
                     }
                     this.taskCount = {
                         count: response.data.length,
-                        finished: n
-                    }
-                })
+                        finished: n,
+                    };
+                });
             },
             changeLockStatus(value) {
                 if (value == 2) {
-                    value = 0
+                    value = 0;
                 }
-                this.changeInfo.lock = Number(value)
+                this.changeInfo.lock = Number(value);
             },
             getCurrentUser() {
-                let _this = this
+                const _this = this;
                 fetch('get', '/users/my').then((response) => {
-                    _this.currentUser = response.data
+                    _this.currentUser = response.data;
                     if (!_this.$store.state.newPrincipalInfo.id && _this.currentUser) {
-                        _this.principal = _this.currentUser.id
+                        _this.principal = _this.currentUser.id;
                     } else {
-                        _this.principal = _this.$store.state.newPrincipalInfo.id
+                        _this.principal = _this.$store.state.newPrincipalInfo.id;
                     }
-                })
+                });
             },
-            addTask: function () {
-                let _this = this;
-                let flagArr = [];
-                for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
-                    flagArr.push(this.$store.state.newParticipantsInfo[i].id)
-                }
-                let data = {
-                    resource_type: 5,
-                    resourceable_id: this.trailId,
-                    title: this.taskName,
-                    type: this.taskType,
-                    principal_id: this.principal,
-                    priority: this.taskLevel,
-                    start_at: this.startTime + ' ' + this.startMinutes,
-                    end_at: this.endTime + ' ' + this.endMinutes,
-                    desc: this.taskIntroduce,
-                    participant_ids: flagArr,
-                    lock_status: Number(this.trailInfo.lock_status)
-                };
-
-                if (!this.taskName) {
-                    toastr.error('请输入任务名称');
-                } else if (!this.taskType) {
-                    toastr.error('请选择任务类型');
-                } else if (!this.principal) {
-                    toastr.error('请选择负责人');
-                } else if (!this.taskLevel) {
-                    toastr.error('请设置任务优先级');
-                } else if (!this.startTime) {
-                    toastr.error('请设置开始时间');
-                } else if (!this.endTime) {
-                    toastr.error('请设置结束时间')
-                } else {
-                    fetch('post', '/tasks', data).then(function (response) {
-                        toastr.success('创建成功');
-                        $('#addTask').modal('hide');
-                        _this.getTrailTask()
-                    })
-                }
+            addTask() {
+                this.getTrailTask();
             },
 
-            redirectCompany: function (companyId) {
-                this.$router.replace({path: '/clients/' + companyId});
+            redirectCompany(companyId) {
+                this.$router.replace({path: `/clients/${companyId}`});
             },
-            redirectProject: function (projectId) {
-                this.$router.replace({path: '/projects/' + projectId});
+            redirectProject(projectId) {
+                this.$router.replace({path: `/projects/${projectId}`});
             },
-            changeLinkage: function (value) {
-                console.log(value)
-            },
-
-            changeTaskType: function (value) {
-                this.taskType = value
+            changeLinkage(value) {
+                console.log(value);
             },
 
-            principalChange: function (value) {
-                this.principal = value.id
+            changeTaskType(value) {
+                this.taskType = value;
             },
 
-            participantChange: function (value) {
-                let flagArr = [];
+            principalChange(value) {
+                this.principal = value.id;
+            },
+
+            participantChange(value) {
+                const flagArr = [];
                 for (let i = 0; i < value.length; i++) {
-                    flagArr.push(value[i].id)
+                    flagArr.push(value[i].id);
                 }
-                this.participants = flagArr
+                this.participants = flagArr;
             },
 
-            changeTaskLevel: function (value) {
-                this.taskLevel = value
+            changeTaskLevel(value) {
+                this.taskLevel = value;
             },
-            changeTrailTaskLevel: function (value) {
-                this.trailInfo.priority = value
-            },
-
-            changeStartTime: function (value) {
-                this.startTime = value
+            changeTrailTaskLevel(value) {
+                this.trailInfo.priority = value;
             },
 
-            changeEndTime: function (value) {
-                this.endTime = value
+            changeStartTime(value) {
+                this.startTime = value;
             },
 
-            taskParticipantChange: function (value) {
-                // this.taskParticipant.data = value
+            changeEndTime(value) {
+                this.endTime = value;
             },
 
-            changeTrailName: function (value) {
-                this.trailInfo.title = value
+            changeTrailName(value) {
+                this.trailInfo.title = value;
             },
-            changeResource: function (value) {
-                this.trailInfo.resource = value
+            changeResource(value) {
+                this.trailInfo.resource = value;
             },
-            changeTrailPrincipal: function (value) {
+            changeTrailPrincipal(value) {
                 if (this.trailInfo.principal) {
-                    this.trailInfo.principal.data = value
+                    this.trailInfo.principal.data = value;
                 } else {
                     this.trailInfo.principal = {
-                        data: value
+                        data: value,
                     };
                 }
-                this.changeInfo.principal_id = value
+                this.changeInfo.principal_id = value;
             },
 
-            changeTrailFee: function (value) {
+            changeTrailFee(value) {
                 if (value == this.trailInfo.fee) {
                     if (this.changeInfo.fee) {
-                        delete this.changeInfo.fee
+                        delete this.changeInfo.fee;
                     } else {
-                        return
+                        return;
                     }
                 }
-                this.changeInfo.fee = value
+                this.changeInfo.fee = value;
             },
 
-            changeTrailBrand: function (value) {
-                this.trailInfo.brand = value
+            changeTrailBrand(value) {
+                this.trailInfo.brand = value;
             },
 
-            changeTrailCompany: function (value) {
-                this.trailInfo.client.data.company = value
+            changeTrailCompany(value) {
+                this.trailInfo.client.data.company = value;
             },
 
-            changeTrailCompanyLevel: function (value) {
-                this.trailInfo.client.data.grade = value
+            changeTrailCompanyLevel(value) {
+                this.trailInfo.client.data.grade = value;
                 if (this.changeInfo.client) {
-                    this.changeInfo.client.grade = value
+                    this.changeInfo.client.grade = value;
                 } else {
-                    Object.assign(this.changeInfo, {client: {grade: value}})
+                    Object.assign(this.changeInfo, {client: {grade: value}});
                 }
             },
 
-            changeTrailContact: function (value) {
-                this.trailInfo.contact.data.name = value
+            changeTrailContact(value) {
+                this.trailInfo.contact.data.name = value;
+                if (this.changeInfo.contact) {
+                    this.changeInfo.contact.id = value;
+                } else {
+                    Object.assign(this.changeInfo, {contact: {id: value}});
+                }
+            },
+            changeTrailContactWechat(value) {
+                this.trailInfo.contact.data.wechat = value;
+                if (this.changeInfo.contact) {
+                    this.changeInfo.contact.wechat = value;
+                } else {
+                    Object.assign(this.changeInfo, {contact: {wechat: value}});
+                }
+            },
+            changeTrailContactOthers(value) {
+                this.trailInfo.contact.data.other_contact_ways = value;
+                if (this.changeInfo.contact) {
+                    this.changeInfo.contact.other_contact_ways = value;
+                } else {
+                    Object.assign(this.changeInfo, {contact: {other_contact_ways: value}});
+                }
+            },
+            changeTrailContactPhone(value) {
+                this.trailInfo.contact.data.phone = value;
             },
 
-            changeTrailContactPhone: function (value) {
-                this.trailInfo.contact.data.phone = value
+            changeTrailDesc(value) {
+                this.trailInfo.desc = value;
             },
-
-            changeTrailExpectations: function (value) {
-
+            changeResourceType(value) {
+                this.trailInfo.resource_type = value;
             },
-
-            changeTrailRecommend: function (value) {
-
-            },
-
-            changeTrailDesc: function (value) {
-                this.trailInfo.desc = value
-            },
-            changeResourceType: function (value) {
-                this.trailInfo.resource_type = value
-            },
-            changeExpectations: function (value) {
+            changeExpectations(value) {
                 if (value.length === 0) {
                     toastr.error('目标艺人不能为空');
-                    return
+                    return;
                 }
                 for (let i = 0; i < value.length; i++) {
-                    let item = value[i].split('-');
+                    const item = value[i].split('-');
                     value[i] = {
                         id: item[1],
-                        flag: item[0]
+                        flag: item[0],
                     };
                 }
-                this.changeInfo.expectations = value
+                this.changeInfo.expectations = value;
             },
 
-            changeRecommendations: function (value) {
+            changeRecommendations(value) {
                 if (value.length === 0) {
                     toastr.error('推荐艺人不能为空');
-                    return
+                    return;
                 }
                 for (let i = 0; i < value.length; i++) {
-                    let item = value[i].split('-');
+                    const item = value[i].split('-');
                     value[i] = {
                         id: item[1],
-                        flag: item[0]
+                        flag: item[0],
                     };
                 }
-                this.changeInfo.recommendations = value
+                this.changeInfo.recommendations = value;
             },
 
-            changePriority: function (value) {
-                console.log(value)
+            changePriority(value) {
+                console.log(value);
             },
 
-            changeRefuseType: function (value) {
+            changeRefuseType(value) {
                 if (value == 1) {
-                    this.refuseType = '我方拒绝'
+                    this.refuseType = '我方拒绝';
                 } else {
-                    this.refuseType = '客户拒绝'
+                    this.refuseType = '客户拒绝';
                 }
             },
             changeIndustry(value) {
-                this.trailInfo.industry_id = value
+                this.trailInfo.industry_id = value;
             },
             changeTrailStatus(value) {
-                this.trailStatus = value
+                this.trailStatus = value;
             },
             changeCooperationType(value) {
-                this.trailInfo.cooperation_type = value
+                this.trailInfo.cooperation_type = value;
             },
-            recoverTrail: function () {
-                let _this = this
-                fetch('put', '/trails/' + this.trailInfo.id + '/recover').then(function (response) {
+            recoverTrail() {
+                const _this = this;
+                fetch('put', `/trails/${this.trailInfo.id}/recover`).then((response) => {
                     toastr.success('激活成功');
                     $('#recoverTrail').modal('hide');
-                    _this.getTrail()
-                })
-                this.trailInfo.progress_status = 1
-
+                    _this.getTrail();
+                });
+                this.trailInfo.progress_status = 1;
             },
-            refuseTrail: function () {
-                let _this = this
+            refuseTrail() {
                 if (!this.refuseType) {
-                    toastr.error('请选择拒绝原因')
+                    toastr.error('请选择拒绝原因');
                 } else if (!this.refuseReason) {
-                    toastr.error('请输入拒绝理由')
+                    toastr.error('请输入拒绝理由');
                 } else {
-                    let data = {
-                        'type': this.refuseType,
-                        'reason': this.refuseReason,
-                    }
-                    fetch('put', '/trails/' + this.trailInfo.id + '/refuse', data).then(function (response) {
+                    const data = {
+                        type: this.refuseType,
+                        reason: this.refuseReason,
+                    };
+                    fetch('put', `/trails/${this.trailInfo.id}/refuse`, data).then(() => {
                         toastr.success('拒绝成功');
                         $('#refuseTrail').modal('hide');
-                        _this.getTrail()
-                    })
-                    // this.trailInfo.progress_status = 0
+                        this.getTrail();
+                    });
                 }
             },
             goTask(id) {
-                this.$router.push({path: '/tasks/' + id})
-            }
-        }
-    }
+                this.$router.push({path: `/tasks/${id}`});
+            },
+        },
+    };
 </script>
 
 <style scoped>

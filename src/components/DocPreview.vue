@@ -1,6 +1,6 @@
 <template>
 <!-- 文件预览组件 by王骁
-    需要url和文件名  
+    需要url和文件名
     模态框组件，需要父组件设置data-target='#docPreview'触发
     内置下载按钮
 -->
@@ -39,78 +39,73 @@
                 </div>
             </div>
         </div>
-    </div>    
+    </div>
 </template>
 
 <script>
 export default {
-    name:'docPreview',
-        //文件url     文件名
-    props:['url','givenFileName','detailpage','givenid'],
-    data(){
-        return {
-            isFullScreen:0,
-        }
-    },
-    created(){
-        
-    },
-    mounted(){
-        if(!this.detailpage){
-            $('#docPreview').on('hidden.bs.modal',function(){
-                    document.getElementsByTagName('body')[0].classList.add('modal-open')
-            })
-            
-        }else{
-            console.log(this.detailpage);
-        }
-    },
-    watch:{
-        detailpage:function(value){
-            if(!value){
-                $('#docPreview').on('hidden.bs.modal',function(){
-                    document.getElementsByTagName('body')[0].classList.add('modal-open')
-                })
-            }
-            
-        }
-    },
-    computed:{
-        //获取扩展名
-        fileNameHandler(){
-            if(this.givenFileName){
-                return String(this.givenFileName).split('.').pop()
-            }else{
-                return String(this.url).split('.').pop()
-            }
-        }
-    },
-    methods:{
-        exitFullscreen(){
-           if (document.exitFullscreen) {
-                document.exitFullscreen();
-            } else if (document.webkitExitFullscreen) {
-                document.webkitExitFullscreen();
-            } else if (document.mozCancelFullScreen) {
-                document.mozCancelFullScreen();
-            } else if (document.msExitFullscreen) {
-                document.msExitFullscreen();
-            }
-            this.isFullScreen = 0
-        },
-        fullScreenHandler(){
-                if (!document.fullscreenElement) {
-                    $('.preview-content')[0].webkitRequestFullscreen();
-                    this.isFullScreen = 1
-                } else {
-                    if (document.exitFullscreen) {
-                        // $('.modal-content')[0].webkitExitFullscreen();
-                        this.exitFullscreen()
-                    }
-                }
-        }
+  name: 'docPreview',
+  // 文件url     文件名
+  props: ['url', 'givenFileName', 'detailpage', 'givenid'],
+  data() {
+    return {
+      isFullScreen: 0,
+    };
+  },
+  created() {
+
+  },
+  mounted() {
+    if (!this.detailpage) {
+      $('#docPreview').on('hidden.bs.modal', () => {
+        document.getElementsByTagName('body')[0].classList.add('modal-open');
+      });
+    } else {
+      // console.log(this.detailpage);
     }
-}
+  },
+  watch: {
+    detailpage(value) {
+      if (!value) {
+        $('#docPreview').on('hidden.bs.modal', () => {
+          document.getElementsByTagName('body')[0].classList.add('modal-open');
+        });
+      }
+    },
+  },
+  computed: {
+    // 获取扩展名
+    fileNameHandler() {
+      if (this.givenFileName) {
+        return String(this.givenFileName).split('.').pop();
+      }
+      return String(this.url).split('.').pop();
+    },
+  },
+  methods: {
+    exitFullscreen() {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+      }
+      this.isFullScreen = 0;
+    },
+    fullScreenHandler() {
+      if (!document.fullscreenElement) {
+        $('.preview-content')[0].webkitRequestFullscreen();
+        this.isFullScreen = 1;
+      } else if (document.exitFullscreen) {
+        // $('.modal-content')[0].webkitExitFullscreen();
+        this.exitFullscreen();
+      }
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -122,4 +117,3 @@ img{
     height: 500px;
 }
 </style>
-
