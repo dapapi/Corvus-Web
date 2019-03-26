@@ -6,6 +6,7 @@
         </div>
 
         <div class="page-content container-fluid">
+
             <div class="panel col-md-12 clearfix py-5">
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist" style="position: relative;">

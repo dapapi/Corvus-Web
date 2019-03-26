@@ -417,7 +417,7 @@
                                                                     @change="(value) => changeArtistBaseInfo(value, 'birthday')"></EditDatepicker>
                                                 </div>
                                             </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                            <div class="card-text py-20 px-0 clearfix col-md-6 float-left edit-height">
                                                 <div class="col-md-3 float-left text-right pl-0">年龄</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     {{artistInfo.birthday|jsGetAge}}
@@ -448,6 +448,13 @@
                                                                @change="(value) => changeArtistBaseInfo(value, 'artist_scout_name')"></EditInput>
                                                 </div>
                                             </div>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height" style="height:64px;">
+                                                <div class="col-md-3 float-left text-right pl-0">地区</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <EditInput :content="artistInfo.star_location" :is-edit="isEdit"
+                                                               @change="(value) => changeArtistBaseInfo(value, 'star_location')"></EditInput>
+                                                </div>
+                                            </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                                 <div class="col-md-3 float-left text-right pl-0">与我司签约意向</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
@@ -466,13 +473,6 @@
                                                                       :input-content="artistInfo.sign_contract_other_name"
                                                                       :condition="1"
                                                                       @change="(value) => changeArtistBaseInfo(value, 'sign_contract_other')"></ConditionalInput>
-                                                </div>
-                                            </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height" style="height:64px;">
-                                                <div class="col-md-3 float-left text-right pl-0">地区</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
-                                                    <EditInput :content="artistInfo.star_location" :is-edit="isEdit"
-                                                               @change="(value) => changeArtistBaseInfo(value, 'star_location')"></EditInput>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height" >
@@ -1384,7 +1384,7 @@ export default {
 
         if (response.data.star_risk_point == 'privacy') {
           _this.artistInfo.star_risk_point = '**';
-        } else{
+        } else {
           _this.artistInfo.star_risk_point = response.data.star_risk_point;
         }
 
@@ -1546,7 +1546,7 @@ export default {
         endTime = this.endTime;
       } else {
         startTime = `${this.startTime} ${this.startMinutes}`;
-        endTime = `${this.endTime } ${ this.endMinutes}`;
+        endTime = `${this.endTime} ${this.endMinutes}`;
       }
       const data = {
         title: this.scheduleName,
@@ -1584,7 +1584,7 @@ export default {
         data.task_ids = this.linkageSelectedIds.tasks;
       }
 
-      fetch('put', `/schedules/${ this.scheduleData.id}`, data).then(() => {
+      fetch('put', `/schedules/${this.scheduleData.id}`, data).then(() => {
         this.$refs.calendar.refresh();
         $('#changeSchedule').modal('hide');
         toastr.success('修改成功');
@@ -1695,7 +1695,7 @@ export default {
         size,
         type: 1,
       };
-      fetch('post', `/schedules/${this.scheduleData.id }/affix`, data).then((response) => {
+      fetch('post', `/schedules/${this.scheduleData.id}/affix`, data).then((response) => {
         toastr.success('上传成功');
         if (this.scheduleData.affixes) {
           this.scheduleData.affixes.data.push(response.data);
@@ -1724,7 +1724,7 @@ export default {
           }
         }
       }
-      fetch('put', `/schedules/${ this.scheduleData.id}`, data).then(() => {
+      fetch('put', `/schedules/${this.scheduleData.id}`, data).then(() => {
         this.$refs.calendar.refresh();
         this.scheduleParticipants = JSON.parse(JSON.stringify(this.$store.state.newParticipantsInfo));
       });
@@ -2094,7 +2094,7 @@ export default {
         principal_id: this.$store.state.newPrincipalInfo.id,
         participant_ids,
         start_at: `${this.startTime} ${this.startMinutes}`,
-        end_at: `${this.endTime } ${this.endMinutes}`,
+        end_at: `${this.endTime} ${this.endMinutes}`,
         resource_type: 2,
         resourceable_id: this.artistId,
         priority: this.taskLevel,
@@ -2387,10 +2387,10 @@ export default {
       this.filterFee = value;
     },
     toProject(id) {
-      this.$router.push({ path: `/projects/${ id}` });
+      this.$router.push({ path: `/projects/${id}` });
     },
     toTask(id) {
-      this.$router.push({ path: `/tasks/${ id}` });
+      this.$router.push({ path: `/tasks/${id}` });
     },
 
   },
@@ -2428,30 +2428,30 @@ export default {
         let returnAge;
         // 根据生日计算年龄（"1995-09-25"）
         // 以下五行是为了获取出生年月日，如果是从身份证上获取需要稍微改变一下
-        let strBirthdayArr = strBirthday.split('-');
-        let birthYear = strBirthdayArr[0];
-        let birthMonth = strBirthdayArr[1];
-        let birthDay = strBirthdayArr[2];
+        const strBirthdayArr = strBirthday.split('-');
+        const birthYear = strBirthdayArr[0];
+        const birthMonth = strBirthdayArr[1];
+        const birthDay = strBirthdayArr[2];
 
-        let d = new Date();
-        let nowYear = d.getFullYear();
-        let nowMonth = d.getMonth() + 1;
-        let nowDay = d.getDate();
+        const d = new Date();
+        const nowYear = d.getFullYear();
+        const nowMonth = d.getMonth() + 1;
+        const nowDay = d.getDate();
 
         if (nowYear == birthYear) {
           returnAge = 0;// 同年 则为0岁
         } else {
-          let ageDiff = nowYear - birthYear; // 年之差
+          const ageDiff = nowYear - birthYear; // 年之差
           if (ageDiff > 0) {
             if (nowMonth == birthMonth) {
-              let dayDiff = nowDay - birthDay;// 日之差
+              const dayDiff = nowDay - birthDay;// 日之差
               if (dayDiff < 0) {
                 returnAge = ageDiff - 1;
               } else {
                 returnAge = ageDiff;
               }
             } else {
-              let monthDiff = nowMonth - birthMonth;// 月之差
+              const monthDiff = nowMonth - birthMonth;// 月之差
               if (monthDiff < 0) {
                 returnAge = ageDiff - 1;
               } else {
