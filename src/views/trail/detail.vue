@@ -809,34 +809,32 @@ export default {
       });
     },
     trailTypeValidate() {
-                if (!this.trailInfo.principal) {
-                    toastr.error("负责人为必填");
-                    return false;
-                } if (!this.trailInfo.fee) {
-                    toastr.error("费用为必填")
-                    return false;
-                } if (!this.trailInfo.client.data.company) {
-                    toastr.error("公司名称为必填")
-                    return false;
-                } if (!this.trailInfo.title) {
-                    toastr.error("线索名称为必填")
-                    return false;
-                } if (!this.trailInfo.contact.data.name) {
-                    toastr.error("联系人为必填")
-                    return false;
-                } if (this.trailInfo.contact.data.phone) {
-                    let phone = this.trailInfo.contact.data.phone
-                    if (!(/^1(3|4|5|7|8)\d{9}$/.test(phone))) {
-                        // alert("手机号码有误，请重填");  
-                        toastr.error("请输入正确的手机号码");
-                        return false;
-                    } 
-                        return true;
-                    
-                }
-                    return true
-                
-            },
+      if (!this.trailInfo.principal) {
+        toastr.error('负责人为必填');
+        return false;
+      } if (!this.trailInfo.fee) {
+        toastr.error('费用为必填');
+        return false;
+      } if (!this.trailInfo.client.data.company) {
+        toastr.error('公司名称为必填');
+        return false;
+      } if (!this.trailInfo.title) {
+        toastr.error('线索名称为必填');
+        return false;
+      } if (!this.trailInfo.contact.data.name) {
+        toastr.error('联系人为必填');
+        return false;
+      } if (this.trailInfo.contact.data.phone) {
+        const phone = this.trailInfo.contact.data.phone;
+        if (!(/^1(3|4|5|7|8)\d{9}$/.test(phone))) {
+          // alert("手机号码有误，请重填");
+          toastr.error('请输入正确的手机号码');
+          return false;
+        }
+        return true;
+      }
+      return true;
+    },
 
     getTrail() {
       this.trailId = this.$route.params.id;
@@ -914,9 +912,11 @@ export default {
       if (this.changeInfo.contact && this.changeInfo.contact.id) {
         // this.changeInfo.resource_type = Number(this.changeInfo.resource_type)
         this.changeInfo.contact.name = this.changeInfo.contact.id;
-      } else {
+      } else if (this.changeInfo.contact) {
         this.changeInfo.contact.id = this.trailInfo.contact.data.name;
         this.changeInfo.contact.name = this.trailInfo.contact.data.name;
+      } else {
+        Object.assign(this.changeInfo, { contact: { id: this.trailInfo.contact.data.name, name: this.trailInfo.contact.data.name } });
       }
       if (this.trailTypeValidate()) {
         const data = this.changeInfo;
