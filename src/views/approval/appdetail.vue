@@ -224,8 +224,8 @@
             <!-- <DocPreview :url='previewUrl' detailpage='true'/> -->
         </div>
         <BuildProject :project-type="projectTypeTemp" :project-fields-arr="projectFieldsArr" mode='detail'
-                      :default-data='{fields:(info.fields && info.fields.data),list:list,trailInfo:trailInfo}'></BuildProject>
-        <ApprovalGreatModule :form-data='formData' singlemode='true' :default-data='detailData' :contract_id='$route.params.id' :detailpage='isDetail'/>
+                      :default-data='{fields:(info.fields && info.fields.data),list:list,trailInfo:trailInfo}' v-if="list.form_status !== 231" :formstatus='list.form_status' ></BuildProject>
+        <ApprovalGreatModule :form-data='formData' singlemode='true' :default-data='detailData' :contract_id='$route.params.id' :detailpage='isDetail' v-if="list.form_status !== 231"/>
         <ApprovalGoModal :mode='approvalMode' :id='list.form_instance_number' @approvaldone='approvalDone'/>
         <div class="modal fade  bootbox" id="docPreviewSelector" aria-labelledby="docPreviewPositionCenter" data-backdrop="static"
              role="dialog" tabindex="-1">
@@ -280,7 +280,7 @@ export default {
       approvalMode: '',
       pending: {},
       currentId: '',
-      isCurrentApprover: false,
+      isCurrentApprover: undefined,
       roleUser: [],
       indexData: [],
       formData: {},
@@ -292,12 +292,12 @@ export default {
       archivesArr: '',
       isDetail: true,
       indexDataCommon: [],
+      waitingForFlag:true,
 
     };
   },
 
   mounted() {
-    this.getFormList();
     this.getData();
   },
   computed: {
@@ -384,7 +384,8 @@ export default {
       });
     },
     waitingFor(params) {
-      if (params) {
+      if (params && this.waitingForFlag === true) {
+        this.waitingForFlag = false
         this.pending = params;
         this.getCurrentApprover();
       }
@@ -470,6 +471,10 @@ export default {
           }
           _this.archivesArr = tempArr.join(',');
         }
+        _this.isLoading = false
+      if(_this.list.form_status !== 231){
+      _this.getFormList();
+      }
       });
     },
     participantChange(value) {
