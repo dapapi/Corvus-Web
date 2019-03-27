@@ -189,10 +189,20 @@
         mounted(){
             this.getDashboard()
         },
-         computed:{
-       ...mapState([
+        computed:{
+         ...mapState([
            'isSelected',//从vuex里获取切换之后的选中id
-       ])
+       ]),
+        mounted(){
+        this.$nextTick(()=>{
+           this.setExpand(this.menus,this.urlRoute)
+        }) 
+        },
+        updated(){
+            if(this.canRun == true){
+                this.setExpand(this.menus,this.urlRoute)
+            }
+        },
     },
         methods:{
             department:function(value){
@@ -224,7 +234,7 @@
                         this.canRun = false
                         this.$store.dispatch('changeIsSelected',source[i].id)
                         this.$store.state.isExpanded.push(source[i].id)
-                        
+                        this.$store.dispatch('changeIsExpanded',this.$store.state.isExpanded)
                     }
                 }
             }
