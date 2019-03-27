@@ -17,12 +17,14 @@
                                placeholder="请输入任务名称">
                     </div>
                     <div class="col-md-3 example float-left">
-                        <Selectors :options="taskTypeArr" @change="changeTaskTypeSearch" placeholder="请选择任务类型"></Selectors>
+                        <Selectors :options="taskTypeArr" @change="changeTaskTypeSearch"
+                                   placeholder="请选择任务类型"></Selectors>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <Selectors :options="taskStatusArr" @change="changeTaskStatusSearch" placeholder="请选择任务状态"></Selectors>
+                        <Selectors :options="taskStatusArr" @change="changeTaskStatusSearch"
+                                   placeholder="请选择任务状态"></Selectors>
                     </div>
-                     <div class="col-md-3 example float-left">
+                    <div class="col-md-3 example float-left">
                         <DropDepartment :data="department" :showUser="true" @change="selectDepartment"/>
                     </div>
                 </div>
@@ -94,16 +96,20 @@
                                     {{ task.title }}
                                 </td>
                                 <td>{{task.resource ? task.resource.data.resource.data.title : ''}}
-                                    <template v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.name">
-                                        -  {{ task.resource.data.resourceable.data.name }}
+                                    <template
+                                            v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.name">
+                                        - {{ task.resource.data.resourceable.data.name }}
                                     </template>
-                                    <template v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.nickname">
-                                        -  {{ task.resource.data.resourceable.data.nickname }}
+                                    <template
+                                            v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.nickname">
+                                        - {{ task.resource.data.resourceable.data.nickname }}
                                     </template>
-                                    <template v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.title">
+                                    <template
+                                            v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.title">
                                         - {{ task.resource.data.resourceable.data.title }}
                                     </template>
-                                    <template v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.company">
+                                    <template
+                                            v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.company">
                                         - {{ task.resource.data.resourceable.data.company }}
                                     </template>
                                 </td>
@@ -128,9 +134,9 @@
                                  style="width: 100%">
                         </div>
                         <Pagination :current_page="current_page"
-                                        :method="getTasks"
-                                        :total_pages="total_pages"
-                                        :total="total"></Pagination>
+                                    :method="getTasks"
+                                    :total_pages="total_pages"
+                                    :total="total"></Pagination>
                     </div>
                 </div>
             </div>
@@ -154,10 +160,10 @@
 </template>
 
 <script>
-import fetch from '../../assets/utils/fetch.js';
-import config from '../../assets/js/config';
-import Cookies from 'js-cookie';
-import { mapState } from 'vuex';
+    import fetch from '../../assets/utils/fetch.js';
+    import config from '../../assets/js/config';
+    import Cookies from 'js-cookie';
+    import {mapState} from 'vuex';
 
     const taskStatusArr = [{name: "全部", value: ""}, ...config.taskStatusArr];
     export default {
@@ -184,7 +190,7 @@ import { mapState } from 'vuex';
                 resourceType: "", // 资源type
                 user: {}, // 个人信息
                 isLoading: true,
-                priorityArr:config.priorityArr,
+                priorityArr: config.priorityArr,
                 my: '',//tasks 筛选  3我负责的 2 我参与的 1我创建的 4我分配的
                 linkCurrentPage: 2, // 关联资源当前页数
                 linkTotalPage: 1, // 关联资源总页数
@@ -211,101 +217,43 @@ import { mapState } from 'vuex';
             })
         },
 
-  methods: {
+        methods: {
 
-    // 任务列表的请求都用url = /tasks  上下联动筛选
-    getTasks(pageNum = 1) {
-      const params = {
-        page: pageNum,
-        my: this.my,
-        include: 'principal,pTask,tasks,resource.resourceable,resource.resource,participants',
-      };
-      const url = '/tasks';
+            // 任务列表的请求都用url = /tasks  上下联动筛选
+            getTasks(pageNum = 1) {
+                const params = {
+                    page: pageNum,
+                    my: this.my,
+                    include: 'principal,pTask,tasks,resource.resourceable,resource.resource,participants',
+                };
+                const url = '/tasks';
 
-      if (this.taskNameSearch) {
-        params.keyword = this.taskNameSearch;
-      }
-      if (this.taskStatusSearch) {
-        params.status = this.taskStatusSearch;
-      }
-      if (this.taskTypeSearch) {
-        params.type_id = this.taskTypeSearch;
-      }
-      fetch('get', url, params).then((response) => {
-        this.tasksInfo = response.data;
-        this.current_page = response.meta.pagination.current_page;
-        this.total = response.meta.pagination.total;
-        this.total_pages = response.meta.pagination.total_pages;
-        this.isLoading = false;
-      });
-    },
-    // 任务我的筛选
-    getMyTasks(my) {
-      this.my = my;
-      this.getTasks(1);
-    },
-    addTask() {
-      // 校验
-      if (!this.taskName) {
-        toastr.error('请填写任务名称！');
-        return;
-      }
-      if (!this.$store.state.newPrincipalInfo.id) {
-        toastr.error('请选择负责人！');
-        return;
-      }
-      if (!this.taskType) {
-        toastr.error('请选择任务类型！');
-        return;
-      }
-      if (!this.taskLevel) {
-        toastr.error('请选择任务优先级！');
-        return;
-      }
-      if (!this.startTime || !this.endTime) {
-        toastr.error('请选择时间!');
-        return;
-      }
-      if ((`${this.startTime  } ${  this.startMinutes}`) > (`${this.endTime  } ${  this.endMinutes}`)) {
-        toastr.error('开始时间不能晚于截止时间');
-        return;
-      }
+                if (this.taskNameSearch) {
+                    params.keyword = this.taskNameSearch;
+                }
+                if (this.taskStatusSearch) {
+                    params.status = this.taskStatusSearch;
+                }
+                if (this.taskTypeSearch) {
+                    params.type_id = this.taskTypeSearch;
+                }
+                fetch('get', url, params).then((response) => {
+                    this.tasksInfo = response.data;
+                    this.current_page = response.meta.pagination.current_page;
+                    this.total = response.meta.pagination.total;
+                    this.total_pages = response.meta.pagination.total_pages;
+                    this.isLoading = false;
+                });
+            },
+            // 任务我的筛选
+            getMyTasks(my) {
+                this.my = my;
+                this.getTasks(1);
+            },
 
-      const participant_ids = [];
-      for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
-        participant_ids.push(this.$store.state.newParticipantsInfo[i].id);
-      }
-
-      const data = {
-        // resource_type: this.resourceType ,
-        // resourceable_id: this.resourceableId,
-        type: this.taskType,
-        title: this.taskName,
-        principal_id: this.$store.state.newPrincipalInfo.id,
-        participant_ids,
-        priority: this.taskLevel,
-        start_at: `${this.startTime  } ${  this.startMinutes}`,
-        end_at: `${this.endTime  } ${  this.endMinutes}`,
-        desc: this.taskIntroduce,
-      };
-
-      if (this.resourceType) {
-        data.resource_type = this.resourceType;
-      }
-      if (this.resourceableId) {
-        data.resourceable_id = this.resourceableId;
-      }
-
-      fetch('post', '/tasks', data).then((res) => {
-        toastr.success('创建成功');
-        $('#addTask').modal('hide');
-        this.$router.push({ path: `/tasks/${  res.data.id}` });
-      });
-    },
-
-    customize(value) {
-      console.log(value);
-    },
+            customize(value) {
+                console.log(value);
+            },
 
             changeTaskName() {
                 this.getTasks();
@@ -318,11 +266,11 @@ import { mapState } from 'vuex';
                 this.taskStatusSearch = value;
                 this.getTasks();
             },
-            goDetail (id) {
+            goDetail(id) {
                 this.$router.push('/tasks/' + id)
             },
 
-            handleAdd () {
+            handleAdd() {
                 if (this.power.task == 'false') {
                     toastr.error('您没有新增任务的权限！')
                     return
@@ -330,7 +278,7 @@ import { mapState } from 'vuex';
                 $('#addTask').modal('show')
             },
             // 选择成员或部门
-            selectDepartment (data) {
+            selectDepartment(data) {
                 console.log(data)
                 if (data.type === 'department') {
                     this.searchUser = ''
@@ -358,8 +306,9 @@ import { mapState } from 'vuex';
             display: inline-block;
         }
     }
+
     table tbody tr {
-       cursor: pointer;
+        cursor: pointer;
     }
 
 </style>
