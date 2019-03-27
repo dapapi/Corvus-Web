@@ -100,5 +100,10 @@ export default {
             data.moduleList = res.data
             commit('setModule', data)
         })
+    },
+    getSupplierDetails({commit},params){
+        fetch('get', `supplier/${params}`).then((res) =>{
+            commit('setSupplierDetails', res.data)
+        })
     }
 }

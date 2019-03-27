@@ -484,6 +484,43 @@ export default new Router({
             name: 'setting',
             component: () => import('./views/setting/index.vue')
         },
+        //供应商
+        {
+            path: '/supplier',
+            name: 'supplier',
+            redirect: '/supplier/list',
+            component: () => import('./views/client/supplier/index.vue'),
+            children: [
+               {
+                path: '/supplier/list',
+                component: () => import('./views/client/supplier/list.vue')
+               },
+               {
+                   path: '/supplier/details/:id',
+                   redirect:'/supplier/basic/:id',
+                   component: () => import('./views/client/supplier/details.vue'),
+                   children:[
+                       {
+                           path:'/supplier/basic/:id',
+                           component:() => import('./views/client/supplier/basic.vue')
+                       },
+                       {
+                            path: '/supplier/linkman/:id',
+                            component: () => import('./views/client/supplier/linkman.vue')
+                       },
+                       {
+                            path: '/supplier/project/:id',
+                            component: () => import('./views/client/supplier/project.vue')
+                       },
+                       {
+                         path: '/supplier/contract/:id',
+                         component: () => import('./views/client/supplier/contract.vue')
+                       }
+                   ]
+
+               }
+            ]
+        },
         {
             path: '/404',
             name: '404',

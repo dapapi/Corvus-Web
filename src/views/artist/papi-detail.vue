@@ -1407,7 +1407,13 @@ export default {
                     this.platformDate = data.join(',');
                     //孵化期时间 
                     if (this.artistInfo.hatch_star_at !== "privacy" && this.artistInfo.hatch_end_at !== "privacy") {
-                        this.Incubationperiod = this.artistInfo.hatch_star_at + '|' + this.artistInfo.hatch_end_at
+                        if(this.artistInfo.hatch_star_at !== null && this.artistInfo.hatch_end_at !== null){
+                            this.Incubationperiod = this.artistInfo.hatch_star_at + '|' + this.artistInfo.hatch_end_at
+                            
+                        }else{
+                            this.Incubationperiod = ''
+                        }
+                        
                         this.isShowPrivacy = true
                     }
                     this.projectContractDefault = {
@@ -2016,6 +2022,7 @@ export default {
                 } else {
                     this.artistInfo.sign_contract_other = 0
                 }
+               
                 this.changeArtistInfo = {
                     nickname: this.Namevalue,
                     type_id: this.artistInfo.type.data.id,
@@ -2040,6 +2047,10 @@ export default {
                     delete(this.changeArtistInfo.level)
                 }
                 if (!this.isShowPrivacy) {
+                    delete(this.changeArtistInfo.hatch_star_at)
+                    delete(this.changeArtistInfo.hatch_end_at)
+                }
+                if(this.artistInfo.hatch_star_at == '' || this.artistInfo.hatch_end_at == ''){
                     delete(this.changeArtistInfo.hatch_star_at)
                     delete(this.changeArtistInfo.hatch_end_at)
                 }
