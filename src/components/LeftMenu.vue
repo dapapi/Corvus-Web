@@ -72,98 +72,98 @@
 import { mapState, mapGetters, mapMutations } from 'vuex';
 import Cookies from 'js-cookie';
 
-export default {
-  name: 'LeftMenu',
-  data() {
-    return {
-      menuData: [
-        {
-          name: '我的',
-          code: 'my',
-          image: 'https://res-crm.papitube.com/image/login-icon/wode.png',
-          hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-wode.png',
-          // data: [
-          //     {
-          //         name: '工作台',
-          //         code: 'my'
-          //     },
-          //     {
-          //         name: '报表',
-          //         code: 'reports'
-          //     }
-          // ]
+    export default {
+        name: "LeftMenu",
+        data() {
+            return {
+                menuData: [
+                    {
+                        name: '我的',
+                        code: 'my',
+                        image: 'https://res-crm.papitube.com/image/login-icon/wode.png',
+                        hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-wode.png',
+                        // data: [
+                        //     {
+                        //         name: '工作台',
+                        //         code: 'my'
+                        //     },
+                        //     {
+                        //         name: '报表',
+                        //         code: 'reports'
+                        //     }
+                        // ]
+                    },
+                    {
+                        name: '日历',
+                        code: 'calendar',
+                        image: 'https://res-crm.papitube.com/image/login-icon/rili.png',
+                        hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-rili.png'
+                    },
+                    {
+                        name: '审批',
+                        code: 'approval',
+                        image: 'https://res-crm.papitube.com/image/login-icon/shenpi.png',
+                        hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-shenpi.png',
+                    },
+                    {
+                        name: '任务',
+                        code: 'tasks',
+                        image: 'https://res-crm.papitube.com/image/login-icon/renwu.png',
+                        hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-renwu.png',
+                    },
+                    {
+                        name: '项目',
+                        code: 'projects',
+                        image: 'https://res-crm.papitube.com/image/login-icon/xiangmu.png',
+                        hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-xiangmu.png',
+                    },
+                    {
+                        name: '线索',
+                        code: 'trails',
+                        image: 'https://res-crm.papitube.com/image/login-icon/xiansuo.png',
+                        hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-xiansuo.png',
+                    },
+                    {
+                        name: '客户',
+                        code: 'clients',
+                        image: 'https://res-crm.papitube.com/image/login-icon/kehu.png',
+                        hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-kehu.png',
+                    },
+                    {
+                        name: 'Talent',
+                        code: 'talent',
+                        image: 'https://res.papitube.com/corvus/images/talent.png',
+                        hoverImage: 'https://res.papitube.com/corvus/images/select-talent.png',
+                    },
+                    {
+                        name: '人事',
+                        image: 'https://res-crm.papitube.com/image/login-icon/renshi.png',
+                        hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-renshi.png',
+                        data: [
+                            {
+                                name: '公告',
+                                code: 'broadcast'
+                            },
+                            {
+                                name: '通讯录',
+                                code: 'address'
+                            },
+                            // {
+                            //     name: '简报',
+                            //     code: 'brief'
+                            // },
+                            // {
+                            //     name: '仪表盘',
+                            //     code: 'dashboard'
+                            // }
+                        ]
+                    }
+                ],
+                pageRoute: '',
+                visible: false,
+                // avatar: ''
+            }
         },
-        {
-          name: '日历',
-          code: 'calendar',
-          image: 'https://res-crm.papitube.com/image/login-icon/rili.png',
-          hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-rili.png',
-        },
-        {
-          name: '审批',
-          code: 'approval',
-          image: 'https://res-crm.papitube.com/image/login-icon/shenpi.png',
-          hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-shenpi.png',
-        },
-        {
-          name: '任务',
-          code: 'tasks',
-          image: 'https://res-crm.papitube.com/image/login-icon/renwu.png',
-          hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-renwu.png',
-        },
-        {
-          name: '项目',
-          code: 'projects',
-          image: 'https://res-crm.papitube.com/image/login-icon/xiangmu.png',
-          hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-xiangmu.png',
-        },
-        {
-          name: '线索',
-          code: 'trails',
-          image: 'https://res-crm.papitube.com/image/login-icon/xiansuo.png',
-          hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-xiansuo.png',
-        },
-        {
-          name: '客户',
-          code: 'clients',
-          image: 'https://res-crm.papitube.com/image/login-icon/kehu.png',
-          hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-kehu.png',
-        },
-        {
-          name: 'Talent',
-          code: 'talent',
-          image: 'https://res.papitube.com/corvus/images/talent.png',
-          hoverImage: 'https://res.papitube.com/corvus/images/select-talent.png',
-        },
-        {
-          name: '人事',
-          image: 'https://res-crm.papitube.com/image/login-icon/renshi.png',
-          hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-renshi.png',
-          data: [
-            {
-              name: '公告',
-              code: 'broadcast',
-            },
-            {
-              name: '通讯录',
-              code: 'address',
-            },
-            // {
-            //     name: '简报',
-            //     code: 'brief'
-            // },
-            // {
-            //     name: '仪表盘',
-            //     code: 'dashboard'
-            // }
-          ],
-        },
-      ],
-      pageRoute: '',
-      visible: false,
-      // avatar: ''
-    };
-  },
   computed: {
     ...mapState([
       'unReadMsg',

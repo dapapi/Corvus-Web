@@ -460,7 +460,8 @@
         }
         .content {
             position: relative;
-            color: #999
+            color: #999;
+            cursor: pointer;
         }
         .is_read {
             display: inline-block;
