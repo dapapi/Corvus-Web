@@ -131,8 +131,8 @@ export default {
             supplierBill:config.billArr,//币种
         }
     },
-    mounted(){
-       
+    created(){
+       this.getSupplierDetails(this.$route.params.id)
     },
     computed:{
         //获取供应商详情
