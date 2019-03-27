@@ -178,6 +178,7 @@ export default {
       const power = JSON.parse(Cookies.get('user')).power;
       this.setUserAvatar(avatar);
       this.setUserPower(power);
+      console.log(JSON.parse(Cookies.get('user')));
       console.log(power);
     }
   },
