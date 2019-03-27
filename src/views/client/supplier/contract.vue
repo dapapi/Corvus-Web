@@ -23,3 +23,23 @@
                     :total_pages="total_pages" :total="total"></pagination> -->
     </div>
 </template>
+<script>
+
+//没有接口
+// import {mapActions,mapState} from 'vuex'
+import fetch from '../../../assets/utils/fetch.js'
+import config from '../../../assets/js/config'
+export default {
+    data(){
+        return {
+
+        }
+    },
+    mounted(){
+
+    },
+    methods:{
+
+    }
+}
+</script>

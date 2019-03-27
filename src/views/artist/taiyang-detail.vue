@@ -658,7 +658,8 @@
 
                         </div>
                     </div>
-                    <div class="panel" style="width: calc(34% - 15px);min-height:100%">
+                </div>
+                <div class="panel" style="width: calc(34% - 15px);min-height:100%">
                         <div class="col-md-12">
                             <div class="card col-md-12">
                                 <div class="card-header card-header-transparent card-header-bordered p-10"
@@ -674,7 +675,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
 
             </div>
 

@@ -15,21 +15,21 @@
                 <div class="card-text py-10 clearfix">
                     <div class="col-md-2 float-left text-right pl-0">供应商名称</div>
                     <div class="col-md-10 float-left font-weight-bold">
-                        <EditInput :content="editSupplierDetails.name" :is-edit="isEdit"
+                        <EditInput :content="supplierDetails.name" :is-edit="isEdit"
                                     @change="changeSupplierName"></EditInput>
                     </div>
                 </div>
                 <div class="card-text py-10 clearfix">
                     <div class="col-md-2 float-left text-right pl-0">供应商编码</div>
                     <div class="col-md-10 float-left font-weight-bold">
-                        <span>{{editSupplierDetails.code}}</span>
+                        <span>{{supplierDetails.code}}</span>
                     </div>
                 </div>
                 <div class="card-text py-10 clearfix">
                     <div class="col-md-2 float-left text-right pl-0">开户行信息</div>
                     <div class="col-md-10 float-left font-weight-bold">
                         
-                        <div class="row mb-5" v-for="(item, index) in editSupplierDetails.bank" :key='index'>
+                        <div class="row mb-5" v-for="(item, index) in supplierInfo.currency" :key='index'>
                             <div class="col-md-4">
                                 <input v-show="isEdit" v-model="item.name" type="text" class="form-control" placeholder="请输入开户行">
                                 <span v-show="!isEdit">{{item.name}}</span>
@@ -40,12 +40,15 @@
                             </div>
                             <div class="col-md-3 row" :class="index===0?'pr-0':''">
                                 <div class="px-0" :class="index===0?'col-md-12':'col-md-11'">
-                                    <div v-show="isEdit">
+                                    <EditSelector :options="supplierBill" :is-edit="isEdit"
+                                        :content="item.coin"
+                                        @select="changeBill" :changeKey="`${index}`"></EditSelector>
+                                    <!-- <div v-show="isEdit">
                                         <selectors :options="supplierBill" :content="item.currency" @select="changeBill" :changeKey="index"></selectors>
                                     </div>
-                                    <span v-show="!isEdit">{{supplierBill.find(n =>n.value == item.currency).name}}</span>
+                                    <span v-show="!isEdit">{{supplierBill.find(n =>n.value == item.currency).name}}</span> -->
                                 </div>
-                                <div v-if="supplierDetails.bank.length>1&&index>0&&isEdit" class="col-md-1 px-0">
+                                <div v-if="supplierInfo.currency.length>1&&index>0&&isEdit" class="col-md-1 px-0">
                                     <i class="pl-2 iconfont icon-shanchu1 font-size-20" @click="deleteBill(index)"></i>
                                 </div>
                             </div>
@@ -106,7 +109,9 @@
     </div>
 </template>
 <script>
+//问题  供应商编辑地址不能编辑 供应商编码没有生成 最新更新人字段没有
 import {mapActions,mapState} from 'vuex'
+import fetch from '../../../assets/utils/fetch.js'
 import config from '../../../assets/js/config'
 export default {
     data(){
@@ -115,9 +120,9 @@ export default {
             changeInfo:{},
             //编辑参数
             supplierInfo:{
-                name:'供应商名称',
-                address:'石家庄实行烫伤',
-                level:2,
+                name:'',
+                address:'',
+                level:0,
                 currency:[]
 
 
@@ -126,46 +131,71 @@ export default {
             supplierBill:config.billArr,//币种
         }
     },
-    mounted(){
-    
+    created(){
+       this.getSupplierDetails(this.$route.params.id)
     },
     computed:{
+        //获取供应商详情
        ...mapState([
            'supplierDetails'
        ]),
-       editSupplierDetails:function(){
-           this.supplierInfo.currency = this.supplierDetails.bank
-           return this.supplierDetails
-       }
+    },
+    watch:{
+        
+        supplierDetails:function(){
+            this.setData()
+            this.supplierInfo.name = this.supplierDetails.name
+            this.supplierInfo.address = this.supplierDetails.address
+            this.supplierInfo.level = this.supplierDetails.level
+        }
     },
     methods:{
        ...mapActions([
            'getSupplierDetails'
        ]),
         editBaseInfo: function () {
-            // if (!this.canEditClient) {
-            //     toastr.error('您没有编辑概况的权限！')
-            //     return
-            // }
+            
             this.isEdit = true;
             this.changeInfo = {};
         },
         cancelEdit: function () {
             this.isEdit = false;
-            // this.getClient()
+            this.supplierInfo.currency=[]
+            this.setData()
+            
         },
+        //设置开户行数据
+        setData:function(){
+            for (let i = 0; i < this.supplierDetails.bank.length; i++) {
+                let data = {
+                    name:'',
+                    account:'',
+                    coin:0
+                }
+                this.supplierInfo.currency.push(data)
+                this.supplierInfo.currency[i].coin = this.supplierDetails.bank[i].currency
+                this.supplierInfo.currency[i].name = this.supplierDetails.bank[i].name
+                this.supplierInfo.currency[i].account = this.supplierDetails.bank[i].account
+                
+            }
+        },
+        //change供应商名称
         changeSupplierName:function(value){
            this.supplierInfo.name = value
         },
+        //change供应商地址
         changeSupplierAddress:function(value){
            this.supplierInfo.address = value
         },
+        //change供应商级别
         changeSupplierLevel:function(value){
-           this.supplierInfo.level = level
+           this.supplierInfo.level = value
         },
+        //change币种
         changeBill:function(key,value){
-            
+           this.supplierInfo.currency[key].coin = value
         },
+        //添加开户行
         addBill:function(){
             let data = {
                 name:'',
@@ -174,6 +204,7 @@ export default {
             }
             this.supplierInfo.currency.push(data)
         },
+        //删除开户行
         deleteBill:function(index){
             this.supplierInfo.currency.splice(index,1)
         },
@@ -181,7 +212,9 @@ export default {
         changeSupplier:function(){
             
             fetch('put', `/supplier/${this.$route.params.id}`,this.supplierInfo).then((res) => {
-               toastr.success("编辑供应商成功");
+                this.isEdit = false
+                this.getSupplierDetails(this.$route.params.id)
+                toastr.success("编辑供应商成功");
             })
         }
 
