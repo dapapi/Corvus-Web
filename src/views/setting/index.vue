@@ -8,20 +8,20 @@
             <div class="panel col-md-12 clearfix py-5">
                 <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link active" 
-                            data-toggle="tab" 
-                            href="#base-setting" 
-                            aria-controls="base-setting" 
+                        <a class="nav-link active"
+                            data-toggle="tab"
+                            href="#base-setting"
+                            aria-controls="base-setting"
                             role="tab" aria-selected="true">
                             基本设置
                         </a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" 
-                            data-toggle="tab" 
-                            href="#personal-info" 
-                            aria-controls="personal-info" 
-                            role="tab" 
+                        <a class="nav-link"
+                            data-toggle="tab"
+                            href="#personal-info"
+                            aria-controls="personal-info"
+                            role="tab"
                             aria-selected="false">
                             个人信息
                         </a>
@@ -30,11 +30,11 @@
 
                 <div class="tab-content pt-20">
                     <div
-                        class="tab-pane animation-fade active" 
+                        class="tab-pane animation-fade active"
                         id="base-setting"
                         role="tabpanel">
                         <div class="title">修改密码</div>
-                        <input 
+                        <input
                             type="text"
                             v-model="oldPwd"
                             placeholder="旧密码"
@@ -51,7 +51,7 @@
                         <p>密码由数字和字母组合，且长度不少与6</p>
                         <button class="btn btn-primary" @click="savePassword">保存</button>
                     </div>
-                    <div 
+                    <div
                         class="tab-pane animation-fade"
                         id="personal-info"
                         role="tabpanel">
@@ -70,7 +70,7 @@
                         <div class="example">
                             <div class="float-left" style="width: 40px;">昵称</div>
                             <div class="float-left pl-0">
-                                <input 
+                                <input
                                     type="text"
                                     v-model="name"
                                     placeholder="请输入昵称"
@@ -109,132 +109,129 @@
 </template>
 
 <script>
-import fetch from '@/assets/utils/fetch'
-import Cookies from 'js-cookie'
-import { mapMutations } from 'vuex'
+import fetch from '@/assets/utils/fetch';
+import Cookies from 'js-cookie';
+import { mapMutations } from 'vuex';
 
 export default {
-    name: 'Setting',
-    data () {
-        return {
-            oldPwd: '',
-            newPwd: '',
-            name: '',
-            job: '',
-            userId: '',
-            departmentId: '', // 部门id
-            iconUrl: '', // 头像
-            newIconUrl: '', // 新头像
-            jobArr: [], // 职位数组
-            userInfo: null // cookie中个人信息
-        }
-    },
-    mounted () {
-        this.getAccountInfo()
-        this.getJobList()
-        this.userInfo = JSON.parse(Cookies.get('user'))
+  name: 'Setting',
+  data() {
+    return {
+      oldPwd: '',
+      newPwd: '',
+      name: '',
+      job: '',
+      userId: '',
+      departmentId: '', // 部门id
+      iconUrl: '', // 头像
+      newIconUrl: '', // 新头像
+      jobArr: [], // 职位数组
+      userInfo: null, // cookie中个人信息
+    };
+  },
+  mounted() {
+    this.getAccountInfo();
+    this.getJobList();
+    this.userInfo = JSON.parse(Cookies.get('user'));
+  },
+  methods: {
+    ...mapMutations([
+      'setUserAvatar',
+    ]),
+    savePassword() { // 保存密码
+      if (!this.oldPwd) {
+        toastr.error('原密码不能为空！');
+        return;
+      }
+      if (!this.newPwd) {
+        toastr.error('新密码不能为空！');
+        return;
+      }
+      if (this.newPwd.length < 6) {
+        toastr.error('新密码长度不能少于6位！');
+        return;
+      }
+      const pattern = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]+$/;
+      if (!pattern.test(this.newPwd)) {
+        toastr.error('新密码必须包含数字和字母！');
+        return;
+      }
 
+      if (this.oldPwd === this.newPwd) {
+        toastr.error('新密码不能与原来的密码相同！');
+        return;
+      }
+      const params = {
+        oldpassword: this.oldPwd,
+        newpassword: this.newPwd,
+      };
+      fetch('put', `/users/${this.userId}`, params).then((res) => {
+        this.oldPwd = '';
+        this.newPwd = '';
+        toastr.success('密码修改成功');
+        setTimeout(() => {
+          Cookies.remove('user');
+          Cookies.remove('CORVUS-ACCESS-TOKEN');
+          Cookies.remove('selectedCalendar');
+          window.location.href = '/login';
+        }, 1000);
+      });
     },
-    methods: {
-        ...mapMutations ([
-            'setUserAvatar'
-        ]),
-        savePassword () { // 保存密码
-            if (!this.oldPwd) {
-                toastr.error('原密码不能为空！')
-                return
-            }
-            if (!this.newPwd) {
-                toastr.error('新密码不能为空！')
-                return
-            }
-            if (this.newPwd.length < 6) {
-                toastr.error('新密码长度不能少于6位！')
-                return
-            }
-            const pattern = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]+$/
-            if (!pattern.test(this.newPwd)) {
-                toastr.error('新密码必须包含数字和字母！')
-                return
-            }
+    // 获取个人信息
+    getAccountInfo() {
+      fetch('get', '/users/my').then((res) => {
+        this.userId = res.data.id;
+        this.iconUrl = res.data.icon_url;
 
-            if (this.oldPwd === this.newPwd) {
-                toastr.error('新密码不能与原来的密码相同！')
-                return
-            }
-            const params = {
-                oldpassword: this.oldPwd,
-                newpassword: this.newPwd
-            }
-            fetch('put', `/users/${this.userId}`, params).then(res => {
-                this.oldPwd = ''
-                this.newPwd = ''
-                toastr.success('密码修改成功')
-                setTimeout(() => {
-                    Cookies.remove('user');
-                    Cookies.remove('CORVUS-ACCESS-TOKEN');
-                    Cookies.remove('selectedCalendar');
-                    window.location.href = '/login'
-                }, 1000)
-            })
-        },
-        // 获取个人信息
-        getAccountInfo () {
-            fetch('get', '/users/my').then(res => {
-                this.userId = res.data.id
-                this.iconUrl = res.data.icon_url
-                
-                this.job = res.data.position ? res.data.position.id : ''
-                this.$nextTick(() => {
-                    this.$refs.jobEl.setValue(this.job)
-                })
-                this.name = res.data.name
-                this.departmentId = res.data.department.id
-                // 修改个人信息
-                this.setUserAvatar(this.iconUrl)
-                this.userInfo.avatar = this.iconUrl
-                this.userInfo.nickname = this.name
-                Cookies.set('user', this.userInfo)
-            })
-        },
-        // 获取职位列表
-        getJobList () {
-            fetch('get', '/departments_position').then(res => {
-                this.jobArr = res.map(n => {
-                    return {
+        this.job = res.data.position ? res.data.position.id : '';
+        this.$nextTick(() => {
+          this.$refs.jobEl.setValue(this.job);
+        });
+        this.name = res.data.name;
+        this.departmentId = res.data.department.id;
+        // 修改个人信息
+        this.setUserAvatar(this.iconUrl);
+        this.userInfo.avatar = this.iconUrl;
+        this.userInfo.nickname = this.name;
+        Cookies.set('user', this.userInfo);
+      });
+    },
+    // 获取职位列表
+    getJobList() {
+      fetch('get', '/departments_position').then((res) => {
+        this.jobArr = res.map((n) => ({
                         name: n.name,
                         value: n.id
-                    }
-                })
-            })
-        },
-        changeJob (value) {
-            this.job = value
-        },
-        // 保存个人信息
-        saveInfo() {
-            const params = {
-                position_id: this.job,
-                name: this.name,
-                icon_url: this.newIconUrl
-            }
-            fetch('put', `/edit/data/${this.userId}`, params).then(res => {
-                toastr.success('设置成功！')
-                // this.setUserAvatar(this.iconUrl)
-                // this.userInfo.avatar = this.iconUrl
-                // this.userInfo.nickname = this.name
-                this.getAccountInfo()
-                this.getJobList()
-                // Cookies.set('user', this.userInfo)
-            })
-        },
-        // 上传头像
-        uploadAvatar (url) {
-            this.iconUrl = url
-            this.newIconUrl = url
-        }
-    }
-}
+                    }));
+      });
+    },
+    changeJob(value) {
+      this.job = value;
+    },
+    // 保存个人信息
+    saveInfo() {
+      const params = {
+        position_id: this.job,
+        name: this.name,
+        icon_url: this.newIconUrl,
+      };
+      fetch('put', `/edit/data/${this.userId}`, params).then((res) => {
+        toastr.success('设置成功！');
+        // this.setUserAvatar(this.iconUrl)
+        // this.userInfo.avatar = this.iconUrl
+        // this.userInfo.nickname = this.name
+        this.getAccountInfo();
+        this.getJobList();
+        // Cookies.set('user', this.userInfo)
+      });
+    },
+    // 上传头像
+    uploadAvatar(url) {
+      this.iconUrl = url;
+      this.newIconUrl = url;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

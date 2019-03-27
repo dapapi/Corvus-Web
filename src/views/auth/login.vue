@@ -150,139 +150,139 @@
 </template>
 
 <script>
-    import fetch from '../../assets/utils/fetch.js'
-    import env from '../../assets/js/env';
-    import Cookies from 'js-cookie';
-    import Verify from '../../assets/utils/verify.js';
-    import redirect from '../../assets/js/bootstrap';
+import Cookies from 'js-cookie';
+import fetch from '../../assets/utils/fetch.js';
+import env from '../../assets/js/env';
+import Verify from '../../assets/utils/verify.js';
+import redirect from '../../assets/js/bootstrap';
 
-    export default {
-        data: function () {
-            return {
-                pageType: 'login',
-                toastText: '发送验证码',
-                second: 60,
-                username: '',
-                password: '',
-                newPassword: '',
-                repeatNewPassword: '',
-                smsCode: '',
-                bindToken: '',
-                smsRequestToken: '',
-                isRememberName: false,
-                phone: '',
-                firstClickTime: null,
-                userInfo: '',
-            }
-        },
+export default {
+  data() {
+    return {
+      pageType: 'login',
+      toastText: '发送验证码',
+      second: 60,
+      username: '',
+      password: '',
+      newPassword: '',
+      repeatNewPassword: '',
+      smsCode: '',
+      bindToken: '',
+      smsRequestToken: '',
+      isRememberName: false,
+      phone: '',
+      firstClickTime: null,
+      userInfo: '',
+    };
+  },
 
-        mounted() {
-            this.checkBindTelephone();
-            this.checkWechatLogin();
-            if (Cookies.get('user_account')) {
-                this.userInfo = JSON.parse(Cookies.get('user_account'));
-                this.username = this.userInfo.name;
-                this.password = this.userInfo.password;
-                this.isRememberName = true;
-            }
-        },
+  mounted() {
+    this.checkBindTelephone();
+    this.checkWechatLogin();
+    if (Cookies.get('user_account')) {
+      this.userInfo = JSON.parse(Cookies.get('user_account'));
+      this.username = this.userInfo.name;
+      this.password = this.userInfo.password;
+      this.isRememberName = true;
+    }
+  },
 
-        watch: {
-            username(newValue) {
-                if (this.userInfo) {
-                    if (newValue !== this.userInfo.name) {
-                        this.password = '';
-                    } else {
-                        this.password = this.userInfo.password
-                    }
-                }
-            }
-        },
+  watch: {
+    username(newValue) {
+      if (this.userInfo) {
+        if (newValue !== this.userInfo.name) {
+          this.password = '';
+        } else {
+          this.password = this.userInfo.password;
+        }
+      }
+    },
+  },
 
-        methods: {
-            storeToLocal(json) {
-                Cookies.set('user', json)
-            },
+  methods: {
+    storeToLocal(json) {
+      Cookies.set('user', json);
+    },
 
-            rememberName(value) {
-                this.isRememberName = value.target.checked;
-            },
+    rememberName(value) {
+      this.isRememberName = value.target.checked;
+    },
 
-            initWechatLogin() {
-                new WxLogin({
-                    id: "loginContainer",
-                    appid: "wx1c8644b3e608c59b",
-                    scope: "snsapi_login",
-                    redirect_uri: "https%3a%2f%2fapi-corvus.mttop.cn%2fwechat_open%2foauth%2fcallback",
-                    state: "",
-                    href: "https://res-crm.papitube.com/css/wxLogin-QrcodeStyle.css"
-                });
-            },
+    initWechatLogin() {
+      new WxLogin({
+        id: 'loginContainer',
+        appid: 'wx1c8644b3e608c59b',
+        scope: 'snsapi_login',
+        redirect_uri: 'https%3a%2f%2fapi-corvus.mttop.cn%2fwechat_open%2foauth%2fcallback',
+        state: '',
+        href: 'https://res-crm.papitube.com/css/wxLogin-QrcodeStyle.css',
+      });
+    },
 
-            returnLogin() {
-                this.pageType = 'login'
-            },
+    returnLogin() {
+      this.pageType = 'login';
+    },
 
-            forgetPassword() {
-                this.pageType = 'resetPassword'
-            },
+    forgetPassword() {
+      this.pageType = 'resetPassword';
+    },
 
-            checkBindTelephone() {
-                this.bindToken = this.getParameterByUrl('bind_token');
-                if (!this.bindToken) {
-                    return
-                }
-                this.pageType = 'bindPhone';
-                this.getServicesToken();
-            },
+    checkBindTelephone() {
+      this.bindToken = this.getParameterByUrl('bind_token');
+      if (!this.bindToken) {
+        return;
+      }
+      this.pageType = 'bindPhone';
+      this.getServicesToken();
+    },
 
-            checkWechatLogin() {
-                this.access_token = this.getParameterByUrl('access_token');
-                if (!this.access_token) {
-                    return
-                }
-                let _this = this;
-                env.setAccessToken(this.access_token);
-                setTimeout(function () {
-                    _this.fetchUserInfo(function (userJson) {
+    checkWechatLogin() {
+      this.access_token = this.getParameterByUrl('access_token');
+      if (!this.access_token) {
+        return;
+      }
+      const _this = this;
+      env.setAccessToken(this.access_token);
+      setTimeout(() => {
+        _this.fetchUserInfo((userJson) => {
                         _this.storeToLocal(userJson);
                         redirect('/my')
-                    })
-                }, 100)
-            },
+                    });
+      }, 100);
+    },
 
-            getParameterByUrl(name, url) {
-                if (!url) {
-                    url = window.location.href;
-                }
-                name = name.replace(/[\[\]]/g, "\\$&");
-                let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-                    results = regex.exec(url);
-                if (!results) return null;
-                if (!results[2]) return '';
-                return decodeURIComponent(results[2].replace(/\+/g, " "));
-            },
+    getParameterByUrl(name, url) {
+      if (!url) {
+        url = window.location.href;
+      }
+      name = name.replace(/[\[\]]/g, '\\$&');
+      let regex = new RegExp(`[?&]${  name  }(=([^&#]*)|&|#|$)`),
+        results = regex.exec(url);
+      if (!results) return null;
+      if (!results[2]) return '';
+      return decodeURIComponent(results[2].replace(/\+/g, ' '));
+    },
 
-            initSendSmsBtn() {
-                let date = new Date();
-                let currentClickTime = date.getTime();
-                if (this.firstClickTime) {
-                    if (currentClickTime - this.firstClickTime < 1000) {
-                        this.firstClickTime = currentClickTime;
-                        return
-                    }
-                } else {
-                    this.firstClickTime = currentClickTime;
-                }
-                let _this = this;
-                setTimeout(function () {
-                    if (!Verify.phone(_this.phone)) {
-                        return
-                    }
-                    if (_this.second > 0 && _this.second !== 60) {
-                        return
-                    }
-                    let interval = setInterval(function () {
+    initSendSmsBtn() {
+      const date = new Date();
+      const currentClickTime = date.getTime();
+      if (this.firstClickTime) {
+        if (currentClickTime - this.firstClickTime < 1000) {
+          this.firstClickTime = currentClickTime;
+          return;
+        }
+      } else {
+        this.firstClickTime = currentClickTime;
+      }
+      const _this = this;
+      setTimeout(() => {
+        if (!Verify.phone(_this.phone)) {
+          return;
+        }
+        if (_this.second > 0 && _this.second !== 60) {
+          return;
+        }
+        const interval = setInterval(() => {
                         _this.toastText = _this.second + 's';
                         _this.second -= 1;
                         if (_this.second === 0) {
@@ -291,165 +291,163 @@
                             _this.second = 60;
                         }
                     }, 1000);
-                    _this.getServicesToken(token => {
-                        _this.sendMessage(token)
-                    })
-                }, 100)
-            },
+        _this.getServicesToken((token) => {
+          _this.sendMessage(token);
+        });
+      }, 100);
+    },
 
-            getServicesToken(callback) {
-                let data = {
-                    device: this.getDevice(),
-                };
-                let _this = this;
-                fetch('get', '/services/request_token', data).then(function (response) {
-                    _this.smsRequestToken = response.data.token;
-                    if (callback) {
-                        callback(response.data.token)
-                    }
-                })
-            },
+    getServicesToken(callback) {
+      const data = {
+        device: this.getDevice(),
+      };
+      const _this = this;
+      fetch('get', '/services/request_token', data).then((response) => {
+        _this.smsRequestToken = response.data.token;
+        if (callback) {
+          callback(response.data.token);
+        }
+      });
+    },
 
-            bindTelephone() {
-                if (!Verify.phone(this.phone) || !Verify.smsCode(this.smsCode)) {
-                    return
-                }
-                let data = {
-                    telephone: this.phone,
-                    device: this.getDevice(),
-                    bind_token: this.bindToken,
-                    sms_code: this.smsCode,
-                    token: this.smsRequestToken
-                };
-                let _this = this;
-                fetch('post', '/wechat/merge', data).then(function (response) {
-                    env.setAccessToken(response.access_token);
-                    setTimeout(function () {
+    bindTelephone() {
+      if (!Verify.phone(this.phone) || !Verify.smsCode(this.smsCode)) {
+        return;
+      }
+      const data = {
+        telephone: this.phone,
+        device: this.getDevice(),
+        bind_token: this.bindToken,
+        sms_code: this.smsCode,
+        token: this.smsRequestToken,
+      };
+      const _this = this;
+      fetch('post', '/wechat/merge', data).then((response) => {
+        env.setAccessToken(response.access_token);
+        setTimeout(() => {
                         _this.fetchUserInfo(function (userJson) {
                             _this.storeToLocal(userJson);
                             redirect('/my')
                         })
-                    }, 100)
-                }).catch(function () {
-                    Cookies.remove('deviceId');
-                })
-            },
+                    }, 100);
+      }).catch(() => {
+        Cookies.remove('deviceId');
+      });
+    },
 
-            getDevice() {
-                let deviceId = Cookies.get('deviceId');
-                if (!deviceId) {
-                    deviceId = this.generateId(24);
-                    Cookies.set('deviceId', deviceId)
-                }
-                return deviceId
-            },
+    getDevice() {
+      let deviceId = Cookies.get('deviceId');
+      if (!deviceId) {
+        deviceId = this.generateId(24);
+        Cookies.set('deviceId', deviceId);
+      }
+      return deviceId;
+    },
 
-            generateId(len) {
-                let arr = new Uint8Array((len || 40) / 2);
-                window.crypto.getRandomValues(arr);
-                return Array.from(arr, this.dec2hex).join('');
-            },
+    generateId(len) {
+      const arr = new Uint8Array((len || 40) / 2);
+      window.crypto.getRandomValues(arr);
+      return Array.from(arr, this.dec2hex).join('');
+    },
 
-            dec2hex(dec) {
-                return ('0' + dec.toString(16)).substr(-2);
-            },
+    dec2hex(dec) {
+      return (`0${dec.toString(16)}`).substr(-2);
+    },
 
-            sendMessage(token) {
-                let data = {
-                    telephone: this.phone,
-                    device: this.getDevice(),
-                    token: token
-                };
-                fetch('get', '/services/send_sms_code', data).then(function () {
-                    toastr.success('发送成功');
-                })
-            },
+    sendMessage(token) {
+      const data = {
+        telephone: this.phone,
+        device: this.getDevice(),
+        token,
+      };
+      fetch('get', '/services/send_sms_code', data).then(() => {
+        toastr.success('发送成功');
+      });
+    },
 
-            checkLogin: function () {
-                if (!Verify.username(this.username) || !Verify.password(this.password)) {
-                    return
-                }
-                let username = this.username;
-                let password = this.password;
-                let data = {
-                    username: username,
-                    password: password,
-                    grant_type: 'password',
-                    client_id: env.clientId,
-                    client_secret: env.clientSecret,
-                    scope: '*'
-                };
-                $.ajax({
-                    type: 'post',
-                    url: env.apiUrl + '/oauth/token',
-                    headers: env.getHeaders(),
-                    data: data,
-                    statusCode: {
-                        401: function () {
+    checkLogin() {
+      if (!Verify.username(this.username) || !Verify.password(this.password)) {
+        return;
+      }
+      const username = this.username;
+      const password = this.password;
+      const data = {
+        username,
+        password,
+        grant_type: 'password',
+        client_id: env.clientId,
+        client_secret: env.clientSecret,
+        scope: '*',
+      };
+      $.ajax({
+        type: 'post',
+        url: `${env.apiUrl  }/oauth/token`,
+        headers: env.getHeaders(),
+        data,
+        statusCode: {
+          401 () {
                             toastr.error('用户名或密码错误')
                         },
-                    }
-                }).done(response => {
-                    let token = response.access_token;
-                    env.setAccessToken(token);
-                    setTimeout(() => {
-                        this.fetchUserInfo(userJson => {
-                            this.storeToLocal(userJson);
-                            if (this.isRememberName) {
-                                let data = {
-                                    name: this.username,
-                                    password: this.password
-                                };
-                                Cookies.set('user_account', data)
-                            } else {
-                                if (Cookies.get('user_account')) {
+        },
+      }).done((response) => {
+        const token = response.access_token;
+        env.setAccessToken(token);
+        setTimeout(() => {
+          this.fetchUserInfo((userJson) => {
+            this.storeToLocal(userJson);
+            if (this.isRememberName) {
+              const data = {
+                name: this.username,
+                password: this.password,
+              };
+              Cookies.set('user_account', data);
+            } else if (Cookies.get('user_account')) {
                                     Cookies.remove('user_account')
                                 }
-                            }
-                            redirect('/my')
-                        })
-                    }, 100)
-                });
-            },
+            redirect('/my');
+          });
+        }, 100);
+      });
+    },
 
-            fetchUserInfo(callback) {
-                $.ajax({
-                    type: 'get',
-                    url: env.apiUrl + '/users/my',
-                    headers: env.getHeaders(),
-                    statusCode: env.getStatusCode()
-                }).done(function (response) {
-                    let userData = response.data;
-                    let json = {
-                        id: userData.id,
-                        avatar: userData.icon_url,
-                        nickname: userData.name,
-                        organization_id: userData.organization_id,
-                        power: userData.power
-                    };
-                    callback(json, userData.company)
-                })
-            },
+    fetchUserInfo(callback) {
+      $.ajax({
+        type: 'get',
+        url: `${env.apiUrl}/users/my`,
+        headers: env.getHeaders(),
+        statusCode: env.getStatusCode(),
+      }).done((response) => {
+        const userData = response.data;
+        const json = {
+          id: userData.id,
+          avatar: userData.icon_url,
+          nickname: userData.name,
+          organization_id: userData.organization_id,
+          power: userData.power,
+        };
+        callback(json, userData.company);
+      });
+    },
 
-            resetPassword() {
-                if (!Verify.phone(this.phone) ||
-                    !Verify.smsCode(this.smsCode) ||
-                    !Verify.password(this.newPassword)
-                ) {
-                    return false
-                } else if (this.newPassword !== this.repeatNewPassword) {
-                    toastr.error('两次密码不一致');
-                    return
-                }
-                let data = {
-                    telephone: this.phone,
-                    device: this.getDevice(),
-                    token: this.smsRequestToken,
-                    sms_code: this.smsCode,
-                    password: this.newPassword
-                };
-                let _this = this;
-                fetch('put', '/users/telephone', data).then(function (response) {
+    resetPassword() {
+      if (!Verify.phone(this.phone)
+                    || !Verify.smsCode(this.smsCode)
+                    || !Verify.password(this.newPassword)
+      ) {
+        return false;
+      } if (this.newPassword !== this.repeatNewPassword) {
+        toastr.error('两次密码不一致');
+        return;
+      }
+      const data = {
+        telephone: this.phone,
+        device: this.getDevice(),
+        token: this.smsRequestToken,
+        sms_code: this.smsCode,
+        password: this.newPassword,
+      };
+      const _this = this;
+      fetch('put', '/users/telephone', data).then((response) => {
                     toastr.success('密码修改成功');
                     env.setAccessToken(response.access_token);
                     setTimeout(function () {
@@ -458,11 +456,11 @@
                             redirect('/my')
                         })
                     }, 100)
-                })
-            },
+                });
+    },
 
-        }
-    }
+  },
+};
 </script>
 
 <style>

@@ -844,11 +844,14 @@ export default {
           this.changeInfo.resource_type = Number(this.oldInfo.resource_type);
         }
       }
-      if (this.changeInfo.contact.id) {
+      if (this.changeInfo.contact && this.changeInfo.contact.id) {
         // this.changeInfo.resource_type = Number(this.changeInfo.resource_type)
-      } else {
+        this.changeInfo.contact.name = this.changeInfo.contact.id;
+      } else if (this.changeInfo.contact) {
         this.changeInfo.contact.id = this.trailInfo.contact.data.name;
         this.changeInfo.contact.name = this.trailInfo.contact.data.name;
+      } else {
+        Object.assign(this.changeInfo, { contact: { id: this.trailInfo.contact.data.name, name: this.trailInfo.contact.data.name } });
       }
       if (this.trailTypeValidate()) {
         const data = this.changeInfo;
@@ -885,7 +888,7 @@ export default {
     },
 
     editBaseInfo() {
-      if (this.$store.state.power.trail !== 'true') {
+      if (this.$store.state.power.trail.add !== 'true') {
         toastr.error('当前用户没有编辑销售线索的权限');
         return;
       }
