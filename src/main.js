@@ -150,7 +150,6 @@ Vue.component('TimeChoice', TimeChoice)
 Vue.component('EditTimeChoice', EditTimeChoice)
 Vue.component('TimeChoice', TimeChoice)
 Vue.component('EditTimeChoice', EditTimeChoice)
-Vue.component('AddTrail', AddTrail)
 Vue.component('AddRemind', AddRemind)
 Vue.component('ImportAndExport', ImportAndExport)
 

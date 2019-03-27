@@ -1149,15 +1149,15 @@
 </template>
 
 <script>
-    import fetch from '../../assets/utils/fetch.js'
-    import config from '../../assets/js/config'
-    import common from '../../assets/js/common'
-    import Cookies from 'js-cookie'
+import fetch from '../../assets/utils/fetch.js';
+import config from '../../assets/js/config';
+import common from '../../assets/js/common';
+import Cookies from 'js-cookie';
 
-    import ApprovalGreatModule from '../../components/ApprovalGreatModule'
+import ApprovalGreatModule from '../../components/ApprovalGreatModule';
 
-    export default {
-        data: function () {
+export default {
+  data () {
             return {
                 common: common,
                 artistId: '',
@@ -1375,7 +1375,7 @@
                 myChart.setOption(option);
             },
 
-            getArtist: function () {
+    getArtist () {
                 this.artistId = this.$route.params.id;
                 let _this = this;
                 let data = {
@@ -1463,7 +1463,7 @@
                 this.selectedDate = value;
                 this.$refs.meetingRoom.setDate(value)
             },
-            getCalendar: function () {
+    getCalendar () {
                 this.artistId = this.$route.params.id;
 
                 let data = {
@@ -1486,23 +1486,23 @@
             changeScheduleRemind: function (value) {
                 this.scheduleRemind = value;
             },
-            getAllProjects: function () {
+    getAllProjects () {
                 fetch('get', '/projects/all').then(response => {
                     this.allProjectsInfo = response.data
                 })
             },
-            getAllTasks: function () {
+    getAllTasks () {
                 fetch('get', '/tasksAll').then(response => {
                     this.allTasksInfo = response.data
                 })
             },
-            addLinkageResource: function () {
+    addLinkageResource () {
                 $('#addLinkage').modal('hide');
             },
-            ScheduleBox: function (value) {
+    ScheduleBox (value) {
                 this.showScheduleModal(value)
             },
-            addSchedule: function () {
+    addSchedule () {
                 let startTime = '';
                 let endTime = '';
                 if (this.isScheduleAllday) {
@@ -1568,12 +1568,12 @@
                     this.initAddScheduleModal()
                 })
             },
-            showScheduleModal: function (schedule) {
+    showScheduleModal (schedule) {
                 let data = {
                     include: 'calendar,participants,creator,material,affixes,project,task',
                 };
                 fetch('get', '/schedules/' + schedule.id, data).then(response => {
-                    if (!response) {
+                    if (response.data.length > 0) {
                         this.scheduleData = schedule;
                         this.noPermission = true;
                         return
@@ -1585,7 +1585,7 @@
                 });
                 $('#checkSchedule').modal('show')
             },
-            showToast: function (clientX, clientY) {
+    showToast (clientX, clientY) {
                 this.toastX = clientX - 100;
                 this.toastY = clientY - 25;
                 this.toastShow = true;
@@ -1593,10 +1593,10 @@
                     this.toastShow = false
                 }, 1000)
             },
-            changeIsAllDay: function (e) {
+    changeIsAllDay (e) {
                 this.isScheduleAllday = Number(e.target.checked);
             },
-            fileUpload: function (url, name, size) {
+    fileUpload (url, name, size) {
                 let data = {
                     title: name,
                     url: url,
@@ -1613,11 +1613,11 @@
                     }
                 })
             },
-            cancelSchedule: function () {
+    cancelSchedule () {
                 this.scheduleType = 'add'
                 this.initAddScheduleModal()
             },
-            showAddScheduleModal: function (date) {
+    showAddScheduleModal (date) {
                 if (this.calendarId.length > 0) {
                     this.$refs.scheduleStartDate.setValue(date);
                     this.$refs.scheduleEndDate.setValue(date);
@@ -1628,22 +1628,22 @@
                     toastr.error('该艺人无对应艺人日历，请先创建艺人日历')
                 }
             },
-            getResources(type) {
-                let data = {};
-                if (type) {
-                    data = {
-                        type: type
-                    };
-                }
-                fetch('get', '/materials/all', data).then(response => {
-                    if (type) {
-                        this.meetingRomeList = response.data;
-                    } else {
-                        this.allMeetingRomeList = response.data;
-                    }
-                })
-            },
-            changeSchedule: function () {
+    getResources(type) {
+      let data = {};
+      if (type) {
+        data = {
+          type,
+        };
+      }
+      fetch('get', '/materials/all', data).then((response) => {
+        if (type) {
+          this.meetingRomeList = response.data;
+        } else {
+          this.allMeetingRomeList = response.data;
+        }
+      });
+    },
+    changeSchedule () {
                 let startTime = '';
                 let endTime = '';
                 if (this.isScheduleAllday) {
@@ -1696,7 +1696,7 @@
                     this.initAddScheduleModal()
                 })
             },
-            changeScheduleParticipants: function (value) {
+    changeScheduleParticipants (value) {
                 let data = {};
                 if (value) {
                     data.participant_del_ids = [value];
@@ -1720,7 +1720,7 @@
                     this.scheduleParticipants = JSON.parse(JSON.stringify(this.$store.state.newParticipantsInfo));
                 })
             },
-            changeScheduleType: function (type) {
+    changeScheduleType (type) {
                 this.scheduleType = type;
                 $('#checkSchedule').modal('hide');
                 setTimeout(function () {
@@ -1762,7 +1762,7 @@
                     }
                 }
             },
-            deleteToastr: function (type, calendar = null) {
+    deleteToastr (type, calendar = null) {
                 this.delType = type;
                 if (calendar) {
                     this.delCalendarInfo = calendar
@@ -1771,14 +1771,14 @@
                     $('#checkSchedule').modal('hide');
                 }
             },
-            deleteSchedule: function () {
+    deleteSchedule () {
                 fetch('delete', '/schedules/' + this.scheduleData.id).then(() => {
                     $('#delModel').modal('hide');
                     toastr.success('删除成功');
                     this.$refs.calendar.refresh()
                 })
             },
-            initAddScheduleModal: function () {
+    initAddScheduleModal () {
                 this.showMore = false;
                 this.$store.dispatch('changeParticipantsInfo', {data: []});
                 this.scheduleName = '';
@@ -1809,13 +1809,13 @@
                 this.$refs.scheduleNotice.setValue('0');
                 this.$refs.scheduleRemind.setValue('0');
             },
-            changeScheduleRepeat: function (value) {
+    changeScheduleRepeat (value) {
                 this.scheduleRepeat = value;
             },
-            isShowMore: function () {
+    isShowMore () {
                 this.showMore = !this.showMore
             },
-            changeScheduleMaterial: function (value) {
+    changeScheduleMaterial (value) {
                 this.scheduleMaterialId = value;
             },
             //账单
@@ -1866,7 +1866,7 @@
                     this.total_pages = response.meta.pagination.total_pages;
                 })
             },
-            taskcancel: function () {
+    taskcancel () {
                 this.$store.state.newParticipantsInfo = []
             },
             getTaskNum: function () {
@@ -1885,30 +1885,30 @@
                     this.taskNum = `${this.doneTaskNum}/${response.meta.pagination.total}`
                 })
             },
-            editBaseInfo: function () {
-                if (this.$store.state.power.blogger !== 'true') {
+    editBaseInfo () {
+                 if(this.$store.state.power.blogger.add !=='true'){
                     toastr.error('当前用户没有权限编辑博主')
                     return
                 }
                 this.isEdit = true;
                 this.isStatrtEdit = false
             },
-            cancelEdit: function () {
+    cancelEdit () {
                 this.getArtist()
                 this.isEdit = false;
                 this.isStatrtEdit = true
             },
-            distributionPerson: function (value) {
+    distributionPerson (value) {
                 this.distributionType = value;
                 if (this.artistInfo[value].data.length > 0) {
                     this.$store.state.participantsInfo = Object.assign([], this.artistInfo[value].data)
                 }
             },
-            abrogate: function () {
+    abrogate () {
                 this.$store.state.participantsInfo = []
             },
-            //分配制作人
-            addDistributionPerson: function () {
+    // 分配制作人
+    addDistributionPerson () {
                 let toast
                 let data = {
                     person_ids: [],
@@ -1955,7 +1955,7 @@
                     $('#addPrivacy').modal('hide')
                 })
             },
-            getPrivacy: function () {
+    getPrivacy () {
                 let data = {
                     blogger_id: this.$route.params.id
                 };
@@ -1971,12 +1971,12 @@
                     }
                 })
             },
-            //类型
-            changArtistType: function (value) {
+    // 类型
+    changArtistType (value) {
                 this.artistInfo.type.data.id = value
             },
-            //沟通状态
-            changeArtistCommunication: function (value) {
+    // 沟通状态
+    changeArtistCommunication (value) {
                 this.artistInfo.communication_status = value
             },
             //平台id
@@ -2071,7 +2071,7 @@
                     this.artistInfo.sign_contract_other = 2
                 }
             },
-            changeWorkAd: function (value) {
+    changeWorkAd (value) {
                 if (value == 1) {
                     this.advertisingType = 1
                 }
@@ -2098,8 +2098,8 @@
                     this.getTaskDate()
                 })
             },
-            //孵化期截止时间计算
-            getTimes: function () {
+    // 孵化期截止时间计算
+    getTimes () {
                 let end_date = '';
                 let end_hour;
                 let end_minute;
@@ -2176,11 +2176,11 @@
                 this.endMinutes = value
             },
             //视频时间
-            changeWorkReleaseTime: function (value) {
+            changeWorkReleaseTime (value) {
                 this.workReleaseTime = value
             },
             //昵称
-            changArtistName: function (value) {
+            changArtistName (value) {
                 this.Namevalue = value
             },
             //微博地址
@@ -2208,39 +2208,38 @@
                 this.updateStar_xiaohongshu_infos.avatar = value
             },
             //备注
-            changeArtistDesc: function (value) {
+            changeArtistDesc (value) {
                 this.artistInfo.desc = value
             },
             //博主级别
-            changeArtistLevel: function (value) {
+            changeArtistLevel (value) {
                 this.updatelevel = value
             },
             //孵化期
-            changeArtistHatch: function (start, end) {
-                console.log(start  ,  end)
+            changeArtistHatch (start, end) {
                 this.artistInfo.hatch_star_at = start
                 this.artistInfo.hatch_end_at = end
 
             },
             //合作需求
-            changeArtistDemand: function (value) {
+            changeArtistDemand (value) {
                 this.updatedemand = value
             },
             taskdetail(id) {
-                this.$router.push({path: '/tasks/' + id})
-            },
-            projectdetil(id) {
-                this.$router.push({path: '/projects/' + id})
-            },
-            Jump(value) {
-                let price = value;
-                let str = /[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\.?///网址是否合法检测
-                let regex = /(https?:\/\/)?(\w+\.?)+(\/[a-zA-Z0-9\?%=_\-\+\/]+)?/gi//http,https有无检测
-                var re = new RegExp(str);
-                if (!re.test(value)) {
-                    toastr.error('您的网址不正确');
-                } else {
-                    value = value.replace(regex, function (match, capture) {
+      this.$router.push({ path: `/tasks/${  id}` });
+    },
+    projectdetil(id) {
+      this.$router.push({ path: `/projects/${  id}` });
+    },
+    Jump(value) {
+      const price = value;
+      const str = /[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\.?/;// 网址是否合法检测
+      const regex = /(https?:\/\/)?(\w+\.?)+(\/[a-zA-Z0-9\?%=_\-\+\/]+)?/gi;// http,https有无检测
+      let re = new RegExp(str);
+      if (!re.test(value)) {
+        toastr.error('您的网址不正确');
+      } else {
+        value = value.replace(regex, (match, capture) => {
                         if (capture) {
                             window.open(price)
                         }
@@ -2262,11 +2261,11 @@
 
                     this.formDate = response.data
                     $('#approval-great-module').modal('show')
-                })
-            }
-        },
-        filters: {
-            getWeek: function (date) {
+                });
+    },
+  },
+  filters: {
+    getWeek (date) {
                 let week = new Date(date).getDay();
                 let value = '';
                 switch (week) {
@@ -2293,9 +2292,9 @@
                         break;
                 }
                 return value;
-            }
-        },
-    }
+            },
+  },
+};
 </script>
 
 <style>
@@ -2320,7 +2319,7 @@
     }
 
     /* .Jump:hover{
-        
+
     } */
     textarea {
         overflow: hidden;

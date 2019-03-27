@@ -16,7 +16,7 @@
                     <div class="col-md-3 example float-left">
                         <input type="text" class="form-control" id="inputPlaceholder" placeholder="请输入项目名称"
                                v-model="projectKeyword"
-                               @blur="getFilterProjects()">
+                               @blur="filterGo">
                     </div>
                     <div class="col-md-3 example float-left">
                         <selectors @change="(value) => getProjectSearch('project_type', value)" placeholder="请选择项目类型"
@@ -26,13 +26,13 @@
                         <selectors @change="(value) => getProjectSearch('principal_ids', value)" placeholder="请选择项目负责人"
                                    :options="allUsers" multiple="true"></selectors>
                     </div>
-                    <!-- <div class="col-md-3 example float-left">
+                    <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
                                 data-toggle="modal" data-target="#customizeContent"
                                 data-placement="right" title="">
                             自定义筛选
                         </button>
-                    </div> -->
+                    </div>
                 </div>
 
                 <div class="col-md-12">
@@ -129,19 +129,19 @@
 </template>
 
 <script>
-    import fetch from '../../assets/utils/fetch.js'
-    import config from '../../assets/js/config'
-    import common from '../../assets/js/common'
-    import {mapState} from 'vuex'
-    import Cookies from 'js-cookie'
-    import ImportAndExport from '../../components/ImportAndExport.vue'
+import fetch from '../../assets/utils/fetch.js';
+import config from '../../assets/js/config';
+import common from '../../assets/js/common';
+import { mapState } from 'vuex';
+import Cookies from 'js-cookie';
+import ImportAndExport from '../../components/ImportAndExport.vue';
 
-    const projectStatusArr = [{name: '全部', value: ''}, ...config.projectStatusArr];
-    const projectTypeArr = [{name: '全部', value: ''}, ...config.projectTypeArr];
+const projectStatusArr = [{ name: '全部', value: '' }, ...config.projectStatusArr];
+const projectTypeArr = [{ name: '全部', value: '' }, ...config.projectTypeArr];
 
-    export default {
+export default {
 
-        data: function () {
+  data () {
             return {
                 common: common,
                 total: 0,
@@ -171,68 +171,75 @@
                 getProjectStatus: 'my_principal',
                 cleanUp: false,
                 exportParams: {},//导出参数
+                fetchData: {},
+                customizeCondition: {}
             }
         },
 
-        mounted() {
-            this.getField()
-            this.getClients();
-            // this.getFilterProjects();
-            this.getMyProjects('my_principal')
-            if (this.userList.length > 0) {
-                for (let i = 0; i < this.userList.length; i++) {
-                    this.allUsers.push({
-                        name: this.userList[i].name,
-                        value: this.userList[i].id
-                    })
-                }
-            }
-        },
+  mounted() {
+    this.getField();
+    this.getClients();
+    // this.getFilterProjects();
+    this.getMyProjects('my_principal');
+    if (this.userList.length > 0) {
+      for (let i = 0; i < this.userList.length; i++) {
+        this.allUsers.push({
+          name: this.userList[i].name,
+          value: this.userList[i].id,
+        });
+      }
+    }
+  },
 
-        computed: {
-            ...mapState([
-                'userList'
-            ]),
-            _userList() {
-                return this.userList
-            }
-        },
-        components: {
-            ImportAndExport
-        },
-        watch: {
-            _userList() {
-                for (let i = 0; i < this.userList.length; i++) {
-                    this.allUsers.push({
-                        name: this.userList[i].name,
-                        value: this.userList[i].id
-                    })
-                }
-            }
-        },
+  computed: {
+    ...mapState([
+      'userList',
+    ]),
+    _userList() {
+      return this.userList;
+    },
+  },
+  components: {
+    ImportAndExport,
+  },
+  watch: {
+    _userList() {
+      for (let i = 0; i < this.userList.length; i++) {
+        this.allUsers.push({
+          name: this.userList[i].name,
+          value: this.userList[i].id,
+        });
+      }
+    },
+  },
 
-        methods: {
-            getField() {
-                let _this = this
-                fetch('get', '/projects/filter_fields').then((params) => {
-                    _this.customizeInfo = params.data
-                })
-            },
-            getMyProjects: function (value) {
+  methods: {
+    getField() {
+      const _this = this;
+      fetch('get', '/projects/filter_fields').then((params) => {
+        _this.customizeInfo = params.data;
+      });
+    },
+    getMyProjects (value) {
                 this.getProjectStatus = value;
-                this.getFilterProjects();
+                this.fetchHandler('post','/projects/filter','filter')
+                // this.getFilterProjects();
             },
-
+            filterGo:function(){
+                this.fetchData.keyword = this.projectKeyword
+                this.fetchHandler('post','/projects/filter','filter')
+            },
             getProjectSearch: function (type, value) {
                 if (type === 'principal_ids') {
                     this.principal_ids = value.join(',');
                 } else if (type === 'project_type') {
                     this.projectSearchType = value
                 }
-                this.getFilterProjects();
+                // this.getFilterProjects();
+                this.fetchHandler('post','/projects/filter','filter')
             },
 
-            getFilterProjects: function (pageNum = 1) {
+    getFilterProjects (pageNum = 1) {
                 let data = {
                     page: pageNum,
                     include: 'principal,trail.expectations'
@@ -263,7 +270,7 @@
                 })
             },
 
-            getClients: function () {
+    getClients () {
                 let _this = this;
                 fetch('get', '/clients/all').then(function (response) {
                     for (let i = 0; i < response.data.length; i++) {
@@ -277,24 +284,61 @@
                 })
             },
 
-            redirectDetail: function (projectId) {
+    redirectDetail (projectId) {
                 this.$router.push({path: '/projects/' + projectId})
             },
-
-            customize: function (value) {
-                let _this = this
-                fetch('post', '/projects/filter?include=principal,trail.expectations', value).then((params) => {
-                    _this.projectsInfo = params.data
-                    _this.total = params.meta.pagination.total;
-                    _this.total_pages = params.meta.pagination.total_pages;
-                    _this.current_page = params.meta.pagination.current_page
+            fetchHandler(methods, url, type) {
+                let _this = this,
+                    fetchData = this.fetchData,
+                    newUrl
+                this.fetchData.include = '&include=principal,trail.expectations'
+                this.fetchData.page = 'page=1'
+                if (type == 'filter') {
+                    fetchData = this.customizeCondition
+                    let keyword, type, principal_ids,my
+                    if (this.fetchData.keyword) {
+                        keyword = '&keyword=' + this.projectKeyword
+                    } else {
+                        keyword = ''
+                    }
+                    if (this.principal_ids.length > 0) {
+                        this.customizeCondition.principal_ids = this.principal_ids
+                    }
+                    if (this.projectSearchType) {
+                        type = '&project_type=' + this.projectSearchType
+                    } else {
+                        type = ''
+                    }
+                    if (this.getProjectStatus) {
+                        my = '&my=' + this.getProjectStatus;
+                    }else{
+                        my = ''
+                    }
+                    newUrl = url + '?' + this.fetchData.page  + this.fetchData.include + keyword + type + my
+                }
+                this.exportParams = {
+                    keyword: this.fetchData.keyword,
+                    type: this.projectSearchTypes,
+                    principal_ids: this.principal_ids,
+                    my:this.getProjectStatus
+                }
+                fetch(methods, newUrl || url, fetchData).then((response) => {
+                    _this.projectsInfo = response.data
+                    console.log(_this.projectsInfo)
+                    _this.total = response.meta.pagination.total;
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total_pages = response.meta.pagination.total_pages;
                     _this.cleanUp = true
+                    _this.isLoading = false;
                 })
-
+            },
+            customize: function (value) {
+                this.customizeCondition = value
+                this.fetchHandler('post','/projects/filter','filter')
             },
 
-            changeProjectType: function (value) {
-                if(this.$store.state.power.project !=='true'){
+    changeProjectType (value) {
+                if(this.$store.state.power.project.add !=='true'){
                     toastr.error('当前用户没有权限新增项目')
                     return
                 }
@@ -312,7 +356,7 @@
                 $('#addProject').modal('show');
             },
 
-            selectProjectType: function () {
+    selectProjectType () {
                 this.projectFieldsArr = [];
                 if (this.projectType == 5) {
                     return
@@ -338,12 +382,12 @@
                 });
             },
 
-            addInfo: function (value, name) {
+    addInfo (value, name) {
                 this.addInfoArr[name] = value
             },
 
-        }
-    }
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -357,4 +401,3 @@
         cursor: pointer;
     }
 </style>
-

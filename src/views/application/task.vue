@@ -23,7 +23,11 @@
                         <Selectors :options="taskStatusArr" @change="changeTaskStatusSearch"
                                    placeholder="请选择任务状态"></Selectors>
                     </div>
+                    <div class="col-md-3 example float-left">
+                        <DropDepartment :data="department" :showUser="true" @change="selectDepartment"/>
+                    </div>
                 </div>
+
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                         <li class="nav-item" role="presentation" @click="getTasks(1)">
@@ -72,10 +76,9 @@
                                 <th class="cell-300" scope="col">截止时间</th>
                             </tr>
                             <tbody>
-                            <tr v-for="task in tasksInfo" :key="task.id" @click="taskDetail(task.id)">
+                            <tr v-for="(task, index) in tasksInfo" :key="index" @click="goDetail(task.id)">
                                 <td class="pointer-content">
-                                    <router-link :to="{name:'tasks/detail', params: {id: task.id}}">{{ task.title }}
-                                    </router-link>
+                                    {{ task.title }}
                                 </td>
                                 <td>{{task.resource ? task.resource.data.resource.data.title : ''}}
                                     <template
@@ -95,7 +98,9 @@
                                         - {{ task.resource.data.resourceable.data.company }}
                                     </template>
                                 </td>
-                                <td>{{ task.type ? task.type.data ? task.type.data.title : '' : '' }}</td>
+                                <!-- <td>暂无</td> -->
+                                <td>{{ task.type ? task.type.data ? task.type.data.title : '' : '' }}
+                                </td>
                                 <td>
                                     <template v-if="task.status === 1"><span style="color:#FF9800">进行中</span></template>
                                     <template v-if="task.status === 2"><span style="color:#4CAF50">已完成</span></template>
@@ -109,18 +114,26 @@
                             </tr>
                             </tbody>
                         </table>
-                        <div style="margin: 6rem auto;width: 100px" v-if="tasksInfo.length==0">
+                        <div style="margin: 6rem auto;width: 100px" v-if="tasksInfo.length === 0">
                             <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                  style="width: 100%">
                         </div>
-                        <template v-if="!taskStatus">
-                            <Pagination :current_page="current_page" :method="getTasks" :total_pages="total_pages"
+                        <Pagination :current_page="current_page"
+                                    :method="getTasks"
+                                    :total_pages="total_pages"
+                                    :total="total"></Pagination>
+                        <!-- <template v-if="!taskStatus && !taskFinishType">
+                            <Pagination :current_page="current_page"
+                                        :method="getTasks"
+                                        :total_pages="total_pages"
                                         :total="total"></Pagination>
-                        </template>
-                        <template v-else>
-                            <Pagination :current_page="current_page" :method="getOther" :total_pages="total_pages"
+                        </template> -->
+                        <!-- <template v-else>
+                            <Pagination :current_page="current_page"
+                                        :method="getMyTasks"
+                                        :total_pages="total_pages"
                                         :total="total"></Pagination>
-                        </template>
+                        </template> -->
                     </div>
                 </div>
                 <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addTask">
@@ -137,18 +150,18 @@
         </div>
     </div>
 </template>
+
 <script>
     import fetch from "../../assets/utils/fetch.js";
     import config from "../../assets/js/config";
     import Cookies from 'js-cookie'
-    import common from '../../assets/js/common'
+    import {mapState} from 'vuex'
 
     const taskStatusArr = [{name: "全部", value: ""}, ...config.taskStatusArr];
     export default {
         name: "",
         data() {
             return {
-                common: common,
                 total: 0,
                 current_page: 1,
                 total_pages: 1,
@@ -161,6 +174,7 @@
                 taskFinishType: "",
                 taskTypeArr: [],
                 taskStatusArr: taskStatusArr,
+                taskLevelArr: config.taskLevelArr,
                 priorityArr: config.priorityArr,
                 customizeInfo: config.customizeInfo,
                 linkData: [],
@@ -171,21 +185,49 @@
                 resourceableId: "", // 资源id
                 user: {}, // 个人信息
                 isLoading: true,
-                my: ''
+                my: '',//tasks 筛选  3我负责的 2 我参与的 1我创建的 4我分配的
+                linkCurrentPage: 2, // 关联资源当前页数
+                linkTotalPage: 1, // 关联资源总页数
+                linkCode: '', // 关联资源父数据的code
+                linkIndex: 0, //
+                canLoadMore: false, // 关联资源是否可以加载更多
+                // canAdd: false, // 是否有权限添加
+                searchDepartment: '', // 搜索部门
+                searchUser: '', // 搜索部门成员
             };
+        },
+        created() {
+            this.getLinkData()
+        },
+        computed: {
+            ...mapState([
+                'power',
+                'department',
+            ])
         },
         mounted() {
             this.getTasks();
         },
 
         methods: {
+
+            //任务列表的请求都用url = /tasks  上下联动筛选
             getTasks(pageNum = 1) {
+
                 let params = {
                     page: pageNum,
                     my: this.my,
-                    include:
-                        "principal,pTask,tasks,resource.resourceable,resource.resource,participants"
+                    include: "principal,pTask,tasks,resource.resourceable,resource.resource,participants"
                 };
+
+                if (this.searchDepartment) {
+                    params.department = this.searchDepartment
+                }
+
+                if (this.searchUser) {
+                    params.user = this.searchUser
+                }
+
                 let url = "/tasks";
 
                 if (this.taskNameSearch) {
@@ -197,25 +239,19 @@
                 if (this.taskTypeSearch) {
                     params.type_id = this.taskTypeSearch;
                 }
-
-                if (this.taskNameSearch || this.taskStatusSearch || this.taskTypeSearch) {
-                    url = "/tasks/filter";
-                }
-
                 fetch("get", url, params).then(response => {
                     this.tasksInfo = response.data;
-                    this.isLoading = false;
                     this.current_page = response.meta.pagination.current_page;
                     this.total = response.meta.pagination.total;
                     this.total_pages = response.meta.pagination.total_pages;
+                    this.isLoading = false;
                 });
             },
-
+            //任务我的筛选
             getMyTasks(my) {
                 this.my = my;
                 this.getTasks()
             },
-
             changeTaskTypeSearch(value) {
                 this.taskTypeSearch = value;
                 this.getTasks();
@@ -234,14 +270,50 @@
                     this.taskTypeArr.unshift({name: '全部', value: ''})
                 })
             },
-            // 跳转
-            taskDetail(taskId) {
-                this.$router.push({path: '/tasks/' + taskId})
+            goDetail(id) {
+                this.$router.push('/tasks/' + id)
             },
+            handleAdd() {
+                if (this.power.task == 'false') {
+                    toastr.error('您没有新增任务的权限！')
+                    return
+                }
+                $('#addTask').modal('show')
+            },
+            // 选择成员或部门
+            selectDepartment(data) {
+                console.log(data)
+                if (data.type === 'department') {
+                    this.searchUser = ''
+                    this.searchDepartment = data.id
+                } else if (data.type === 'user') {
+                    this.searchUser = data.id
+                    this.searchDepartment = ''
+                }
+                this.getTasks()
+            }
         }
     };
 </script>
-<style>
+<style scoped lang="scss">
+    table td {
+        position: relative;
+        a:before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            display: inline-block;
+        }
+    }
+
+    .modal-body .example {
+        display: flex;
+        align-items: center;
+    }
+
     .panel {
         box-shadow: 0 0 0 0;
     }

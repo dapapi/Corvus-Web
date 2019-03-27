@@ -1,7 +1,7 @@
-import fetch from '../assets/utils/fetch'
+import fetch from '../assets/utils/fetch';
 
 export default {
-    changeParticipantsInfo: function (data, params) {
+  changeParticipantsInfo (data, params) {
 
         //collectInfo:[],//收款金额
         //payInfo:[],//付款金额
@@ -32,7 +32,7 @@ export default {
 
     },
 
-    changePrincipal: function (data, params) {
+  changePrincipal (data, params) {
         if (params.type === 'change') {
             data.commit('changePrincipal', params.data)
         } else if (params.type === 'selector') {
@@ -42,7 +42,7 @@ export default {
         }
     },
 
-    changeCompany: function (data, params) {
+  changeCompany (data, params) {
         data.commit('changeCompany', params)
     },
     changeOtherSlot: function (data, params) {
@@ -55,7 +55,7 @@ export default {
 
         data.commit('changeIsSelected', params)
     },
-    changeIsExpanded: function (data, params) {
+  changeIsExpanded (data, params) {
         data.commit('changeIsExpanded', params)
     },
     changePreview: function (data, params) {

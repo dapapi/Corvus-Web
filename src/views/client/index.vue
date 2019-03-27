@@ -514,8 +514,8 @@
             goDetail(id) {
                 this.$router.push('/clients/' + id)
             },
-        }
-    }
+  },
+};
 </script>
 
 <style lang="scss" scoped>

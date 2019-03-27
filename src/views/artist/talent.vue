@@ -8,8 +8,8 @@
                 <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" id="taskDropdown"
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
-                     role="menu" x-placement="bottom-end" v-if="!isShow">
-                    <ImportAndExport :type="'import'" :moduleName="'bloggers'">
+                     role="menu" x-placement="bottom-end" v-if="!isShow" ref="colse">
+                    <ImportAndExport :type="'import'" :moduleName="'bloggers'" @importFile="importFile">
                         <a class="dropdown-item" role="menuitem">导入</a>
                     </ImportAndExport>
                     <ImportAndExport :type="'export'" :moduleName="'bloggers'" :params="exportParams">
@@ -19,8 +19,8 @@
                        :data-target="selectedArtistsArr.length>0&&'#giveProducer'" @click="judge">分配制作人</a>
                 </div>
                 <div class="dropdown-menu  dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
-                     role="menu" x-placement="bottom-end" v-if="isShow">
-                    <ImportAndExport :type="'import'" :moduleName="'stars'">
+                     role="menu" x-placement="bottom-end" v-if="isShow" ref="colse">
+                    <ImportAndExport :type="'import'" :moduleName="'stars'" @importFile="importFile">
                         <a class="dropdown-item" role="menuitem">导入</a>
                     </ImportAndExport>
                     <ImportAndExport :type="'export'" :moduleName="'stars'" :params="exportParams">
@@ -46,8 +46,7 @@
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" data-toggle="tab" href="#forum-blogger"
                                aria-controls="forum-present"
-                               aria-expanded="false" role="tab" :class="!isShow?'active':''"
-                               @click="tab('bloggers')">博主</a>
+                               aria-expanded="false" role="tab" :class="!isShow?'active':''" @click="tab('bloggers')">博主</a>
                         </li>
                         <i v-if="isShow"
                            style="position: absolute;right:10px;top:10px;color: rgb(0, 176, 255);font-style: normal;"
@@ -189,12 +188,8 @@
 
                                     </template>
                                 </td>
-                                <td @click="redirectArtistDetail(artist.id)">
-                                    {{common.timeProcessing(artist.created_at)}}
-                                </td>
-                                <td @click="redirectArtistDetail(artist.id)">
-                                    {{common.timeProcessing(artist.last_follow_up_at)}}
-                                </td>
+                                <td @click="redirectArtistDetail(artist.id)">{{common.timeProcessing(artist.created_at)}}</td>
+                                <td @click="redirectArtistDetail(artist.id)">{{common.timeProcessing(artist.last_follow_up_at)}}</td>
                             </tr>
                             </tbody>
 
@@ -288,9 +283,7 @@
                                 <td @click="redirectBolggerDetail(artist.id)"
                                     v-if="bloggerInfo.find(item=>item.sign_contract_status!==1)">暂无
                                 </td>
-                                <td @click="redirectBolggerDetail(artist.id)" v-if=" artist.type">{{
-                                    artist.type.data.name }}
-                                </td>
+                                <td @click="redirectBolggerDetail(artist.id)" v-if=" artist.type">{{ artist.type.data.name }}</td>
                                 <td @click="redirectBolggerDetail(artist.id)"
                                     v-if="bloggerInfo.find(item=>item.sign_contract_status==2&&artist.contracts)">{{
                                     common.timeProcessing(artist.contracts.data.contract_start_date, 'day') }}
@@ -316,11 +309,8 @@
                                         {{v.name}}
                                     </span>
                                 </td>
-                                <td @click="redirectBolggerDetail(artist.id)">
-                                    {{common.timeProcessing(artist.created_at)}}
-                                </td>
-                                <td @click="redirectBolggerDetail(artist.id)">
-                                    {{common.timeProcessing(artist.last_follow_up_at)}}
+                                <td @click="redirectBolggerDetail(artist.id)">{{common.timeProcessing(artist.created_at)}}</td>
+                                <td @click="redirectBolggerDetail(artist.id)">{{common.timeProcessing(artist.last_follow_up_at)}}
                                 </td>
                             </tr>
 
@@ -344,8 +334,7 @@
         <customize-filter :data="customizeContentType==='stars'?customizeInfoStars:customizeInfoBloggers"
                           @change="customize" ref="removeDate" :isint="true"></customize-filter>
 
-        <div class="site-action" data-plugin="actionBtn" data-toggle="modal"
-             @click='rightChecker("博主","addBolgger","blogger")' v-if="!isShow">
+        <div class="site-action" data-plugin="actionBtn" data-toggle="modal" @click='rightChecker("博主","addBolgger","blogger")' v-if="!isShow">
             <button type="button"
                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                 <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
@@ -472,18 +461,15 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="emptyBolgger">取消
                         </button>
-                        <button class="btn btn-primary" type="submit" :disable="isAddBloggerButtonDisable"
-                                @click="addBolgger">确定
-                        </button>
+                        <button class="btn btn-primary" type="submit" @click="addBolgger">确定</button>
                     </div>
 
                 </div>
             </div>
         </div>
-        <div class="site-action" data-plugin="actionBtn" data-toggle="modal"
-             @click='rightChecker("艺人","addArtist","star")' v-if="isShow">
+        <div class="site-action" data-plugin="actionBtn" data-toggle="modal" @click='rightChecker("艺人","addArtist","star")' v-if="isShow">
             <button type="button"
                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                 <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
@@ -680,6 +666,11 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!-- <FileUploader class="fileupload" @change="uploadAttachment"></FileUploader>
+                                <div class="mt-5" v-for="(attach,index) in affixes" :key="index">
+                                    {{attachmentTypeArr.find(item => item.value == attach.type).name}} -
+                                    {{attach.title}}
+                                </div> -->
                             </div>
                         </div>
                         <div class="example">
@@ -705,9 +696,7 @@
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="cancleData">取消
                         </button>
-                        <button class="btn btn-primary" type="submit" :disable="isAddAritstButtonDisable"
-                                @click="addArtist">确定
-                        </button>
+                        <button class="btn btn-primary" type="submit" @click="addArtist">确定</button>
                     </div>
 
                 </div>
@@ -753,7 +742,7 @@
                         <ListSelectMember :listName="'成员列表'" :selectName="'已选择成员'" :type="'change'"></ListSelectMember>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="cancelGiveBroker">
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="cancelGiveBroker()">
                             取消
                         </button>
                         <button class="btn btn-primary" type="submit" @click="giveBroker">确定</button>
@@ -770,7 +759,6 @@
     import config from '../../assets/js/config'
     import common from '../../assets/js/common'
     import Cookies from 'js-cookie'
-
     export default {
         data: function () {
             return {
@@ -889,13 +877,25 @@
                 artistPhone: '',
                 artistWeiXin: '',
                 artistsInfo: '',
+                artistStatus: '',
                 artistName: '',
                 artistGender: '',
                 artistBirthday: '',
                 artistSource: '',
                 artistType: '',
                 communicationStatus: '',
+                weiboUrl: '',
+                weiboFansNum: '',
+                douyinId: '',
+                douyinFansNum: '',
+                xhsUrl: '',
+                xhsFansNum: '',
+                // platform:[],
+                platformType: [],
+                signIntention: '',
+                signCompany: '',
                 sign_contract_other_name: '',
+                artistDesc: '',
                 baikeUrl: '',
                 baikeFansNum: '',
                 qitaUrl: '',
@@ -915,76 +915,79 @@
                 affixIndex: '',
                 isdilog: true,
                 exportParams: {},
-                customizeInfo: {},
-                customizeInfoId: '',
-                currentpagestatus: '',
-                currentcommunicationstatus: '',
-                currentpagename: '',
-                fetchData: {},
+                customizeInfo:{},
+                customizeInfoId:'',
+                currentpagestatus:'',
+                currentcommunicationstatus:'',
+                currentpagename:'',
+                fetchData:{},
                 customizeCondition: {},
-                isAddAritstButtonDisable: false,
-                isAddBloggerButtonDisable: false,
+                // currentStatus:'start'
             }
         },
         watch: {
             platformType: function () {
                 return this.platformType
-            }
+            }           
         },
         created() {
-            this.getStarsField();
-            this.getBloggerField();
+            this.getStarsField()
+            this.getBloggerField()
             this.getStars();
         },
         mounted() {
             this.getArtists();
             this.getBlogger();
-            this.getBlogType(); //获取博主类型
+            this.getBlogType() //获取博主类型
             $('table').asSelectable();
-            $('#addBolgger').on('hidden.bs.modal', function () {
-                this.emptyBolgger()
-            })
         },
         methods: {
+            importFile() {
+                this.$refs.colse.classList.remove('show')
+            },
             rightChecker(value, params, type) {
-                if (this.$store.state.power[type] !== 'true') {
-                    toastr.error('当前用户没有权限新增' + value);
+                if (this.$store.state.power[type].add !== 'true') {
+                    toastr.error('当前用户没有权限新增' + value)
                     return
                 }
-                $('#' + params).modal('show')
+                $('#'+params).modal('show')       
             },
             getStarsField() {
-                fetch('get', '/stars/filter_fields').then(params => {
-                    this.customizeInfoStars = params.data
+                let _this = this
+                fetch('get', '/stars/filter_fields').then((params) => {
+                    _this.customizeInfoStars = params.data
                 })
             },
             getBloggerField() {
-                fetch('get', '/bloggers/filter_fields').then(params => {
-                    this.customizeInfoBloggers = params.data
+                let _this = this
+                fetch('get', '/bloggers/filter_fields').then((params) => {
+                    _this.customizeInfoBloggers = params.data
                 })
             },
             //获取沟通状态
             getStatus: function (value) {
-                this.listData.communication_status = value;
-                this.fetchHandler('post', '/stars/filter', 'filter')
+                this.listData.communication_status = value
+                // this.getArtists()
+                this.fetchHandler('post', '/stars/filter','filter')
             },
             //获取签约状态
             getSource: function (value) {
                 if (value) {
                     this.listData.sign_contract_status = value
                 }
-                this.fetchHandler('post', '/stars/filter', 'filter')
+                // this.getArtists()
+                this.fetchHandler('post', '/stars/filter','filter')
             },
             //查询列表
             getArtists: function (page = 1, signStatus) {
-                let _this = this
+                let _this = this;
                 if (signStatus) {
                     this.listData.sign_contract_status = signStatus
                 }
-                this.currentpagestatus = this.listData.sign_contract_status;
-                this.currentcommunicationstatus = this.listData.communication_status;
-                this.currentpagename = this.listData.name;
-                this.listData.page = page;
+                this.currentpagestatus = this.listData.sign_contract_status
+                this.currentcommunicationstatus = this.listData.communication_status
+                this.currentpagename = this.listData.name
+                this.listData.page = page
                 this.exportParams = {
                     name: this.listData.name,
                     sign_contract_status: this.listData.sign_contract_status,//  签约状态
@@ -998,7 +1001,7 @@
                         if (item.sign_contract_status) {
                             _this.isContract = true
                         }
-                    });
+                    })
                     if (response.meta) {
                         _this.current_page = response.meta.pagination.current_page;
                         _this.total = response.meta.pagination.total;
@@ -1012,42 +1015,43 @@
             getBlogger: function (page = 1, signStatus) {
                 let data = {
                     include: 'type,creator,affixes,publicity,operatelogs,contracts',
-                };
+                }
+                let _this = this;
                 //博主状态
                 if (signStatus) {
                     this.blogStatus = signStatus
                 }
-                if (this.blogStatus) {
-                    data.status = '&status=' + this.blogStatus
-                } else {
+                if(this.blogStatus){
+                    data.status = '&status='+this.blogStatus
+                }else{
                     data.status = ''
                 }
                 //沟通状态
                 if (this.blogCommunication) {
-                    data.communication_status = '&communication_status=' + this.blogCommunication
-                } else {
+                    data.communication_status = '&communication_status='+this.blogCommunication
+                }else{
                     data.communication_status = ''
                 }
                 //博主名称
                 if (this.blogName) {
-                    data.name = '&name=' + this.blogName
-                } else {
+                    data.name = '&name='+this.blogName
+                }else{
                     data.name = ''
                 }
-                data.page = '&page=' + page;
-                fetch('get', '/bloggers?include=type,creator,affixes,publicity,operatelogs,contracts' + data.status + data.communication_status + data.name + data.page, this.customizeInfo).then(response => {
-
-                    if (response.data) {
-                        this.bloggerInfo = response.data;
+                data.page = '&page='+page
+                fetch('get', '/bloggers?include=type,creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name +data.page ,this.customizeInfo).then(function (response) {
+                    
+                    if(response.data){
+                        _this.bloggerInfo = response.data;
                     }
                     if (response.meta) {
-                        this.Bcurrent_page = response.meta.pagination.current_page;
-                        this.Btotal = response.meta.pagination.total;
-                        this.Btotal_pages = response.meta.pagination.total_pages;
+                        _this.Bcurrent_page = response.meta.pagination.current_page;
+                        _this.Btotal = response.meta.pagination.total;
+                        _this.Btotal_pages = response.meta.pagination.total_pages;
                     }
-                    this.isLoading = false;
-                    this.selectAllBlogger = false;
-                    this.selectedArtistsArr = [];
+                    _this.isLoading = false;
+                    _this.selectAllBlogger = false;
+                    _this.selectedArtistsArr = [];
                 });
             },
             deleteAffix: function (index) {
@@ -1055,116 +1059,157 @@
                     if (index == this.affixIndex) {
                         this.affixes.splice(index, 1)
                     }
-                });
+                })
                 $('#affix').modal('hide');
             },
+            // getAffixIndex: function (index) {
+            //     this.affixIndex = index
+            // },
             previewFile: function (url, name) {
-                this.previewUrl = url;
+                this.previewUrl = url
                 this.previewName = name
             },
             //获取博主类型
             getBlogType() {
-                fetch('get', '/bloggers/gettype').then(response => {
+                let _this = this
+                fetch('get', '/bloggers/gettype').then(function (response) {
                     let data = {
                         id: '',
                         name: '全部'
-                    };
-                    this.artistTypeArr = response.data;
-                    this.artistTypeArr.unshift(data)
+                    }
+                    _this.artistTypeArr = response.data
+                    _this.artistTypeArr.unshift(data)
                 })
             },
-            getBloggerName() {
-                this.fetchHandler('post', '/bloggers/filter', 'filter')
+            getBloggerName(){
+                this.blogName = this.blogName 
+                this.fetchHandler('post', '/bloggers/filter','filter')
             },
             //选择博主类型
             typeFilter(value) {
-                this.blogStatus = value;
-                this.fetchHandler('post', '/bloggers/filter', 'filter')
+                this.blogStatus = value
+                // this.getBlogger()
+                this.fetchHandler('post', '/bloggers/filter','filter')
             },
             //沟通状态
             CommunicationStatus(value) {
-                this.blogCommunication = value;
-                this.fetchHandler('post', '/bloggers/filter', 'filter')
+                this.blogCommunication = value
+                // this.getBlogger()
+                this.fetchHandler('post', '/bloggers/filter','filter')
             },
             fetchHandler(methods, url, type) {
-                let fetchData = this.fetchData;
-                let newUrl = "";
-                if (url === '/stars/filter') {
-                    this.fetchData.include = 'include=broker,creator,contracts';
-                    if (type === 'filter') {
-                        fetchData = this.customizeCondition;
-                        let keyword, sign_contract_status, communication_status, page;
+                
+                let _this = this,
+                    fetchData = this.fetchData,
+                    newUrl
+                if(url == '/stars/filter'){
+                     this.fetchData.include = 'include=broker,creator,contracts'
+                    if (type == 'filter') {
+                        fetchData = this.customizeCondition
+                        let keyword, sign_contract_status, communication_status,page
                         if (this.listData.name) {
-                            keyword = '&name=' + this.listData.name
+                            keyword = '&name='+this.listData.name
                         } else {
                             keyword = '&name='
                         }
                         if (this.listData.communication_status) {
-                            communication_status = '&communication_status=' + this.listData.communication_status
+                            communication_status = '&communication_status='+this.listData.communication_status
                         } else {
                             communication_status = '&communication_status='
                         }
-                        if (this.listData.sign_contract_status) {
-                            sign_contract_status = '&sign_contract_status=' + this.listData.sign_contract_status
+                        if(this.listData.sign_contract_status){
+                          sign_contract_status  = '&sign_contract_status='+this.listData.sign_contract_status 
                         }
                         if (this.listData.page) {
-                            page = '&page=' + this.current_page
+                            page = '&page='+this.current_page
                         } else {
                             page = ''
                         }
-                        newUrl = url + '?' + this.fetchData.include + keyword + sign_contract_status + communication_status + page
-                    }
-                } else if (url === '/bloggers/filter') {
-                    this.fetchData.include = 'include=creator,affixes,publicity,operatelogs,contracts';
-                    if (type === 'filter') {
-                        fetchData = this.customizeCondition;
-                        let keyword, status, communication_status, page;
+                        newUrl = url + '?' + this.fetchData.include + keyword + sign_contract_status + communication_status+page
+                    }    
+                }else if(url == '/bloggers/filter'){
+                    this.fetchData.include = 'include=creator,affixes,publicity,operatelogs,contracts'
+                    if (type == 'filter') {
+                        fetchData = this.customizeCondition
+                        let keyword, status, communication_status,page
                         if (this.blogName) {
-                            keyword = '&name=' + this.blogName
+                            keyword = '&name='+this.blogName
                         } else {
                             keyword = '&name='
                         }
                         if (this.blogStatus) {
-                            status = '&status=' + this.blogStatus
+                            status = '&status='+this.blogStatus
                         } else {
                             status = ''
                         }
                         if (this.blogCommunication) {
-                            communication_status = '&communication_status=' + this.blogCommunication
+                            communication_status = '&communication_status='+this.blogCommunication
                         } else {
                             communication_status = ''
                         }
                         if (this.current_page) {
-                            page = '&page=' + this.current_page
+                            page = '&page='+this.current_page
                         } else {
                             page = ''
                         }
                         newUrl = url + '?' + this.fetchData.include + keyword + status + communication_status+page
-                }               
                 }
-                console.log(newUrl);
-                console.log(url);
-                fetch(methods, newUrl || url, fetchData).then(response => {
-                    if (url === '/stars/filter') {
-                        this.artistsInfo = response.data;
-                        this.current_page = response.meta.pagination.current_page;
-                        this.total = response.meta.pagination.total;
-                        this.total_pages = response.meta.pagination.total_pages;
-                        this.cleanUp = true
-                    } else if (url === '/bloggers/filter') {
-                        this.bloggerInfo = response.data;
-                        this.Bcurrent_page = response.meta.pagination.current_page;
-                        this.Btotal = response.meta.pagination.total;
-                        this.Btotal_pages = response.meta.pagination.total_pages;
+                // console.log(this.fetchData)
+               
+                }
+                // this.exportParams = {
+                //     keyword: this.fetchData.keyword,
+                //     status: this.fetchData.status,
+                //     principal_ids: this.fetchData.communication_status,
+                // }
+                fetch(methods, newUrl || url, fetchData).then((response) => {
+                         if (url == '/stars/filter') {
+                        _this.artistsInfo = response.data
+                        _this.current_page = response.meta.pagination.current_page;
+                        _this.total = response.meta.pagination.total;
+                        _this.total_pages = response.meta.pagination.total_pages;
+                        _this.cleanUp = true
+                    } else if (url == '/bloggers/filter') {
+                        _this.bloggerInfo = response.data;
+                        _this.Bcurrent_page = response.meta.pagination.current_page;
+                        _this.Btotal = response.meta.pagination.total;
+                        _this.Btotal_pages = response.meta.pagination.total_pages;
                     }
+                    // _this.clientsInfo = response.data
+                    // _this.total = response.meta.pagination.total;
+                    // _this.current_page = response.meta.pagination.current_page;
+                    // _this.total_pages = response.meta.pagination.total_pages;
+                    // _this.isLoading = false;
                 })
             },
             customize: function (value) {
-                if (value.length === 0) {
-                    return
-                }
-                this.customizeCondition = value;
+                // let _this = this
+                // let data = {
+                //     include: 'type,creator,affixes,publicity,operatelogs,contracts',
+
+                // }
+                // if (this.blogStatus) {
+                //     data.status = '&status='+this.blogStatus
+                // }else{
+                //     data.status = ''
+                // }
+                // //沟通状态
+                // if (this.blogCommunication) {
+                //     data.communication_status = '&communication_status='+this.blogCommunication
+                // }else{
+                //     data.communication_status = ''
+                // }
+                // //博主名称
+                // if (this.blogName) {
+                //     data.name = '&name='+this.blogName
+                // }else{
+                //     data.name = ''
+                // }
+                // data.page = '&page='+this.current_page
+                console.log(value)
+                this.customizeCondition = value  
                 this.customizeCondition.sign_contract_status = this.currentpagestatus
+                console.log(this.customizeContentType)
                 this.fetchHandler('post', '/'+this.customizeContentType+'/filter','filter')
                 // fetch('post', this.customizeContentType +'/filter?include=creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name ,value).then(function (params) {
 
@@ -1188,7 +1233,7 @@
             },
             //头像
             getUploadUrl(value) {
-                let Suffix = ['png', 'gif', 'bmp', 'jpg', 'jpeg'];
+                let Suffix = ['png', 'gif', 'bmp', 'jpg', 'jpeg']
                 if (Suffix.includes(String(value).split('.').pop())) {
                     this.uploadUrl = value
                 } else {
@@ -1196,7 +1241,7 @@
                 }
             },
             changeCheckbox: function (value) {
-                this.platformType = [];
+                this.platformType = []
                 for (let i = 0; i < value.length; i++) {
                     this.platformType.push(value[i].value)
                 }
@@ -1223,6 +1268,7 @@
                 this.artistTypeId = value
             },
             addBolgger: function () {
+                let _this = this;
                 if (!this.bolggerName) {
                     toastr.error('请输入博主名称');
                     return false
@@ -1261,7 +1307,6 @@
                     toastr.error('请填写签约公司');
                     return false
                 }
-                this.isAddBloggerButtonDisable = true;
                 let platform = this.platformType.join(',');
                 let data = {
                     //微博,抖音,小红书
@@ -1279,12 +1324,14 @@
                     star_xiaohongshu_infos: this.star_xiaohongshu_infos,
                     avatar: this.uploadUrl
                 };
-                fetch('post', '/bloggers', data).then(response => {
-                    this.isAddBloggerButtonDisable = false;
+                fetch('post', '/bloggers', data).then(function (response) {
                     toastr.success('创建成功');
                     $('#addBolgger').modal('hide');
-                    this.$router.push({path: 'blogger/' + response.data.id});
-                    this.getBlogger();
+                    _this.$router.push({path: 'blogger/' + response.data.id});
+                    _this.getBlogger()
+                    $('#addBolgger').on('hidden.bs.modal', function () {
+                        _this.emptyBolgger()
+                    })
                 })
             },
             emptyBolgger: function () {
@@ -1294,11 +1341,11 @@
                 this.star_douyin_infos.url = '';//抖音地址
                 this.$refs.douyin.setValue('0');//抖音粉丝
                 this.star_xiaohongshu_infos.url = '';//小红书地址
-                this.$refs.xiaohongshu.setValue('0');//小红书粉丝
-                this.$refs.papitype.setValue('');//类型
-                this.$refs.communicationType.setValue('');//沟通类型
-                this.$refs.signIntention.setValue('');//我公司意向
-                this.$refs.isSign.setValue('');//其他公司意向
+                this.$refs.xiaohongshu.setValue('0')//小红书粉丝
+                this.$refs.papitype.setValue('')//类型
+                this.$refs.communicationType.setValue('')//沟通类型
+                this.$refs.signIntention.setValue('')//我公司意向
+                this.$refs.isSign.setValue('')//其他公司意向
                 this.artistDesc = '';//备注
                 this.platformType = [];
                 this.uploadUrl = ''
@@ -1329,26 +1376,28 @@
             },
             //分配制作人
             giveProducer: function () {
-                let data = {
+                let _this = this
+                let data = {}
+                data = {
                     person_ids: [],
                     del_person_ids: [],//删除
-                    moduleable_ids: this.selectedArtistsArr,
+                    moduleable_ids: this.selectedArtistsArr,//
                     moduleable_type: 'blogger',
                     type: 4, //制作人
-                };
+                }
                 for (let i = 0; i < this.$store.state.participantsInfo.length; i++) {
                     data.person_ids.push(this.$store.state.participantsInfo[i].id)
                 }
-                fetch('post', 'distribution/person', data).then(() => {
-                    if (this.selectedArtistsArr.length == 0) {
+                fetch('post', 'distribution/person', data).then(function (response) {
+                    if (_this.selectedArtistsArr.length == 0) {
                         return false
                     }
-                    toastr.success('分配制作人成功');
-                    $('#giveProducer').modal('hide');
-                    this.selectedArtistsArr = [];
-                    this.getBlogger();
-                    this.$store.state.participantsInfo = [];
-                    this.selectedArtistsArr = []
+                    toastr.success('分配制作人成功')
+                    $('#giveProducer').modal('hide')
+                    _this.selectedArtistsArr = []
+                    _this.getBlogger()
+                    _this.$store.state.participantsInfo = []
+                    _this.selectedArtistsArr = []
                 })
             },
             abrogate: function () {
@@ -1356,14 +1405,14 @@
             },
             judge() {
                 if (this.selectedArtistsArr.length == 0) {
-                    toastr.error('请先选择博主，再进行分配');
-                    $('#giveProducer').modal('hide');
-                    this.$store.state.participantsInfo = [];
+                    toastr.error('请先选择博主，再进行分配')
+                    $('#giveProducer').modal('hide')
+                    this.$store.state.participantsInfo = []
                     return false
                 }
             },
             getStars: function () {
-                let organization_id = JSON.parse(Cookies.get('user')).organization_id;
+                let organization_id = JSON.parse(Cookies.get('user')).organization_id
                 if (organization_id == 411) {
                     this.isShow = true
                 } else if (organization_id == 412) {
@@ -1371,30 +1420,31 @@
                 }
             },
             tab: function (value) {
-                this.selectedArtistsArr = [];
-                if (value === 'start') {
-                    this.$refs.removeDate.setValue({conditions: []});
-                    this.customizeCondition = {};
-                    this.getArtists();
-                    this.isShow = true;
-                    this.$refs.removeDate.reset()
-                } else if (value === 'bloggers') {
-                    this.$refs.removeDate.setValue({conditions: []});
-                    this.customizeCondition = {};
-                    this.getBlogger();
-                    this.isShow = false;
-                    this.$refs.removeDate.reset()
+                this.selectedArtistsArr = []
+                if (value == 'start') {
+                    this.$refs.removeDate.setValue({conditions:[]})
+                    this.customizeCondition = {}
+                    this.getArtists()                  
+                    this.isShow = true
+                    // this.$refs.removeDate.reset()
+                } else if (value == 'bloggers') {
+                    this.$refs.removeDate.setValue({conditions:[]})
+                    this.customizeCondition  = {}
+                    this.getBlogger()
+                    this.isShow = false
+                    // this.$refs.removeDate.reset()
                 }
             },
             giveBroker: function () {
-                let url, toast, data;
+                let url, toast, data
+                let _this = this
                 if (this.selectedArtistsArr.length <= 0) {
-                    toastr.error('请选择分配艺人');
+                    toastr.error('请选择分配艺人')
                     return false
                 }
                 if (this.giveType == 1) {
-                    url = 'distribution/person';
-                    toast = '分配经理人成功';
+                    url = 'distribution/person'
+                    toast = '分配经理人成功'
                     data = {
                         person_ids: [],//经理人数组
                         del_person_ids: [],//删除
@@ -1403,8 +1453,8 @@
                         type: 3,//经理人
                     }
                 } else {
-                    url = 'distribution/person';
-                    toast = '分配宣传人成功';
+                    url = 'distribution/person'
+                    toast = '分配宣传人成功'
                     data = {
                         person_ids: [],//宣传人数组
                         del_person_ids: [],//删除
@@ -1416,14 +1466,29 @@
                 for (let i = 0; i < this.$store.state.participantsInfo.length; i++) {
                     data.person_ids.push(this.$store.state.participantsInfo[i].id)
                 }
-                fetch('post', url, data).then(() => {
-                    toastr.success(toast);
-                    $('#giveBroker').modal('hide');
-                    this.$store.state.participantsInfo = []
+                fetch('post', url, data).then(function (response) {
+                    toastr.success(toast)
+                    $('#giveBroker').modal('hide')
+                    _this.$store.state.participantsInfo = []
                 })
             },
             cancelGiveBroker: function () {
                 this.$store.state.participantsInfo = []
+            },
+            changeCheckbox: function (value) {
+                this.platformType = []
+                for (let i = 0; i < value.length; i++) {
+                    this.platformType.push(value[i].value)
+                }
+            },
+            changeCommunicationType: function (value) {
+                this.communication = value
+            },
+            changeSignIntention: function (value) {
+                this.signIntention = value
+            },
+            isSignCompany: function (value) {
+                this.signCompany = value
             },
             changeGender: function (value) {
                 this.artistGender = value
@@ -1435,7 +1500,12 @@
                 this.artistSource = value
             },
             uploadAttachment: function (url, name, size) {
-                this.Preview = url;
+                this.Preview = url
+                // for (let i = 0; i < this.affixes.length; i++) {
+                //     if (this.affixes[i].type == this.affixesType) {
+                //         this.affixes.splice(i, 1)
+                //     }
+                // }
                 this.affixes.push({
                     title: name,
                     size: size,
@@ -1465,11 +1535,11 @@
                     return false
                 }
                 if (!this.artistEmail) {
-                    toastr.error('请选择输入邮箱');
+                    toastr.error('请选择输入邮箱')
                     return false
                 }
                 if (!this.artistPhone) {
-                    toastr.error('请选择输入手机号');
+                    toastr.error('请选择输入手机号')
                     return false
                 }
                 if (this.platformType.length === 0) {
@@ -1484,6 +1554,9 @@
                     toastr.error('请选择签约意向');
                     return false
                 }
+                if (this.signIntention == 1) {
+                    this.notSignReason = ''
+                }
                 if (this.signIntention == 2 && !this.notSignReason) {
                     toastr.error('请填写不签约理由');
                     return false
@@ -1496,16 +1569,12 @@
                     toastr.error('请输入已签约公司名称');
                     return false
                 }
-                if (this.affixesType > 1 && this.affixes.length === 0) {
-                    toastr.error('请上传附件');
-                    return false
-                }
-                this.isAddAritstButtonDisable = true;
                 if (this.signCompany == 2) {
                     this.sign_contract_other_name = ''
                 }
-                if (this.signIntention == 1) {
-                    this.notSignReason = ''
+                if (this.affixesType > 1 && this.affixes.length == 0) {
+                    toastr.error('请上传附件');
+                    return false
                 }
                 let platform = this.platformType.join(',');
                 let data = {
@@ -1521,6 +1590,7 @@
                     intention_desc: this.notSignReason, //不签约理由
                     sign_contract_other: this.signCompany, //是否签约其他公司
                     sign_contract_other_name: this.sign_contract_other_name, //签约其他公司名称
+                    // sign_contract_at:'',//签约日期
                     artist_scout_name: this.artistScoutName,//星探名称
                     star_location: this.artistLocation, //明星地区
                     platform: platform,//社交平台
@@ -1535,51 +1605,55 @@
                     affix: this.affixes,//附件
                     desc: this.artistDesc,//  备注
                     avatar: this.uploadUrl
-                };
-                fetch('post', '/stars', data).then(() => {
+                }
+                let _this = this;
+                fetch('post', '/stars', data).then(function (response) {
                     toastr.success('创建成功');
                     $('#addArtist').modal('hide');
-                    this.cancleData()
+                    // _this.$router.push({path: '/artists/' + response.data.id});
+                    _this.cancleData()
                 })
             },
             //清空数据
             cancleData: function () {
-                this.artistName = '';
-                this.artistGender = '';
-                this.artistBirthday = '';
-                this.artistSource = '';
-                this.artistEmail = '';
-                this.artistPhone = '';
-                this.artistWeiXin = '';
-                this.artistScoutName = '';
-                this.artistLocation = '';
-                this.weiboUrl = '';
-                this.weiboFansNum = '';
-                this.baikeUrl = '';
-                this.baikeFansNum = '';
-                this.douyinId = '';
-                this.douyinFansNum = '';
-                this.qitaUrl = '';
-                this.qita_fans_num = '';
-                this.communication = '';
-                this.signIntention = '';
-                this.notSignReason = '';
-                this.signCompany = '';
-                this.sign_contract_other_name = '';
-                this.affixesType = '';
-                this.affixes = [];
-                this.uploadUrl = '';
-                this.$refs.gender.setValue('');
-                this.$refs.birthday.setValue('');
-                this.$refs.source.setValue('');
-                this.$refs.communicationType.setValue('');
-                this.$refs.signIntention.setValue('');
-                this.$refs.signCompany.setValue('');
+                this.artistName = ''
+                this.artistGender = ''
+                this.artistBirthday = ''
+                this.artistSource = ''
+                this.artistEmail = ''
+                this.artistPhone = ''
+                this.artistWeiXin = ''
+                this.artistScoutName = ''
+                this.artistLocation = ''
+                this.weiboUrl = ''
+                this.weiboFansNum = ''
+                this.baikeUrl = ''
+                this.baikeFansNum = ''
+                this.douyinId = ''
+                this.douyinFansNum = ''
+                this.qitaUrl = ''
+                this.qita_fans_num = ''
+                this.communication = ''
+                this.signIntention = ''
+                this.notSignReason = ''
+                this.signCompany = ''
+                this.sign_contract_other_name = ''
+                this.affixesType = ''
+                this.affixes = []
+                this.uploadUrl = ''
+                this.$refs.gender.setValue('')
+                this.$refs.birthday.setValue('')
+                this.$refs.source.setValue('')
+                this.$refs.communicationType.setValue('')
+                this.$refs.signIntention.setValue('')
+                this.$refs.signCompany.setValue('')
                 this.$refs.attachmentType.setValue('')
             },
             //选择附件类型
             changeAttachmentType: function (value) {
                 this.affixesType = value
+                //   alert(value)
+                //   alert(this.affixesType)
             },
             hide: function () {
                 this.isdilog = !this.isdilog
@@ -1599,13 +1673,13 @@
                     var nowYear = d.getFullYear();
                     var nowMonth = d.getMonth() + 1;
                     var nowDay = d.getDate();
-                    if (nowYear === birthYear) {
+                    if (nowYear == birthYear) {
                         returnAge = 0;//同年 则为0岁
                     }
                     else {
                         var ageDiff = nowYear - birthYear; //年之差
                         if (ageDiff > 0) {
-                            if (nowMonth === birthMonth) {
+                            if (nowMonth == birthMonth) {
                                 var dayDiff = nowDay - birthDay;//日之差
                                 if (dayDiff < 0) {
                                     returnAge = ageDiff - 1;
@@ -1639,6 +1713,7 @@
 <style>
     .puls {
         display: inline-block;
+        background-size: 100px;
         width: 50px;
         height: 50px;
         text-align: center;
@@ -1646,11 +1721,10 @@
         border-radius: 50%;
         border: 1px dashed #eee;
         background-repeat: no-repeat;
-        background-size: 100%;
+        background-size: 100% 100%;
         -moz-background-size: 100% 100%;
         position: relative;
     }
-
     .puls div {
         position: absolute;
         top: 0;
@@ -1662,11 +1736,9 @@
         z-index: 10;
         opacity: 0;
     }
-
     .puls:hover div {
         opacity: 1;
     }
-
     .puls div span {
         width: 100px;
         height: 20px;

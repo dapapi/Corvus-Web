@@ -414,7 +414,7 @@
                                                                     @change="(value) => changeArtistBaseInfo(value, 'birthday')"></EditDatepicker>
                                                 </div>
                                             </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                            <div class="card-text py-20 px-0 clearfix col-md-6 float-left edit-height">
                                                 <div class="col-md-3 float-left text-right pl-0">年龄</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     {{artistInfo.birthday|jsGetAge}}
@@ -445,6 +445,13 @@
                                                                 @change="(value) => changeArtistBaseInfo(value, 'artist_scout_name')"></EditInput>
                                                 </div>
                                             </div>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height" style="height:64px;">
+                                                <div class="col-md-3 float-left text-right pl-0">地区</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <EditInput :content="artistInfo.star_location" :is-edit="isEdit"
+                                                               @change="(value) => changeArtistBaseInfo(value, 'star_location')"></EditInput>
+                                                </div>
+                                            </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                                 <div class="col-md-3 float-left text-right pl-0">与我司签约意向</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
@@ -465,529 +472,547 @@
                                                                         @change="(value) => changeArtistBaseInfo(value, 'sign_contract_other')"></ConditionalInput>
                                                 </div>
                                             </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height"
-                                                 style="height:64px;">
-                                                <div class="col-md-3 float-left text-right pl-0">地区</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
-                                                    <EditInput :content="artistInfo.star_location" :is-edit="isEdit"
-                                                                @change="(value) => changeArtistBaseInfo(value, 'star_location')"></EditInput>
-                                                </div>
-                                            </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
-                                                <div class="col-md-3 float-left text-right pl-0">潜在风险点</div>
-                                                <div class="col-md-9 float-left font-weight-bold"
-                                                     v-if="artistInfo.star_risk_point!=='**'">
-                                                    <editTextarea :content="artistInfo.star_risk_point"
-                                                                  :is-edit="isEdit"
-                                                                  @change="(value) => changeArtistBaseInfo(value, 'star_risk_point')"></editTextarea>
+                                                <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height"
+                                                     style="height:64px;">
+                                                    <div class="col-md-3 float-left text-right pl-0">地区</div>
+                                                    <div class="col-md-9 float-left font-weight-bold">
+                                                        <EditInput :content="artistInfo.star_location" :is-edit="isEdit"
+                                                                   @change="(value) => changeArtistBaseInfo(value, 'star_location')"></EditInput>
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-9 float-left font-weight-bold"
-                                                     v-if="artistInfo.star_risk_point=='**'">
-                                                    {{artistInfo.star_risk_point}}
+                                                <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                                    <div class="col-md-3 float-left text-right pl-0">潜在风险点</div>
+                                                    <div class="col-md-9 float-left font-weight-bold"
+                                                         v-if="artistInfo.star_risk_point!=='**'">
+                                                        <editTextarea :content="artistInfo.star_risk_point"
+                                                                      :is-edit="isEdit"
+                                                                      @change="(value) => changeArtistBaseInfo(value, 'star_risk_point')"></editTextarea>
+                                                    </div>
+                                                    <div class="col-md-9 float-left font-weight-bold"
+                                                         v-if="artistInfo.star_risk_point=='**'">
+                                                        {{artistInfo.star_risk_point}}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <h5 class="pl-15 pt-10 clearfix col-md-12 float-left">联系信息</h5>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
-                                                <div class="col-md-3 float-left text-right pl-0">手机号</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
-                                                    <EditInput :content="artistInfo.phone" :is-edit="isEdit"
-                                                                @change="(value) => changeArtistBaseInfo(value, 'phone')"></EditInput>
+                                                <h5 class="pl-15 pt-10 clearfix col-md-12 float-left">联系信息</h5>
+                                                <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                                    <div class="col-md-3 float-left text-right pl-0">手机号</div>
+                                                    <div class="col-md-9 float-left font-weight-bold">
+                                                        <EditInput :content="artistInfo.phone" :is-edit="isEdit"
+                                                                   @change="(value) => changeArtistBaseInfo(value, 'phone')"></EditInput>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
-                                                <div class="col-md-3 float-left text-right pl-0">微信</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
-                                                    <EditInput :content="artistInfo.wechat" :is-edit="isEdit"
-                                                                @change="(value) => changeArtistBaseInfo(value, 'wechat')"></EditInput>
+                                                <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                                    <div class="col-md-3 float-left text-right pl-0">微信</div>
+                                                    <div class="col-md-9 float-left font-weight-bold">
+                                                        <EditInput :content="artistInfo.wechat" :is-edit="isEdit"
+                                                                   @change="(value) => changeArtistBaseInfo(value, 'wechat')"></EditInput>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
-                                                <div class="col-md-3 float-left text-right pl-0">邮箱</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
-                                                    <EditInput :content="artistInfo.email" :is-edit="isEdit"
-                                                                @change="(value) => changeArtistBaseInfo(value, 'email')"></EditInput>
+                                                <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                                    <div class="col-md-3 float-left text-right pl-0">邮箱</div>
+                                                    <div class="col-md-9 float-left font-weight-bold">
+                                                        <EditInput :content="artistInfo.email" :is-edit="isEdit"
+                                                                   @change="(value) => changeArtistBaseInfo(value, 'email')"></EditInput>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
-                                                <div class="col-md-3 float-left text-right pl-0">社交平台</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
-                                                    <EditSelector :is-edit="isEdit" :multiple="true"
-                                                                    :content="artistInfo.platform ? artistInfo.platform.split(',') : []"
-                                                                    :options="artistSocialPlatform"
-                                                                    @change="(value) => changeArtistBaseInfo(value, 'platform')"></EditSelector>
+                                                <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                                    <div class="col-md-3 float-left text-right pl-0">社交平台</div>
+                                                    <div class="col-md-9 float-left font-weight-bold">
+                                                        <EditSelector :is-edit="isEdit" :multiple="true"
+                                                                      :content="artistInfo.platform ? artistInfo.platform.split(',') : []"
+                                                                      :options="artistSocialPlatform"
+                                                                      @change="(value) => changeArtistBaseInfo(value, 'platform')"></EditSelector>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
-                                                <div class="col-md-3 float-left text-right pl-0">微博主页地址</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
-                                                    <EditInput :content="artistInfo.weibo_url" :is-edit="isEdit"
-                                                                @change="(value) => changeArtistBaseInfo(value, 'weibo_url')"></EditInput>
+                                                <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                                    <div class="col-md-3 float-left text-right pl-0">微博主页地址</div>
+                                                    <div class="col-md-9 float-left font-weight-bold">
+                                                        <EditInput :content="artistInfo.weibo_url" :is-edit="isEdit"
+                                                                   @change="(value) => changeArtistBaseInfo(value, 'weibo_url')"></EditInput>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
-                                                <div class="col-md-3 float-left text-right pl-0">微博粉丝数</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
-                                                    <EditInput :content="artistInfo.weibo_fans_num" :is-edit="isEdit"
-                                                                @change="(value) => changeArtistBaseInfo(value, 'weibo_fans_num')"></EditInput>
+                                                <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                                    <div class="col-md-3 float-left text-right pl-0">微博粉丝数</div>
+                                                    <div class="col-md-9 float-left font-weight-bold">
+                                                        <EditInput :content="artistInfo.weibo_fans_num"
+                                                                   :is-edit="isEdit"
+                                                                   @change="(value) => changeArtistBaseInfo(value, 'weibo_fans_num')"></EditInput>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
-                                                <div class="col-md-3 float-left text-right pl-0">抖音ID</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
-                                                    <EditInput :content="artistInfo.douyin_id" :is-edit="isEdit"
-                                                                @change="(value) => changeArtistBaseInfo(value, 'douyin_id')"></EditInput>
+                                                <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                                    <div class="col-md-3 float-left text-right pl-0">抖音ID</div>
+                                                    <div class="col-md-9 float-left font-weight-bold">
+                                                        <EditInput :content="artistInfo.douyin_id" :is-edit="isEdit"
+                                                                   @change="(value) => changeArtistBaseInfo(value, 'douyin_id')"></EditInput>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
-                                                <div class="col-md-3 float-left text-right pl-0">抖音粉丝数</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
-                                                    <EditInput :content="artistInfo.douyin_fans_num" :is-edit="isEdit"
-                                                                @change="(value) => changeArtistBaseInfo(value, 'douyin_fans_num')"></EditInput>
+                                                <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                                    <div class="col-md-3 float-left text-right pl-0">抖音粉丝数</div>
+                                                    <div class="col-md-9 float-left font-weight-bold">
+                                                        <EditInput :content="artistInfo.douyin_fans_num"
+                                                                   :is-edit="isEdit"
+                                                                   @change="(value) => changeArtistBaseInfo(value, 'douyin_fans_num')"></EditInput>
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
-                                                <div class="col-md-3 float-left text-right pl-0">备注</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
-                                                    <editTextarea :content="artistInfo.desc" :is-edit="isEdit"
-                                                                    @change="(value) => changeArtistBaseInfo(value, 'desc')"></editTextarea>
+                                                <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                                    <div class="col-md-3 float-left text-right pl-0">备注</div>
+                                                    <div class="col-md-9 float-left font-weight-bold">
+                                                        <editTextarea :content="artistInfo.desc" :is-edit="isEdit"
+                                                                      @change="(value) => changeArtistBaseInfo(value, 'desc')"></editTextarea>
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            <div v-show="isEdit"
-                                                    class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
-                                                <div class="col-md-3 float-left text-right pl-0">附件类型</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
-                                                    <selectors v-show="isEdit" :options="attachmentTypeArr"
-                                                                @change="changeAttachmentType"
-                                                                ref="attachType"></selectors>
+                                                <div v-show="isEdit"
+                                                     class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                                    <div class="col-md-3 float-left text-right pl-0">附件类型</div>
+                                                    <div class="col-md-9 float-left font-weight-bold">
+                                                        <selectors v-show="isEdit" :options="attachmentTypeArr"
+                                                                   @change="changeAttachmentType"
+                                                                   ref="attachType"></selectors>
 
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
-                                                <div class="col-md-3 float-left text-right pl-0">签约状态</div>
-                                                <div class="col-md-9 float-left font-weight-bold"
-                                                        v-if="artistInfo.sign_contract_status" :class="isEdit?'py-10':''">
-                                                    {{signState.find(item=>item.value ===
-                                                    artistInfo.sign_contract_status).name}}
+                                                <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                                    <div class="col-md-3 float-left text-right pl-0">签约状态</div>
+                                                    <div class="col-md-9 float-left font-weight-bold"
+                                                         v-if="artistInfo.sign_contract_status"
+                                                         :class="isEdit?'py-10':''">
+                                                        {{signState.find(item=>item.value ===
+                                                        artistInfo.sign_contract_status).name}}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left mt-10"
-                                                    style="min-height:57px">
-                                                <div class="col-md-3 float-left text-right pl-0">附件</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
+                                                <div class="card-text py-10 px-0 clearfix col-md-6 float-left mt-10"
+                                                     style="min-height:57px">
+                                                    <div class="col-md-3 float-left text-right pl-0">附件</div>
+                                                    <div class="col-md-9 float-left font-weight-bold">
                                                     <span v-show="isEdit"
                                                           style="color:#01BCD4;cursor:pointer">上传附件</span>
-                                                    <FileUploader v-show="isEdit" class="uploadAttach"
-                                                                  @change="uploadAttachment" mulId="aff"></FileUploader>
-                                                    <div class="mt-5">
-                                                        <div class="row" v-for="(attach,index) in affixes" :key="index">
-                                                            <div class="col-md-2 p-0">
-                                                                <i class="iconfont icon-wenjian"
-                                                                   style="color:#1e88e5;font-size:36px"></i>
-                                                            </div>
+                                                        <FileUploader v-show="isEdit" class="uploadAttach"
+                                                                      @change="uploadAttachment"
+                                                                      mulId="aff"></FileUploader>
+                                                        <div class="mt-5">
+                                                            <div class="row" v-for="(attach,index) in affixes"
+                                                                 :key="index">
+                                                                <div class="col-md-2 p-0">
+                                                                    <i class="iconfont icon-wenjian"
+                                                                       style="color:#1e88e5;font-size:36px"></i>
+                                                                </div>
 
-                                                            <div class="col-md-10 mt-5">
-                                                                <span class="mr-20 single">{{attachmentTypeArr.find(item => item.value == attach.type).name}} - {{attach.title}}</span>
-                                                                <a data-toggle="modal" data-target='#docPreview'
-                                                                   @click="previewFile(attach.url,attach.title)"
-                                                                   class="iconfont icon-liulan  mr-15"
-                                                                   style="color:#3f51b5"></a>
-                                                                <i class="iconfont icon-shanchu1" data-toggle="modal"
-                                                                   data-target="#affix"
-                                                                   @click="getAffixId(attach.id)"></i>
+                                                                <div class="col-md-10 mt-5">
+                                                                    <span class="mr-20 single">{{attachmentTypeArr.find(item => item.value == attach.type).name}} - {{attach.title}}</span>
+                                                                    <a data-toggle="modal" data-target='#docPreview'
+                                                                       @click="previewFile(attach.url,attach.title)"
+                                                                       class="iconfont icon-liulan  mr-15"
+                                                                       style="color:#3f51b5"></a>
+                                                                    <i class="iconfont icon-shanchu1"
+                                                                       data-toggle="modal"
+                                                                       data-target="#affix"
+                                                                       @click="getAffixId(attach.id)"></i>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            
-                                        </div>
 
-                                        <h5 class="pl-15 pt-10">更新信息</h5>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                            <div class="col-md-3 float-left text-right pl-0">录入人</div>
-                                            <div class="col-md-9 float-left font-weight-bold">
-                                                {{ artistInfo.creator.data.name }}
                                             </div>
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                            <div class="col-md-3 float-left text-right pl-0">录入时间</div>
-                                            <div class="col-md-9 float-left font-weight-bold">
-                                                {{ common.timeProcessing(artistInfo.created_at) }}
+
+                                            <h5 class="pl-15 pt-10">更新信息</h5>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                                <div class="col-md-3 float-left text-right pl-0">录入人</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    {{ artistInfo.creator.data.name }}
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                            <div class="col-md-3 float-left text-right pl-0">最近更新人</div>
-                                            <div class="col-md-9 float-left font-weight-bold">
-                                                <template v-if="artistInfo.last_updated_user">
-                                                    {{artistInfo.last_updated_user}}
-                                                </template>
-                                                <template v-else>{{ artistInfo.creator.data.name }}</template>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                                <div class="col-md-3 float-left text-right pl-0">录入时间</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    {{ common.timeProcessing(artistInfo.created_at) }}
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
-                                            <div class="col-md-3 float-left text-right pl-0">最近更新时间</div>
-                                            <div class="col-md-9 float-left font-weight-bold">
-                                                <template v-if="artistInfo.last_follow_up_at">
-                                                    {{ common.timeProcessing(artistInfo.last_follow_up_at)}}
-                                                </template>
-                                                <template v-else>{{ common.timeProcessing(artistInfo.created_at) }}
-                                                </template>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                                <div class="col-md-3 float-left text-right pl-0">最近更新人</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <template v-if="artistInfo.last_updated_user">
+                                                        {{artistInfo.last_updated_user}}
+                                                    </template>
+                                                    <template v-else>{{ artistInfo.creator.data.name }}</template>
+                                                </div>
+                                            </div>
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
+                                                <div class="col-md-3 float-left text-right pl-0">最近更新时间</div>
+                                                <div class="col-md-9 float-left font-weight-bold">
+                                                    <template v-if="artistInfo.last_follow_up_at">
+                                                        {{ common.timeProcessing(artistInfo.last_follow_up_at)}}
+                                                    </template>
+                                                    <template v-else>{{ common.timeProcessing(artistInfo.created_at) }}
+                                                    </template>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="panel" style="width: calc(34% - 15px);min-height:100%;">
-                    <div class="col-md-12">
-                        <div class="card col-md-12">
-                            <div class="card-header card-header-transparent card-header-bordered p-10"
-                                    style="font-size: 16px;font-weight: bold;">
-                                <div>艺人跟进</div>
-                            </div>
-                            <div class="card-block">
-                                <div class="col-md-12 pl-0">
-                                    <TaskFollowUp :follow-type="'艺人'" :trailId="$route.params.id"
-                                                    trailType="stars"></TaskFollowUp>
                                 </div>
                             </div>
+
+                        </div>
+                    </div>
+                    <div class="panel" style="width: calc(34% - 15px);min-height:100%">
+                        <div class="col-md-12">
+                            <div class="card col-md-12">
+                                <div class="card-header card-header-transparent card-header-bordered p-10"
+                                     style="font-size: 16px;font-weight: bold;">
+                                    <div>艺人跟进</div>
+                                </div>
+                                <div class="card-block">
+                                    <div class="col-md-12 pl-0">
+                                        <TaskFollowUp :follow-type="'艺人'" :trailId="$route.params.id"
+                                                      trailType="stars"></TaskFollowUp>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+
             </div>
 
-        </div>
-
-        <div class="calendar-toast" v-show="toastShow"
-             :style="'position: absolute;top:' + toastY + 'px; left: ' + toastX + 'px;'">双击创建日程
-        </div>
-
-        <modal :id="'affix'" :title="'删除附件'" @onOK="deleteAffix">
-            <div class="text-center m-20">您确认删除该附件吗？</div>
-        </modal>
-        <!-- 新增任务 -->
-        <AddTask :resourceable_id="artistId" resource_type="2" :resource_title="artistName" resource_name="艺人" @success="addTask"></AddTask>
-
-        <!--作品库-->
-        <div class="modal fade" id="addWork" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1" data-backdrop="static">
-            <div class="modal-dialog modal-simple">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
-                        </button>
-                        <h4 class="modal-title">新增作品</h4>
-                    </div>
-                    <div class="modal-body">
-
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">艺人</div>
-                            <div class="col-md-10 float-left">{{ artistInfo.name }}</div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left require">作品名称</div>
-                            <div class="col-md-10 float-left">
-                                <input type="text" title="" class="form-control" v-model="artistWorkName"
-                                       placeholder="请输入作品名称">
-                            </div>
-                        </div>
-
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left require">导演</div>
-                            <div class="col-md-10 float-left">
-                                <input type="text" title="" class="form-control" v-model="artistWorkDirector"
-                                       placeholder="请输入导演姓名">
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left require">作品发布时间</div>
-                            <div class="col-md-10 float-left">
-                                <datepicker @change="changeWorkReleaseTime" ref="workTime"
-                                            placeholder="请选择时间"></datepicker>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left require">作品类型</div>
-                            <div class="col-md-10 float-left">
-                                <selectors :options="workTypeArr" @change="changeWorkType" ref="workType"></selectors>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">角色</div>
-                            <div class="col-md-10 float-left">
-                                <input type="text" title="" class="form-control" v-model="character"
-                                       placeholder="请输入角色">
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">合作演员</div>
-                            <div class="col-md-10 float-left">
-                                <input type="text" title="" class="form-control" v-model="coActor"
-                                       placeholder="请输入合作演员">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" type="submit" :disable="isAddWorkButtonDisable" @click="addWork">确定</button>
-                    </div>
-
-                </div>
+            <div class="calendar-toast" v-show="toastShow"
+                 :style="'position: absolute;top:' + toastY + 'px; left: ' + toastX + 'px;'">双击创建日程
             </div>
-        </div>
-        <!--分配经纪人和宣传人-->
-        <div class="modal fade" id="distributionBroker" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1" data-backdrop="static">
-            <div class="modal-dialog modal-simple" style="max-width: 50rem;">
 
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
-                        </button>
-                        <template v-if="distributionType === 'broker'">
-                            <h4 class="modal-title">分配经理人</h4>
-                        </template>
-                        <template v-else>
-                            <h4 class="modal-title">分配宣传人</h4>
-                        </template>
-                    </div>
-                    <div class="modal-body">
-                        <div class="py-20">
-                            <ListSelectMember type="change"></ListSelectMember>
+            <modal :id="'affix'" :title="'删除附件'" @onOK="deleteAffix">
+                <div class="text-center m-20">您确认删除该附件吗？</div>
+            </modal>
+            <!-- 新增任务 -->
+            <AddTask :resourceable_id="artistId" resource_type="2" :resource_title="artistName" resource_name="艺人"
+                     @success="addTask"></AddTask>
+
+            <!--作品库-->
+            <div class="modal fade" id="addWork" aria-hidden="true" aria-labelledby="addLabelForm"
+                 role="dialog" tabindex="-1" data-backdrop="static">
+                <div class="modal-dialog modal-simple">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                                <i class="iconfont icon-guanbi" aria-hidden="true"></i>
+                            </button>
+                            <h4 class="modal-title">新增作品</h4>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" type="submit" @click="addDistributionPerson">确定</button>
+                        <div class="modal-body">
+
+                            <div class="example">
+                                <div class="col-md-2 text-right float-left">艺人</div>
+                                <div class="col-md-10 float-left">{{ artistInfo.name }}</div>
+                            </div>
+                            <div class="example">
+                                <div class="col-md-2 text-right float-left require">作品名称</div>
+                                <div class="col-md-10 float-left">
+                                    <input type="text" title="" class="form-control" v-model="artistWorkName"
+                                           placeholder="请输入作品名称">
+                                </div>
+                            </div>
+
+                            <div class="example">
+                                <div class="col-md-2 text-right float-left require">导演</div>
+                                <div class="col-md-10 float-left">
+                                    <input type="text" title="" class="form-control" v-model="artistWorkDirector"
+                                           placeholder="请输入导演姓名">
+                                </div>
+                            </div>
+                            <div class="example">
+                                <div class="col-md-2 text-right float-left require">作品发布时间</div>
+                                <div class="col-md-10 float-left">
+                                    <datepicker @change="changeWorkReleaseTime" ref="workTime"
+                                                placeholder="请选择时间"></datepicker>
+                                </div>
+                            </div>
+                            <div class="example">
+                                <div class="col-md-2 text-right float-left require">作品类型</div>
+                                <div class="col-md-10 float-left">
+                                    <selectors :options="workTypeArr" @change="changeWorkType"
+                                               ref="workType"></selectors>
+                                </div>
+                            </div>
+                            <div class="example">
+                                <div class="col-md-2 text-right float-left">角色</div>
+                                <div class="col-md-10 float-left">
+                                    <input type="text" title="" class="form-control" v-model="character"
+                                           placeholder="请输入角色">
+                                </div>
+                            </div>
+                            <div class="example">
+                                <div class="col-md-2 text-right float-left">合作演员</div>
+                                <div class="col-md-10 float-left">
+                                    <input type="text" title="" class="form-control" v-model="coActor"
+                                           placeholder="请输入合作演员">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                            <button class="btn btn-primary" type="submit" :disable="isAddWorkButtonDisable"
+                                    @click="addWork">确定
+                            </button>
+                        </div>
+
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- 新建/修改 日程 -->
-        <div class="modal fade line-center" id="changeSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1" data-backdrop="static">
-            <div class="modal-dialog modal-simple">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <div style="order: 2">
-                            <span class="pointer-content hover-content mr-4" data-toggle="modal"
-                                  data-target="#addLinkage">关联</span>
-                            <i class="iconfont icon-guanbi pointer-content" aria-hidden="true" data-dismiss="modal"></i>
-                        </div>
-                        <h5 class="modal-title">
-                            <template v-if="scheduleType === 'add'">
-                                <h4 class="modal-title">新建日程</h4>
+            <!--分配经纪人和宣传人-->
+            <div class="modal fade" id="distributionBroker" aria-hidden="true" aria-labelledby="addLabelForm"
+                 role="dialog" tabindex="-1" data-backdrop="static">
+                <div class="modal-dialog modal-simple" style="max-width: 50rem;">
+
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                                <i class="iconfont icon-guanbi" aria-hidden="true"></i>
+                            </button>
+                            <template v-if="distributionType === 'broker'">
+                                <h4 class="modal-title">分配经理人</h4>
                             </template>
                             <template v-else>
-                                <h4 class="modal-title">修改日程</h4>
+                                <h4 class="modal-title">分配宣传人</h4>
                             </template>
-                        </h5>
+                        </div>
+                        <div class="modal-body">
+                            <div class="py-20">
+                                <ListSelectMember type="change"></ListSelectMember>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                            <button class="btn btn-primary" type="submit" @click="addDistributionPerson">确定</button>
+                        </div>
                     </div>
-                    <div class="modal-body">
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">标题</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <input type="text" class="form-control" title="" placeholder="请输入标题"
-                                       v-model="scheduleName">
+                </div>
+            </div>
+            <!-- 新建/修改 日程 -->
+            <div class="modal fade line-center" id="changeSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
+                 role="dialog" tabindex="-1" data-backdrop="static">
+                <div class="modal-dialog modal-simple">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div style="order: 2">
+                            <span class="pointer-content hover-content mr-4" data-toggle="modal"
+                                  data-target="#addLinkage">关联</span>
+                                <i class="iconfont icon-guanbi pointer-content" aria-hidden="true"
+                                   data-dismiss="modal"></i>
                             </div>
+                            <h5 class="modal-title">
+                                <template v-if="scheduleType === 'add'">
+                                    <h4 class="modal-title">新建日程</h4>
+                                </template>
+                                <template v-else>
+                                    <h4 class="modal-title">修改日程</h4>
+                                </template>
+                            </h5>
                         </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">日历</div>
-                            <div class="col-md-10 float-left pl-0">{{calendarName}}</div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">开始时间</div>
-                            <div class="col-md-5 float-left pl-0">
-                                <datepicker @change="changeStartTime" ref="scheduleStartDate"></datepicker>
-                            </div>
-                            <div class="col-md-5 float-left pl-0" v-show="!isAllday">
-                                <TimeChoice @change="changeStartMinutes" ref="scheduleStartMinute"></TimeChoice>
-                            </div>
-                        </div>
-                        <div class="clearfix">
-                            <div class="col-md-2 text-right float-left line-fixed-height">结束时间</div>
-                            <div class="col-md-5 float-left pl-0">
-                                <datepicker @change="changeEndTime" ref="scheduleEndDate"
-                                            :startDate="startTime"></datepicker>
-                            </div>
-                            <div class="col-md-5 float-left pl-0" v-show="!isAllday">
-                                <TimeChoice @change="changeEndMinutes" ref="scheduleEndMinute"></TimeChoice>
-                            </div>
-                        </div>
-                        <div class="clearfix">
-                            <div class="col-md-2 text-right float-left"></div>
-                            <div class="col-md-10 float-left pl-0">
-                                <div class="checkbox-custom checkbox-primary">
-                                    <input type="checkbox" id="isAllDay" @change="changeIsAllDay" v-model="isAllday">
-                                    <label for="isAllDay">全天</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="clearfix py-10">
-                            <div class="col-md-2 text-right float-left line-fixed-height">参与人</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <AddMember type="add"></AddMember>
-                            </div>
-                        </div>
-
-                        <div v-show="showMore">
-                            <div class="pt-10 mb-20 clearfix">
-                                <div class="col-md-2 text-right float-left line-fixed-height">资源</div>
+                        <div class="modal-body">
+                            <div class="example">
+                                <div class="col-md-2 text-right float-left">标题</div>
                                 <div class="col-md-10 float-left pl-0">
-                                    <selectors :options="allMeetingRomeList" ref="scheduleResource"
-                                               @change="changeScheduleMaterial"></selectors>
+                                    <input type="text" class="form-control" title="" placeholder="请输入标题"
+                                           v-model="scheduleName">
                                 </div>
                             </div>
                             <div class="example">
-                                <div class="col-md-2 text-right float-left">提醒</div>
-                                <div class="col-md-10 float-left pl-0">
-                                    <selectors :options="remindArr" ref="scheduleRemind"></selectors>
-                                </div>
-                            </div>
-                            <div class="clearfix my-20">
-                                <div class="col-md-2 text-right float-left line-fixed-height">重复</div>
-                                <div class="col-md-10 float-left pl-0">
-                                    <selectors :options="repeatArr" ref="scheduleRepeat"
-                                               @change="changeScheduleRepeat"></selectors>
-                                </div>
-                                <div class="col-md-2 float-left"></div>
-                                <div class="col-md-10 float-left pl-0 font-12 mt-5" style="color: #c3c3c3">重复周期为1年</div>
+                                <div class="col-md-2 text-right float-left">日历</div>
+                                <div class="col-md-10 float-left pl-0">{{calendarName}}</div>
                             </div>
                             <div class="example">
-                                <div class="col-md-2 text-right float-left">位置</div>
-                                <div class="col-md-10 float-left pl-0">
-                                    <input type="text" class="form-control" title="" v-model="eventPlace">
+                                <div class="col-md-2 text-right float-left">开始时间</div>
+                                <div class="col-md-5 float-left pl-0">
+                                    <datepicker @change="changeStartTime" ref="scheduleStartDate"></datepicker>
+                                </div>
+                                <div class="col-md-5 float-left pl-0" v-show="!isAllday">
+                                    <TimeChoice @change="changeStartMinutes" ref="scheduleStartMinute"></TimeChoice>
                                 </div>
                             </div>
-                            <div class="example">
-                                <div class="col-md-2 text-right float-left">备注</div>
-                                <div class="col-md-10 float-left pl-0">
-                                    <textarea class="form-control" title="" v-model="eventDesc"></textarea>
+                            <div class="clearfix">
+                                <div class="col-md-2 text-right float-left line-fixed-height">结束时间</div>
+                                <div class="col-md-5 float-left pl-0">
+                                    <datepicker @change="changeEndTime" ref="scheduleEndDate"
+                                                :startDate="startTime"></datepicker>
+                                </div>
+                                <div class="col-md-5 float-left pl-0" v-show="!isAllday">
+                                    <TimeChoice @change="changeEndMinutes" ref="scheduleEndMinute"></TimeChoice>
                                 </div>
                             </div>
                             <div class="clearfix">
                                 <div class="col-md-2 text-right float-left"></div>
                                 <div class="col-md-10 float-left pl-0">
                                     <div class="checkbox-custom checkbox-primary">
-                                        <input type="checkbox" id="onlyParticipantVisible" v-model="schedulePrivacy">
-                                        <label for="onlyParticipantVisible">仅参与人可见</label>
+                                        <input type="checkbox" id="isAllDay" @change="changeIsAllDay"
+                                               v-model="isAllday">
+                                        <label for="isAllDay">全天</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix py-10">
+                                <div class="col-md-2 text-right float-left line-fixed-height">参与人</div>
+                                <div class="col-md-10 float-left pl-0">
+                                    <AddMember type="add"></AddMember>
+                                </div>
+                            </div>
+
+                            <div v-show="showMore">
+                                <div class="pt-10 mb-20 clearfix">
+                                    <div class="col-md-2 text-right float-left line-fixed-height">资源</div>
+                                    <div class="col-md-10 float-left pl-0">
+                                        <selectors :options="allMeetingRomeList" ref="scheduleResource"
+                                                   @change="changeScheduleMaterial"></selectors>
+                                    </div>
+                                </div>
+                                <div class="example">
+                                    <div class="col-md-2 text-right float-left">提醒</div>
+                                    <div class="col-md-10 float-left pl-0">
+                                        <selectors :options="remindArr" ref="scheduleRemind"></selectors>
+                                    </div>
+                                </div>
+                                <div class="clearfix my-20">
+                                    <div class="col-md-2 text-right float-left line-fixed-height">重复</div>
+                                    <div class="col-md-10 float-left pl-0">
+                                        <selectors :options="repeatArr" ref="scheduleRepeat"
+                                                   @change="changeScheduleRepeat"></selectors>
+                                    </div>
+                                    <div class="col-md-2 float-left"></div>
+                                    <div class="col-md-10 float-left pl-0 font-12 mt-5" style="color: #c3c3c3">重复周期为1年
+                                    </div>
+                                </div>
+                                <div class="example">
+                                    <div class="col-md-2 text-right float-left">位置</div>
+                                    <div class="col-md-10 float-left pl-0">
+                                        <input type="text" class="form-control" title="" v-model="eventPlace">
+                                    </div>
+                                </div>
+                                <div class="example">
+                                    <div class="col-md-2 text-right float-left">备注</div>
+                                    <div class="col-md-10 float-left pl-0">
+                                        <textarea class="form-control" title="" v-model="eventDesc"></textarea>
+                                    </div>
+                                </div>
+                                <div class="clearfix">
+                                    <div class="col-md-2 text-right float-left"></div>
+                                    <div class="col-md-10 float-left pl-0">
+                                        <div class="checkbox-custom checkbox-primary">
+                                            <input type="checkbox" id="onlyParticipantVisible"
+                                                   v-model="schedulePrivacy">
+                                            <label for="onlyParticipantVisible">仅参与人可见</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pointer-content hover-content mt-20" @click="isShowMore">
+                                <div class="col-md-2 float-left"></div>
+                                <div class="col-md-10 float-left pl-0">
+                                    <template v-if="showMore">隐藏更多选项</template>
+                                    <template v-else>添加更多选项</template>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                            <template v-if="scheduleType === 'add'">
+                                <button class="btn btn-primary" type="submit" :disabled="isAddScheduleButtonDisable"
+                                        @click="addSchedule">确定
+                                </button>
+                            </template>
+                            <template v-if="scheduleType === 'edit'">
+                                <button class="btn btn-primary" type="submit" @click="changeSchedule">确定</button>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 关联资源 -->
+            <div class="modal fade" id="addLinkage" aria-hidden="true" aria-labelledby="addLabelForm"
+                 role="dialog" tabindex="-1" data-backdrop="static">
+                <div class="modal-dialog modal-simple">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                                <i class="iconfont icon-guanbi" aria-hidden="true"></i>
+                            </button>
+                            <h4 class="modal-title">关联资源</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="tab-pane p-20" role="tabpanel">
+                                <div class="nav-tabs-vertical" data-plugin="tabs" style="margin: 0 -20px -30px  -20px ">
+                                    <ul class="nav nav-tabs nav-tabs-line mr-25" role="tablist">
+                                        <li class="nav-item" role="presentation"
+                                            @click="selectProjectLinkage('project')">
+                                            <a class="nav-link active" data-toggle="tab" href="#projectsPane"
+                                               aria-controls="exampleTabsLineLeftOne" role="tab" aria-selected="false">
+                                                项目</a>
+                                        </li>
+                                        <li class="nav-item" role="presentation" @click="selectProjectLinkage('task')">
+                                            <a class="nav-link" data-toggle="tab" href="#tasksPane"
+                                               aria-controls="exampleTabsLineLeftOne" role="tab" aria-selected="false">
+                                                任务</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content px-0" style="max-height: 70vh;overflow-y: auto">
+                                        <div class="tab-pane active" id="projectsPane" role="tabpanel">
+                                            <div class="input-search mb-20" style="width: 70%">
+                                                <button type="submit" class="input-search-btn">
+                                                    <i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
+                                                </button>
+                                                <input type="text" class="form-control" name="" placeholder="搜索关键字..."
+                                                       v-model="searchKeyWord">
+                                            </div>
+                                            <ul class="nav">
+                                                <li class="nav-link pointer-content" style="width: 95%"
+                                                    v-for="(project,index) in allProjectsInfo" :key="index"
+                                                    v-show="project.title.indexOf(searchKeyWord) > -1"
+                                                    @click="selectResource('projects', project.id)">{{ project.title }}
+                                                    <span class="float-right"
+                                                          v-show="linkageSelectedIds.projects.indexOf(project.id) > -1">
+                                                    <i class="md-check"></i>
+                                                </span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="tab-pane" id="tasksPane" role="tabpanel">
+                                            <div class="input-search mb-20" style="width: 70%">
+                                                <button type="submit" class="input-search-btn">
+                                                    <i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
+                                                </button>
+                                                <input type="text" class="form-control" name="" placeholder="搜索关键字..."
+                                                       v-model="searchKeyWord">
+                                            </div>
+                                            <ul class="nav">
+                                                <li class="nav-link pointer-content" style="width: 95%"
+                                                    v-for="(task,index) in allTasksInfo" :key="index"
+                                                    v-show="task.title.indexOf(searchKeyWord) > -1"
+                                                    @click="selectResource('tasks', task.id)">{{ task.title }}
+                                                    <span class="float-right"
+                                                          v-show="linkageSelectedIds.tasks.indexOf(task.id) > -1">
+                                                    <i class="md-check"></i>
+                                                </span>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="pointer-content hover-content mt-20" @click="isShowMore">
-                            <div class="col-md-2 float-left"></div>
-                            <div class="col-md-10 float-left pl-0">
-                                <template v-if="showMore">隐藏更多选项</template>
-                                <template v-else>添加更多选项</template>
-                            </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                            <button class="btn btn-primary" type="submit" @click="addLinkageResource">确定</button>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <template v-if="scheduleType === 'add'">
-                            <button class="btn btn-primary" type="submit" :disabled="isAddScheduleButtonDisable" @click="addSchedule">确定</button>
-                        </template>
-                        <template v-if="scheduleType === 'edit'">
-                            <button class="btn btn-primary" type="submit" @click="changeSchedule">确定</button>
-                        </template>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- 关联资源 -->
-        <div class="modal fade" id="addLinkage" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1" data-backdrop="static">
-            <div class="modal-dialog modal-simple">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
-                        </button>
-                        <h4 class="modal-title">关联资源</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="tab-pane p-20" role="tabpanel">
-                            <div class="nav-tabs-vertical" data-plugin="tabs" style="margin: 0 -20px -30px  -20px ">
-                                <ul class="nav nav-tabs nav-tabs-line mr-25" role="tablist">
-                                    <li class="nav-item" role="presentation" @click="selectProjectLinkage('project')">
-                                        <a class="nav-link active" data-toggle="tab" href="#projectsPane"
-                                           aria-controls="exampleTabsLineLeftOne" role="tab" aria-selected="false">
-                                            项目</a>
-                                    </li>
-                                    <li class="nav-item" role="presentation" @click="selectProjectLinkage('task')">
-                                        <a class="nav-link" data-toggle="tab" href="#tasksPane"
-                                           aria-controls="exampleTabsLineLeftOne" role="tab" aria-selected="false">
-                                            任务</a>
-                                    </li>
-                                </ul>
-                                <div class="tab-content px-0" style="max-height: 70vh;overflow-y: auto">
-                                    <div class="tab-pane active" id="projectsPane" role="tabpanel">
-                                        <div class="input-search mb-20" style="width: 70%">
-                                            <button type="submit" class="input-search-btn">
-                                                <i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
-                                            </button>
-                                            <input type="text" class="form-control" name="" placeholder="搜索关键字..."
-                                                   v-model="searchKeyWord">
-                                        </div>
-                                        <ul class="nav">
-                                            <li class="nav-link pointer-content" style="width: 95%"
-                                                v-for="(project,index) in allProjectsInfo" :key="index"
-                                                v-show="project.title.indexOf(searchKeyWord) > -1"
-                                                @click="selectResource('projects', project.id)">{{ project.title }}
-                                                <span class="float-right"
-                                                      v-show="linkageSelectedIds.projects.indexOf(project.id) > -1">
-                                                    <i class="md-check"></i>
-                                                </span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="tab-pane" id="tasksPane" role="tabpanel">
-                                        <div class="input-search mb-20" style="width: 70%">
-                                            <button type="submit" class="input-search-btn">
-                                                <i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
-                                            </button>
-                                            <input type="text" class="form-control" name="" placeholder="搜索关键字..."
-                                                   v-model="searchKeyWord">
-                                        </div>
-                                        <ul class="nav">
-                                            <li class="nav-link pointer-content" style="width: 95%"
-                                                v-for="(task,index) in allTasksInfo" :key="index"
-                                                v-show="task.title.indexOf(searchKeyWord) > -1"
-                                                @click="selectResource('tasks', task.id)">{{ task.title }}
-                                                <span class="float-right"
-                                                      v-show="linkageSelectedIds.tasks.indexOf(task.id) > -1">
-                                                    <i class="md-check"></i>
-                                                </span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" type="submit" @click="addLinkageResource">确定</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- 查看日程 -->
-        <div class="modal fade" id="checkSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1" data-backdrop="static">
-            <div class="modal-dialog modal-simple">
-                <div class="modal-content" v-if="scheduleData">
-                    <div class="modal-header">
-                        <div style="order: 2">
+            <!-- 查看日程 -->
+            <div class="modal fade" id="checkSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
+                 role="dialog" tabindex="-1" data-backdrop="static">
+                <div class="modal-dialog modal-simple">
+                    <div class="modal-content" v-if="scheduleData">
+                        <div class="modal-header">
+                            <div style="order: 2">
                             <span v-show="!noPermission">
                                 <i class="iconfont icon-bianji2 pr-4 font-size-16 pointer-content"
                                    @click="changeScheduleType('edit')" aria-hidden="true"></i>
@@ -996,1276 +1021,1277 @@
                                 <i class="iconfont icon-shanchu1 pr-4 font-size-16 pointer-content" data-toggle="modal"
                                    data-target="#delModel" aria-hidden="true" @click="deleteToastr('schedule')"></i>
                             </span>
-                            <i class="iconfont icon-guanbi pointer-content" aria-hidden="true" data-dismiss="modal"></i>
+                                <i class="iconfont icon-guanbi pointer-content" aria-hidden="true"
+                                   data-dismiss="modal"></i>
+                            </div>
+                            <h5 class="modal-title">{{ scheduleData.calendar.data.title }}</h5>
                         </div>
-                        <h5 class="modal-title">{{ scheduleData.calendar.data.title }}</h5>
-                    </div>
-                    <div class="modal-body px-40">
-                        <div class="">
-                            <h4 class="my-20">{{ scheduleData.title }}</h4>
-                        </div>
-                        <div class="example">
+                        <div class="modal-body px-40">
                             <div class="">
-                                <div class="col-md-3 float-left px-0">
-                                    <div class="">{{ (scheduleData.start_at.split(' ')[0]).split('-')[1] }}月
-                                        {{ (scheduleData.start_at.split(' ')[0]).split('-')[2] }}日
-                                        {{ scheduleData.start_at|getWeek(scheduleData.start_at) }}
+                                <h4 class="my-20">{{ scheduleData.title }}</h4>
+                            </div>
+                            <div class="example">
+                                <div class="">
+                                    <div class="col-md-3 float-left px-0">
+                                        <div class="">{{ (scheduleData.start_at.split(' ')[0]).split('-')[1] }}月
+                                            {{ (scheduleData.start_at.split(' ')[0]).split('-')[2] }}日
+                                            {{ scheduleData.start_at|getWeek(scheduleData.start_at) }}
+                                        </div>
+                                        <div class="big-time">{{ (scheduleData.start_at.split(' ')[1]).slice(0,5) }}
+                                        </div>
                                     </div>
-                                    <div class="big-time">{{ (scheduleData.start_at.split(' ')[1]).slice(0,5) }}</div>
-                                </div>
-                                <div class="col-md-2 float-left pl-0">
-                                    <div class="" style="color: white"> -</div>
-                                    <div class="big-time text-center"> -</div>
-                                </div>
-                                <div class="col-md-3 float-left px-0">
-                                    <div class="">{{ (scheduleData.end_at.split(' ')[0]).split('-')[1] }}月
-                                        {{ (scheduleData.end_at.split(' ')[0]).split('-')[2] }}日
-                                        {{ scheduleData.end_at|getWeek(scheduleData.end_at) }}
+                                    <div class="col-md-2 float-left pl-0">
+                                        <div class="" style="color: white"> -</div>
+                                        <div class="big-time text-center"> -</div>
                                     </div>
-                                    <div class="big-time">{{ (scheduleData.end_at.split(' ')[1]).slice(0,5) }}</div>
-                                </div>
-                                <div class="col-md-2 float-left" v-show="scheduleData.is_allday">
-                                    <div class="" style="color: white"> -</div>
-                                    <div class="big-time font-size-18" style="line-height: 75px">全天</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="example" v-if="scheduleData.position">
-                            <div class="col-md-2 px-0 float-left">地点</div>
-                            <div class="col-md-10 pl-0 float-left">{{ scheduleData.position }}</div>
-                        </div>
-                        <div class="example" v-if="scheduleData.material">
-                            <div class="col-md-2 px-0 float-left">资源</div>
-                            <div class="col-md-10 pl-0 float-left">{{ scheduleData.material.data.name }}</div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 px-0 float-left">组织人</div>
-                            <div class="col-md-10 pl-0 float-left">
-                                {{ scheduleData.creator.data.name }}
-                            </div>
-                        </div>
-                        <div class="example"
-                             v-if="((scheduleData.project && scheduleData.project.data.length > 0) || (scheduleData.task && scheduleData.task.data.length > 0)) && !noPermission">
-                            <div class="col-md-2 px-0 float-left">关联资源</div>
-                            <div class="col-md-10 pl-0 float-left">
-                                <div class="pb-5" v-if="scheduleData.project"
-                                     v-for="project in scheduleData.project.data">
-                                    <span>项目 - {{ project.title }}</span>
-                                </div>
-                                <div class="pb-5" v-if="scheduleData.task" v-for="task in scheduleData.task.data">
-                                    <span>任务 - {{ task.title }}</span>
+                                    <div class="col-md-3 float-left px-0">
+                                        <div class="">{{ (scheduleData.end_at.split(' ')[0]).split('-')[1] }}月
+                                            {{ (scheduleData.end_at.split(' ')[0]).split('-')[2] }}日
+                                            {{ scheduleData.end_at|getWeek(scheduleData.end_at) }}
+                                        </div>
+                                        <div class="big-time">{{ (scheduleData.end_at.split(' ')[1]).slice(0,5) }}</div>
+                                    </div>
+                                    <div class="col-md-2 float-left" v-show="scheduleData.is_allday">
+                                        <div class="" style="color: white"> -</div>
+                                        <div class="big-time font-size-18" style="line-height: 75px">全天</div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="example" v-if="scheduleData.participants && !noPermission">
-                            <div class="col-md-2 px-0 float-left">参与人</div>
-                            <div class="col-md-10 pl-0 float-left">
-                                <AddMember type="add" @change="changeScheduleParticipants"></AddMember>
+                            <div class="example" v-if="scheduleData.position">
+                                <div class="col-md-2 px-0 float-left">地点</div>
+                                <div class="col-md-10 pl-0 float-left">{{ scheduleData.position }}</div>
                             </div>
-                        </div>
-                        <div class="example" v-if="scheduleData.desc && !noPermission">
-                            <div class="col-md-2 px-0 float-left">备注</div>
-                            <div class="col-md-10 pl-0 float-left">{{ scheduleData.desc }}</div>
-                        </div>
-                        <div class="example" v-if="scheduleData.affixes && scheduleData.affixes.data.length > 0">
-                            <div>附件</div>
-                            <div>
-                                <div class="col-md-3 float-left text-center position-relative file-item"
-                                     v-for="(affix,index) in scheduleData.affixes.data" :key="index">
-                                    <div class="del-affix iconfont icon-zuofei position-absolute pointer-content"
-                                         @click="delAffix(affix.id)"></div>
-                                    <div><i class="iconfont icon-wenjian" style="font-size: 36px"></i></div>
-                                    <div @click="openFile(affix.url)" class="pointer-content">{{ affix.title }}</div>
+                            <div class="example" v-if="scheduleData.material">
+                                <div class="col-md-2 px-0 float-left">资源</div>
+                                <div class="col-md-10 pl-0 float-left">{{ scheduleData.material.data.name }}</div>
+                            </div>
+                            <div class="example">
+                                <div class="col-md-2 px-0 float-left">组织人</div>
+                                <div class="col-md-10 pl-0 float-left">
+                                    {{ scheduleData.creator.data.name }}
+                                </div>
+                            </div>
+                            <div class="example"
+                                 v-if="((scheduleData.project && scheduleData.project.data.length > 0) || (scheduleData.task && scheduleData.task.data.length > 0)) && !noPermission">
+                                <div class="col-md-2 px-0 float-left">关联资源</div>
+                                <div class="col-md-10 pl-0 float-left">
+                                    <div class="pb-5" v-if="scheduleData.project"
+                                         v-for="project in scheduleData.project.data">
+                                        <span>项目 - {{ project.title }}</span>
+                                    </div>
+                                    <div class="pb-5" v-if="scheduleData.task" v-for="task in scheduleData.task.data">
+                                        <span>任务 - {{ task.title }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="example" v-if="scheduleData.participants && !noPermission">
+                                <div class="col-md-2 px-0 float-left">参与人</div>
+                                <div class="col-md-10 pl-0 float-left">
+                                    <AddMember type="add" @change="changeScheduleParticipants"></AddMember>
+                                </div>
+                            </div>
+                            <div class="example" v-if="scheduleData.desc && !noPermission">
+                                <div class="col-md-2 px-0 float-left">备注</div>
+                                <div class="col-md-10 pl-0 float-left">{{ scheduleData.desc }}</div>
+                            </div>
+                            <div class="example" v-if="scheduleData.affixes && scheduleData.affixes.data.length > 0">
+                                <div>附件</div>
+                                <div>
+                                    <div class="col-md-3 float-left text-center position-relative file-item"
+                                         v-for="(affix,index) in scheduleData.affixes.data" :key="index">
+                                        <div class="del-affix iconfont icon-zuofei position-absolute pointer-content"
+                                             @click="delAffix(affix.id)"></div>
+                                        <div><i class="iconfont icon-wenjian" style="font-size: 36px"></i></div>
+                                        <div @click="openFile(affix.url)" class="pointer-content">{{ affix.title }}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- 删除日历/日程 -->
-        <div class="modal fade" id="delModel" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
-             tabindex="-1" data-backdrop="static">
-            <div class="modal-dialog modal-simple">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" aria-hidden="true" data-dismiss="modal" class="close"><i
-                                aria-hidden="true" class="iconfont icon-guanbi"></i></button>
-                        <h4 class="modal-title">确认删除</h4>
-                    </div>
-                    <div class="modal-body clearfix">
-                        <div class="example">
+            <!-- 删除日历/日程 -->
+            <div class="modal fade" id="delModel" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
+                 tabindex="-1" data-backdrop="static">
+                <div class="modal-dialog modal-simple">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" aria-hidden="true" data-dismiss="modal" class="close"><i
+                                    aria-hidden="true" class="iconfont icon-guanbi"></i></button>
+                            <h4 class="modal-title">确认删除</h4>
+                        </div>
+                        <div class="modal-body clearfix">
+                            <div class="example">
+                                <template v-if="delType === 'calendar'">
+                                    <p>确认删除日历 “{{ delCalendarInfo.title }}” </p>
+                                </template>
+                                <template v-if="delType === 'schedule'">
+                                    <p>确认删除日程 “{{ scheduleData.title }}” </p>
+                                </template>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
                             <template v-if="delType === 'calendar'">
-                                <p>确认删除日历 “{{ delCalendarInfo.title }}” </p>
+                                <button class="btn btn-primary" @click="deleteCalendar">确定</button>
                             </template>
                             <template v-if="delType === 'schedule'">
-                                <p>确认删除日程 “{{ scheduleData.title }}” </p>
+                                <button class="btn btn-primary" @click="deleteSchedule">确定</button>
                             </template>
                         </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <template v-if="delType === 'calendar'">
-                            <button class="btn btn-primary" @click="deleteCalendar">确定</button>
-                        </template>
-                        <template v-if="delType === 'schedule'">
-                            <button class="btn btn-primary" @click="deleteSchedule">确定</button>
-                        </template>
                     </div>
                 </div>
             </div>
+            <!--附件预览-->
+            <ApprovalGreatModule :formData='formDate' :detailpage='isDetail'
+                                 :default-value="{value:projectContractDefault,id:$route.params.id}"></ApprovalGreatModule>
+            <DocPreview :url="previewUrl" :givenFileName="previewName" :detailpage='isDetail'/>
         </div>
-        <!--附件预览-->
-        <ApprovalGreatModule :formData='formDate' :detailpage='isDetail'
-                             :default-value="{value:projectContractDefault,id:$route.params.id}"></ApprovalGreatModule>
-        <DocPreview :url="previewUrl" :givenFileName="previewName" :detailpage='isDetail'/>
     </div>
 </template>
 
 <script>
 
-    // 项目列表include 头部三个项目单独接口  作品include 任务列表单独接口  头部三个任务include
-    import Cookies from 'js-cookie';
-    import fetch from '../../assets/utils/fetch.js';
-    import config from '../../assets/js/config';
-    import common from '../../assets/js/common';
+// 项目列表include 头部三个项目单独接口  作品include 任务列表单独接口  头部三个任务include
+import Cookies from 'js-cookie';
+import fetch from '../../assets/utils/fetch.js';
+import config from '../../assets/js/config';
+import common from '../../assets/js/common';
 
-    import ApprovalGreatModule from '../../components/ApprovalGreatModule';
+import ApprovalGreatModule from '../../components/ApprovalGreatModule';
 
-    export default {
-        data() {
-            return {
-                common,
-                artistId: '',
-                artistName: '',
-                artistInfo: {},
-                taskTypeArr: [],
-                taskLevelArr: config.taskLevelArr,
-                attachmentTypeArr: config.attachmentTypeArr,
-                taskType: '',
-                startTime: '',
-                startMinutes: '00:00',
-                endTime: '',
-                endMinutes: '00:00',
-                taskIntroduce: '',
-                artistTasksInfo: [], // 任务
-                artistWorksInfo: [], // 作品库
-                artistProjectsInfo: '', // 项目
-                artistWorkName: '', // 作品名称
-                artistWorkDirector: '', // 导演名称
-                artistBillsInfo: [], // 账单
-                workReleaseTime: '',
-                workTypeArr: config.workTypeArr,
-                workType: '',
-                character: '',
-                coActor: '',
-                isEdit: '',
-                genderArr: config.genderArr,
-                artistDesc: '',
-                artistSourceArr: config.artistSourceArr,
-                taiyangCommunicationStatusArr: config.taiyangCommunicationStatusArr,
-                yesOrNoArr: config.yesOrNoArr,
-                signState: config.signState,
-                changeArtistInfo: {},
-                artistSocialPlatform: [
-                    {
-                        value: 1,
-                        name: '微博',
-                    },
-                    {
-                        value: 2,
-                        name: '百科',
-                    },
-                    {
-                        value: 3,
-                        name: '抖音',
-                    },
-                    {
-                        value: 4,
-                        name: '其他',
-                    },
-                ],
-                distributionType: '',
-                affixes: [], // 附件
-                affixesType: '', // 附件类型
-                affixId: '',
-                taskNum: '',
-                doneTaskNum: 0,
-                filterFee: 1,
-                avatar: '',
-                selectedDate: '',
-                scheduleData: '',
-                scheduleParticipants: [],
-                previewUrl: '',
-                previewName: '',
-                user: {},
-                total: 0,
-                current_page: 1,
-                total_pages: 1,
-                allTaskList: [], // 获取任务列表
-                threeProjectList: [], // 获取三个项目
-                expense_type: 0,
-                incomesum: 0, // 账单 -- 收入总和
-                expendituresum: 0, // 账单 -- 支出总和
-                isLoading: true,
-                uploadUrl: '',
-                calendarId: [], // 艺人关联日历id
-                scheduleType: 'add',
-                scheduleName: '',
-                calendarList: [],
-                scheduleCalendar: '',
-                isAllday: false,
-                isScheduleAllday: 0,
-                linkageSelectedIds: {
-                    projects: [],
-                    tasks: [],
-                },
-                showMore: false,
-                searchKeyWord: '',
-                allProjectsInfo: '',
-                allTasksInfo: '',
-                colorArr: config.colorArr,
-                checkColor: '',
-                allMeetingRomeList: '',
-                remindArr: config.remindArr,
-                repeatArr: config.repeatArr,
-                eventPlace: '',
-                eventDesc: '',
-                schedulePrivacy: false,
-                scheduleMaterialId: '',
-                noPermission: false,
-                delType: '',
-                calendarName: '',
-                scheduleRepeat: 0,
-                contractType: 'stars',
-                formDate: '',
-                scheduleShow: [],
-                priorityArr: config.priorityArr,
-                scheduleStartTime: '',
-                scheduleEndTime: '',
-                toastShow: false,
-                toastX: 0,
-                toastY: 0,
-                projectContractDefault: '',
-                taskDate: {},
-                scheduleRemind: '',
-                conditionLength: 0,
-                selectorHidden: [],
-                isCancel: false,
-                scheduleRemindDate: [],
-                isDetail: true,
-                isAddScheduleButtonDisable: false,
-                isAddWorkButtonDisable: false,
-            };
+export default {
+  data() {
+    return {
+      common,
+      artistId: '',
+      artistName: '',
+      artistInfo: {},
+      taskTypeArr: [],
+      taskLevelArr: config.taskLevelArr,
+      attachmentTypeArr: config.attachmentTypeArr,
+      taskType: '',
+      startTime: '',
+      startMinutes: '00:00',
+      endTime: '',
+      endMinutes: '00:00',
+      taskIntroduce: '',
+      artistTasksInfo: [], // 任务
+      artistWorksInfo: [], // 作品库
+      artistProjectsInfo: '', // 项目
+      artistWorkName: '', // 作品名称
+      artistWorkDirector: '', // 导演名称
+      artistBillsInfo: [], // 账单
+      workReleaseTime: '',
+      workTypeArr: config.workTypeArr,
+      workType: '',
+      character: '',
+      coActor: '',
+      isEdit: '',
+      genderArr: config.genderArr,
+      artistDesc: '',
+      artistSourceArr: config.artistSourceArr,
+      taiyangCommunicationStatusArr: config.taiyangCommunicationStatusArr,
+      yesOrNoArr: config.yesOrNoArr,
+      signState: config.signState,
+      changeArtistInfo: {},
+      artistSocialPlatform: [
+        {
+          value: 1,
+          name: '微博',
         },
-
-        created() {
-            this.getArtist();
+        {
+          value: 2,
+          name: '百科',
         },
-        components: {
-            ApprovalGreatModule,
+        {
+          value: 3,
+          name: '抖音',
         },
-        mounted() {
-            this.getTaskType();
-            this.getCalendar();
-            this.draw();
-            this.getArtistsBill();
-            this.getTaskDate();
-            this.getProjectList();
-            this.selectProjectLinkage();
-            this.getResources();
-            this.user = JSON.parse(Cookies.get('user'));
-            this.$store.commit('changeNewPrincipal', {
-                name: this.user.nickname,
-                id: this.user.id,
-            });
-            const _this = this;
-            $('#distributionBroker').on('hidden.bs.modal', () => {
-                _this.$store.commit('changeParticipantsInfo', []);
-            });
-            $('#changeSchedule').on('hidden.bs.modal', () => {
-                _this.initAddScheduleModal();
-            });
+        {
+          value: 4,
+          name: '其他',
         },
-
-        methods: {
-
-            // 获取艺人信息
-            getArtist() {
-                this.artistId = this.$route.params.id;
-
-                const data = {
-                    include: 'publicity,broker,creator,tasks,affixes,trails.project.principal,works,trails.client,relate_project_bills_resource,',
-                };
-                let _this = this;
-                fetch('get', '/stars/' + this.artistId, data).then(function (response) {
-                    _this.artistInfo = response.data;
-                    if(response.data.star_risk_point == "privacy"){
-                         _this.artistInfo.star_risk_point = '**'
-                        
-                    }else{
-                         _this.artistInfo.star_risk_point = response.data.star_risk_point
-                    }
-                    _this.uploadUrl = _this.artistInfo.avatar
-                    // _this.artistProjectsInfo = []
-                    _this.artistTasksInfo = response.data.tasks.data//任务数据
-
-                    _this.artistWorksInfo = response.data.works.data//作品数据
-                    _this.affixes = response.data.affixes.data
-                    _this.isLoading = false
-                })
-
-            },
-            getProject(page = 1) {
-                fetch('get', `/stars/${this.artistId}/project`, {page}).then(response => {
-                    this.artistProjectsInfo = response.data;
-                    this.current_page = response.meta.pagination.current_page;
-                    this.total = response.meta.pagination.total;
-                    this.total_pages = response.meta.pagination.total_pages;
-                });
-            },
-            getWoks() {
-                fetch('get', `/stars/${this.artistId}/works`).then(response => {
-                    this.artistWorksInfo = response.data;
-                    this.current_page = response.meta.pagination.current_page;
-                    this.total = response.meta.pagination.total;
-                    this.total_pages = response.meta.pagination.total_pages;
-                });
-            },
-            getCalendar() {
-                this.artistId = this.$route.params.id;
-
-
-                const data = {
-                    include: 'calendar,schedule,schedule.creator',
-                };
-                fetch('get', `/stars/${this.artistId}`, data).then(response => {
-                    if (response.data.calendar) {
-                        this.calendarId.push(response.data.calendar.data.id);
-                        this.calendarName = response.data.calendar.data.title;
-                    }
-                    // 日程展示
-                    if (response.data.schedule) {
-                        for (let i = 0; i < response.data.schedule.data.length; i++) {
-                            this.scheduleShow.push(response.data.schedule.data[i]);
-                        }
-                    }
-                });
-            },
-
-            ScheduleBox(value) {
-                this.showScheduleModal(value);
-            },
-            /* 查看日历详情 --添加日历 -- 修改日历 */
-
-            // 获取日历详情
-            showScheduleModal(schedule) {
-                const data = {
-                    include: 'calendar,participants,creator,material,affixes,project,task',
-                };
-                fetch('get', `/schedules/${schedule.id}`, data).then((response) => {
-                    if (!response) {
-                        this.scheduleData = schedule;
-                        this.noPermission = true;
-                        return;
-                    }
-                    this.noPermission = false;
-                    this.scheduleData = response.data;
-                    this.scheduleParticipants = JSON.parse(JSON.stringify(response.data.participants.data));
-                    this.$store.dispatch('changeParticipantsInfo', {data: response.data.participants.data});
-                });
-                $('#checkSchedule').modal('show');
-            },
-            addSchedule() {
-                let startTime = '';
-                let endTime = '';
-                if (this.isScheduleAllday) {
-                    startTime = this.startTime;
-                    endTime = this.endTime;
-                } else {
-                    startTime = `${this.startTime} ${this.startMinutes}`;
-                    endTime = `${this.endTime} ${this.endMinutes}`;
-
-                    if (startTime > endTime) {
-                        toastr.error('开始时间不能晚于截止时间');
-                        return;
-                    }
-
-                    if (this.startTime === this.endTime) {
-                        const startMinutesArr = this.startMinutes.split(':');
-                        const endMinutesArr = this.endMinutes.split(':');
-                        if (startMinutesArr[0] === endMinutesArr[0]) {
-                            if ((Number(endMinutesArr[1]) - Number(startMinutesArr[1])) < 30) {
-                                toastr.error('日程时间不能小于30分钟');
-                                return;
-                            }
-                        }
-                    }
-                }
-                this.isAddScheduleButtonDisable = true;
-                const data = {
-                    title: this.scheduleName,
-                    calendar_id: this.calendarId[0],
-                    is_allday: this.isScheduleAllday,
-                    privacy: Number(this.schedulePrivacy),
-                    start_at: startTime,
-                    end_at: endTime,
-                    repeat: this.scheduleRepeat,
-                    desc: this.eventDesc,
-                };
-                if (this.eventPlace) {
-                    data.position = this.eventPlace;
-                }
-                if (this.scheduleMaterialId) {
-                    data.material_id = this.scheduleMaterialId;
-                }
-                if (this.$store.state.newParticipantsInfo) {
-                    data.participant_ids = [];
-                    const newParticipantsInfo = this.$store.state.newParticipantsInfo;
-                    for (let i = 0; i < newParticipantsInfo.length; i++) {
-                        data.participant_ids.push(newParticipantsInfo[i].id);
-                    }
-                }
-                if (this.linkageSelectedIds.projects.length > 0) {
-                    data.project_ids = this.linkageSelectedIds.projects;
-                }
-                if (this.linkageSelectedIds.tasks.length > 0) {
-                    data.task_ids = this.linkageSelectedIds.tasks;
-                }
-                fetch('post', '/schedules', data).then(() => {
-                    this.isAddScheduleButtonDisable = false;
-                    this.$refs.calendar.refresh();
-                    $('#changeSchedule').modal('hide');
-                    toastr.success('添加成功');
-                });
-            },
-            showToast(clientX, clientY) {
-                this.toastX = clientX - 100;
-                this.toastY = clientY - 25;
-                this.toastShow = true;
-                setTimeout(() => {
-                    this.toastShow = false;
-                }, 1000);
-            },
-            changeSchedule() {
-                let startTime = '';
-                let endTime = '';
-                if (this.isScheduleAllday) {
-                    startTime = this.startTime;
-                    endTime = this.endTime;
-                } else {
-                    startTime = `${this.startTime} ${this.startMinutes}`;
-                    endTime = `${this.endTime} ${this.endMinutes}`;
-                }
-                const data = {
-                    title: this.scheduleName,
-                    calendar_id: this.scheduleCalendar,
-                    is_allday: this.isScheduleAllday,
-                    privacy: Number(this.schedulePrivacy),
-                    start_at: startTime,
-                    end_at: endTime,
-                    repeat: this.scheduleRepeat,
-                    desc: this.eventDesc,
-                    material_id: this.scheduleMaterialId,
-                };
-                if (this.eventPlace) {
-                    data.position = this.eventPlace;
-                }
-
-                data.participant_del_ids = [];
-                data.participant_ids = [];
-                const flagInfo = this.$store.state.newParticipantsInfo;
-                for (let i = 0; i < this.scheduleParticipants.length; i++) {
-                    if (flagInfo.map(item => item.id).indexOf(this.scheduleParticipants[i].id) === -1) {
-                        data.participant_del_ids.push(this.scheduleParticipants[i].id);
-                    }
-                }
-                for (let i = 0; i < flagInfo.length; i++) {
-                    if (this.scheduleParticipants.map(item => item.id).indexOf(flagInfo[i].id) === -1) {
-                        data.participant_ids.push(flagInfo[i].id);
-                    }
-                }
-
-                if (this.linkageSelectedIds.projects.length > 0) {
-                    data.project_ids = this.linkageSelectedIds.projects;
-                }
-                if (this.linkageSelectedIds.tasks.length > 0) {
-                    data.task_ids = this.linkageSelectedIds.tasks;
-                }
-
-                fetch('put', `/schedules/${this.scheduleData.id}`, data).then(() => {
-                    this.$refs.calendar.refresh();
-                    $('#changeSchedule').modal('hide');
-                    toastr.success('修改成功');
-                });
-            },
-            taskcancel() {
-                this.getTaskList();
-                this.getArtist();
-                this.setDefaultPrincipal();
-                this.$store.state.newParticipantsInfo = [];
-                this.taskType = '';
-                this.taskName = '';
-                this.taskLevel = '';
-                this.startTime = '';
-                this.endTime = '';
-                this.startMinutes = '';
-                this.endMinutes = '';
-                this.taskIntroduce = '';
-                this.$refs.taskType.setValue('');
-                this.$refs.taskStartTime.setValue('0');
-                this.$refs.taskStartDate.setValue('');
-                this.$refs.taskEndDate.setValue('');
-                this.$refs.taskEndTime.setValue('0');
-                this.$refs.taskLevel.setValue('');
-            },
-            selectScheduleCalendar(value) {
-                this.scheduleCalendar = value;
-            },
-            changeIsAllDay(e) {
-                this.isScheduleAllday = Number(e.target.checked);
-            },
-            showAddScheduleModal(date) {
-                if (this.calendarId.length > 0) {
-                    this.$refs.scheduleStartDate.setValue(date);
-                    this.$refs.scheduleEndDate.setValue(date);
-                    this.startTime = date;
-                    this.endTime = date;
-                    $('#changeSchedule').modal('show');
-                } else {
-                    toastr.error('该艺人无对应艺人日历，请先创建艺人日历');
-                }
-            },
-            selectProjectLinkage(value) {
-                if (!this.allProjectsInfo) {
-                    this.getAllProjects();
-                }
-                if (!this.allTasksInfo) {
-                    this.getAllTasks();
-                }
-            },
-            getAllProjects() {
-                fetch('get', '/projects/all').then((response) => {
-                    this.allProjectsInfo = response.data;
-                });
-            },
-            getAllTasks() {
-                fetch('get', '/tasksAll').then((response) => {
-                    this.allTasksInfo = response.data;
-                });
-            },
-            addLinkageResource() {
-                $('#addLinkage').modal('hide');
-            },
-            selectResource(type, value) {
-                const index = this.linkageSelectedIds[type].indexOf(value);
-                if (index > -1) {
-                    this.linkageSelectedIds[type].splice(index, 1);
-                } else {
-                    this.linkageSelectedIds[type].push(value);
-                }
-            },
-            delNewScheduleLinkage(type, value) {
-                const index = this.linkageSelectedIds[type].indexOf(value);
-                this.linkageSelectedIds[type].splice(index, 1);
-            },
-            changeCalendarColor(value) {
-                this.checkColor = value;
-            },
-            getResources(type) {
-                let data = {};
-                if (type) {
-                    data = {
-                        type,
-                    };
-                }
-                fetch('get', '/materials/all', data).then((response) => {
-                    if (type) {
-                        this.meetingRomeList = response.data;
-                    } else {
-                        this.allMeetingRomeList = response.data;
-                    }
-                });
-            },
-            changeScheduleRepeat(value) {
-                this.scheduleRepeat = value;
-            },
-            isShowMore() {
-                this.showMore = !this.showMore;
-            },
-            changeScheduleMaterial(value) {
-                this.scheduleMaterialId = value;
-            },
-            fileUpload(url, name, size) {
-                const data = {
-                    title: name,
-                    url,
-                    size,
-                    type: 1,
-                };
-                fetch('post', `/schedules/${this.scheduleData.id}/affix`, data).then((response) => {
-                    toastr.success('上传成功');
-                    if (this.scheduleData.affixes) {
-                        this.scheduleData.affixes.data.push(response.data);
-                    } else {
-                        this.scheduleData.affixes = {data: []};
-                        this.scheduleData.affixes.data.push(response.data);
-                    }
-                });
-            },
-            changeScheduleParticipants(value) {
-                const data = {};
-                if (value) {
-                    data.participant_del_ids = [value];
-                } else {
-                    const participantsInfo = this.$store.state.newParticipantsInfo;
-                    data.participant_ids = [];
-                    data.participant_del_ids = [];
-                    for (let i = 0; i < participantsInfo.length; i++) {
-                        if (this.scheduleParticipants.map(item => item.id).indexOf(participantsInfo[i].id) === -1) {
-                            data.participant_ids.push(participantsInfo[i].id);
-                        }
-                    }
-                    for (let i = 0; i < this.scheduleParticipants.length; i++) {
-                        if (participantsInfo.map(item => item.id).indexOf(this.scheduleParticipants[i].id) === -1) {
-                            data.participant_del_ids.push(this.scheduleParticipants[i].id);
-                        }
-                    }
-                }
-                fetch('put', `/schedules/${this.scheduleData.id}`, data).then(() => {
-                    this.$refs.calendar.refresh();
-                    this.scheduleParticipants = JSON.parse(JSON.stringify(this.$store.state.newParticipantsInfo));
-                });
-            },
-            changeScheduleType(type) {
-                this.scheduleType = type;
-                $('#checkSchedule').modal('hide');
-                setTimeout(() => {
-                    $('#changeSchedule').modal('show');
-                }, 400);
-                if (type === 'edit') {
-                    this.scheduleName = this.scheduleData.title;
-                    this.scheduleCalendar = this.scheduleData.calendar.data.id;
-                    this.$refs.scheduleStartDate.setValue(this.scheduleData.start_at.split(' ')[0]);
-                    const startMinutes = this.scheduleData.start_at.split(' ')[1].split(':');
-                    this.$refs.scheduleStartMinute.setValue(startMinutes);
-                    this.startTime = this.scheduleData.start_at.split(' ')[0];
-                    this.startMinutes = `${startMinutes[0]}:${startMinutes[1]}`;
-                    this.$refs.scheduleEndDate.setValue(this.scheduleData.end_at.split(' ')[0]);
-                    const endMinutes = this.scheduleData.end_at.split(' ')[1].split(':');
-                    this.$refs.scheduleEndMinute.setValue(endMinutes);
-                    this.endTime = this.scheduleData.end_at.split(' ')[0];
-                    this.endMinutes = `${endMinutes[0]}:${endMinutes[1]}`;
-                    this.isAllday = this.scheduleData.is_allday;
-                    this.eventDesc = this.scheduleData.desc;
-                    this.eventPlace = this.scheduleData.position;
-                    this.$store.dispatch('changeParticipantsInfo', {data: this.scheduleData.participants.data});
-                    if (this.scheduleData.material) {
-                        this.$refs.scheduleResource.setValue(this.scheduleData.material.data.id);
-                        this.scheduleMaterialId = this.scheduleData.material.data.id;
-                    }
-                    if (this.scheduleData.project.data.length > 0) {
-                        this.linkageSelectedIds.projects = [];
-                        for (let i = 0; i < this.scheduleData.project.data.length; i++) {
-                            this.linkageSelectedIds.projects.push(this.scheduleData.project.data[i].moduleable_id);
-                        }
-                    }
-                    if (this.scheduleData.task.data.length > 0) {
-                        this.linkageSelectedIds.tasks = [];
-                        for (let i = 0; i < this.scheduleData.task.data.length; i++) {
-                            this.linkageSelectedIds.tasks.push(this.scheduleData.task.data[i].moduleable_id);
-                        }
-                    }
-                }
-            },
-            deleteToastr(type, calendar = null) {
-                this.delType = type;
-                if (calendar) {
-                    this.delCalendarInfo = calendar;
-                }
-                if (type === 'schedule') {
-                    $('#checkSchedule').modal('hide');
-                }
-            },
-            deleteSchedule() {
-                fetch('delete', `/schedules/${this.scheduleData.id}`).then(() => {
-                    $('#delModel').modal('hide');
-                    toastr.success('删除成功');
-                    this.$refs.calendar.refresh();
-                });
-            },
-            changeScheduleRemind(value) {
-                this.scheduleRemind = value;
-            },
-            initAddScheduleModal() {
-                this.showMore = false;
-                this.$store.dispatch('changeParticipantsInfo', {data: []});
-                this.scheduleName = '';
-                this.scheduleCalendar = '';
-                this.isScheduleAllday = 0;
-                this.privacy = 1;
-                this.startTime = '';
-                this.startMinutes = '00:00';
-                this.endTime = '';
-                this.endMinutes = '00:00';
-                this.eventPlace = '';
-                this.scheduleRepeat = 0;
-                this.scheduleMaterialId = '';
-                this.eventDesc = '';
-                this.isAllday = false;
-                this.schedulePrivacy = false;
-                this.scheduleType = 'add';
-                this.linkageSelectedIds = {
-                    projects: [],
-                    tasks: [],
-                };
-                this.$refs.scheduleStartDate.setValue('');
-                this.$refs.scheduleEndDate.setValue('');
-                this.$refs.scheduleStartMinute.setValue('0');
-                this.$refs.scheduleEndMinute.setValue('0');
-                this.$refs.scheduleResource.setValue('');
-                this.$refs.scheduleRepeat.setValue('0');
-                // this.$refs.scheduleNotice.setValue('0');
-                this.$refs.scheduleRemind.setValue('0');
-                // this.this.scheduleRemindDate = []
-            },
-            /* 查看日历详情 --添加日历 -- 修改日历 --结束 */
-
-            // 获取账单
-            getArtistsBill(page = 1, expense_type) {
-                if (expense_type) {
-                    this.expense_type = expense_type;
-                } else {
-                    this.expense_type = 0;
-                }
-                fetch('get', `/stars/${this.$route.params.id}/bill`, {
-                    page,
-                    expense_type: this.expense_type,
-                }).then(response => {
-                    this.artistBillsInfo = response.data;
-                    this.current_page = response.meta.pagination.current_page;
-                    this.total = response.meta.pagination.total;
-                    this.total_pages = response.meta.pagination.total_pages;
-                    if (response.meta.incomesum) {
-                        this.incomesum = response.meta.incomesum.toFixed(2);// 收入总和
-                    }
-                    if (response.meta.expendituresum) {
-                        this.expendituresum = response.meta.expendituresum.toFixed(2);// 支出总和
-                    }
-                });
-            },
-
-            getTaskType() {
-                fetch('get', '/task_types').then(response => {
-                    for (let i = 0; i < response.data.length; i++) {
-                        this.taskTypeArr.push({
-                            value: response.data[i].id,
-                            name: response.data[i].title,
-                        });
-                    }
-                });
-            },
-            // 获取任务列表
-            getTaskList(page = 1) {
-                fetch('get', `/stars/${this.$route.params.id}/tasks/`, {
-                    page,
-                }).then(response => {
-                    this.allTaskList = response.data;
-
-                    this.current_page = response.meta.pagination.current_page;
-                    this.total = response.meta.pagination.total;
-                    this.total_pages = response.meta.pagination.total_pages;
-                    response.data.forEach((item) => {
-                        if (item.status !== 2 && new Date(item.end_at).getTime() < new Date().getTime()) {
-                            item.status = 4;
-                        }
-                    });
-                });
-            },
-            getTaskDate() {
-                this.doneTaskNum = 0;
-                fetch('get', `/stars/${this.$route.params.id}/tasks`).then(response => {
-                    this.allTaskList = response.data;
-                    if (this.allTaskList.length > 0) {
-                        for (let i = 0; i < this.allTaskList.length; i++) {
-                            if (this.allTaskList[i].status == 2) {
-                                this.doneTaskNum += 1;
-                            }
-                        }
-                    }
-
-                    this.taskNum = `${this.doneTaskNum}/${response.meta.pagination.total}`;
-                });
-            },
-            selectDate(value) {
-                this.selectedDate = value;
-                this.$refs.meetingRoom.setDate(value);
-            },
-            // 获取三个项目
-            getProjectList() {
-                fetch('get', `/projects/star/${this.$route.params.id}`).then(response => {
-                    this.threeProjectList = response;
-                });
-            },
-            // 粉丝数据
-            draw() {
-                const myChart = echarts.init(document.getElementById('myChart'));
-
-                // 指定图表的配置项和数据
-                const option = {
-                    title: {
-                        text: '粉丝统计',
-                    },
-                    tooltip: {
-                        trigger: 'axis',
-                    },
-                    legend: {
-                        data: ['微博', '百科', '抖音', '其他'],
-                    },
-                    grid: {
-                        left: '3%',
-                        right: '5%',
-                        bottom: '3%',
-                        containLabel: true,
-                    },
-                    toolbox: {
-                        feature: {
-                            saveAsImage: {
-                                show: true,
-                                title: '保存',
-                                iconStyle: {
-                                    textPosition: 10000,
-                                    textAlign: 'left',
-                                },
-
-                            },
-                        },
-                    },
-                    xAxis: {
-                        type: 'category',
-                        boundaryGap: false,
-                        data: ['2018', '2017', '2016', '2015', '2014', '2013', '2012'],
-                    },
-                    yAxis: {
-                        type: 'value',
-                    },
-                    series: [
-                        {
-                            name: '微博',
-                            type: 'line',
-                            stack: '总量',
-                            data: [120, 132, 101, 134, 90, 230, 210],
-                        },
-                        {
-                            name: '百科',
-                            type: 'line',
-                            stack: '总量',
-                            data: [220, 182, 191, 234, 290, 330, 310],
-                        },
-                        {
-                            name: '抖音',
-                            type: 'line',
-                            stack: '总量',
-                            data: [150, 232, 201, 154, 190, 330, 410],
-                        },
-                        {
-                            name: '其他',
-                            type: 'line',
-                            stack: '总量',
-                            data: [320, 332, 301, 334, 390, 330, 320],
-                        },
-                    ],
-                };
-
-                // 使用刚指定的配置项和数据显示图表。
-                myChart.setOption(option);
-            },
-
-            run(res, callback) {
-                this.changeArtistBaseInfo(res, 'avatar');
-                return callback();
-            },
-            // 上传头像 ---修改头像
-            getUploadUrl(res) {
-                if (!this.isEdit) {
-                    this.changeArtistInfo = {};
-                }
-                this.uploadUrl = res;
-                this.run(res, () => {
-                    this.changeArtist();
-                });
-            },
-            changeTaskType(value) {
-                this.taskType = value;
-            },
-
-            changeTaskLevel(value) {
-                this.taskLevel = value;
-            },
-
-            changeStartTime(value) {
-                this.startTime = value;
-            },
-
-            changeStartMinutes(value) {
-                this.startMinutes = value;
-            },
-
-            changeEndTime(value) {
-                this.endTime = value;
-            },
-
-            changeEndMinutes(value) {
-                this.endMinutes = value;
-            },
-
-            // 添加任务
-            addTask(response) {
-                this.allTaskList.push(response.data);
-            },
-            // 设置默认负责人
-            setDefaultPrincipal() {
-                this.$store.commit('changeNewPrincipal', {
-                    name: this.user.nickname,
-                    id: this.user.id,
-                });
-                this.$store.commit('changeNewParticipantsInfo', []);
-            },
-            // 添加作品
-            addWork() {
-                if (!this.artistWorkName) {
-                    toastr.error('请填写作品名称');
-                    return false;
-                }
-                if (!this.workReleaseTime) {
-                    toastr.error('请选择作品发布时间');
-                    return false;
-                }
-                if (!this.workType) {
-                    toastr.error('请选择作品类型');
-                    return false;
-                }
-                if (!this.character) {
-                    toastr.error('请选择角色');
-                    return false;
-                }
-                if (!this.coActor) {
-                    toastr.error('请填写合作演员');
-                    return false;
-                }
-                this.isAddWorkButtonDisable = true;
-                const data = {
-                    name: this.artistWorkName,
-                    director: this.artistWorkDirector,
-                    role: this.character,
-                    co_star: this.coActor,
-                    release_time: this.workReleaseTime,
-                    works_type: this.workType,
-                };
-                fetch('post', `/stars/${this.$route.params.id}/works`, data).then(response => {
-                    toastr.success('新增成功');
-                    $('#addWork').modal('hide');
-                    this.isAddWorkButtonDisable = false;
-                    this.artistWorksInfo.push(response.data);
-                    this.artistWorkName = '';
-                    this.artistWorkDirector = '';
-                    this.character = '';
-                    this.coActor = '';
-                    this.workReleaseTime = '';
-                    this.workType = '';
-                    this.$refs.workType.setValue('');
-                    this.$refs.workTime.setValue('');
-                });
-            },
-
-            addPrivacy() {
-                $('#addPrivacy').modal('hide');
-                this.$store.state.collectInfo = [];
-                this.$store.state.payInfo = [];
-                this.$store.state.contractInfo = [];
-                this.$store.state.divisionInfo = [];
-                this.$store.state.incubationInfo = [];
-                this.$store.state.billInfo = [];
-            },
-
-            changeWorkReleaseTime(value) {
-                this.workReleaseTime = value;
-            },
-
-            changeWorkType(value) {
-                this.workType = value;
-            },
-
-            editBaseInfo() {
-                if (this.$store.state.power.star !== 'true') {
-                    toastr.error('当前用户没有权限编辑艺人');
-                    return;
-                }
-                this.isEdit = true;
-                this.changeArtistInfo = {};
-            },
-
-            cancelEdit() {
-                this.isEdit = false;
-            },
-            // 修改基本信息
-            changeArtistBaseInfo(value, name) {
-                if (name === 'platform') {
-                    value = value.join(',');
-                }
-
-                if (name === 'broker_id') {
-                    if (value) {
-                        value = this.$store.state.principalInfo.id;
-                    } else {
-                        return;
-                    }
-                } else if (name === 'intention') {
-                    if (value.key === 'value') {
-                        name = 'intention_desc';
-                    }
-                    if (value.key === 'condition') {
-                        name = 'intention';
-                    }
-                    value = value.value;
-                } else if (name === 'sign_contract_other') {
-                    if (value.key === 'value') {
-                        name = 'sign_contract_other_name';
-                    }
-                    if (value.key === 'condition') {
-                        name = 'sign_contract_other';
-                    }
-                    value = value.value;
-                }
-                this.changeArtistInfo[name] = value;
-            },
-
-            changeArtist() {
-                if (this.changeArtistInfo.intention || this.changeArtistInfo.hasOwnProperty('intention_desc')) {
-                    if (this.$refs.condition.getSelectorValue() == 2) {
-                        if (!this.changeArtistInfo.intention_desc) {
-                            toastr.error('请填写不签约理由');
-                            return false;
-                        }
-                    } else {
-                        this.changeArtistInfo.intention_desc = '';
-                    }
-                }
-                if (this.changeArtistInfo.sign_contract_other || this.changeArtistInfo.hasOwnProperty('sign_contract_other_name')) {
-                    if (this.$refs.condition1.getSelectorValue() == 1) {
-                        if (!this.changeArtistInfo.sign_contract_other_name) {
-                            toastr.error('请输入已签约公司名称');
-                            return false;
-                        }
-                    } else {
-                        this.changeArtistInfo.sign_contract_other_name;
-                    }
-                }
-
-                if (JSON.stringify(this.changeArtistInfo) === '{}') {
-                    this.isEdit = false;
-                    return;
-                }
-                const _this = this;
-                fetch('put', `/stars/${this.artistId}`, this.changeArtistInfo).then((response) => {
-                    toastr.success('修改成功');
-                    if (_this.isEdit) {
-                        _this.isEdit = false;
-                    }
-                    _this.getArtist();
-                });
-            },
-
-            distributionPerson(value) {
-                this.distributionType = value;
-                if (this.artistInfo[value].data.length > 0) {
-                    this.$store.state.participantsInfo = Object.assign([], this.artistInfo[value].data);
-                }
-            },
-            // 分配经理人和分配宣传人
-            addDistributionPerson() {
-                let toast,
-                    url;
-                const data = {
-                    person_ids: [],
-                    del_person_ids: [],
-                };
-
-
-                const personInfo = this.$store.state.participantsInfo;
-                const oldPersonInfo = this.artistInfo[this.distributionType].data;
-                // todo 删除和新增的数据有问题
-                if (this.artistInfo[this.distributionType].data.length > 0) {
-                    for (let i = 0; i < this.artistInfo[this.distributionType].data.length; i++) {
-                        if (personInfo.map(item => item.id).indexOf(this.artistInfo[this.distributionType].data[i].id) === -1) {
-                            data.del_person_ids.push(this.artistInfo[this.distributionType].data[i].id);
-                        }
-                    }
-                }
-                for (let i = 0; i < this.$store.state.participantsInfo.length; i++) {
-                    data.person_ids.push(this.$store.state.participantsInfo[i].id);
-                }
-
-                if (this.distributionType === 'broker') {
-                    // data.type = 3
-                    toast = '分配经理人成功',
-                        url = `stars/${this.artistId}/broker`;
-                } else {
-                    // data.type = 2
-                    toast = '分配宣传人成功';
-                    url = `stars/${this.artistId}/publicity`;
-                }
-                const _this = this;
-                fetch('post', url, data).then((response) => {
-                    toastr.success(toast);
-                    $('#distributionBroker').modal('hide');
-                    _this.getArtist();
-                    _this.$store.state.participantsInfo = [];
-                });
-            },
-            // 获取附件类型
-            changeAttachmentType(value) {
-                this.affixesType = value;
-            },
-            // 上传附件
-            uploadAttachment(url, name, size) {
-                if (!this.affixesType) {
-                    toastr.error('请选择上传附件类型');
-                    return false;
-                }
-
-                // 删除已存在的数据
-                for (let i = 0; i < this.affixes.length; i++) {
-                    if (this.affixes[i].type == this.affixesType) {
-                        this.affixes.splice(i, 1);
-                    }
-                }
-                // 添加新的数据
-                this.affixes.push({
-                    title: name,
-                    size,
-                    url,
-                    type: this.affixesType,
-                });
-                this.changeArtistBaseInfo(this.affixes, 'affix');
-            },
-            // 获取附件id
-            getAffixId(id) {
-                this.affixId = id;
-            },
-            previewFile(url, name) {
-                this.previewUrl = url;
-                this.previewName = name;
-            },
-            // 删除附件
-            deleteAffix() {
-                const _this = this;
-                fetch('delete', `/star/${this.$route.params.id}/affixes/${this.affixId}`).then((response) => {
-                    $('#affix').modal('hide');
-                    toastr.success('删除成功');
-                    _this.isEdit = false;
-                    _this.getArtist();
-                });
-            },
-            contractlist(status) {
-                this.isDetail = false;
-                const _this = this;
-                this.isDetail = false;
-                const data = {
-                    type: this.contractType,
-                };
-                data.status = status;
-                fetch('get', 'approvals/specific_contract', data).then((response) => {
-                    _this.formDate = response.data;
-                    $('#approval-great-module').modal('show');
-                });
-            },
-            filterProjectFee(value) {
-                this.filterFee = value;
-            },
-            toProject(id) {
-                this.$router.push({path: `/projects/${id}`});
-            },
-            toTask(id) {
-                this.$router.push({path: `/tasks/${id}`});
-            },
-
-        },
-        filters: {
-            getWeek(date) {
-                const week = new Date(date).getDay();
-                let value = '';
-                switch (week) {
-                    case 0:
-                        value = '周日';
-                        break;
-                    case 1:
-                        value = '周一';
-                        break;
-                    case 2:
-                        value = '周二';
-                        break;
-                    case 3:
-                        value = '周三';
-                        break;
-                    case 4:
-                        value = '周四';
-                        break;
-                    case 5:
-                        value = '周五';
-                        break;
-                    case 6:
-                        value = '周六';
-                        break;
-                }
-                return value;
-            },
-            jsGetAge(strBirthday) {
-                if (strBirthday) {
-                    let returnAge;
-                    // 根据生日计算年龄（"1995-09-25"）
-                    // 以下五行是为了获取出生年月日，如果是从身份证上获取需要稍微改变一下
-                    const strBirthdayArr = strBirthday.split('-');
-                    const birthYear = strBirthdayArr[0];
-                    const birthMonth = strBirthdayArr[1];
-                    const birthDay = strBirthdayArr[2];
-
-                    const d = new Date();
-                    const nowYear = d.getFullYear();
-                    const nowMonth = d.getMonth() + 1;
-                    const nowDay = d.getDate();
-
-                    if (nowYear == birthYear) {
-                        returnAge = 0;// 同年 则为0岁
-                    } else {
-                        const ageDiff = nowYear - birthYear; // 年之差
-                        if (ageDiff > 0) {
-                            if (nowMonth == birthMonth) {
-                                const dayDiff = nowDay - birthDay;// 日之差
-                                if (dayDiff < 0) {
-                                    returnAge = ageDiff - 1;
-                                } else {
-                                    returnAge = ageDiff;
-                                }
-                            } else {
-                                const monthDiff = nowMonth - birthMonth;// 月之差
-                                if (monthDiff < 0) {
-                                    returnAge = ageDiff - 1;
-                                } else {
-                                    returnAge = ageDiff;
-                                }
-                            }
-                        } else {
-                            returnAge = -1;// 返回-1 表示出生日期输入错误 晚于今天
-                        }
-                    }
-                    return returnAge;// 返回周岁年龄
-                }
-                return strBirthday;
-            },
-        },
+      ],
+      distributionType: '',
+      affixes: [], // 附件
+      affixesType: '', // 附件类型
+      affixId: '',
+      taskNum: '',
+      doneTaskNum: 0,
+      filterFee: 1,
+      avatar: '',
+      selectedDate: '',
+      scheduleData: '',
+      scheduleParticipants: [],
+      previewUrl: '',
+      previewName: '',
+      user: {},
+      total: 0,
+      current_page: 1,
+      total_pages: 1,
+      allTaskList: [], // 获取任务列表
+      threeProjectList: [], // 获取三个项目
+      expense_type: 0,
+      incomesum: 0, // 账单 -- 收入总和
+      expendituresum: 0, // 账单 -- 支出总和
+      isLoading: true,
+      uploadUrl: '',
+      calendarId: [], // 艺人关联日历id
+      scheduleType: 'add',
+      scheduleName: '',
+      calendarList: [],
+      scheduleCalendar: '',
+      isAllday: false,
+      isScheduleAllday: 0,
+      linkageSelectedIds: {
+        projects: [],
+        tasks: [],
+      },
+      showMore: false,
+      searchKeyWord: '',
+      allProjectsInfo: '',
+      allTasksInfo: '',
+      colorArr: config.colorArr,
+      checkColor: '',
+      allMeetingRomeList: '',
+      remindArr: config.remindArr,
+      repeatArr: config.repeatArr,
+      eventPlace: '',
+      eventDesc: '',
+      schedulePrivacy: false,
+      scheduleMaterialId: '',
+      noPermission: false,
+      delType: '',
+      calendarName: '',
+      scheduleRepeat: 0,
+      contractType: 'stars',
+      formDate: '',
+      scheduleShow: [],
+      priorityArr: config.priorityArr,
+      scheduleStartTime: '',
+      scheduleEndTime: '',
+      toastShow: false,
+      toastX: 0,
+      toastY: 0,
+      projectContractDefault: '',
+      taskDate: {},
+      scheduleRemind: '',
+      conditionLength: 0,
+      selectorHidden: [],
+      isCancel: false,
+      scheduleRemindDate: [],
+      isDetail: true,
+      isAddScheduleButtonDisable: false,
+      isAddWorkButtonDisable: false,
     };
+  },
+
+  created() {
+    this.getArtist();
+  },
+  components: {
+    ApprovalGreatModule,
+  },
+  mounted() {
+    this.getTaskType();
+    this.getCalendar();
+    this.draw();
+    this.getArtistsBill();
+    this.getTaskDate();
+    this.getProjectList();
+    this.selectProjectLinkage();
+    this.getResources();
+    this.user = JSON.parse(Cookies.get('user'));
+    this.$store.commit('changeNewPrincipal', {
+      name: this.user.nickname,
+      id: this.user.id,
+    });
+    const _this = this;
+    $('#distributionBroker').on('hidden.bs.modal', () => {
+      _this.$store.commit('changeParticipantsInfo', []);
+    });
+    $('#changeSchedule').on('hidden.bs.modal', () => {
+      _this.initAddScheduleModal();
+    });
+  },
+
+  methods: {
+
+    // 获取艺人信息
+    getArtist() {
+      this.artistId = this.$route.params.id;
+
+      const data = {
+        include: 'publicity,broker,creator,tasks,affixes,trails.project.principal,works,trails.client,relate_project_bills_resource,',
+      };
+      fetch('get', `/stars/${this.artistId}`, data).then((response) => {
+        this.artistInfo = response.data;
+        this.artistName = response.data.name;
+        if (response.data.star_risk_point == 'privacy') {
+          this.artistInfo.star_risk_point = '**';
+        } else {
+          this.artistInfo.star_risk_point = response.data.star_risk_point;
+        }
+
+        this.uploadUrl = this.artistInfo.avatar;
+        this.artistTasksInfo = response.data.tasks.data;// 任务数据
+        this.artistWorksInfo = response.data.works.data;// 作品数据
+        this.affixes = response.data.affixes.data;
+        this.isLoading = false;
+      });
+    },
+    getProject(page = 1) {
+      fetch('get', `/stars/${this.artistId}/project`, { page }).then((response) => {
+        this.artistProjectsInfo = response.data;
+        this.current_page = response.meta.pagination.current_page;
+        this.total = response.meta.pagination.total;
+        this.total_pages = response.meta.pagination.total_pages;
+      });
+    },
+    getWoks() {
+      fetch('get', `/stars/${this.artistId}/works`).then((response) => {
+        this.artistWorksInfo = response.data;
+        this.current_page = response.meta.pagination.current_page;
+        this.total = response.meta.pagination.total;
+        this.total_pages = response.meta.pagination.total_pages;
+      });
+    },
+    getCalendar() {
+      this.artistId = this.$route.params.id;
+
+
+      const data = {
+        include: 'calendar,schedule,schedule.creator',
+      };
+      fetch('get', `/stars/${this.artistId}`, data).then((response) => {
+        if (response.data.calendar) {
+          this.calendarId.push(response.data.calendar.data.id);
+          this.calendarName = response.data.calendar.data.title;
+        }
+        // 日程展示
+        if (response.data.schedule) {
+          for (let i = 0; i < response.data.schedule.data.length; i++) {
+            this.scheduleShow.push(response.data.schedule.data[i]);
+          }
+        }
+      });
+    },
+
+    ScheduleBox(value) {
+      this.showScheduleModal(value);
+    },
+    /* 查看日历详情 --添加日历 -- 修改日历 */
+
+    // 获取日历详情
+    showScheduleModal(schedule) {
+      const data = {
+        include: 'calendar,participants,creator,material,affixes,project,task',
+      };
+      fetch('get', `/schedules/${schedule.id}`, data).then((response) => {
+        if (!response) {
+          this.scheduleData = schedule;
+          this.noPermission = true;
+          return;
+        }
+        this.noPermission = false;
+        this.scheduleData = response.data;
+        this.scheduleParticipants = JSON.parse(JSON.stringify(response.data.participants.data));
+        this.$store.dispatch('changeParticipantsInfo', { data: response.data.participants.data });
+      });
+      $('#checkSchedule').modal('show');
+    },
+    addSchedule() {
+      let startTime = '';
+      let endTime = '';
+      if (this.isScheduleAllday) {
+        startTime = this.startTime;
+        endTime = this.endTime;
+      } else {
+        startTime = `${this.startTime} ${this.startMinutes}`;
+        endTime = `${this.endTime} ${this.endMinutes}`;
+
+        if (startTime > endTime) {
+          toastr.error('开始时间不能晚于截止时间');
+          return;
+        }
+
+        if (this.startTime === this.endTime) {
+          const startMinutesArr = this.startMinutes.split(':');
+          const endMinutesArr = this.endMinutes.split(':');
+          if (startMinutesArr[0] === endMinutesArr[0]) {
+            if ((Number(endMinutesArr[1]) - Number(startMinutesArr[1])) < 30) {
+              toastr.error('日程时间不能小于30分钟');
+              return;
+            }
+          }
+        }
+      }
+      this.isAddScheduleButtonDisable = true;
+      const data = {
+        title: this.scheduleName,
+        calendar_id: this.calendarId[0],
+        is_allday: this.isScheduleAllday,
+        privacy: Number(this.schedulePrivacy),
+        start_at: startTime,
+        end_at: endTime,
+        repeat: this.scheduleRepeat,
+        desc: this.eventDesc,
+      };
+      if (this.eventPlace) {
+        data.position = this.eventPlace;
+      }
+      if (this.scheduleMaterialId) {
+        data.material_id = this.scheduleMaterialId;
+      }
+      if (this.$store.state.newParticipantsInfo) {
+        data.participant_ids = [];
+        const newParticipantsInfo = this.$store.state.newParticipantsInfo;
+        for (let i = 0; i < newParticipantsInfo.length; i++) {
+          data.participant_ids.push(newParticipantsInfo[i].id);
+        }
+      }
+      if (this.linkageSelectedIds.projects.length > 0) {
+        data.project_ids = this.linkageSelectedIds.projects;
+      }
+      if (this.linkageSelectedIds.tasks.length > 0) {
+        data.task_ids = this.linkageSelectedIds.tasks;
+      }
+      fetch('post', '/schedules', data).then(() => {
+        this.isAddScheduleButtonDisable = false;
+        this.$refs.calendar.refresh();
+        $('#changeSchedule').modal('hide');
+        toastr.success('添加成功');
+      });
+    },
+    showToast(clientX, clientY) {
+      this.toastX = clientX - 100;
+      this.toastY = clientY - 25;
+      this.toastShow = true;
+      setTimeout(() => {
+        this.toastShow = false;
+      }, 1000);
+    },
+    changeSchedule() {
+      let startTime = '';
+      let endTime = '';
+      if (this.isScheduleAllday) {
+        startTime = this.startTime;
+        endTime = this.endTime;
+      } else {
+        startTime = `${this.startTime} ${this.startMinutes}`;
+        endTime = `${this.endTime} ${this.endMinutes}`;
+      }
+      const data = {
+        title: this.scheduleName,
+        calendar_id: this.scheduleCalendar,
+        is_allday: this.isScheduleAllday,
+        privacy: Number(this.schedulePrivacy),
+        start_at: startTime,
+        end_at: endTime,
+        repeat: this.scheduleRepeat,
+        desc: this.eventDesc,
+        material_id: this.scheduleMaterialId,
+      };
+      if (this.eventPlace) {
+        data.position = this.eventPlace;
+      }
+
+      data.participant_del_ids = [];
+      data.participant_ids = [];
+      const flagInfo = this.$store.state.newParticipantsInfo;
+      for (let i = 0; i < this.scheduleParticipants.length; i++) {
+        if (flagInfo.map(item => item.id).indexOf(this.scheduleParticipants[i].id) === -1) {
+          data.participant_del_ids.push(this.scheduleParticipants[i].id);
+        }
+      }
+      for (let i = 0; i < flagInfo.length; i++) {
+        if (this.scheduleParticipants.map(item => item.id).indexOf(flagInfo[i].id) === -1) {
+          data.participant_ids.push(flagInfo[i].id);
+        }
+      }
+
+      if (this.linkageSelectedIds.projects.length > 0) {
+        data.project_ids = this.linkageSelectedIds.projects;
+      }
+      if (this.linkageSelectedIds.tasks.length > 0) {
+        data.task_ids = this.linkageSelectedIds.tasks;
+      }
+
+      fetch('put', `/schedules/${this.scheduleData.id}`, data).then(() => {
+        this.$refs.calendar.refresh();
+        $('#changeSchedule').modal('hide');
+        toastr.success('修改成功');
+      });
+    },
+    taskcancel() {
+      this.getTaskList();
+      this.getArtist();
+      this.setDefaultPrincipal();
+      this.$store.state.newParticipantsInfo = [];
+      this.taskType = '';
+      this.taskName = '';
+      this.taskLevel = '';
+      this.startTime = '';
+      this.endTime = '';
+      this.startMinutes = '';
+      this.endMinutes = '';
+      this.taskIntroduce = '';
+      this.$refs.taskType.setValue('');
+      this.$refs.taskStartTime.setValue('0');
+      this.$refs.taskStartDate.setValue('');
+      this.$refs.taskEndDate.setValue('');
+      this.$refs.taskEndTime.setValue('0');
+      this.$refs.taskLevel.setValue('');
+    },
+    selectScheduleCalendar(value) {
+      this.scheduleCalendar = value;
+    },
+    changeIsAllDay(e) {
+      this.isScheduleAllday = Number(e.target.checked);
+    },
+    showAddScheduleModal(date) {
+      if (this.calendarId.length > 0) {
+        this.$refs.scheduleStartDate.setValue(date);
+        this.$refs.scheduleEndDate.setValue(date);
+        this.startTime = date;
+        this.endTime = date;
+        $('#changeSchedule').modal('show');
+      } else {
+        toastr.error('该艺人无对应艺人日历，请先创建艺人日历');
+      }
+    },
+    selectProjectLinkage(value) {
+      if (!this.allProjectsInfo) {
+        this.getAllProjects();
+      }
+      if (!this.allTasksInfo) {
+        this.getAllTasks();
+      }
+    },
+    getAllProjects() {
+      fetch('get', '/projects/all').then((response) => {
+        this.allProjectsInfo = response.data;
+      });
+    },
+    getAllTasks() {
+      fetch('get', '/tasksAll').then((response) => {
+        this.allTasksInfo = response.data;
+      });
+    },
+    addLinkageResource() {
+      $('#addLinkage').modal('hide');
+    },
+    selectResource(type, value) {
+      const index = this.linkageSelectedIds[type].indexOf(value);
+      if (index > -1) {
+        this.linkageSelectedIds[type].splice(index, 1);
+      } else {
+        this.linkageSelectedIds[type].push(value);
+      }
+    },
+    delNewScheduleLinkage(type, value) {
+      const index = this.linkageSelectedIds[type].indexOf(value);
+      this.linkageSelectedIds[type].splice(index, 1);
+    },
+    changeCalendarColor(value) {
+      this.checkColor = value;
+    },
+    getResources(type) {
+      let data = {};
+      if (type) {
+        data = {
+          type,
+        };
+      }
+      fetch('get', '/materials/all', data).then((response) => {
+        if (type) {
+          this.meetingRomeList = response.data;
+        } else {
+          this.allMeetingRomeList = response.data;
+        }
+      });
+    },
+    changeScheduleRepeat(value) {
+      this.scheduleRepeat = value;
+    },
+    isShowMore() {
+      this.showMore = !this.showMore;
+    },
+    changeScheduleMaterial(value) {
+      this.scheduleMaterialId = value;
+    },
+    fileUpload(url, name, size) {
+      const data = {
+        title: name,
+        url,
+        size,
+        type: 1,
+      };
+      fetch('post', `/schedules/${this.scheduleData.id}/affix`, data).then((response) => {
+        toastr.success('上传成功');
+        if (this.scheduleData.affixes) {
+          this.scheduleData.affixes.data.push(response.data);
+        } else {
+          this.scheduleData.affixes = { data: [] };
+          this.scheduleData.affixes.data.push(response.data);
+        }
+      });
+    },
+    changeScheduleParticipants(value) {
+      const data = {};
+      if (value) {
+        data.participant_del_ids = [value];
+      } else {
+        const participantsInfo = this.$store.state.newParticipantsInfo;
+        data.participant_ids = [];
+        data.participant_del_ids = [];
+        for (let i = 0; i < participantsInfo.length; i++) {
+          if (this.scheduleParticipants.map(item => item.id).indexOf(participantsInfo[i].id) === -1) {
+            data.participant_ids.push(participantsInfo[i].id);
+          }
+        }
+        for (let i = 0; i < this.scheduleParticipants.length; i++) {
+          if (participantsInfo.map(item => item.id).indexOf(this.scheduleParticipants[i].id) === -1) {
+            data.participant_del_ids.push(this.scheduleParticipants[i].id);
+          }
+        }
+      }
+      fetch('put', `/schedules/${this.scheduleData.id}`, data).then(() => {
+        this.$refs.calendar.refresh();
+        this.scheduleParticipants = JSON.parse(JSON.stringify(this.$store.state.newParticipantsInfo));
+      });
+    },
+    changeScheduleType(type) {
+      this.scheduleType = type;
+      $('#checkSchedule').modal('hide');
+      setTimeout(() => {
+        $('#changeSchedule').modal('show');
+      }, 400);
+      if (type === 'edit') {
+        this.scheduleName = this.scheduleData.title;
+        this.scheduleCalendar = this.scheduleData.calendar.data.id;
+        this.$refs.scheduleStartDate.setValue(this.scheduleData.start_at.split(' ')[0]);
+        const startMinutes = this.scheduleData.start_at.split(' ')[1].split(':');
+        this.$refs.scheduleStartMinute.setValue(startMinutes);
+        this.startTime = this.scheduleData.start_at.split(' ')[0];
+        this.startMinutes = `${startMinutes[0]}:${startMinutes[1]}`;
+        this.$refs.scheduleEndDate.setValue(this.scheduleData.end_at.split(' ')[0]);
+        const endMinutes = this.scheduleData.end_at.split(' ')[1].split(':');
+        this.$refs.scheduleEndMinute.setValue(endMinutes);
+        this.endTime = this.scheduleData.end_at.split(' ')[0];
+        this.endMinutes = `${endMinutes[0]}:${endMinutes[1]}`;
+        this.isAllday = this.scheduleData.is_allday;
+        this.eventDesc = this.scheduleData.desc;
+        this.eventPlace = this.scheduleData.position;
+        this.$store.dispatch('changeParticipantsInfo', { data: this.scheduleData.participants.data });
+        if (this.scheduleData.material) {
+          this.$refs.scheduleResource.setValue(this.scheduleData.material.data.id);
+          this.scheduleMaterialId = this.scheduleData.material.data.id;
+        }
+        if (this.scheduleData.project.data.length > 0) {
+          this.linkageSelectedIds.projects = [];
+          for (let i = 0; i < this.scheduleData.project.data.length; i++) {
+            this.linkageSelectedIds.projects.push(this.scheduleData.project.data[i].moduleable_id);
+          }
+        }
+        if (this.scheduleData.task.data.length > 0) {
+          this.linkageSelectedIds.tasks = [];
+          for (let i = 0; i < this.scheduleData.task.data.length; i++) {
+            this.linkageSelectedIds.tasks.push(this.scheduleData.task.data[i].moduleable_id);
+          }
+        }
+      }
+    },
+    deleteToastr(type, calendar = null) {
+      this.delType = type;
+      if (calendar) {
+        this.delCalendarInfo = calendar;
+      }
+      if (type === 'schedule') {
+        $('#checkSchedule').modal('hide');
+      }
+    },
+    deleteSchedule() {
+      fetch('delete', `/schedules/${this.scheduleData.id}`).then(() => {
+        $('#delModel').modal('hide');
+        toastr.success('删除成功');
+        this.$refs.calendar.refresh();
+      });
+    },
+    changeScheduleRemind(value) {
+      this.scheduleRemind = value;
+    },
+    initAddScheduleModal() {
+      this.showMore = false;
+      this.$store.dispatch('changeParticipantsInfo', { data: [] });
+      this.scheduleName = '';
+      this.scheduleCalendar = '';
+      this.isScheduleAllday = 0;
+      this.privacy = 1;
+      this.startTime = '';
+      this.startMinutes = '00:00';
+      this.endTime = '';
+      this.endMinutes = '00:00';
+      this.eventPlace = '';
+      this.scheduleRepeat = 0;
+      this.scheduleMaterialId = '';
+      this.eventDesc = '';
+      this.isAllday = false;
+      this.schedulePrivacy = false;
+      this.scheduleType = 'add';
+      this.linkageSelectedIds = {
+        projects: [],
+        tasks: [],
+      };
+      this.$refs.scheduleStartDate.setValue('');
+      this.$refs.scheduleEndDate.setValue('');
+      this.$refs.scheduleStartMinute.setValue('0');
+      this.$refs.scheduleEndMinute.setValue('0');
+      this.$refs.scheduleResource.setValue('');
+      this.$refs.scheduleRepeat.setValue('0');
+      // this.$refs.scheduleNotice.setValue('0');
+      this.$refs.scheduleRemind.setValue('0');
+      // this.this.scheduleRemindDate = []
+    },
+    /* 查看日历详情 --添加日历 -- 修改日历 --结束 */
+
+    // 获取账单
+    getArtistsBill(page = 1, expense_type) {
+      if (expense_type) {
+        this.expense_type = expense_type;
+      } else {
+        this.expense_type = 0;
+      }
+      fetch('get', `/stars/${this.$route.params.id}/bill`, {
+        page,
+        expense_type: this.expense_type,
+      }).then((response) => {
+        this.artistBillsInfo = response.data;
+        this.current_page = response.meta.pagination.current_page;
+        this.total = response.meta.pagination.total;
+        this.total_pages = response.meta.pagination.total_pages;
+        if (response.meta.incomesum) {
+          this.incomesum = response.meta.incomesum.toFixed(2);// 收入总和
+        }
+        if (response.meta.expendituresum) {
+          this.expendituresum = response.meta.expendituresum.toFixed(2);// 支出总和
+        }
+      });
+    },
+
+    getTaskType() {
+      fetch('get', '/task_types').then((response) => {
+        for (let i = 0; i < response.data.length; i++) {
+          this.taskTypeArr.push({
+            value: response.data[i].id,
+            name: response.data[i].title,
+          });
+        }
+      });
+    },
+    // 获取任务列表
+    getTaskList(page = 1) {
+      fetch('get', `/stars/${this.$route.params.id}/tasks/`, {
+        page,
+      }).then((response) => {
+        this.allTaskList = response.data;
+
+        this.current_page = response.meta.pagination.current_page;
+        this.total = response.meta.pagination.total;
+        this.total_pages = response.meta.pagination.total_pages;
+        response.data.forEach((item) => {
+          if (item.status !== 2 && new Date(item.end_at).getTime() < new Date().getTime()) {
+            item.status = 4;
+          }
+        });
+      });
+    },
+    getTaskDate() {
+      this.doneTaskNum = 0;
+      fetch('get', `/stars/${this.$route.params.id}/tasks`).then((response) => {
+        this.allTaskList = response.data;
+        if (this.allTaskList.length > 0) {
+          for (let i = 0; i < this.allTaskList.length; i++) {
+            if (this.allTaskList[i].status == 2) {
+              this.doneTaskNum += 1;
+            }
+          }
+        }
+
+        this.taskNum = `${this.doneTaskNum}/${response.meta.pagination.total}`;
+      });
+    },
+    selectDate(value) {
+      this.selectedDate = value;
+      this.$refs.meetingRoom.setDate(value);
+    },
+    // 获取三个项目
+    getProjectList() {
+      fetch('get', `/projects/star/${this.$route.params.id}`).then((response) => {
+        this.threeProjectList = response;
+      });
+    },
+    // 粉丝数据
+    draw() {
+      const myChart = echarts.init(document.getElementById('myChart'));
+
+      // 指定图表的配置项和数据
+      const option = {
+        title: {
+          text: '粉丝统计',
+        },
+        tooltip: {
+          trigger: 'axis',
+        },
+        legend: {
+          data: ['微博', '百科', '抖音', '其他'],
+        },
+        grid: {
+          left: '3%',
+          right: '5%',
+          bottom: '3%',
+          containLabel: true,
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {
+              show: true,
+              title: '保存',
+              iconStyle: {
+                textPosition: 10000,
+                textAlign: 'left',
+              },
+
+            },
+          },
+        },
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: ['2018', '2017', '2016', '2015', '2014', '2013', '2012'],
+        },
+        yAxis: {
+          type: 'value',
+        },
+        series: [
+          {
+            name: '微博',
+            type: 'line',
+            stack: '总量',
+            data: [120, 132, 101, 134, 90, 230, 210],
+          },
+          {
+            name: '百科',
+            type: 'line',
+            stack: '总量',
+            data: [220, 182, 191, 234, 290, 330, 310],
+          },
+          {
+            name: '抖音',
+            type: 'line',
+            stack: '总量',
+            data: [150, 232, 201, 154, 190, 330, 410],
+          },
+          {
+            name: '其他',
+            type: 'line',
+            stack: '总量',
+            data: [320, 332, 301, 334, 390, 330, 320],
+          },
+        ],
+      };
+
+      // 使用刚指定的配置项和数据显示图表。
+      myChart.setOption(option);
+    },
+
+    run(res, callback) {
+      this.changeArtistBaseInfo(res, 'avatar');
+      return callback();
+    },
+    // 上传头像 ---修改头像
+    getUploadUrl(res) {
+      if (!this.isEdit) {
+        this.changeArtistInfo = {};
+      }
+      this.uploadUrl = res;
+      this.run(res, () => {
+        this.changeArtist();
+      });
+    },
+    changeTaskType(value) {
+      this.taskType = value;
+    },
+
+    changeTaskLevel(value) {
+      this.taskLevel = value;
+    },
+
+    changeStartTime(value) {
+      this.startTime = value;
+    },
+
+    changeStartMinutes(value) {
+      this.startMinutes = value;
+    },
+
+    changeEndTime(value) {
+      this.endTime = value;
+    },
+
+    changeEndMinutes(value) {
+      this.endMinutes = value;
+    },
+
+    // 添加任务
+    addTask(response) {
+      this.allTaskList.push(response.data);
+    },
+    // 设置默认负责人
+    setDefaultPrincipal() {
+      this.$store.commit('changeNewPrincipal', {
+        name: this.user.nickname,
+        id: this.user.id,
+      });
+      this.$store.commit('changeNewParticipantsInfo', []);
+    },
+    // 添加作品
+    addWork() {
+      if (!this.artistWorkName) {
+        toastr.error('请填写作品名称');
+        return false;
+      }
+      if (!this.workReleaseTime) {
+        toastr.error('请选择作品发布时间');
+        return false;
+      }
+      if (!this.workType) {
+        toastr.error('请选择作品类型');
+        return false;
+      }
+      if (!this.character) {
+        toastr.error('请选择角色');
+        return false;
+      }
+      if (!this.coActor) {
+        toastr.error('请填写合作演员');
+        return false;
+      }
+      this.isAddWorkButtonDisable = true;
+      const data = {
+        name: this.artistWorkName,
+        director: this.artistWorkDirector,
+        role: this.character,
+        co_star: this.coActor,
+        release_time: this.workReleaseTime,
+        works_type: this.workType,
+      };
+      fetch('post', `/stars/${this.$route.params.id}/works`, data).then((response) => {
+        toastr.success('新增成功');
+        $('#addWork').modal('hide');
+        this.isAddWorkButtonDisable = false;
+        this.artistWorksInfo.push(response.data);
+        this.artistWorkName = '';
+        this.artistWorkDirector = '';
+        this.character = '';
+        this.coActor = '';
+        this.workReleaseTime = '';
+        this.workType = '';
+        this.$refs.workType.setValue('');
+        this.$refs.workTime.setValue('');
+      });
+    },
+
+    addPrivacy() {
+      $('#addPrivacy').modal('hide');
+      this.$store.state.collectInfo = [];
+      this.$store.state.payInfo = [];
+      this.$store.state.contractInfo = [];
+      this.$store.state.divisionInfo = [];
+      this.$store.state.incubationInfo = [];
+      this.$store.state.billInfo = [];
+    },
+
+    changeWorkReleaseTime(value) {
+      this.workReleaseTime = value;
+    },
+
+    changeWorkType(value) {
+      this.workType = value;
+    },
+
+    editBaseInfo() {
+      if (this.$store.state.power.star.add !== 'true') {
+        toastr.error('当前用户没有权限编辑艺人');
+        return;
+      }
+      this.isEdit = true;
+      this.changeArtistInfo = {};
+    },
+
+    cancelEdit() {
+      this.isEdit = false;
+    },
+    // 修改基本信息
+    changeArtistBaseInfo(value, name) {
+      if (name === 'platform') {
+        value = value.join(',');
+      }
+
+      if (name === 'broker_id') {
+        if (value) {
+          value = this.$store.state.principalInfo.id;
+        } else {
+          return;
+        }
+      } else if (name === 'intention') {
+        if (value.key === 'value') {
+          name = 'intention_desc';
+        }
+        if (value.key === 'condition') {
+          name = 'intention';
+        }
+        value = value.value;
+      } else if (name === 'sign_contract_other') {
+        if (value.key === 'value') {
+          name = 'sign_contract_other_name';
+        }
+        if (value.key === 'condition') {
+          name = 'sign_contract_other';
+        }
+        value = value.value;
+      }
+      this.changeArtistInfo[name] = value;
+    },
+
+    changeArtist() {
+      if (this.changeArtistInfo.intention || this.changeArtistInfo.hasOwnProperty('intention_desc')) {
+        if (this.$refs.condition.getSelectorValue() == 2) {
+          if (!this.changeArtistInfo.intention_desc) {
+            toastr.error('请填写不签约理由');
+            return false;
+          }
+        } else {
+          this.changeArtistInfo.intention_desc = '';
+        }
+      }
+      if (this.changeArtistInfo.sign_contract_other || this.changeArtistInfo.hasOwnProperty('sign_contract_other_name')) {
+        if (this.$refs.condition1.getSelectorValue() == 1) {
+          if (!this.changeArtistInfo.sign_contract_other_name) {
+            toastr.error('请输入已签约公司名称');
+            return false;
+          }
+        } else {
+          this.changeArtistInfo.sign_contract_other_name;
+        }
+      }
+
+      if (JSON.stringify(this.changeArtistInfo) === '{}') {
+        this.isEdit = false;
+        return;
+      }
+      const _this = this;
+      fetch('put', `/stars/${this.artistId}`, this.changeArtistInfo).then((response) => {
+        toastr.success('修改成功');
+        if (_this.isEdit) {
+          _this.isEdit = false;
+        }
+        _this.getArtist();
+      });
+    },
+
+    distributionPerson(value) {
+      this.distributionType = value;
+      if (this.artistInfo[value].data.length > 0) {
+        this.$store.state.participantsInfo = Object.assign([], this.artistInfo[value].data);
+      }
+    },
+    // 分配经理人和分配宣传人
+    addDistributionPerson() {
+      let toast,
+        url;
+      const data = {
+        person_ids: [],
+        del_person_ids: [],
+      };
+
+
+      const personInfo = this.$store.state.participantsInfo;
+      const oldPersonInfo = this.artistInfo[this.distributionType].data;
+      // todo 删除和新增的数据有问题
+      if (this.artistInfo[this.distributionType].data.length > 0) {
+        for (let i = 0; i < this.artistInfo[this.distributionType].data.length; i++) {
+          if (personInfo.map(item => item.id).indexOf(this.artistInfo[this.distributionType].data[i].id) === -1) {
+            data.del_person_ids.push(this.artistInfo[this.distributionType].data[i].id);
+          }
+        }
+      }
+      for (let i = 0; i < this.$store.state.participantsInfo.length; i++) {
+        data.person_ids.push(this.$store.state.participantsInfo[i].id);
+      }
+
+      if (this.distributionType === 'broker') {
+        // data.type = 3
+        toast = '分配经理人成功',
+        url = `stars/${this.artistId}/broker`;
+      } else {
+        // data.type = 2
+        toast = '分配宣传人成功';
+        url = `stars/${this.artistId}/publicity`;
+      }
+      const _this = this;
+      fetch('post', url, data).then((response) => {
+        toastr.success(toast);
+        $('#distributionBroker').modal('hide');
+        _this.getArtist();
+        _this.$store.state.participantsInfo = [];
+      });
+    },
+    // 获取附件类型
+    changeAttachmentType(value) {
+      this.affixesType = value;
+    },
+    // 上传附件
+    uploadAttachment(url, name, size) {
+      if (!this.affixesType) {
+        toastr.error('请选择上传附件类型');
+        return false;
+      }
+
+      // 删除已存在的数据
+      for (let i = 0; i < this.affixes.length; i++) {
+        if (this.affixes[i].type == this.affixesType) {
+          this.affixes.splice(i, 1);
+        }
+      }
+      // 添加新的数据
+      this.affixes.push({
+        title: name,
+        size,
+        url,
+        type: this.affixesType,
+      });
+      this.changeArtistBaseInfo(this.affixes, 'affix');
+    },
+    // 获取附件id
+    getAffixId(id) {
+      this.affixId = id;
+    },
+    previewFile(url, name) {
+      this.previewUrl = url;
+      this.previewName = name;
+    },
+    // 删除附件
+    deleteAffix() {
+      const _this = this;
+      fetch('delete', `/star/${this.$route.params.id}/affixes/${this.affixId}`).then((response) => {
+        $('#affix').modal('hide');
+        toastr.success('删除成功');
+        _this.isEdit = false;
+        _this.getArtist();
+      });
+    },
+    contractlist(status) {
+      this.isDetail = false;
+      const _this = this;
+      this.isDetail = false;
+      const data = {
+        type: this.contractType,
+      };
+      data.status = status;
+      fetch('get', 'approvals/specific_contract', data).then((response) => {
+        _this.formDate = response.data;
+        $('#approval-great-module').modal('show');
+      });
+    },
+    filterProjectFee(value) {
+      this.filterFee = value;
+    },
+    toProject(id) {
+      this.$router.push({ path: `/projects/${id}` });
+    },
+    toTask(id) {
+      this.$router.push({ path: `/tasks/${id}` });
+    },
+
+  },
+  filters: {
+    getWeek(date) {
+      const week = new Date(date).getDay();
+      let value = '';
+      switch (week) {
+        case 0:
+          value = '周日';
+          break;
+        case 1:
+          value = '周一';
+          break;
+        case 2:
+          value = '周二';
+          break;
+        case 3:
+          value = '周三';
+          break;
+        case 4:
+          value = '周四';
+          break;
+        case 5:
+          value = '周五';
+          break;
+        case 6:
+          value = '周六';
+          break;
+      }
+      return value;
+    },
+    jsGetAge(strBirthday) {
+      if (strBirthday) {
+        let returnAge;
+        // 根据生日计算年龄（"1995-09-25"）
+        // 以下五行是为了获取出生年月日，如果是从身份证上获取需要稍微改变一下
+        const strBirthdayArr = strBirthday.split('-');
+        const birthYear = strBirthdayArr[0];
+        const birthMonth = strBirthdayArr[1];
+        const birthDay = strBirthdayArr[2];
+
+        const d = new Date();
+        const nowYear = d.getFullYear();
+        const nowMonth = d.getMonth() + 1;
+        const nowDay = d.getDate();
+
+        if (nowYear == birthYear) {
+          returnAge = 0;// 同年 则为0岁
+        } else {
+          const ageDiff = nowYear - birthYear; // 年之差
+          if (ageDiff > 0) {
+            if (nowMonth == birthMonth) {
+              const dayDiff = nowDay - birthDay;// 日之差
+              if (dayDiff < 0) {
+                returnAge = ageDiff - 1;
+              } else {
+                returnAge = ageDiff;
+              }
+            } else {
+              const monthDiff = nowMonth - birthMonth;// 月之差
+              if (monthDiff < 0) {
+                returnAge = ageDiff - 1;
+              } else {
+                returnAge = ageDiff;
+              }
+            }
+          } else {
+            returnAge = -1;// 返回-1 表示出生日期输入错误 晚于今天
+          }
+        }
+        return returnAge;// 返回周岁年龄
+      }
+      return strBirthday;
+    },
+  },
+};
 
 </script>
 
