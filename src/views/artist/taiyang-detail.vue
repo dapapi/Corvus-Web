@@ -48,7 +48,7 @@
                                         <span>{{broker.department.name}}</span>
                                         <span v-if="broker.department.name">-</span>
                                         <span>{{ broker.name }}</span>
-                                        
+
                                     </span>
                                 </div>
                             </div>
@@ -63,11 +63,8 @@
                                         <span>{{publicity.department.name}}</span>
                                         <span v-if="publicity.company">-</span>
                                         <span>{{ publicity.name }}</span>
-                                        
+
                                     </span>
-                                    <!-- <template v-for="publicity in artistInfo.publicity.data">
-                                        {{ publicity.name }}
-                                    </template> -->
                                 </div>
                             </div>
 
@@ -468,20 +465,24 @@
                                                                         @change="(value) => changeArtistBaseInfo(value, 'sign_contract_other')"></ConditionalInput>
                                                 </div>
                                             </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height" style="height:64px;">
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height"
+                                                 style="height:64px;">
                                                 <div class="col-md-3 float-left text-right pl-0">地区</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditInput :content="artistInfo.star_location" :is-edit="isEdit"
                                                                 @change="(value) => changeArtistBaseInfo(value, 'star_location')"></EditInput>
                                                 </div>
                                             </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height" >
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                                 <div class="col-md-3 float-left text-right pl-0">潜在风险点</div>
-                                                <div class="col-md-9 float-left font-weight-bold" v-if="artistInfo.star_risk_point!=='**'">
-                                                    <editTextarea :content="artistInfo.star_risk_point" :is-edit="isEdit"
-                                                                    @change="(value) => changeArtistBaseInfo(value, 'star_risk_point')"></editTextarea>
+                                                <div class="col-md-9 float-left font-weight-bold"
+                                                     v-if="artistInfo.star_risk_point!=='**'">
+                                                    <editTextarea :content="artistInfo.star_risk_point"
+                                                                  :is-edit="isEdit"
+                                                                  @change="(value) => changeArtistBaseInfo(value, 'star_risk_point')"></editTextarea>
                                                 </div>
-                                                <div class="col-md-9 float-left font-weight-bold" v-if="artistInfo.star_risk_point=='**'">
+                                                <div class="col-md-9 float-left font-weight-bold"
+                                                     v-if="artistInfo.star_risk_point=='**'">
                                                     {{artistInfo.star_risk_point}}
                                                 </div>
                                             </div>
@@ -552,7 +553,7 @@
                                                                     @change="(value) => changeArtistBaseInfo(value, 'desc')"></editTextarea>
                                                 </div>
                                             </div>
-                                            
+
                                             <div v-show="isEdit"
                                                     class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                                 <div class="col-md-3 float-left text-right pl-0">附件类型</div>
@@ -575,22 +576,26 @@
                                                     style="min-height:57px">
                                                 <div class="col-md-3 float-left text-right pl-0">附件</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
-                                                    <span v-show="isEdit" style="color:#01BCD4;cursor:pointer">上传附件</span>
+                                                    <span v-show="isEdit"
+                                                          style="color:#01BCD4;cursor:pointer">上传附件</span>
                                                     <FileUploader v-show="isEdit" class="uploadAttach"
-                                                                    @change="uploadAttachment" mulId="aff"></FileUploader>
-                                                    <div class="mt-5" >
+                                                                  @change="uploadAttachment" mulId="aff"></FileUploader>
+                                                    <div class="mt-5">
                                                         <div class="row" v-for="(attach,index) in affixes" :key="index">
                                                             <div class="col-md-2 p-0">
-                                                                <i class="iconfont icon-wenjian" style="color:#1e88e5;font-size:36px"></i>
+                                                                <i class="iconfont icon-wenjian"
+                                                                   style="color:#1e88e5;font-size:36px"></i>
                                                             </div>
-                                                            
+
                                                             <div class="col-md-10 mt-5">
-                                                                <span class="mr-20 single">{{attachmentTypeArr.find(item => item.value == attach.type).name}} - {{attach.title}}</span>     
+                                                                <span class="mr-20 single">{{attachmentTypeArr.find(item => item.value == attach.type).name}} - {{attach.title}}</span>
                                                                 <a data-toggle="modal" data-target='#docPreview'
-                                                                @click="previewFile(attach.url,attach.title)"
-                                                                class="iconfont icon-liulan  mr-15" style="color:#3f51b5"></a>
+                                                                   @click="previewFile(attach.url,attach.title)"
+                                                                   class="iconfont icon-liulan  mr-15"
+                                                                   style="color:#3f51b5"></a>
                                                                 <i class="iconfont icon-shanchu1" data-toggle="modal"
-                                                                data-target="#affix" @click="getAffixId(attach.id)"></i>
+                                                                   data-target="#affix"
+                                                                   @click="getAffixId(attach.id)"></i>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -627,7 +632,8 @@
                                                 <template v-if="artistInfo.last_follow_up_at">
                                                     {{ common.timeProcessing(artistInfo.last_follow_up_at)}}
                                                 </template>
-                                                <template v-else>{{ common.timeProcessing(artistInfo.created_at) }}</template>
+                                                <template v-else>{{ common.timeProcessing(artistInfo.created_at) }}
+                                                </template>
                                             </div>
                                         </div>
                                     </div>
@@ -666,92 +672,7 @@
             <div class="text-center m-20">您确认删除该附件吗？</div>
         </modal>
         <!-- 新增任务 -->
-        <div class="modal fade" id="addTask" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1" data-backdrop="static">
-            <div class="modal-dialog modal-simple">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
-                        </button>
-                        <h4 class="modal-title">新增任务</h4>
-                    </div>
-                    <div class="modal-body">
-
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">关联资源</div>
-                            <div class="col-md-10 float-left">
-                                艺人 - {{ artistInfo.name }}
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left require">任务类型</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskTypeArr" @change="changeTaskType" ref="taskType"></selectors>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left require">任务名称</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <input type="text" class="form-control" placeholder="请输入任务名称" v-model="taskName">
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left require">负责人</div>
-                            <div class="col-md-5 float-left pl-0">
-                                <input-selectors :placeholder="'请选择负责人'"></input-selectors>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">参与人</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <add-member></add-member>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left pl-0 require">任务优先级</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <selectors :options="priorityArr" @change="changeTaskLevel"
-                                           ref="taskLevel"></selectors>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left require">开始时间</div>
-                            <div class="col-md-5 float-left pl-0">
-                                <datepicker @change="changeStartTime" :placeholder="'请输入开始时间'"
-                                            ref="taskStartDate"></datepicker>
-                            </div>
-                            <div class="col-md-5 float-left pl-0">
-                                <TimeChoice @change="changeStartMinutes" ref="taskStartTime"></TimeChoice>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left require">截止时间</div>
-                            <div class="col-md-5 float-left pl-0">
-                                <datepicker @change="changeEndTime" :placeholder="'请输入结束时间'"
-                                            ref="taskEndDate" :startDate="startTime"></datepicker>
-                            </div>
-                            <div class="col-md-5 float-left pl-0">
-                                <TimeChoice @change="changeEndMinutes" ref="taskEndTime"></TimeChoice>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">任务说明</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <textarea class="form-control" name="taskDescription" id="" cols="30"
-                                          rows="5" title="" v-model="taskIntroduce"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="taskcancel">取消
-                        </button>
-                        <button class="btn btn-primary" type="submit" @click="addTask">确定</button>
-                    </div>
-
-                </div>
-            </div>
-        </div>
+        <AddTask :resourceable_id="artistId" resource_type="2" :resource_title="artistName" resource_name="艺人" @success="addTask"></AddTask>
 
         <!--作品库-->
         <div class="modal fade" id="addWork" aria-hidden="true" aria-labelledby="addLabelForm"
@@ -815,7 +736,7 @@
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" type="submit" @click="addWork">确定</button>
+                        <button class="btn btn-primary" type="submit" :disable="isAddWorkButtonDisable" @click="addWork">确定</button>
                     </div>
 
                 </div>
@@ -888,19 +809,16 @@
                                 <datepicker @change="changeStartTime" ref="scheduleStartDate"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-show="!isAllday">
-                                <!-- <timepicker :default="startMinutes" @change="changeStartMinutes"
-                                            ref="scheduleStartMinute"></timepicker> -->
                                 <TimeChoice @change="changeStartMinutes" ref="scheduleStartMinute"></TimeChoice>
                             </div>
                         </div>
                         <div class="clearfix">
                             <div class="col-md-2 text-right float-left line-fixed-height">结束时间</div>
                             <div class="col-md-5 float-left pl-0">
-                                <datepicker @change="changeEndTime" ref="scheduleEndDate" :startDate="startTime"></datepicker>
+                                <datepicker @change="changeEndTime" ref="scheduleEndDate"
+                                            :startDate="startTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-show="!isAllday">
-                                <!-- <timepicker :default="endMinutes" @change="changeEndMinutes"
-                                            ref="scheduleEndMinute"></timepicker> -->
                                 <TimeChoice @change="changeEndMinutes" ref="scheduleEndMinute"></TimeChoice>
                             </div>
                         </div>
@@ -919,7 +837,7 @@
                                 <AddMember type="add"></AddMember>
                             </div>
                         </div>
-                       
+
                         <div v-show="showMore">
                             <div class="pt-10 mb-20 clearfix">
                                 <div class="col-md-2 text-right float-left line-fixed-height">资源</div>
@@ -976,7 +894,7 @@
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
                         <template v-if="scheduleType === 'add'">
-                            <button class="btn btn-primary" type="submit" @click="addSchedule">确定</button>
+                            <button class="btn btn-primary" type="submit" :disabled="isAddScheduleButtonDisable" @click="addSchedule">确定</button>
                         </template>
                         <template v-if="scheduleType === 'edit'">
                             <button class="btn btn-primary" type="submit" @click="changeSchedule">确定</button>
@@ -1199,44 +1117,44 @@
             </div>
         </div>
         <!--附件预览-->
-        <ApprovalGreatModule :formData='formDate' :detailpage='isDetail' :default-value="{value:projectContractDefault,id:$route.params.id}"></ApprovalGreatModule>
-        <DocPreview :url="previewUrl" :givenFileName="previewName" :detailpage='isDetail' />
+        <ApprovalGreatModule :formData='formDate' :detailpage='isDetail'
+                             :default-value="{value:projectContractDefault,id:$route.params.id}"></ApprovalGreatModule>
+        <DocPreview :url="previewUrl" :givenFileName="previewName" :detailpage='isDetail'/>
     </div>
 </template>
 
 <script>
 
-    //项目列表include 头部三个项目单独接口  作品include 任务列表单独接口  头部三个任务include  
-    import fetch from '../../assets/utils/fetch.js'
-    import config from '../../assets/js/config'
-    import common from '../../assets/js/common'
-    import Cookies from 'js-cookie'
+    // 项目列表include 头部三个项目单独接口  作品include 任务列表单独接口  头部三个任务include
+    import Cookies from 'js-cookie';
+    import fetch from '../../assets/utils/fetch.js';
+    import config from '../../assets/js/config';
+    import common from '../../assets/js/common';
 
-    import ApprovalGreatModule from '../../components/ApprovalGreatModule'
+    import ApprovalGreatModule from '../../components/ApprovalGreatModule';
 
     export default {
-        data: function () {
+        data() {
             return {
-                common: common,
+                common,
                 artistId: '',
+                artistName: '',
                 artistInfo: {},
                 taskTypeArr: [],
                 taskLevelArr: config.taskLevelArr,
                 attachmentTypeArr: config.attachmentTypeArr,
                 taskType: '',
-                taskName: '',
-                taskLevel: '',
                 startTime: '',
                 startMinutes: '00:00',
                 endTime: '',
                 endMinutes: '00:00',
                 taskIntroduce: '',
-                artistTasksInfo: [],//任务
-                artistWorksInfo: [],//作品库
-                artistProjectsInfo: '',//项目
-                artistWorkName: '', //作品名称
-                artistWorkDirector: '',//导演名称
-                artistBillsInfo: [],//账单
+                artistTasksInfo: [], // 任务
+                artistWorksInfo: [], // 作品库
+                artistProjectsInfo: '', // 项目
+                artistWorkName: '', // 作品名称
+                artistWorkDirector: '', // 导演名称
+                artistBillsInfo: [], // 账单
                 workReleaseTime: '',
                 workTypeArr: config.workTypeArr,
                 workType: '',
@@ -1253,24 +1171,24 @@
                 artistSocialPlatform: [
                     {
                         value: 1,
-                        name: '微博'
+                        name: '微博',
                     },
                     {
                         value: 2,
-                        name: '百科'
+                        name: '百科',
                     },
                     {
                         value: 3,
-                        name: '抖音'
+                        name: '抖音',
                     },
                     {
                         value: 4,
-                        name: '其他'
+                        name: '其他',
                     },
                 ],
                 distributionType: '',
-                affixes: [], //附件
-                affixesType: '',//附件类型
+                affixes: [], // 附件
+                affixesType: '', // 附件类型
                 affixId: '',
                 taskNum: '',
                 doneTaskNum: 0,
@@ -1285,14 +1203,14 @@
                 total: 0,
                 current_page: 1,
                 total_pages: 1,
-                allTaskList: [], //获取任务列表
-                threeProjectList: [],//获取三个项目
+                allTaskList: [], // 获取任务列表
+                threeProjectList: [], // 获取三个项目
                 expense_type: 0,
-                incomesum: 0,//账单 -- 收入总和
-                expendituresum: 0,//账单 -- 支出总和
+                incomesum: 0, // 账单 -- 收入总和
+                expendituresum: 0, // 账单 -- 支出总和
                 isLoading: true,
                 uploadUrl: '',
-                calendarId: [],//艺人关联日历id
+                calendarId: [], // 艺人关联日历id
                 scheduleType: 'add',
                 scheduleName: '',
                 calendarList: [],
@@ -1301,7 +1219,7 @@
                 isScheduleAllday: 0,
                 linkageSelectedIds: {
                     projects: [],
-                    tasks: []
+                    tasks: [],
                 },
                 showMore: false,
                 searchKeyWord: '',
@@ -1329,185 +1247,164 @@
                 toastShow: false,
                 toastX: 0,
                 toastY: 0,
-                projectContractDefault:'',
-                taskDate:{},
-                scheduleRemind:'',
+                projectContractDefault: '',
+                taskDate: {},
+                scheduleRemind: '',
                 conditionLength: 0,
                 selectorHidden: [],
-                isCancel:false,
-                scheduleRemindDate:[],
-                isDetail:true,
-            }
+                isCancel: false,
+                scheduleRemindDate: [],
+                isDetail: true,
+                isAddScheduleButtonDisable: false,
+                isAddWorkButtonDisable: false,
+            };
         },
 
         created() {
-            this.getArtist()
-
+            this.getArtist();
         },
         components: {
-            ApprovalGreatModule
+            ApprovalGreatModule,
         },
         mounted() {
-
             this.getTaskType();
             this.getCalendar();
             this.draw();
-            this.getArtistsBill()
-            this.getTaskDate()
-            this.getProjectList()
+            this.getArtistsBill();
+            this.getTaskDate();
+            this.getProjectList();
             this.selectProjectLinkage();
             this.getResources();
-            this.user = JSON.parse(Cookies.get('user'))
+            this.user = JSON.parse(Cookies.get('user'));
             this.$store.commit('changeNewPrincipal', {
                 name: this.user.nickname,
-                id: this.user.id
-            })
-            let _this = this;
-            $('#distributionBroker').on('hidden.bs.modal', function () {
-                _this.$store.commit('changeParticipantsInfo', [])
-            })
-            $('#changeSchedule').on('hidden.bs.modal', function () {
+                id: this.user.id,
+            });
+            const _this = this;
+            $('#distributionBroker').on('hidden.bs.modal', () => {
+                _this.$store.commit('changeParticipantsInfo', []);
+            });
+            $('#changeSchedule').on('hidden.bs.modal', () => {
                 _this.initAddScheduleModal();
             });
         },
 
         methods: {
 
-            //获取艺人信息
-            getArtist: function () {
+            // 获取艺人信息
+            getArtist() {
                 this.artistId = this.$route.params.id;
 
-                let data = {
+                const data = {
                     include: 'publicity,broker,creator,tasks,affixes,trails.project.principal,works,trails.client,relate_project_bills_resource,',
                 };
                 let _this = this;
                 fetch('get', '/stars/' + this.artistId, data).then(function (response) {
-
                     _this.artistInfo = response.data;
-                    
                     if(response.data.star_risk_point == "privacy"){
                          _this.artistInfo.star_risk_point = '**'
                         
                     }else{
                          _this.artistInfo.star_risk_point = response.data.star_risk_point
                     }
-                     
                     _this.uploadUrl = _this.artistInfo.avatar
                     // _this.artistProjectsInfo = []
                     _this.artistTasksInfo = response.data.tasks.data//任务数据
-          
 
                     _this.artistWorksInfo = response.data.works.data//作品数据
-
-
                     _this.affixes = response.data.affixes.data
-
-
-
                     _this.isLoading = false
                 })
 
             },
             getProject(page = 1) {
-                let _this = this;
-                fetch('get', '/stars/' + this.artistId + '/project',{page:page}).then(function (response) {
-                   
-                    _this.artistProjectsInfo = response.data
-                    _this.current_page = response.meta.pagination.current_page;
-                    _this.total = response.meta.pagination.total;
-                    _this.total_pages = response.meta.pagination.total_pages;
-                })
+                fetch('get', `/stars/${this.artistId}/project`, {page}).then(response => {
+                    this.artistProjectsInfo = response.data;
+                    this.current_page = response.meta.pagination.current_page;
+                    this.total = response.meta.pagination.total;
+                    this.total_pages = response.meta.pagination.total_pages;
+                });
             },
-            getWoks(page = 1) {
-                let _this = this;
-                fetch('get', '/stars/' + this.artistId + '/works').then(function (response) {
-                    _this.artistWorksInfo = response.data
-                    _this.current_page = response.meta.pagination.current_page;
-                    _this.total = response.meta.pagination.total;
-                    _this.total_pages = response.meta.pagination.total_pages;
-                })
+            getWoks() {
+                fetch('get', `/stars/${this.artistId}/works`).then(response => {
+                    this.artistWorksInfo = response.data;
+                    this.current_page = response.meta.pagination.current_page;
+                    this.total = response.meta.pagination.total;
+                    this.total_pages = response.meta.pagination.total_pages;
+                });
             },
-            getCalendar: function () {
+            getCalendar() {
                 this.artistId = this.$route.params.id;
 
 
-                let data = {
+                const data = {
                     include: 'calendar,schedule,schedule.creator',
                 };
-                let _this = this;
-                fetch('get', '/stars/' + this.artistId, data).then(function (response) {
-                    
+                fetch('get', `/stars/${this.artistId}`, data).then(response => {
                     if (response.data.calendar) {
-                        _this.calendarId.push(response.data.calendar.data.id)
-                        _this.calendarName = response.data.calendar.data.title
+                        this.calendarId.push(response.data.calendar.data.id);
+                        this.calendarName = response.data.calendar.data.title;
                     }
-                    //日程展示
+                    // 日程展示
                     if (response.data.schedule) {
                         for (let i = 0; i < response.data.schedule.data.length; i++) {
-                            _this.scheduleShow.push(response.data.schedule.data[i])
+                            this.scheduleShow.push(response.data.schedule.data[i]);
                         }
                     }
-                })
-            }
+                });
+            },
 
-            ,
-            ScheduleBox: function (value) {
-                this.showScheduleModal(value)
-            }
-            ,
-            /*查看日历详情 --添加日历 -- 修改日历 */
+            ScheduleBox(value) {
+                this.showScheduleModal(value);
+            },
+            /* 查看日历详情 --添加日历 -- 修改日历 */
 
-            //获取日历详情
-            showScheduleModal: function (schedule) {
-                let data = {
+            // 获取日历详情
+            showScheduleModal(schedule) {
+                const data = {
                     include: 'calendar,participants,creator,material,affixes,project,task',
                 };
-                fetch('get', '/schedules/' + schedule.id, data).then(response => {
-                  
+                fetch('get', `/schedules/${schedule.id}`, data).then((response) => {
                     if (!response) {
                         this.scheduleData = schedule;
                         this.noPermission = true;
-                        return
+                        return;
                     }
                     this.noPermission = false;
                     this.scheduleData = response.data;
                     this.scheduleParticipants = JSON.parse(JSON.stringify(response.data.participants.data));
                     this.$store.dispatch('changeParticipantsInfo', {data: response.data.participants.data});
                 });
-                $('#checkSchedule').modal('show')
-            }
-            ,
-            addSchedule: function () {
+                $('#checkSchedule').modal('show');
+            },
+            addSchedule() {
                 let startTime = '';
                 let endTime = '';
                 if (this.isScheduleAllday) {
                     startTime = this.startTime;
                     endTime = this.endTime;
                 } else {
-                    startTime = this.startTime + ' ' + this.startMinutes;
-                    endTime = this.endTime + ' ' + this.endMinutes;
+                    startTime = `${this.startTime} ${this.startMinutes}`;
+                    endTime = `${this.endTime} ${this.endMinutes}`;
 
                     if (startTime > endTime) {
                         toastr.error('开始时间不能晚于截止时间');
-                        return
+                        return;
                     }
 
                     if (this.startTime === this.endTime) {
-                        let startMinutesArr = this.startMinutes.split(':');
-                        let endMinutesArr = this.endMinutes.split(':');
+                        const startMinutesArr = this.startMinutes.split(':');
+                        const endMinutesArr = this.endMinutes.split(':');
                         if (startMinutesArr[0] === endMinutesArr[0]) {
                             if ((Number(endMinutesArr[1]) - Number(startMinutesArr[1])) < 30) {
                                 toastr.error('日程时间不能小于30分钟');
-                                return
+                                return;
                             }
-
                         }
                     }
                 }
-                // for (let key in this.scheduleRemind ){
-                //     this.scheduleRemindDate.push(this.scheduleRemind[key])
-                // }
-                let data = {
+                this.isAddScheduleButtonDisable = true;
+                const data = {
                     title: this.scheduleName,
                     calendar_id: this.calendarId[0],
                     is_allday: this.isScheduleAllday,
@@ -1516,7 +1413,6 @@
                     end_at: endTime,
                     repeat: this.scheduleRepeat,
                     desc: this.eventDesc,
-                    // remind: this.scheduleRemind
                 };
                 if (this.eventPlace) {
                     data.position = this.eventPlace;
@@ -1526,9 +1422,9 @@
                 }
                 if (this.$store.state.newParticipantsInfo) {
                     data.participant_ids = [];
-                    let newParticipantsInfo = this.$store.state.newParticipantsInfo;
+                    const newParticipantsInfo = this.$store.state.newParticipantsInfo;
                     for (let i = 0; i < newParticipantsInfo.length; i++) {
-                        data.participant_ids.push(newParticipantsInfo[i].id)
+                        data.participant_ids.push(newParticipantsInfo[i].id);
                     }
                 }
                 if (this.linkageSelectedIds.projects.length > 0) {
@@ -1538,32 +1434,31 @@
                     data.task_ids = this.linkageSelectedIds.tasks;
                 }
                 fetch('post', '/schedules', data).then(() => {
+                    this.isAddScheduleButtonDisable = false;
                     this.$refs.calendar.refresh();
                     $('#changeSchedule').modal('hide');
-                    toastr.success('添加成功')
-                })
-            }
-            ,
-            showToast: function (clientX, clientY) {
+                    toastr.success('添加成功');
+                });
+            },
+            showToast(clientX, clientY) {
                 this.toastX = clientX - 100;
                 this.toastY = clientY - 25;
                 this.toastShow = true;
                 setTimeout(() => {
-                    this.toastShow = false
-                }, 1000)
-            }
-            ,
-            changeSchedule: function () {
+                    this.toastShow = false;
+                }, 1000);
+            },
+            changeSchedule() {
                 let startTime = '';
                 let endTime = '';
                 if (this.isScheduleAllday) {
                     startTime = this.startTime;
                     endTime = this.endTime;
                 } else {
-                    startTime = this.startTime + ' ' + this.startMinutes;
-                    endTime = this.endTime + ' ' + this.endMinutes;
+                    startTime = `${this.startTime} ${this.startMinutes}`;
+                    endTime = `${this.endTime} ${this.endMinutes}`;
                 }
-                let data = {
+                const data = {
                     title: this.scheduleName,
                     calendar_id: this.scheduleCalendar,
                     is_allday: this.isScheduleAllday,
@@ -1572,7 +1467,7 @@
                     end_at: endTime,
                     repeat: this.scheduleRepeat,
                     desc: this.eventDesc,
-                    material_id: this.scheduleMaterialId
+                    material_id: this.scheduleMaterialId,
                 };
                 if (this.eventPlace) {
                     data.position = this.eventPlace;
@@ -1580,15 +1475,15 @@
 
                 data.participant_del_ids = [];
                 data.participant_ids = [];
-                let flagInfo = this.$store.state.newParticipantsInfo;
+                const flagInfo = this.$store.state.newParticipantsInfo;
                 for (let i = 0; i < this.scheduleParticipants.length; i++) {
                     if (flagInfo.map(item => item.id).indexOf(this.scheduleParticipants[i].id) === -1) {
-                        data.participant_del_ids.push(this.scheduleParticipants[i].id)
+                        data.participant_del_ids.push(this.scheduleParticipants[i].id);
                     }
                 }
                 for (let i = 0; i < flagInfo.length; i++) {
                     if (this.scheduleParticipants.map(item => item.id).indexOf(flagInfo[i].id) === -1) {
-                        data.participant_ids.push(flagInfo[i].id)
+                        data.participant_ids.push(flagInfo[i].id);
                     }
                 }
 
@@ -1599,188 +1494,169 @@
                     data.task_ids = this.linkageSelectedIds.tasks;
                 }
 
-                fetch('put', '/schedules/' + this.scheduleData.id, data).then(() => {
+                fetch('put', `/schedules/${this.scheduleData.id}`, data).then(() => {
                     this.$refs.calendar.refresh();
                     $('#changeSchedule').modal('hide');
-                    toastr.success('修改成功')
-                })
-            }
-            ,
-            taskcancel: function () {
-                this.getTaskList()
-                this.getArtist()
-                this.setDefaultPrincipal()
-                this.$store.state.newParticipantsInfo = []
-                this.taskType = ''
-                this.taskName = ''
-                this.taskLevel = ''
-                this.startTime = ''
-                this.endTime = ''
-                this.startMinutes = ''
-                this.endMinutes = ''
-                this.taskIntroduce = ''
-                this.$refs.taskType.setValue('')
-                this.$refs.taskStartTime.setValue('0')
-                this.$refs.taskStartDate.setValue('')
-                this.$refs.taskEndDate.setValue('')
-                this.$refs.taskEndTime.setValue('0')
-                this.$refs.taskLevel.setValue('')
-            }
-            ,
-            selectScheduleCalendar: function (value) {
-                this.scheduleCalendar = value
-            }
-            ,
-            changeIsAllDay: function (e) {
+                    toastr.success('修改成功');
+                });
+            },
+            taskcancel() {
+                this.getTaskList();
+                this.getArtist();
+                this.setDefaultPrincipal();
+                this.$store.state.newParticipantsInfo = [];
+                this.taskType = '';
+                this.taskName = '';
+                this.taskLevel = '';
+                this.startTime = '';
+                this.endTime = '';
+                this.startMinutes = '';
+                this.endMinutes = '';
+                this.taskIntroduce = '';
+                this.$refs.taskType.setValue('');
+                this.$refs.taskStartTime.setValue('0');
+                this.$refs.taskStartDate.setValue('');
+                this.$refs.taskEndDate.setValue('');
+                this.$refs.taskEndTime.setValue('0');
+                this.$refs.taskLevel.setValue('');
+            },
+            selectScheduleCalendar(value) {
+                this.scheduleCalendar = value;
+            },
+            changeIsAllDay(e) {
                 this.isScheduleAllday = Number(e.target.checked);
-            }
-            ,
-            showAddScheduleModal: function (date) {
+            },
+            showAddScheduleModal(date) {
                 if (this.calendarId.length > 0) {
                     this.$refs.scheduleStartDate.setValue(date);
                     this.$refs.scheduleEndDate.setValue(date);
                     this.startTime = date;
                     this.endTime = date;
-                    $('#changeSchedule').modal('show')
+                    $('#changeSchedule').modal('show');
                 } else {
-                    toastr.error('该艺人无对应艺人日历，请先创建艺人日历')
+                    toastr.error('该艺人无对应艺人日历，请先创建艺人日历');
                 }
-            }
-            ,
-            selectProjectLinkage: function (value) {
-                this.linkageResource = value;
+            },
+            selectProjectLinkage(value) {
                 if (!this.allProjectsInfo) {
-                    this.getAllProjects()
+                    this.getAllProjects();
                 }
                 if (!this.allTasksInfo) {
-                    this.getAllTasks()
+                    this.getAllTasks();
                 }
-            }
-            ,
-            getAllProjects: function () {
-                fetch('get', '/projects/all').then(response => {
-                    this.allProjectsInfo = response.data
-                })
-            }
-            ,
-            getAllTasks: function () {
-                fetch('get', '/tasksAll').then(response => {
-                    this.allTasksInfo = response.data
-                })
-            }
-            ,
-            addLinkageResource: function () {
+            },
+            getAllProjects() {
+                fetch('get', '/projects/all').then((response) => {
+                    this.allProjectsInfo = response.data;
+                });
+            },
+            getAllTasks() {
+                fetch('get', '/tasksAll').then((response) => {
+                    this.allTasksInfo = response.data;
+                });
+            },
+            addLinkageResource() {
                 $('#addLinkage').modal('hide');
-            }
-            ,
-            selectResource: function (type, value) {
-                let index = this.linkageSelectedIds[type].indexOf(value);
+            },
+            selectResource(type, value) {
+                const index = this.linkageSelectedIds[type].indexOf(value);
                 if (index > -1) {
-                    this.linkageSelectedIds[type].splice(index, 1)
+                    this.linkageSelectedIds[type].splice(index, 1);
                 } else {
-                    this.linkageSelectedIds[type].push(value)
+                    this.linkageSelectedIds[type].push(value);
                 }
-            }
-            ,
-            delNewScheduleLinkage: function (type, value) {
-                let index = this.linkageSelectedIds[type].indexOf(value);
-                this.linkageSelectedIds[type].splice(index, 1)
-            }
-            ,
-            changeCalendarColor: function (value) {
+            },
+            delNewScheduleLinkage(type, value) {
+                const index = this.linkageSelectedIds[type].indexOf(value);
+                this.linkageSelectedIds[type].splice(index, 1);
+            },
+            changeCalendarColor(value) {
                 this.checkColor = value;
-            }
-            ,
+            },
             getResources(type) {
                 let data = {};
                 if (type) {
                     data = {
-                        type: type
+                        type,
                     };
                 }
-                fetch('get', '/materials/all', data).then(response => {
+                fetch('get', '/materials/all', data).then((response) => {
                     if (type) {
                         this.meetingRomeList = response.data;
                     } else {
                         this.allMeetingRomeList = response.data;
                     }
-                })
-            }
-            ,
-            changeScheduleRepeat: function (value) {
+                });
+            },
+            changeScheduleRepeat(value) {
                 this.scheduleRepeat = value;
-            }
-            ,
-            isShowMore: function () {
-                this.showMore = !this.showMore
-            }
-            ,
-            changeScheduleMaterial: function (value) {
+            },
+            isShowMore() {
+                this.showMore = !this.showMore;
+            },
+            changeScheduleMaterial(value) {
                 this.scheduleMaterialId = value;
-            }
-            ,
-            fileUpload: function (url, name, size) {
-                let data = {
+            },
+            fileUpload(url, name, size) {
+                const data = {
                     title: name,
-                    url: url,
-                    size: size,
-                    type: 1
+                    url,
+                    size,
+                    type: 1,
                 };
-                fetch('post', '/schedules/' + this.scheduleData.id + '/affix', data).then(response => {
+                fetch('post', `/schedules/${this.scheduleData.id}/affix`, data).then((response) => {
                     toastr.success('上传成功');
                     if (this.scheduleData.affixes) {
-                        this.scheduleData.affixes.data.push(response.data)
+                        this.scheduleData.affixes.data.push(response.data);
                     } else {
                         this.scheduleData.affixes = {data: []};
-                        this.scheduleData.affixes.data.push(response.data)
+                        this.scheduleData.affixes.data.push(response.data);
                     }
-                })
-            }
-            ,
-            changeScheduleParticipants: function (value) {
-                let data = {};
+                });
+            },
+            changeScheduleParticipants(value) {
+                const data = {};
                 if (value) {
                     data.participant_del_ids = [value];
                 } else {
-                    let participantsInfo = this.$store.state.newParticipantsInfo;
+                    const participantsInfo = this.$store.state.newParticipantsInfo;
                     data.participant_ids = [];
                     data.participant_del_ids = [];
                     for (let i = 0; i < participantsInfo.length; i++) {
                         if (this.scheduleParticipants.map(item => item.id).indexOf(participantsInfo[i].id) === -1) {
-                            data.participant_ids.push(participantsInfo[i].id)
+                            data.participant_ids.push(participantsInfo[i].id);
                         }
                     }
                     for (let i = 0; i < this.scheduleParticipants.length; i++) {
                         if (participantsInfo.map(item => item.id).indexOf(this.scheduleParticipants[i].id) === -1) {
-                            data.participant_del_ids.push(this.scheduleParticipants[i].id)
+                            data.participant_del_ids.push(this.scheduleParticipants[i].id);
                         }
                     }
                 }
-                fetch('put', '/schedules/' + this.scheduleData.id, data).then(() => {
+                fetch('put', `/schedules/${this.scheduleData.id}`, data).then(() => {
                     this.$refs.calendar.refresh();
                     this.scheduleParticipants = JSON.parse(JSON.stringify(this.$store.state.newParticipantsInfo));
-                })
-            }
-            ,
-            changeScheduleType: function (type) {
+                });
+            },
+            changeScheduleType(type) {
                 this.scheduleType = type;
                 $('#checkSchedule').modal('hide');
-                setTimeout(function () {
+                setTimeout(() => {
                     $('#changeSchedule').modal('show');
                 }, 400);
                 if (type === 'edit') {
                     this.scheduleName = this.scheduleData.title;
                     this.scheduleCalendar = this.scheduleData.calendar.data.id;
                     this.$refs.scheduleStartDate.setValue(this.scheduleData.start_at.split(' ')[0]);
-                    let startMinutes = this.scheduleData.start_at.split(' ')[1].split(':');
+                    const startMinutes = this.scheduleData.start_at.split(' ')[1].split(':');
                     this.$refs.scheduleStartMinute.setValue(startMinutes);
                     this.startTime = this.scheduleData.start_at.split(' ')[0];
-                    this.startMinutes = startMinutes[0] + ':' + startMinutes[1];
+                    this.startMinutes = `${startMinutes[0]}:${startMinutes[1]}`;
                     this.$refs.scheduleEndDate.setValue(this.scheduleData.end_at.split(' ')[0]);
-                    let endMinutes = this.scheduleData.end_at.split(' ')[1].split(':');
+                    const endMinutes = this.scheduleData.end_at.split(' ')[1].split(':');
                     this.$refs.scheduleEndMinute.setValue(endMinutes);
                     this.endTime = this.scheduleData.end_at.split(' ')[0];
-                    this.endMinutes = endMinutes[0] + ':' + endMinutes[1];
+                    this.endMinutes = `${endMinutes[0]}:${endMinutes[1]}`;
                     this.isAllday = this.scheduleData.is_allday;
                     this.eventDesc = this.scheduleData.desc;
                     this.eventPlace = this.scheduleData.position;
@@ -1792,41 +1668,37 @@
                     if (this.scheduleData.project.data.length > 0) {
                         this.linkageSelectedIds.projects = [];
                         for (let i = 0; i < this.scheduleData.project.data.length; i++) {
-                            this.linkageSelectedIds.projects.push(this.scheduleData.project.data[i].moduleable_id)
+                            this.linkageSelectedIds.projects.push(this.scheduleData.project.data[i].moduleable_id);
                         }
                     }
                     if (this.scheduleData.task.data.length > 0) {
                         this.linkageSelectedIds.tasks = [];
                         for (let i = 0; i < this.scheduleData.task.data.length; i++) {
-                            this.linkageSelectedIds.tasks.push(this.scheduleData.task.data[i].moduleable_id)
+                            this.linkageSelectedIds.tasks.push(this.scheduleData.task.data[i].moduleable_id);
                         }
                     }
                 }
-            }
-            ,
-            deleteToastr: function (type, calendar = null) {
+            },
+            deleteToastr(type, calendar = null) {
                 this.delType = type;
                 if (calendar) {
-                    this.delCalendarInfo = calendar
+                    this.delCalendarInfo = calendar;
                 }
                 if (type === 'schedule') {
                     $('#checkSchedule').modal('hide');
                 }
-            }
-            ,
-            deleteSchedule: function () {
-                fetch('delete', '/schedules/' + this.scheduleData.id).then(() => {
+            },
+            deleteSchedule() {
+                fetch('delete', `/schedules/${this.scheduleData.id}`).then(() => {
                     $('#delModel').modal('hide');
                     toastr.success('删除成功');
-                    this.$refs.calendar.refresh()
-                })
+                    this.$refs.calendar.refresh();
+                });
             },
-            changeScheduleRemind: function (value) {
-                
-                this.scheduleRemind = value
-            }
-            ,
-            initAddScheduleModal: function () {
+            changeScheduleRemind(value) {
+                this.scheduleRemind = value;
+            },
+            initAddScheduleModal() {
                 this.showMore = false;
                 this.$store.dispatch('changeParticipantsInfo', {data: []});
                 this.scheduleName = '';
@@ -1846,7 +1718,7 @@
                 this.scheduleType = 'add';
                 this.linkageSelectedIds = {
                     projects: [],
-                    tasks: []
+                    tasks: [],
                 };
                 this.$refs.scheduleStartDate.setValue('');
                 this.$refs.scheduleEndDate.setValue('');
@@ -1857,118 +1729,105 @@
                 // this.$refs.scheduleNotice.setValue('0');
                 this.$refs.scheduleRemind.setValue('0');
                 // this.this.scheduleRemindDate = []
-            }
-            ,
-            /*查看日历详情 --添加日历 -- 修改日历 --结束*/
+            },
+            /* 查看日历详情 --添加日历 -- 修改日历 --结束 */
 
-            //获取账单
-            getArtistsBill: function (page = 1, expense_type) {
-              
-                let _this = this
+            // 获取账单
+            getArtistsBill(page = 1, expense_type) {
                 if (expense_type) {
-                    _this.expense_type = expense_type
+                    this.expense_type = expense_type;
                 } else {
-                    _this.expense_type = 0
+                    this.expense_type = 0;
                 }
                 fetch('get', `/stars/${this.$route.params.id}/bill`, {
-                    page:page,
-                    expense_type: _this.expense_type
+                    page,
+                    expense_type: this.expense_type,
                 }).then(response => {
-                    _this.artistBillsInfo = response.data
-                    _this.current_page = response.meta.pagination.current_page;
-                    _this.total = response.meta.pagination.total;
-                    _this.total_pages = response.meta.pagination.total_pages;
+                    this.artistBillsInfo = response.data;
+                    this.current_page = response.meta.pagination.current_page;
+                    this.total = response.meta.pagination.total;
+                    this.total_pages = response.meta.pagination.total_pages;
                     if (response.meta.incomesum) {
-                        _this.incomesum = response.meta.incomesum.toFixed(2)//收入总和
+                        this.incomesum = response.meta.incomesum.toFixed(2);// 收入总和
                     }
                     if (response.meta.expendituresum) {
-                        _this.expendituresum = response.meta.expendituresum.toFixed(2)//支出总和
+                        this.expendituresum = response.meta.expendituresum.toFixed(2);// 支出总和
                     }
-                })
-            }
-            ,
+                });
+            },
 
-            getTaskType: function () {
-                let _this = this;
-                fetch('get', '/task_types').then(function (response) {
+            getTaskType() {
+                fetch('get', '/task_types').then(response => {
                     for (let i = 0; i < response.data.length; i++) {
-                        _this.taskTypeArr.push({
+                        this.taskTypeArr.push({
                             value: response.data[i].id,
-                            name: response.data[i].title
-                        })
+                            name: response.data[i].title,
+                        });
                     }
-                })
-            }
-            ,
-            //获取任务列表
-            getTaskList: function (page = 1) {
-               
-                let _this = this
-                fetch('get', `/stars/${this.$route.params.id}/tasks/`,{
-                    page:page
+                });
+            },
+            // 获取任务列表
+            getTaskList(page = 1) {
+                fetch('get', `/stars/${this.$route.params.id}/tasks/`, {
+                    page,
                 }).then(response => {
-                    _this.allTaskList = response.data
-                   
-                    _this.current_page = response.meta.pagination.current_page;
-                    _this.total = response.meta.pagination.total;
-                    _this.total_pages = response.meta.pagination.total_pages;
-                    response.data.forEach(item => {
-                        if (item.status !== 2 && new Date(item.end_at).getTime() < new Date().getTime()) {
-                            item.status = 4
-                        }
-                    })
-                })
-            },
-            getTaskDate: function () {
-                this.doneTaskNum = 0
-                let _this = this
-                fetch('get', `/stars/${this.$route.params.id}/tasks`).then(response => {
-                    _this.allTaskList = response.data
-                    if (_this.allTaskList.length > 0) {
-                        for (let i = 0; i < _this.allTaskList.length; i++) {
-                            if (_this.allTaskList[i].status == 2) {
-                                _this.doneTaskNum = _this.doneTaskNum + 1
-                            }
+                    this.allTaskList = response.data;
 
+                    this.current_page = response.meta.pagination.current_page;
+                    this.total = response.meta.pagination.total;
+                    this.total_pages = response.meta.pagination.total_pages;
+                    response.data.forEach((item) => {
+                        if (item.status !== 2 && new Date(item.end_at).getTime() < new Date().getTime()) {
+                            item.status = 4;
+                        }
+                    });
+                });
+            },
+            getTaskDate() {
+                this.doneTaskNum = 0;
+                fetch('get', `/stars/${this.$route.params.id}/tasks`).then(response => {
+                    this.allTaskList = response.data;
+                    if (this.allTaskList.length > 0) {
+                        for (let i = 0; i < this.allTaskList.length; i++) {
+                            if (this.allTaskList[i].status == 2) {
+                                this.doneTaskNum += 1;
+                            }
                         }
                     }
-                  
-                    _this.taskNum = `${_this.doneTaskNum}/${response.meta.pagination.total}`
-                })
+
+                    this.taskNum = `${this.doneTaskNum}/${response.meta.pagination.total}`;
+                });
             },
-            selectDate: function (value) {
+            selectDate(value) {
                 this.selectedDate = value;
-                this.$refs.meetingRoom.setDate(value)
-            }
-            ,
-            //获取三个项目
-            getProjectList: function () {
-                let _this = this
+                this.$refs.meetingRoom.setDate(value);
+            },
+            // 获取三个项目
+            getProjectList() {
                 fetch('get', `/projects/star/${this.$route.params.id}`).then(response => {
-                    _this.threeProjectList = response
-                })
-            }
-            ,
-            //粉丝数据
-            draw: function () {
-                let myChart = echarts.init(document.getElementById('myChart'));
+                    this.threeProjectList = response;
+                });
+            },
+            // 粉丝数据
+            draw() {
+                const myChart = echarts.init(document.getElementById('myChart'));
 
                 // 指定图表的配置项和数据
-                let option = {
+                const option = {
                     title: {
-                        text: '粉丝统计'
+                        text: '粉丝统计',
                     },
                     tooltip: {
-                        trigger: 'axis'
+                        trigger: 'axis',
                     },
                     legend: {
-                        data: ['微博', '百科', '抖音', '其他']
+                        data: ['微博', '百科', '抖音', '其他'],
                     },
                     grid: {
                         left: '3%',
                         right: '5%',
                         bottom: '3%',
-                        containLabel: true
+                        containLabel: true,
                     },
                     toolbox: {
                         feature: {
@@ -1977,507 +1836,365 @@
                                 title: '保存',
                                 iconStyle: {
                                     textPosition: 10000,
-                                    textAlign: 'left'
-                                }
+                                    textAlign: 'left',
+                                },
 
-                            }
-                        }
+                            },
+                        },
                     },
                     xAxis: {
                         type: 'category',
                         boundaryGap: false,
-                        data: ['2018', '2017', '2016', '2015', '2014', '2013', '2012']
+                        data: ['2018', '2017', '2016', '2015', '2014', '2013', '2012'],
                     },
                     yAxis: {
-                        type: 'value'
+                        type: 'value',
                     },
                     series: [
                         {
                             name: '微博',
                             type: 'line',
                             stack: '总量',
-                            data: [120, 132, 101, 134, 90, 230, 210]
+                            data: [120, 132, 101, 134, 90, 230, 210],
                         },
                         {
                             name: '百科',
                             type: 'line',
                             stack: '总量',
-                            data: [220, 182, 191, 234, 290, 330, 310]
+                            data: [220, 182, 191, 234, 290, 330, 310],
                         },
                         {
                             name: '抖音',
                             type: 'line',
                             stack: '总量',
-                            data: [150, 232, 201, 154, 190, 330, 410]
+                            data: [150, 232, 201, 154, 190, 330, 410],
                         },
                         {
                             name: '其他',
                             type: 'line',
                             stack: '总量',
-                            data: [320, 332, 301, 334, 390, 330, 320]
+                            data: [320, 332, 301, 334, 390, 330, 320],
                         },
-                        // {
-                        //     name:'搜索引擎',
-                        //     type:'line',
-                        //     stack: '总量',
-                        //     data:[820, 932, 901, 934, 1290, 1330, 1320]
-                        // }
-                    ]
+                    ],
                 };
 
                 // 使用刚指定的配置项和数据显示图表。
                 myChart.setOption(option);
-            }
-            ,
-            getArtistWorks: function () {
+            },
 
-            }
-            ,
-            run: function (res, callback) {
-                this.changeArtistBaseInfo(res, 'avatar')
-                return callback()
-            }
-            ,
-            //上传头像 ---修改头像
+            run(res, callback) {
+                this.changeArtistBaseInfo(res, 'avatar');
+                return callback();
+            },
+            // 上传头像 ---修改头像
             getUploadUrl(res) {
-                let _this = this
                 if (!this.isEdit) {
-                    this.changeArtistInfo = {}
+                    this.changeArtistInfo = {};
                 }
-                _this.uploadUrl = res
-                _this.run(res, function () {
-                    _this.changeArtist()
-                })
-            }
-            ,
-            changeTaskType: function (value) {
-                this.taskType = value
-            }
-            ,
+                this.uploadUrl = res;
+                this.run(res, () => {
+                    this.changeArtist();
+                });
+            },
+            changeTaskType(value) {
+                this.taskType = value;
+            },
 
-            changeTaskLevel: function (value) {
-                this.taskLevel = value
-            }
-            ,
+            changeTaskLevel(value) {
+                this.taskLevel = value;
+            },
 
-            changeStartTime: function (value) {
+            changeStartTime(value) {
+                this.startTime = value;
+            },
 
-                this.startTime = value
+            changeStartMinutes(value) {
+                this.startMinutes = value;
+            },
 
-            }
-            ,
+            changeEndTime(value) {
+                this.endTime = value;
+            },
 
-            changeStartMinutes: function (value) {
-                this.startMinutes = value
-            }
-            ,
+            changeEndMinutes(value) {
+                this.endMinutes = value;
+            },
 
-            changeEndTime: function (value) {
-                this.endTime = value
-            }
-            ,
-
-            changeEndMinutes: function (value) {
-                this.endMinutes = value
-            }
-            ,
-            //设置默认负责人
-            // setDefault:function(){
-            //     // let defaultParams = 
-
-            //     this.$store.state.newPrincipalInfo = {id:this.$route.params.id}
-            // },
-
-            //添加任务
-            addTask: function () {
-                let participant_ids = [];
-                let start, end, startMin, endMin
-                for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
-                    participant_ids.push(this.$store.state.newParticipantsInfo[i].id)
-                }
-
-                if (!this.taskType) {
-                    toastr.error('请选择任务类型')
-                    return false
-                }
-                if (!this.taskName) {
-                    toastr.error('请输入任务名称')
-                    return false
-                }
-                if (!this.$store.state.newPrincipalInfo.id) {
-                    toastr.error('请选择负责人')
-                    return false
-                }
-                // if (participant_ids.length <= 0) {
-                //     toastr.error('请选择参与人')
-                //     return false
-                // }
-                if (!this.taskLevel) {
-                    toastr.error('请选择任务优先级')
-                    return false
-                }
-                if (!this.startTime) {
-                    toastr.error('请选择任务开始日期')
-                    return false
-                }
-                if (!this.startMinutes) {
-                    toastr.error('请选择任务开始时间')
-                    return false
-                }
-                if (!this.endTime) {
-                    toastr.error('请选择任务结束日期')
-                    return false
-                }
-                if (!this.endMinutes) {
-                    toastr.error('请选择任务结束时间')
-                    return false
-                }
-
-                //判断开始时间必须早于结束时间
-                startMin = this.startMinutes.split(':')
-                endMin = this.endMinutes.split(':')
-                start = new Date(this.startTime).getTime() + startMin[0] * 60 * 60 * 1000 + startMin[1] * 60 * 1000
-                end = new Date(this.endTime).getTime() + endMin[0] * 60 * 60 * 1000 + endMin[1] * 60 * 1000
-                if (start > end) {
-                    toastr.error('开始时间不能晚于截止时间');
-                    return false;
-                }
-
-                let data = {
-                    title: this.taskName,
-                    principal_id: this.$store.state.newPrincipalInfo.id,
-                    participant_ids: participant_ids,
-                    start_at: this.startTime + ' ' + this.startMinutes,
-                    end_at: this.endTime + ' ' + this.endMinutes,
-                    resource_type: 2,
-                    resourceable_id: this.artistId,
-                    priority: this.taskLevel,
-                    desc: this.taskIntroduce,
-                    type: this.taskType
-                };
-                let _this = this;
-                fetch('post', '/tasks', data).then(function (response) {
-                    toastr.success('创建成功');
-                    _this.allTaskList.push(response.data)
-                    $('#addTask').modal('hide');
-                    _this.getTaskList()
-                    _this.getTaskDate()
-                    _this.getArtist()
-                    _this.setDefaultPrincipal()
-                    _this.$store.state.newParticipantsInfo = []
-                    _this.taskType = ''
-                    _this.taskName = ''
-                    _this.taskLevel = ''
-                    _this.startTime = ''
-                    _this.endTime = ''
-                    _this.startMinutes = ''
-                    _this.endMinutes = ''
-                    _this.taskIntroduce = ''
-                    _this.$refs.taskType.setValue('')
-                    _this.$refs.taskStartTime.setValue('0')
-                    _this.$refs.taskStartDate.setValue('')
-                    _this.$refs.taskEndDate.setValue('')
-                    _this.$refs.taskEndTime.setValue('0')
-                    _this.$refs.taskLevel.setValue('')
-                })
-            }
-            ,
-            //设置默认负责人
+            // 添加任务
+            addTask(response) {
+                this.allTaskList.push(response.data);
+            },
+            // 设置默认负责人
             setDefaultPrincipal() {
                 this.$store.commit('changeNewPrincipal', {
                     name: this.user.nickname,
-                    id: this.user.id
-                })
-                this.$store.commit('changeNewParticipantsInfo', [])
-            }
-            ,
-            //添加作品
-            addWork: function () {
+                    id: this.user.id,
+                });
+                this.$store.commit('changeNewParticipantsInfo', []);
+            },
+            // 添加作品
+            addWork() {
                 if (!this.artistWorkName) {
-                    toastr.error('请填写作品名称')
-                    return false
+                    toastr.error('请填写作品名称');
+                    return false;
                 }
                 if (!this.workReleaseTime) {
-                    toastr.error('请选择作品发布时间')
-                    return false
+                    toastr.error('请选择作品发布时间');
+                    return false;
                 }
                 if (!this.workType) {
-                    toastr.error('请选择作品类型')
-                    return false
+                    toastr.error('请选择作品类型');
+                    return false;
                 }
                 if (!this.character) {
-                    toastr.error('请选择角色')
-                    return false
+                    toastr.error('请选择角色');
+                    return false;
                 }
                 if (!this.coActor) {
-                    toastr.error('请填写合作演员')
-                    return false
+                    toastr.error('请填写合作演员');
+                    return false;
                 }
-                let data = {
+                this.isAddWorkButtonDisable = true;
+                const data = {
                     name: this.artistWorkName,
                     director: this.artistWorkDirector,
                     role: this.character,
                     co_star: this.coActor,
                     release_time: this.workReleaseTime,
-                    works_type: this.workType
+                    works_type: this.workType,
                 };
-                let _this = this;
-                fetch('post', `/stars/${this.$route.params.id}/works`, data).then(function (response) {
+                fetch('post', `/stars/${this.$route.params.id}/works`, data).then(response => {
                     toastr.success('新增成功');
                     $('#addWork').modal('hide');
-                    _this.artistWorksInfo.push(response.data)
-                    _this.artistWorkName = ''
-                    _this.artistWorkDirector = ''
-                    _this.character = ''
-                    _this.coActor = ''
-                    _this.workReleaseTime = ''
-                    _this.workType = ''
-                    _this.$refs.workType.setValue('')
-                    _this.$refs.workTime.setValue('');
-                })
-            }
-            ,
+                    this.isAddWorkButtonDisable = false;
+                    this.artistWorksInfo.push(response.data);
+                    this.artistWorkName = '';
+                    this.artistWorkDirector = '';
+                    this.character = '';
+                    this.coActor = '';
+                    this.workReleaseTime = '';
+                    this.workType = '';
+                    this.$refs.workType.setValue('');
+                    this.$refs.workTime.setValue('');
+                });
+            },
 
-            addPrivacy: function () {
-                $('#addPrivacy').modal('hide')
-                this.$store.state.collectInfo = []
-                this.$store.state.payInfo = []
-                this.$store.state.contractInfo = []
-                this.$store.state.divisionInfo = []
-                this.$store.state.incubationInfo = []
-                this.$store.state.billInfo = []
-            }
-            ,
+            addPrivacy() {
+                $('#addPrivacy').modal('hide');
+                this.$store.state.collectInfo = [];
+                this.$store.state.payInfo = [];
+                this.$store.state.contractInfo = [];
+                this.$store.state.divisionInfo = [];
+                this.$store.state.incubationInfo = [];
+                this.$store.state.billInfo = [];
+            },
 
-            changeWorkReleaseTime: function (value) {
-                this.workReleaseTime = value
-            }
-            ,
+            changeWorkReleaseTime(value) {
+                this.workReleaseTime = value;
+            },
 
-            changeWorkType: function (value) {
-                this.workType = value
-            }
-            ,
+            changeWorkType(value) {
+                this.workType = value;
+            },
 
-            editBaseInfo: function () {
+            editBaseInfo() {
+                if (this.$store.state.power.star !== 'true') {
+                    toastr.error('当前用户没有权限编辑艺人');
+                    return;
+                }
                 this.isEdit = true;
                 this.changeArtistInfo = {};
-            }
-            ,
+            },
 
-            cancelEdit: function () {
-                this.isEdit = false
-            }
-            ,
-            //修改基本信息
-            changeArtistBaseInfo: function (value, name) {
+            cancelEdit() {
+                this.isEdit = false;
+            },
+            // 修改基本信息
+            changeArtistBaseInfo(value, name) {
                 if (name === 'platform') {
-                    value = value.join(',')
+                    value = value.join(',');
                 }
 
                 if (name === 'broker_id') {
                     if (value) {
-                        value = this.$store.state.principalInfo.id
+                        value = this.$store.state.principalInfo.id;
                     } else {
-                        return
+                        return;
                     }
                 } else if (name === 'intention') {
                     if (value.key === 'value') {
-                        name = 'intention_desc'
+                        name = 'intention_desc';
                     }
                     if (value.key === 'condition') {
-                        name = 'intention'
+                        name = 'intention';
                     }
-                    value = value.value
-
+                    value = value.value;
                 } else if (name === 'sign_contract_other') {
                     if (value.key === 'value') {
-                        name = 'sign_contract_other_name'
+                        name = 'sign_contract_other_name';
                     }
                     if (value.key === 'condition') {
-                        name = 'sign_contract_other'
+                        name = 'sign_contract_other';
                     }
-                    value = value.value
+                    value = value.value;
                 }
-                this.changeArtistInfo[name] = value
-                console.log(this.changeArtistInfo )
-            }
-            ,
+                this.changeArtistInfo[name] = value;
+            },
 
-            changeArtist: function () {
-
-                if (this.changeArtistInfo.intention || this.changeArtistInfo.hasOwnProperty("intention_desc")) {
+            changeArtist() {
+                if (this.changeArtistInfo.intention || this.changeArtistInfo.hasOwnProperty('intention_desc')) {
                     if (this.$refs.condition.getSelectorValue() == 2) {
                         if (!this.changeArtistInfo.intention_desc) {
-                            toastr.error('请填写不签约理由')
-                            return false
+                            toastr.error('请填写不签约理由');
+                            return false;
                         }
                     } else {
-                        this.changeArtistInfo.intention_desc = ''
+                        this.changeArtistInfo.intention_desc = '';
                     }
                 }
-                if (this.changeArtistInfo.sign_contract_other || this.changeArtistInfo.hasOwnProperty("sign_contract_other_name")) {
+                if (this.changeArtistInfo.sign_contract_other || this.changeArtistInfo.hasOwnProperty('sign_contract_other_name')) {
                     if (this.$refs.condition1.getSelectorValue() == 1) {
                         if (!this.changeArtistInfo.sign_contract_other_name) {
-                            toastr.error('请输入已签约公司名称')
-                            return false
+                            toastr.error('请输入已签约公司名称');
+                            return false;
                         }
                     } else {
-                        this.changeArtistInfo.sign_contract_other_name
+                        this.changeArtistInfo.sign_contract_other_name;
                     }
                 }
-                
-                if (JSON.stringify(this.changeArtistInfo) === "{}") {
+
+                if (JSON.stringify(this.changeArtistInfo) === '{}') {
                     this.isEdit = false;
-                    return
+                    return;
                 }
-                let _this = this;
-                fetch('put', '/stars/' + this.artistId, this.changeArtistInfo).then(function (response) {
+                const _this = this;
+                fetch('put', `/stars/${this.artistId}`, this.changeArtistInfo).then((response) => {
                     toastr.success('修改成功');
                     if (_this.isEdit) {
                         _this.isEdit = false;
                     }
                     _this.getArtist();
-                })
-            }
-            ,
+                });
+            },
 
-            distributionPerson: function (value) {
-
+            distributionPerson(value) {
                 this.distributionType = value;
                 if (this.artistInfo[value].data.length > 0) {
-                    this.$store.state.participantsInfo = Object.assign([], this.artistInfo[value].data)
+                    this.$store.state.participantsInfo = Object.assign([], this.artistInfo[value].data);
                 }
-            }
-            ,
-            //分配经理人和分配宣传人 
-            addDistributionPerson: function () {
-                let toast,url
-                let data = {
+            },
+            // 分配经理人和分配宣传人
+            addDistributionPerson() {
+                let toast,
+                    url;
+                const data = {
                     person_ids: [],
-                    del_person_ids: []
+                    del_person_ids: [],
                 };
 
 
-                let personInfo = this.$store.state.participantsInfo;
-                let oldPersonInfo = this.artistInfo[this.distributionType].data
-                //todo 删除和新增的数据有问题
+                const personInfo = this.$store.state.participantsInfo;
+                const oldPersonInfo = this.artistInfo[this.distributionType].data;
+                // todo 删除和新增的数据有问题
                 if (this.artistInfo[this.distributionType].data.length > 0) {
-
                     for (let i = 0; i < this.artistInfo[this.distributionType].data.length; i++) {
-
                         if (personInfo.map(item => item.id).indexOf(this.artistInfo[this.distributionType].data[i].id) === -1) {
-
-                            data.del_person_ids.push(this.artistInfo[this.distributionType].data[i].id)
+                            data.del_person_ids.push(this.artistInfo[this.distributionType].data[i].id);
                         }
                     }
                 }
                 for (let i = 0; i < this.$store.state.participantsInfo.length; i++) {
-                    data.person_ids.push(this.$store.state.participantsInfo[i].id)
-
+                    data.person_ids.push(this.$store.state.participantsInfo[i].id);
                 }
 
                 if (this.distributionType === 'broker') {
                     // data.type = 3
                     toast = '分配经理人成功',
-                    url = `stars/${this.artistId}/broker`
+                        url = `stars/${this.artistId}/broker`;
                 } else {
                     // data.type = 2
-                    toast = '分配宣传人成功'
-                    url = `stars/${this.artistId}/publicity`
+                    toast = '分配宣传人成功';
+                    url = `stars/${this.artistId}/publicity`;
                 }
-                let _this = this;
-                fetch('post', url, data).then(function (response) {
-                    toastr.success(toast)
+                const _this = this;
+                fetch('post', url, data).then((response) => {
+                    toastr.success(toast);
                     $('#distributionBroker').modal('hide');
                     _this.getArtist();
-                    _this.$store.state.participantsInfo = []
-                })
-            }
-            ,
-            //获取附件类型
-            changeAttachmentType: function (value) {
-                this.affixesType = value
-            }
-            ,
-            //上传附件
-            uploadAttachment: function (url, name, size) {
+                    _this.$store.state.participantsInfo = [];
+                });
+            },
+            // 获取附件类型
+            changeAttachmentType(value) {
+                this.affixesType = value;
+            },
+            // 上传附件
+            uploadAttachment(url, name, size) {
                 if (!this.affixesType) {
                     toastr.error('请选择上传附件类型');
-                    return false
+                    return false;
                 }
 
-                //删除已存在的数据
+                // 删除已存在的数据
                 for (let i = 0; i < this.affixes.length; i++) {
                     if (this.affixes[i].type == this.affixesType) {
-
-                        this.affixes.splice(i, 1)
+                        this.affixes.splice(i, 1);
                     }
-
                 }
-                //添加新的数据
+                // 添加新的数据
                 this.affixes.push({
                     title: name,
-                    size: size,
-                    url: url,
-                    type: this.affixesType
-                })
-                this.changeArtistBaseInfo(this.affixes, 'affix')
-
-            }
-            ,
-            //获取附件id
-            getAffixId: function (id) {
-                this.affixId = id
-            }
-            ,
-            previewFile: function (url, name) {
-                this.previewUrl = url
-                this.previewName = name
-            }
-            ,
-            //删除附件
-            deleteAffix: function () {
-                let _this = this
-                fetch('delete', `/star/${this.$route.params.id}/affixes/${this.affixId}`).then(function (response) {
+                    size,
+                    url,
+                    type: this.affixesType,
+                });
+                this.changeArtistBaseInfo(this.affixes, 'affix');
+            },
+            // 获取附件id
+            getAffixId(id) {
+                this.affixId = id;
+            },
+            previewFile(url, name) {
+                this.previewUrl = url;
+                this.previewName = name;
+            },
+            // 删除附件
+            deleteAffix() {
+                const _this = this;
+                fetch('delete', `/star/${this.$route.params.id}/affixes/${this.affixId}`).then((response) => {
                     $('#affix').modal('hide');
                     toastr.success('删除成功');
                     _this.isEdit = false;
                     _this.getArtist();
-                })
-            }
-            ,
+                });
+            },
             contractlist(status) {
-                this.isDetail = false
-                let _this = this;
-                this.isDetail = false
-                let data = {
-                    type: this.contractType
-                }
-                data.status = status
-                fetch('get', 'approvals/specific_contract', data).then(function (response) {
-                    _this.formDate = response.data
-                    $('#approval-great-module').modal('show')
-                })
-            }
-            ,
-            filterProjectFee: function (value) {
+                this.isDetail = false;
+                const _this = this;
+                this.isDetail = false;
+                const data = {
+                    type: this.contractType,
+                };
+                data.status = status;
+                fetch('get', 'approvals/specific_contract', data).then((response) => {
+                    _this.formDate = response.data;
+                    $('#approval-great-module').modal('show');
+                });
+            },
+            filterProjectFee(value) {
                 this.filterFee = value;
-            }
-            ,
-            toProject: function (id) {
-                this.$router.push({path: '/projects/' + id});
-
-            }
-            ,
-            toTask: function (id) {
-                this.$router.push({path: '/tasks/' + id});
-            }
+            },
+            toProject(id) {
+                this.$router.push({path: `/projects/${id}`});
+            },
+            toTask(id) {
+                this.$router.push({path: `/tasks/${id}`});
+            },
 
         },
         filters: {
-            getWeek: function (date) {
-                let week = new Date(date).getDay();
+            getWeek(date) {
+                const week = new Date(date).getDay();
                 let value = '';
                 switch (week) {
                     case 0:
@@ -2504,57 +2221,51 @@
                 }
                 return value;
             },
-            jsGetAge: function (strBirthday) {
+            jsGetAge(strBirthday) {
                 if (strBirthday) {
-                    var returnAge;
+                    let returnAge;
                     // 根据生日计算年龄（"1995-09-25"）
-                    //以下五行是为了获取出生年月日，如果是从身份证上获取需要稍微改变一下
-                    var strBirthdayArr = strBirthday.split("-");
-                    var birthYear = strBirthdayArr[0];
-                    var birthMonth = strBirthdayArr[1];
-                    var birthDay = strBirthdayArr[2];
+                    // 以下五行是为了获取出生年月日，如果是从身份证上获取需要稍微改变一下
+                    const strBirthdayArr = strBirthday.split('-');
+                    const birthYear = strBirthdayArr[0];
+                    const birthMonth = strBirthdayArr[1];
+                    const birthDay = strBirthdayArr[2];
 
-                    var d = new Date();
-                    var nowYear = d.getFullYear();
-                    var nowMonth = d.getMonth() + 1;
-                    var nowDay = d.getDate();
+                    const d = new Date();
+                    const nowYear = d.getFullYear();
+                    const nowMonth = d.getMonth() + 1;
+                    const nowDay = d.getDate();
 
                     if (nowYear == birthYear) {
-                        returnAge = 0;//同年 则为0岁
-                    }
-                    else {
-                        var ageDiff = nowYear - birthYear; //年之差
+                        returnAge = 0;// 同年 则为0岁
+                    } else {
+                        const ageDiff = nowYear - birthYear; // 年之差
                         if (ageDiff > 0) {
                             if (nowMonth == birthMonth) {
-                                var dayDiff = nowDay - birthDay;//日之差
+                                const dayDiff = nowDay - birthDay;// 日之差
                                 if (dayDiff < 0) {
                                     returnAge = ageDiff - 1;
-                                }
-                                else {
+                                } else {
                                     returnAge = ageDiff;
                                 }
-                            }
-                            else {
-                                var monthDiff = nowMonth - birthMonth;//月之差
+                            } else {
+                                const monthDiff = nowMonth - birthMonth;// 月之差
                                 if (monthDiff < 0) {
                                     returnAge = ageDiff - 1;
-                                }
-                                else {
+                                } else {
                                     returnAge = ageDiff;
                                 }
                             }
-                        }
-                        else {
-                            returnAge = -1;//返回-1 表示出生日期输入错误 晚于今天
+                        } else {
+                            returnAge = -1;// 返回-1 表示出生日期输入错误 晚于今天
                         }
                     }
-                    return returnAge;//返回周岁年龄
-                } else {
-                    return strBirthday
+                    return returnAge;// 返回周岁年龄
                 }
+                return strBirthday;
             },
         },
-    }
+    };
 
 </script>
 
@@ -2574,10 +2285,11 @@
         left: 0;
         will-change: transform;
     }
-/* 
-    . {
-        height: 57px;
-    } */
+
+    /*
+        . {
+            height: 57px;
+        } */
 
     .uploadContent {
         position: relative;
@@ -2722,15 +2434,16 @@
     .projectshow:hover {
         cursor: pointer;
     }
-    .single{
+
+    .single {
         display: inline-block;
         width: 100%;
-        overflow:hidden; /*内容超出宽度时隐藏超出部分的内容 */
-        text-overflow:ellipsis;/* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用。*/
-        white-space:nowrap;
+        overflow: hidden; /*内容超出宽度时隐藏超出部分的内容 */
+        text-overflow: ellipsis; /* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用。*/
+        white-space: nowrap;
     }
-    .projectcontent:hover,.taskcontent:hover{
+
+    .projectcontent:hover, .taskcontent:hover {
         background: #eee
     }
 </style>
-

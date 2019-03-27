@@ -1,17 +1,17 @@
 <template>
   <div class="department-item">
-    <div class="name" :style="{paddingLeft: paddingLeft + 'px'}" @click="selectData">
+    <div class="name" :style="{paddingLeft: paddingLeft + 'px'}" @click="selectData()">
       <i v-show="visible" class="icon md-caret-down" @click.stop="showList" v-if="data.id"></i>
       <i v-show="!visible" class="icon md-caret-right" @click.stop="showList" v-if="data.id"></i>
       <img src="../assets/img/department@2x.png" v-if="data.id">
       {{ data.name }}
     </div>
-    <!-- <ul v-show="visible" v-if="!isEdit">
-            <li v-for="(_item, _index) in data.users.data" :key="_index" :style="{paddingLeft: paddingLeft + 40 + 'px'}">
-                {{ _item.name }}
-                <i class="icon md-eye" style="float: right;line-height: 40px;" @click.stop></i>
-            </li>
-    </ul>-->
+    <ul v-if="showUser" v-show="visible">
+        <li v-for="(_item, _index) in data.users.data" :key="_index" :style="{paddingLeft: paddingLeft + 40 + 'px'}" @click="selectData(_item)">
+            {{ _item.name }}
+            <!-- <i class="icon md-eye" style="float: right;line-height: 40px;" @click.stop></i> -->
+        </li>
+    </ul>
     <template v-for="(item, index) in data.departments.data">
       <Departments
         v-show="visible"
@@ -20,6 +20,7 @@
         :isEdit="isEdit"
         :left="paddingLeft"
         :key="index"
+        :showUser="showUser"
       />
     </template>
   </div>
@@ -28,7 +29,7 @@
 <script>
 export default {
   name: "DepartmentItem",
-  props: ["data", "bgColor", "left", "isEdit", "change"],
+  props: ["data", "bgColor", "left", "isEdit", "change", "showUser"], // showUser 是否展示部门成员
   data() {
     return {
       visible: false,
@@ -43,12 +44,21 @@ export default {
   },
   methods: {
     // 返回选中数据
-    selectData() {
-      this.change({
-        id: this.data.id,
-        name: this.data.name,
-        pId: this.data.department_pid
-      });
+    selectData(item) {
+        if (item) {
+            this.change({
+                id: item.id,
+                name: item.name,
+                type: 'user'
+            });
+        } else {
+            this.change({
+                id: this.data.id,
+                name: this.data.name,
+                pId: this.data.department_pid,
+                type: 'department'
+            });
+        }
     },
     showList () {
         this.visible = !this.visible
@@ -65,28 +75,28 @@ export default {
   width: 100%;
 }
 
-// ul {
-//     padding: 0;
-//     margin: 0;
-//     li {
-//         height: 40px;
-//         line-height: 40px;
-//         list-style: none;
-//         i {
-//             margin: 0 11px;
-//             display: none;
-//         }
-//         &:hover {
-//             background: #F5F5F5;
-//             // color: #3f51b5;
-//             cursor: pointer;
-//             i {
-//                 margin: 0 11px;
-//                 display: block;
-//             }
-//         }
-//     }
-// }
+ul {
+    padding: 0;
+    margin: 0;
+    li {
+        height: 40px;
+        line-height: 40px;
+        list-style: none;
+        i {
+            margin: 0 11px;
+            display: none;
+        }
+        &:hover {
+            background: #F5F5F5;
+            // color: #3f51b5;
+            cursor: pointer;
+            i {
+                margin: 0 11px;
+                display: block;
+            }
+        }
+    }
+}
 .name {
   color: #333;
   cursor: pointer;

@@ -50,9 +50,15 @@
                                  v-if="projectInfo.trail && projectInfo.trail.data.expectations">
                                 <template v-for="artist in projectInfo.trail.data.expectations.data">
                                     <template v-if="artist.name">
+                                        <template v-if="artist.broker && artist.broker.data.length > 0">
+                                            {{ artist.broker.data[0].department.name }} -
+                                        </template>
                                         {{ artist.name }}
                                     </template>
                                     <template v-else>
+                                        <template v-if="artist.publicity && artist.publicity.data.length > 0">
+                                            {{ artist.publicity.data[0].department.name }} -
+                                        </template>
                                         {{ artist.nickname }}
                                     </template>
                                 </template>
@@ -84,11 +90,11 @@
                                 <i class="iconfont icon-gengduo pr-2" aria-hidden="true"></i>项目类型
                             </div>
                             <div class="font-weight-bold float-left">
-                                    <template v-if="projectInfo.type === 1">影视项目</template>
-                                    <template v-if="projectInfo.type === 2">综艺项目</template>
-                                    <template v-if="projectInfo.type === 3">商务项目</template>
-                                    <template v-if="projectInfo.type === 4">商务项目</template>
-                                    <template v-if="projectInfo.type === 5">基础项目</template>
+                                <template v-if="projectInfo.type === 1">影视项目</template>
+                                <template v-if="projectInfo.type === 2">综艺项目</template>
+                                <template v-if="projectInfo.type === 3">商务项目</template>
+                                <template v-if="projectInfo.type === 4">商务项目</template>
+                                <template v-if="projectInfo.type === 5">基础项目</template>
                             </div>
                         </div>
                     </div>
@@ -659,7 +665,7 @@
                                         </div>
                                     </div>
                                     <div class="py-20" v-if="projectInfo.title">
-                                        
+
                                         <div class="clearfix">
                                             <h5 class="pl-15">基本资料</h5>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
@@ -850,7 +856,7 @@
                                             </div>
                                         </div>
 
-                                        
+
                                         <h5 class="pl-15 pt-10">更新信息</h5>
                                         <div class="clearfix">
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
@@ -940,96 +946,7 @@
             </div>
         </div>
         <!-- 新建任务 -->
-        <div class="modal fade" id="addTask" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1" data-backdrop="static">
-            <div class="modal-dialog modal-simple">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
-                        </button>
-                        <h4 class="modal-title">新增任务</h4>
-                    </div>
-                    <div class="modal-body">
-
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">关联资源</div>
-                            <div class="col-md-10 float-left pl-0">
-                                项目 - {{ projectInfo.title }}
-                            </div>
-                        </div>
-                        <div class="example" v-if="taskTypeArr.length > 0">
-                            <div class="col-md-2 text-right float-left">任务类型</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskTypeArr" ref="taskType"
-                                           @change="changeTaskType"></selectors>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">任务名称</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <input type="text" class="form-control" placeholder="请输入任务名称"
-                                       v-model="taskName">
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">负责人</div>
-                            <div class="col-md-5 float-left pl-0">
-                                <input-selectors :placeholder="'请选择负责人'"
-                                                 @change="principalChange"></input-selectors>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">参与人</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <add-member @change="participantChange"></add-member>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left pl-0">任务优先级</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <selectors :options="priorityArr" ref="taskLevel"
-                                           @change="changeTaskLevel"></selectors>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">开始时间</div>
-                            <div class="col-md-5 float-left pl-0">
-                                <datepicker ref="startTime" @change="changeStartTime"></datepicker>
-                            </div>
-                            <div class="col-md-5 float-left pl-0">
-                                <!-- <timepicker ref="startMinutes" :default="startMinutes"
-                                            @change="changeStartMinutes"></timepicker> -->
-                                <TimeChoice @change="changeStartMinutes" ref="startMinutes"></TimeChoice>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">截止时间</div>
-                            <div class="col-md-5 float-left pl-0">
-                                <datepicker ref="endTime" @change="changeEndTime" :startDate="startTime"></datepicker>
-                            </div>
-                            <div class="col-md-5 float-left pl-0">
-                                <!-- <timepicker ref="endMinutes" :default="endMinutes"
-                                            @change="changeEndMinutes"></timepicker> -->
-                                <TimeChoice @change="changeEndMinutes" ref="endMinutes"></TimeChoice>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">任务说明</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <textarea class="form-control" name="taskDescription" title=""
-                                          v-model="taskIntroduce"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" type="submit" @click="addTask">确定</button>
-                    </div>
-
-                </div>
-            </div>
-        </div>
+        <AddTask :resourceable_id="projectId" resource_type="3" :resource_title="projectName" resource_name="项目" @success="addTask"></AddTask>
         <!-- 隐私设置 -->
         <div class="modal fade" id="addPrivacy" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
@@ -1177,7 +1094,8 @@
                             <div class="col-md-2 text-right float-left px-0">计划回款金额</div>
                             <div class="col-md-10 float-left">
                                 <NumberSpinner ref="paybackMoney"
-                                               @change="(value) => addProjectReturn(value, 'plan_returned_money')" :min="0" :max="1000000000" :precision="2" :value="0"></NumberSpinner>
+                                               @change="(value) => addProjectReturn(value, 'plan_returned_money')"
+                                               :min="0" :max="1000000000" :precision="2" :value="0"></NumberSpinner>
                             </div>
                         </div>
                         <div class="example">
@@ -1198,7 +1116,7 @@
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
                         <template v-if="!isEditProjectPayback">
-                            <button class="btn btn-primary" type="submit" @click="addProjectPayback">确定</button>
+                            <button class="btn btn-primary" type="submit" :disable="isPaybackDisable" @click="addProjectPayback">确定</button>
                         </template>
                         <template v-else>
                             <button class="btn btn-primary" type="submit" @click="editProjectPayback">确定</button>
@@ -1252,7 +1170,8 @@
                             <div class="col-md-2 text-right float-left px-0">回款金额</div>
                             <div class="col-md-10 float-left">
                                 <NumberSpinner ref="paybackMoney1"
-                                               @change="(value) => addProjectReturn(value, 'plan_returned_money')" :min="0" :max="1000000000" :precision="2" :value="0"></NumberSpinner>
+                                               @change="(value) => addProjectReturn(value, 'plan_returned_money')"
+                                               :min="0" :max="1000000000" :precision="2" :value="0"></NumberSpinner>
                             </div>
                         </div>
                         <div class="example">
@@ -1281,7 +1200,7 @@
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消
                         </button>
                         <template v-if="!isEditProjectPaybackTime">
-                            <button class="btn btn-primary" type="submit" @click="addProjectPaybackTime">确定</button>
+                            <button class="btn btn-primary" type="submit" :disabled="isPaybackButtonDisable" @click="addProjectPaybackTime">确定</button>
                         </template>
                         <template v-else>
                             <button class="btn btn-primary" type="submit" @click="editProjectPayback">确定</button>
@@ -1330,7 +1249,8 @@
                             <div class="col-md-2 text-right float-left px-0">开票金额</div>
                             <div class="col-md-10 float-left">
                                 <NumberSpinner ref="paybackMoney2"
-                                               @change="(value) => addProjectReturn(value, 'plan_returned_money')" :min="0" :max="1000000000" :precision="2" :value="0"></NumberSpinner>
+                                               @change="(value) => addProjectReturn(value, 'plan_returned_money')"
+                                               :min="0" :max="1000000000" :precision="2" :value="0"></NumberSpinner>
                             </div>
                         </div>
                         <div class="example">
@@ -1358,7 +1278,7 @@
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
                         <template v-if="!isEditProjectPaybackTime">
-                            <button class="btn btn-primary" type="submit" @click="addProjectPaybackTime">确定</button>
+                            <button class="btn btn-primary" type="submit" :disabled="isPaybackButtonDisable" @click="addProjectPaybackTime">确定</button>
                         </template>
                         <template v-else>
                             <button class="btn btn-primary" type="submit" @click="editProjectPayback">确定</button>
@@ -1494,7 +1414,7 @@
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
                         <template
                                 v-if="!projectBillMetaInfo.divide">
-                            <button class="btn btn-primary" type="submit" @click="addProjectBill">确定</button>
+                            <button class="btn btn-primary" type="submit" :disable="isBillButtonDisable" @click="addProjectBill">确定</button>
                         </template>
                         <template v-else>
                             <button class="btn btn-primary" type="submit" @click="changeProjectBill">确定</button>
@@ -1561,13 +1481,6 @@
                 priorityArr: config.priorityArr,
                 cooperationTypeArr: config.cooperationTypeArr,
                 trailStatusArr: config.trailStatusArr,
-                taskLevel: '',
-                taskName: '',
-                startTime: '',
-                endTime: '',
-                startMinutes: '00:00',
-                endMinutes: '00:00',
-                taskIntroduce: '',
                 projectTasksInfo: [],
                 withdrawalReason: '',
                 companyArr: [],
@@ -1680,6 +1593,10 @@
                 projectProgress: '',
                 cooperationOther: '',
                 cooperationKeyId: '',
+                projectName: '',
+                isBillButtonDisable: false,
+                isPaybackButtonDisable: false,
+                isPaybackDisable: false,
             }
         },
 
@@ -1718,24 +1635,6 @@
                 this.cancelChangeBill();
             });
 
-            $('#addTask').on('hidden.bs.modal', () => {
-                this.taskName = '';
-                this.taskLevel = '';
-                this.$refs.taskLevel.setValue('');
-                this.taskType = '';
-                this.$refs.taskType.setValue('');
-                this.startTime = '';
-                this.endTime = '';
-                this.startMinutes = '';
-                this.endMinutes = '';
-                this.taskIntroduce = '';
-                this.$refs.startTime.setValue('');
-                this.$refs.startMinutes.setValue('0');
-                this.$refs.endTime.setValue('');
-                this.$refs.endMinutes.setValue('0');
-                this.$store.commit('changeNewPrincipal', {});
-                this.$store.commit('changeNewParticipantsInfo', [])
-            })
         },
 
         watch: {
@@ -1762,12 +1661,13 @@
 
             getProject: function () {
                 let data = {
-                    include: 'principal,participants,tasks,creator,fields,trail.expectations,trail.client,relate_tasks,relate_projects,type',
+                    include: 'principal,participants,tasks,creator,fields,trail.expectations.broker,trail.expectations.publicity,trail.client,relate_tasks,relate_projects,type',
                 };
                 fetch('get', '/projects/' + this.projectId, data).then(response => {
                     this.oldInfo = JSON.parse(JSON.stringify(response));
                     let fieldsArr = response.meta.fields.data;
                     this.metaInfo = response.meta;
+                    this.projectName = response.data.title;
                     for (let i = 0; i < fieldsArr.length; i++) {
                         if (fieldsArr[i].field_type === 2 || fieldsArr[i].field_type === 6) {
                             fieldsArr[i].contentArr = [];
@@ -1980,12 +1880,14 @@
             },
 
             addProjectBill: function () {
+                this.isBillButtonDisable = true;
                 let data = {
                     expenses: this.billExpenses,
                     my_divide: this.myDivide,
                     star: this.divideArrInfo,
                 };
                 fetch('post', '/projects/' + this.projectId + '/store/bill', data).then(() => {
+                    this.isBillButtonDisable = false;
                     this.getProjectBill();
                     toastr.success('添加成功');
                     $('#addBill').modal('hide');
@@ -2131,10 +2033,12 @@
             },
 
             addProjectPayback: function () {
+                this.isPaybackDisable = true;
                 this.projectReturnData.contract_id = this.contractId;
                 this.projectReturnData.principal_id = this.user.id;
                 this.projectReturnData.issue_name = this.paybackLength;
                 fetch('post', '/projects/' + this.projectId + '/returned/money', this.projectReturnData).then(() => {
+                    this.isPaybackDisable = false;
                     $('#addPaybackTime').modal('hide');
                     toastr.success('添加成功');
                     this.getProjectReturned(this.contractId)
@@ -2178,9 +2082,11 @@
                     toastr.error('请选择票据类型或付款方式')
                     return
                 }
+                this.isPaybackButtonDisable = true;
                 this.projectReturnData.contract_id = this.contractId;
                 this.projectReturnData.principal_id = this.user.id;
-                fetch('post', '/projects/' + this.projectId + '/returned/' + this.paybackTime.id + '/money', this.projectReturnData).then(response => {
+                fetch('post', '/projects/' + this.projectId + '/returned/' + this.paybackTime.id + '/money', this.projectReturnData).then(() => {
+                    this.isPaybackButtonDisable = false;
                     $('#addPayback').modal('hide');
                     $('#addInvoice').modal('hide');
                     toastr.success('添加成功');
@@ -2239,30 +2145,9 @@
                 this.changeInfo.resource_type = value;
             },
 
-            addTask: function () {
-                let participant_ids = [];
-                for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
-                    participant_ids.push(this.$store.state.newParticipantsInfo[i].id)
-                }
-                let data = {
-                    resource_type: 3,
-                    resourceable_id: this.projectId,
-                    type: this.taskType,
-                    title: this.taskName,
-                    principal_id: this.$store.state.newPrincipalInfo.id,
-                    participant_ids: participant_ids,
-                    priority: this.taskLevel,
-                    start_at: this.startTime + ' ' + this.startMinutes,
-                    end_at: this.endTime + ' ' + this.endMinutes,
-                    desc: this.taskIntroduce
-                };
-                fetch('post', '/tasks', data).then(response => {
-                    toastr.success('创建成功');
-                    $('#addTask').modal('hide');
-                    this.projectTasksInfo.push(response.data);
-                    // this.getProjectTasking();
-                    this.getProject();
-                })
+            addTask: function (response) {
+                this.projectTasksInfo.push(response.data);
+                this.getProject();
             },
 
             getTaskType: function () {
@@ -2288,6 +2173,10 @@
                 })
             },
             editBaseInfo: function () {
+                if (this.$store.state.power.project !== 'true') {
+                    toastr.error('当前用户没有权限编辑项目')
+                    return
+                }
                 this.isEdit = true;
                 this.changeInfo = {};
                 this.addInfoArr = {};

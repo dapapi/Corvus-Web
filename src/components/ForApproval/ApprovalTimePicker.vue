@@ -8,60 +8,65 @@
 
 <script>
 export default {
-    props:['duration','title','consdata','refresh','clear','defaultData','startDate'],
-    data(){
-        return{
-            defaultDate:'',
-            ymd:'',
-            hms:'',
-            start_date:'',
-            isDisabled:false
+  props: ['duration', 'title', 'consdata', 'refresh', 'clear', 'defaultData', 'startDate'],
+  data() {
+    return {
+      defaultDate: '',
+      ymd: '',
+      hms: '',
+      start_date: '',
+      isDisabled: false,
+    };
+  },
+  mounted() {
+    this.defaultDataChecker();
+  },
+  methods: {
+    hmsPicker(params) {
+      this.hms = params;
+      this.change();
+    },
+    ymdPicker(params) {
+      this.ymd = params;
+      this.change();
+    },
+    defaultDataChecker() {
+      if (this.consdata[0].control_value) {
+        this.defaultDate = this.consdata[0].control_value;
+        if (this.consdata[0].control_data_select_format !== 94) {
+          this.ymd = this.consdata[0].control_value;
         }
+        // for (const i in this.defaultData) {
+        //     if (this.defaultData[i].key === this.consdata[0].control_title) {
+        //         console.log(this.defaultData[i]);
+        //         this.$nextTick((params) => {
+        //             // $(this.$el).selectpicker('val', this.defaultData[i].values.data.value);
+        //             this.defaultDate = this.defaultData[i]
+        //         })
+        //     }
+        // }
+      }
     },
-    mounted(){
-        this.defaultDataChecker()
+    change() {
+      const { id } = this.consdata[0];
+      const { related_field } = this.consdata[0];
+      this.$emit('change', { key: id, value: `${this.ymd} ${this.hms}`, type: related_field });
+      if (this.consdata[0].control_source) {
+        this.$emit('changestarttime', { type: this.consdata[0].control_source.flag, value: `${this.ymd} ${this.hms}` });
+      }
     },
-    methods:{
-        hmsPicker(params){
-            this.hms = params
-            this.change()
-        },
-        ymdPicker(params){
-            this.ymd = params
-            this.change()
-        },
-        defaultDataChecker(){
-            if(this.consdata[0].control_value){
-                this.defaultDate = this.consdata[0].control_value
-                // for (const i in this.defaultData) {
-                //     if (this.defaultData[i].key === this.consdata[0].control_title) {
-                //         console.log(this.defaultData[i]);
-                //         this.$nextTick((params) => {
-                //             // $(this.$el).selectpicker('val', this.defaultData[i].values.data.value);
-                //             this.defaultDate = this.defaultData[i]
-                //         })
-                //     }
-                // }
-            }
-        },
-        change(){
-            let {id} = this.consdata[0]
-            let {related_field} = this.consdata[0]
-            this.$emit('change',{key:id,value:this.ymd+' '+this.hms,type:related_field})
-            this.$emit('changestarttime',{type:this.consdata[0].control_source.flag,value:this.ymd+' '+this.hms})
-        }
+  },
+  watch: {
+    defaultDate(value) {
+      this.change(value);
     },
-    watch:{
-       defaultDate:function(value){
-           this.change(value)
-       },
-       startDate(newValue) {
-           if(this.consdata[0].control_source.flag === 'end_time'){
-               this.start_date = newValue
-           }
-        },
-    }
-}
+    startDate(newValue) {
+      if (this.consdata[0].control_source && this.consdata[0].control_source.flag === 'end_time') {
+        this.start_date = newValue;
+      }
+    },
+  },
+};
 </script>
 
 <style scoped>

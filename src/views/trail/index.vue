@@ -238,7 +238,9 @@
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click='cleanTempData'>取消
                         </button>
-                        <button class="btn btn-primary" type="submit" @click="addTrail">确定</button>
+                        <button class="btn btn-primary" type="submit" :disable="isAddButtonDisable" @click="addTrail">
+                            确定
+                        </button>
                     </div>
 
                 </div>
@@ -336,7 +338,8 @@
                 exportParams: {},//导出参数
                 customizeCondition: {},
                 trailContactWechat: '',
-                trailContactEtc: ''
+                trailContactEtc: '',
+                isAddButtonDisable: false,
             }
         },
         created() {
@@ -404,7 +407,7 @@
                 if (value) {
                     this.fetchData.principal_ids = value.join(',')
                 }
-                this.fetchHandler('post', '/trails/filter','filter')
+                this.fetchHandler('post', '/trails/filter', 'filter')
             },
             phoneValidate() {
                 let phone = this.trailContactPhone
@@ -588,6 +591,7 @@
                 // })
             },
             addTrail: function () {
+                this.isAddButtonDisable = true;
                 let data = {
                     title: this.trailName,
                     brand: this.brandName,
@@ -623,16 +627,16 @@
                 } else {
                     data.resource = ''
                 }
-                let organization_id = JSON.parse(Cookies.get('user')).organization_id
+                let organization_id = JSON.parse(Cookies.get('user')).organization_id;
                 if (organization_id !== 411) {
                     data.lock = this.trailIsLocked
                 }
-                let _this = this;
                 if (this.trailTypeValidate()) {
-                    fetch('post', '/trails', data).then(function (response) {
+                    fetch('post', '/trails', data).then(response => {
+                        this.isAddButtonDisable = false;
                         $('#addTrail').modal('hide');
-                        _this.$router.push({path: '/trails/' + response.data.id})
-                        _this.cleanTempData()
+                        this.$router.push({path: '/trails/' + response.data.id});
+                        this.cleanTempData()
                     })
                 }
             }
@@ -730,6 +734,10 @@
             }
             ,
             changeTrailType: function (value) {
+                if (this.$store.state.power.trail !== 'true') {
+                    toastr.error('当前用户没有权限新增销售线索')
+                    return
+                }
                 let organization_id = JSON.parse(Cookies.get('user')).organization_id
                 if (value == 3) {
                     if (organization_id == 411) {
