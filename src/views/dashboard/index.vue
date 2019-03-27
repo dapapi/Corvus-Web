@@ -11,10 +11,10 @@
                     <div data-role="content" class="scrollable-content" style="width: 259px;">
                         <section class="page-aside-section">
                             <h5 class="page-title pl-30 mb-20">仪表盘</h5>
-                            <!-- <i class="iconfont icon-xinjianmenhu pl-100"  data-toggle="modal" data-target="#dashboard"></i> -->
-                                <div class="level" :class="`level-${menu.level}`" v-for="menu in urlData" :key="menu.id">
-                                    <div class="list-group-item selected" v-if="menu.type ==='link'" >
-                                        <router-link class="link" v-bind:to="menu.url"  :class="menu.level>1?'pl-15':''">
+
+                                <div class="level" :class="`level-${menu.level}`" v-for="(menu,index) in urlData" :key="index">
+                                    <div class="list-group-item selected" v-if="menu.type ==='link'" :class="isSelected == menu.id?'selected':''">
+                                        <router-link class="link" v-bind:to="menu.url"  :class="menu.level>1?'pl-15':''"  @click="toggle(menu)">
                                         {{menu.name}}
                                         </router-link>     
                                     </div>
@@ -27,8 +27,6 @@
                                             role="menu" x-placement="bottom-start" style="min-width: 0;">
                                             <a class="dropdown-item" role="menuitem" data-toggle="modal"
                                             data-target="#Editor">查看</a>
-                                            <!-- <a class="dropdown-item" role="menuitem" data-toggle="modal"
-                                            data-target="#Delete">删除</a> -->
                                         </div>
                                     </div>
                                 </div>
@@ -165,6 +163,7 @@
 </template>
 
 <script>
+    import {mapState} from 'vuex'
     import fetch from '../../assets/utils/fetch.js'
     export default {
         name: "home",
@@ -184,12 +183,17 @@
                 departmentDate:'',//仪表盘部门值
                 dashboardName:'',//仪表盘名称
                 dashboard_describe:'',//仪表盘描述
-                
+                canRun:true,
             }
         },
         mounted(){
             this.getDashboard()
         },
+         computed:{
+       ...mapState([
+           'isSelected',//从vuex里获取切换之后的选中id
+       ])
+    },
         methods:{
             department:function(value){
                 this.departmentDate = value
@@ -197,18 +201,34 @@
             getDashboard:function(){
                 let _this = this
                 fetch('get', '/dashboards').then(function (response) {   
-                    response.data.forEach(item=>{
-                        _this.urlData.forEach(data=>{   
-                            data.id = item.id
+                    response.data.forEach((item,index)=>{
+                        _this.urlData.forEach(data=>{  
+                            data.id =  index
                             data.name = item.name
-                            data.url = '/dashboard/' +  data.id 
+                            data.url = '/dashboard/' +  item.id
                         })
                        
                     })
                     
                 })
                 console.log(_this.urlData)
+            },
+            toggle(menu){
+                this.setExpand(this.menus, menu.url)
+            },
+            setExpand:function(source, url) {
+            let sourceItem = '';
+            for (let i = 0; i < source.length; i++) {
+                sourceItem = JSON.stringify(source[i]); // 把菜单项转为字符串
+                if (sourceItem.indexOf(url) > -1) { // 查找当前 URL 所对应的子菜单属于哪一个祖先菜单
+                        this.canRun = false
+                        this.$store.dispatch('changeIsSelected',source[i].id)
+                        this.$store.state.isExpanded.push(source[i].id)
+                        
+                    }
+                }
             }
+        
         }
     }
 </script>

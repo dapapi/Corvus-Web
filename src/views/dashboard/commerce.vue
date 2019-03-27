@@ -3,7 +3,7 @@
         <div class="page-header page-header-bordered mb-0">
             <h1 class="page-title">{{DashboardName}}</h1>
         </div>
-         <div class="page-content container-fluid px-20">
+        <div class="page-content container-fluid px-20">
                 <div class="tab  my-20 pl-10" style="display:flex">
                         <div class="task mx-20" data-plugin="actionBtn" data-toggle="modal" @click="addTask">创建任务</div>
                         <div class="target mx-20">创建目标</div>
@@ -259,8 +259,8 @@
                     </div>
 
                 </div>
-            </div>
-             <div class="modal fade"
+        </div>
+        <div class="modal fade"
              id="addTask"
              aria-hidden="true"
              aria-labelledby="addLabelForm"
@@ -426,7 +426,7 @@
                                 <AddMember type="add"></AddMember>
                             </div>
                         </div>
-                        <!-- <div class="my-10 clearfix"
+                        <div class="my-10 clearfix"
                              v-show="linkageSelectedIds.projects.length > 0 || linkageSelectedIds.tasks.length > 0">
                             <div class="col-md-2 text-right float-left">关联资源</div>
                             <div class="col-md-10 float-left pl-0">
@@ -445,7 +445,7 @@
                                           @click="delNewScheduleLinkage('tasks', id)"></span>
                                 </div>
                             </div>
-                        </div> -->
+                        </div>
                         <div v-show="showMore">
                             <div class="pt-10 mb-20 clearfix">
                                 <div class="col-md-2 text-right float-left line-fixed-height">资源</div>
@@ -500,16 +500,13 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="cancelSchedule">取消
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" >取消
                         </button>
                         <template v-if="scheduleType === 'add'">
                             <button class="btn btn-primary" type="submit" @click="addSchedule">确定</button>
                         </template>
-                        <template v-if="scheduleType === 'edit'">
-                            <button class="btn btn-primary" type="submit" @click="changeSchedule">确定</button>
-                        </template>
-                    </div> -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -598,6 +595,7 @@
             this.getProjects()
             this.getTaskType()
             this.getResources();
+            this.getCalendarList()
             $('#addTask').on('hidden.bs.modal', () => {
                 // 清空state
                 this.closeAddTask()
@@ -608,6 +606,10 @@
                 name: this.user.nickname,
                 id: this.user.id
             })
+            let _this = this;
+            $('#changeSchedule').on('hidden.bs.modal', function () {
+                _this.initAddScheduleModal();
+            });
         },
         computed:{
             TaskPercentage:function(){
@@ -970,6 +972,122 @@
             },
             changeScheduleRepeat: function (value) {
                 this.scheduleRepeat = value;
+            },
+            addSchedule: function () {
+                let startTime = '';
+                let endTime = '';
+                if (this.isScheduleAllday) {
+                    startTime = this.startTime;
+                    endTime = this.endTime;
+                } else {
+                    startTime = this.startTime + ' ' + this.startMinutes;
+                    endTime = this.endTime + ' ' + this.endMinutes;
+
+                    if (startTime > endTime) {
+                        toastr.error('开始时间不能晚于截止时间');
+                        return
+                    }
+
+                    if (this.startTime === this.endTime) {
+                        let startMinutesArr = this.startMinutes.split(':');
+                        let endMinutesArr = this.endMinutes.split(':');
+                        if (startMinutesArr[0] === endMinutesArr[0]) {
+                            if ((Number(endMinutesArr[1]) - Number(startMinutesArr[1])) < 30) {
+                                toastr.error('日程时间不能小于30分钟');
+                                return
+                            }
+
+                        }
+                    }
+                }
+                let data = {
+                    title: this.scheduleName,
+                    calendar_id: this.scheduleCalendar,
+                    is_allday: Number(this.isScheduleAllday),
+                    privacy: Number(this.schedulePrivacy),
+                    start_at: startTime,
+                    end_at: endTime,
+                    repeat: this.scheduleRepeat,
+                    desc: this.eventDesc,
+                };
+                if (this.eventPlace) {
+                    data.position = this.eventPlace;
+                }
+                if (this.scheduleMaterialId) {
+                    data.material_id = this.scheduleMaterialId;
+                }
+                if (this.$store.state.newParticipantsInfo) {
+                    data.participant_ids = [];
+                    let newParticipantsInfo = this.$store.state.newParticipantsInfo;
+                    for (let i = 0; i < newParticipantsInfo.length; i++) {
+                        data.participant_ids.push(newParticipantsInfo[i].id)
+                    }
+                }
+                if (this.linkageSelectedIds.projects.length > 0) {
+                    data.project_ids = this.linkageSelectedIds.projects;
+                }
+                if (this.linkageSelectedIds.tasks.length > 0) {
+                    data.task_ids = this.linkageSelectedIds.tasks;
+                }
+                fetch('post', '/schedules', data).then(() => {
+                    $('#changeSchedule').modal('hide');
+                    toastr.success('添加成功')
+                })
+            },
+            getCalendarList: function () {
+                this.calendarList = [];
+                let data = {};
+                if (this.calendarTitle) {
+                    data.title = this.calendarTitle
+                }
+                fetch('get', '/calendars/all', data).then(response => {
+                    for (let i = 0; i < response.data.length; i++) {
+                        response.data[i].name = response.data[i].title;
+                        response.data[i].value = response.data[i].id;
+                        this.calendarList.push(response.data[i])
+                    }
+                    if (data.title) {
+                        this.oldSelectedCalendar = this.selectedCalendar;
+                        this.selectedCalendar = [];
+                        for (let i = 0; i < response.data.length; i++) {
+                            this.selectedCalendar.push(response.data[i].id)
+                        }
+                    } else {
+                        this.selectedCalendar = this.oldSelectedCalendar;
+                    }
+                })
+
+            },
+             initAddScheduleModal: function () {
+                this.showMore = false;
+                this.$store.dispatch('changeParticipantsInfo', {data: []});
+                this.scheduleName = '';
+                this.scheduleCalendar = '';
+                this.isScheduleAllday = 0;
+                this.privacy = 1;
+                this.startTime = '';
+                this.startMinutes = '00:00';
+                this.endTime = '';
+                this.endMinutes = '00:00';
+                this.eventPlace = '';
+                this.scheduleRepeat = 0;
+                this.scheduleMaterialId = '';
+                this.eventDesc = '';
+                this.isScheduleAllday = false;
+                this.schedulePrivacy = false;
+                this.scheduleType = 'add';
+                this.linkageSelectedIds = {
+                    projects: [],
+                    tasks: []
+                };
+                this.$refs.calendarSelector.setValue('');
+                this.$refs.scheduleStartDate.setValue('');
+                this.$refs.scheduleEndDate.setValue('');
+                this.$refs.scheduleStartMinute.setValue('0');
+                this.$refs.scheduleEndMinute.setValue('0');
+                this.$refs.scheduleResource.setValue('');
+                this.$refs.scheduleRepeat.setValue('0');
+                this.$refs.scheduleRemind.setValue('0');
             },
         }
     }

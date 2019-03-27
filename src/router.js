@@ -129,7 +129,6 @@ export default new Router({
         {
             path:'/dashboard',
             name:'dashboard',
-            // redirect: '/dashboard/commerce',
             component:() => import('./views/dashboard/index.vue'),
             children:[{
                 path: '/dashboard/:id',

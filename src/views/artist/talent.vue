@@ -1424,14 +1424,16 @@
                     this.customizeCondition = {}
                     this.getArtists()                  
                     this.isShow = true
+                    this.$refs.customize.reset()
                    
                 } else if (value == 'bloggers') {
                     this.$refs.customize.setValue({conditions:[]})
                     this.customizeCondition  = {}
                     this.getBlogger()
                     this.isShow = false
+                    this.$refs.customize.reset()
                 }
-                this.$refs.customize.reset()
+                
             },
             giveBroker: function () {
                 let url, toast, data
