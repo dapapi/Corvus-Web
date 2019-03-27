@@ -472,7 +472,7 @@
                                                                         @change="(value) => changeArtistBaseInfo(value, 'sign_contract_other')"></ConditionalInput>
                                                 </div>
                                             </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                            <!-- <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height"> -->
                                                 <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height"
                                                      style="height:64px;">
                                                     <div class="col-md-3 float-left text-right pl-0">地区</div>
@@ -616,9 +616,9 @@
                                                     </div>
                                                 </div>
 
-                                            </div>
+                                            <!-- </div> -->
 
-                                            <h5 class="pl-15 pt-10">更新信息</h5>
+                                            <h5 class="pl-15 pt-10 clearfix col-md-12 float-left">更新信息</h5>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                                 <div class="col-md-3 float-left text-right pl-0">录入人</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
@@ -658,7 +658,8 @@
 
                         </div>
                     </div>
-                    <div class="panel" style="width: calc(34% - 15px);min-height:100%">
+                </div>
+                <div class="panel" style="width: calc(34% - 15px);min-height:100%">
                         <div class="col-md-12">
                             <div class="card col-md-12">
                                 <div class="card-header card-header-transparent card-header-bordered p-10"
@@ -674,7 +675,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
 
             </div>
 
