@@ -45,6 +45,7 @@ const state = {
         task: true,
         trail: true,
     }, // 用户权限(新增)
+    supplierDetails:{},//供应商详情
 };
 
 export default new Vuex.Store({

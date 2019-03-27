@@ -30,6 +30,7 @@
                            <i class="md-chevron-left"></i>回到主任务
                             </span>
                         </template>
+                        <i v-if="oldInfo.privacy" class="iconfont icon-zhuansimi" style="font-size: 20px; color: #F44336; float: right;"></i>
                     </h4>
                     <div class="card-text clearfix example">
                         <div class="float-left pl-0 pr-2 col-md-1">
@@ -82,7 +83,7 @@
                 </div>
             </div>
 
-            <div style="display:-webkit-box">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start">
                 <div class="panel" style="width: calc(66% - 15px);z-index: 10;float:left;margin-right:30px">
 
                     <div class="col-md-12 tab-title">

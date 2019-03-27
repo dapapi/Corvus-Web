@@ -128,7 +128,7 @@
 
                 </div>
             </div>
-            <div style="display: -webkit-box">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start">
                 <div class="panel" style="width: calc(66% - 15px);z-index: 100;float:left;margin-right:30px;">
 
                     <div class="col-md-12">

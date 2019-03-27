@@ -1341,6 +1341,17 @@ let config = {
                 value: 4,
                 name: '天津朱迪蔻珠宝有限公司'
             },
+        ],
+        //币种
+        billArr: [
+            {
+              name: '人民币',
+              value: 1
+            },
+            {
+              name: '外币',
+              value: 2
+            }
         ]
 
     }
