@@ -16,6 +16,7 @@
 <script>
 import axios from 'axios'
 import env from '../assets/js/env'
+//导入和导出调通的模块只有 客户
 export default {
     name:'ImportAndExport',
     props:{
@@ -34,6 +35,7 @@ export default {
             type:Object
         }
     },
+   
     data(){
         return {
           getRandom:Math.round(Math.random() * 1000),
@@ -46,6 +48,7 @@ export default {
     methods:{
         //导入
         importFile:function(event){
+            
             this.header['Content-Type'] = 'multipart/form-data;boundary = ' + new Date().getTime()
             this.file = event.target.files[0];
             let importUrl = `${env.apiUrl}/${this.moduleName}/import`
@@ -53,6 +56,7 @@ export default {
             formData.append('file', this.file);
             //创建一个干净的axios对象
             var instance = axios.create();
+            this.$emit('importFile')
             instance.defaults.headers = this.header
             instance.post(importUrl, formData)
             .then(function (response) {
@@ -88,7 +92,6 @@ export default {
                }
             }
             getParams = getParams.join('&')
-            console.log(getParams)
             var page_url = `${env.apiUrl}/${this.moduleName}/export?${getParams}`
             xhh.open("post", page_url)
             xhh.setRequestHeader('Accept', 'application/vnd.Corvus.v1+json')
@@ -120,30 +123,6 @@ export default {
                 str+=String.fromCharCode(parseInt(data[i],16).toString(10));
             }
             return str;
-        },
-        postDataFormat:function (obj){
-            if(typeof obj != "object" ) {
-                alert("输入的参数必须是对象");
-                return;
-            }
-        
-            // 支持有FormData的浏览器（Firefox 4+ , Safari 5+, Chrome和Android 3+版的Webkit）
-            if(typeof FormData == "function") {
-                var data = new FormData();
-                for(var attr in obj) {
-                    data.append(attr,obj[attr]);
-                }
-                return data;
-            }else {
-                // 不支持FormData的浏览器的处理 
-                var arr = new Array();
-                var i = 0;
-                for(var attr in obj) {
-                    arr[i] = encodeURIComponent(attr) + "=" + encodeURIComponent(obj[attr]);
-                    i++;
-                }
-                return arr.join("&");
-            }
         }
     }
 }
