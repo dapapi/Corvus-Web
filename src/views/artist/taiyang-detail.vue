@@ -618,7 +618,7 @@
 
                                             
 
-                                            <h5 class="pl-15 pt-10">更新信息</h5>
+                                            <h5 class="pl-15 pt-10 clearfix col-md-12 float-left">更新信息</h5>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                                 <div class="col-md-3 float-left text-right pl-0">录入人</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
