@@ -109,6 +109,7 @@
     </div>
 </template>
 <script>
+//问题  供应商编辑地址不能编辑 供应商编码没有生成 最新更新人字段没有
 import {mapActions,mapState} from 'vuex'
 import fetch from '../../../assets/utils/fetch.js'
 import config from '../../../assets/js/config'
