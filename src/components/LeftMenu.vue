@@ -152,10 +152,10 @@ import Cookies from 'js-cookie';
                             //     name: '简报',
                             //     code: 'brief'
                             // },
-                            {
-                                name: '仪表盘',
-                                code: 'dashboard'
-                            }
+                            // {
+                            //     name: '仪表盘',
+                            //     code: 'dashboard'
+                            // }
                         ]
                     }
                 ],
