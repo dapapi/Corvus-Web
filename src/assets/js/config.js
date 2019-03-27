@@ -1322,6 +1322,16 @@ let config = {
               name: '/broadcast', //公告
               url: '/announcements/'
             },
+        ],
+        //币种
+        billArr: [{
+            name: '人民币',
+            value: 1
+          },
+          {
+            name: '外币',
+            value: 2
+          }
         ]
 
 

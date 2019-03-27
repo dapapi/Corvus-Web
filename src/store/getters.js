@@ -36,4 +36,7 @@ export default {
     getIsExpanded:function(state){
         return state.isExpanded
     },
+    getSupplierDetails:function(state){
+        return state.supplierDetails
+    }
 }

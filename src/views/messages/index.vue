@@ -52,7 +52,7 @@
                                             </div>
                                         </div>
                                         <div class="content py-15 pl-40 col-md-8 ml-80"
-                                             @click="msgStatus(item2.message_id,item2.module,item2.module_data_id)">
+                                             @click="msgStatus(item2.id,item2.module,item2.module_data_id)">
                                             <span class="is_read" v-show="item2.state == 1"></span>
                                             <div class="title font-size-16 mb-15">{{item2.message_subheading}}</div>
                                             <div class="row">

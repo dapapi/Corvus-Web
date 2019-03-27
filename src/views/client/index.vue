@@ -2,7 +2,10 @@
     <div class="page">
         <Loading :is-loading="isLoading"></Loading>
         <div class="page-header page-header-bordered">
-            <h1 class="page-title">客户管理</h1>
+            <h1 class="page-title">客户管理
+                <router-link :to="{path:'/supplier/list'}" style="color: #3298dc;" class="pl-20 font-size-20 pointer-content"><i
+                        class="iconfont icon-jiantou_xiayiye font-size-22 pr-5"></i>供应商</router-link>
+            </h1>
             <div class="page-header-actions">
                 <ImportAndExport class="float-left" :type="'export'" :moduleName="'clients'" :params="exportParams">
                     <i class="iconfont icon-daochu px-5 font-size-20 pr-20 pointer-content" title="导出"
@@ -297,11 +300,6 @@
                 if (this.clientPrincipalIdSearch.length > 0) {
                     params.principal_ids = this.clientPrincipalIdSearch
                 }
-                this.exportParams = {
-                    keyword: this.companyName,
-                    grade: this.clientLevelSearch,
-                    principal_ids: this.clientPrincipalIdSearch
-                }
                 if (this.companyName || this.clientLevelSearch || this.clientPrincipalIdSearch.length > 0) {
                     url = '/clients/filter'
                 }
@@ -424,11 +422,7 @@
                     }
                     newUrl = url + '?' + this.fetchData.include + keyword + status 
                 }
-                this.exportParams = {
-                    keyword: this.fetchData.keyword,
-                    status: this.fetchData.status,
-                    principal_ids: this.fetchData.principal_ids,
-                }
+                
                 fetch(methods, newUrl || url, fetchData).then((response) => {
                     _this.clientsInfo = response.data
                     _this.total = response.meta.pagination.total;
@@ -454,17 +448,20 @@
             },
             filterGo() {
                 this.fetchData.keyword = this.companyName
+                this.exportParams.keyword = this.companyName
                 this.fetchHandler('post', '/clients/filter', 'filter')
                 // this.fetchHandler('get', '/trails/filter')
 
             },
             changePrincipalSelect(value) {
                 this.clientPrincipalIdSearch = value
+                this.exportParams.principal_ids = value
                 this.fetchHandler('post', '/clients/filter', 'filter')
             },
 
             changeClientLevelSelect(value) {
                 this.clientLevelSearch = value
+                this.exportParams.status = value
                 this.fetchHandler('post', '/clients/filter', 'filter')
             },
 

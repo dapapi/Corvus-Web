@@ -90,5 +90,8 @@ export default {
     setUserPower (state, data) {
         console.log(data)
         state.power = data
+    },
+    setSupplierDetails(state,data){
+        state.supplierDetails = data
     }
 }
