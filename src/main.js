@@ -2,6 +2,7 @@ import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
 import store from './store/index.js';
+import AddTask from './components/AddTask.vue';
 import AddMember from './components/AddMember.vue';
 import ApprovalGreatModule from './components/ApprovalGreatModule';
 import BuildProject from './components/BuildProject.vue';
@@ -66,7 +67,7 @@ import ApprovalGoModal from '@/components/ForApproval/ApprovalGoModal.vue'
 import AppDetail from  '@/views/approval/appdetail.vue'
 import Avatar from '@/components/Avatar.vue'
 import ApprovalProgress from '@/components/ForApproval/ApprovalProgress'
-import AddTrail from '@/components/addTrail'
+import AddTrail from '@/components/AddTrail'
 import TimeChoice from '@/components/TimeChoice.vue'
 import EditTimeChoice from '@/components/EditTimeChoice.vue'
 import AddRemind from '@/components/AddRemind.vue'
@@ -74,6 +75,7 @@ import ImportAndExport from '@/components/ImportAndExport.vue'
 import VueUeditorWrap from 'vue-ueditor-wrap'
 import DepartmentPicker from '@/components/DepartmentPicker'
 Vue.config.productionTip = false;
+Vue.component('AddTask', AddTask);
 Vue.component('ApprovalGoModal', ApprovalGoModal);
 Vue.component('AppDetail', AppDetail);
 Vue.component('ApprovalGreatModule', ApprovalGreatModule);
@@ -148,7 +150,6 @@ Vue.component('TimeChoice', TimeChoice)
 Vue.component('EditTimeChoice', EditTimeChoice)
 Vue.component('TimeChoice', TimeChoice)
 Vue.component('EditTimeChoice', EditTimeChoice)
-Vue.component('AddTrail', AddTrail)
 Vue.component('AddRemind', AddRemind)
 Vue.component('ImportAndExport', ImportAndExport)
 

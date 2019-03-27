@@ -458,7 +458,7 @@
                                     <td>{{ contact.position }}</td>
                                     <td>{{ clientInfo.principal?clientInfo.principal.data.name:'' }}</td>
                                     <td>
-                                        
+
                                         <span class="pr-10 d-block float-left pointer-content"
                                               style="color: #b9b9b9;"
                                               data-plugin="actionBtn" data-toggle="modal"
@@ -593,7 +593,7 @@
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" @click="addContact">确定</button>
+                        <button class="btn btn-primary" :disable="isAddButtonDisable" @click="addContact">确定</button>
                     </div>
                 </div>
             </div>
@@ -662,105 +662,8 @@
             </div>
         </div>
 
-        <div class="modal fade" id="addTask" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1" data-backdrop="static">
-            <div class="modal-dialog modal-simple">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
-                        </button>
-                        <h4 class="modal-title">新增任务</h4>
-                    </div>
-                    <div class="modal-body">
-
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">关联资源</div>
-                            <div class="col-md-10 float-left">
-                                客户 - {{ clientInfo.company }}
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left require">任务类型</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <selectors ref="taskType" :options="taskTypeArr" @change="changeTaskType"></selectors>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left require">任务名称</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <input type="text" class="form-control" placeholder="请输入任务名称" v-model="taskName">
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left require">负责人</div>
-                            <div class="col-md-5 float-left pl-0">
-                                <input-selectors :placeholder="'请选择负责人'"
-                                                 @change="taskPrincipalChange"></input-selectors>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">参与人</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <add-member @change="taskParticipantChange"></add-member>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left pl-0 require">任务优先级</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <selectors ref="taskLevel" :options="priorityArr" @change="changeTaskLevel"></selectors>
-                            </div>
-                        </div>
-                        <!-- <div class="example">
-                            <div class="col-md-2 text-right float-left require">开始时间</div>
-                            <div class="col-md-4 float-left pl-0">
-                                <datepicker ref="startTime" @change="changeStartTime"></datepicker>
-                            </div>
-                            <div class="col-md-2 text-right float-left require">截止时间</div>
-                            <div class="col-md-4 float-left pl-0">
-                                <datepicker ref="endTime" @change="changeEndTime"></datepicker>
-                            </div>
-                        </div> -->
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left require">开始时间</div>
-                            <div class="col-md-5 float-left pl-0">
-                                <datepicker @change="changeStartTime" :placeholder="'请输入开始时间'"
-                                            ref="startTime"></datepicker>
-                            </div>
-                            <div class="col-md-5 float-left pl-0">
-                                <!-- <timepicker :default="startMinutes" @change="changeStartMinutes"
-                                            ref="taskStartTime"></timepicker> -->
-                                <TimeChoice @change="changeStartMinutes" ref="taskStartTime"></TimeChoice>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left require">截止时间</div>
-                            <div class="col-md-5 float-left pl-0">
-                                <datepicker @change="changeEndTime" :placeholder="'请输入结束时间'"
-                                            ref="endTime" :startDate="taskStartTime"></datepicker>
-                            </div>
-                            <div class="col-md-5 float-left pl-0">
-                                <!-- <timepicker :default="endMinutes" @change="changeEndMinutes"
-                                            ref="taskEndTime"></timepicker> -->
-                                <TimeChoice @change="changeEndMinutes" ref="taskEndTime"></TimeChoice>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">任务说明</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <textarea class="form-control" name="taskDescription" id="" cols="30"
-                                          rows="5" title="" v-model="taskIntroduce"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" type="submit" @click="addTask">确定</button>
-                    </div>
-
-                </div>
-            </div>
-        </div>
+        <AddTask :resourceable_id="clientId" resource_type="4" :resource_title="clientName" resource_name="客户"
+                 @success="addTask"></AddTask>
 
         <!-- 是否确认删除 -->
         <flag @confirmFlag="delContact"/>
@@ -775,7 +678,7 @@
     import config from '../../assets/js/config'
     import Cookies from 'js-cookie'
     import common from '../../assets/js/common'
-    import { mapState } from 'vuex'
+    import {mapState} from 'vuex'
 
     export default {
         data: function () {
@@ -836,6 +739,8 @@
                 canEditClient: false, // 是否可以添加任务
                 canAddContact: true, // 是否可以新增联系人
                 isDisabled: true, // 联系人是否可以编辑
+                clientName: '',
+                isAddButtonDisable: false,
             }
         },
         beforeMount() {
@@ -849,20 +754,16 @@
                 _this.getClientProject();
             }, 100);
             this.user = JSON.parse(Cookies.get('user'))
-            this.setDefaultPrincipal()
-            this.getTaskType()
-            $('#addTask').on('hidden.bs.modal', () => {
-                // 清空state
-                this.cancleTask()
-            })
+            this.setDefaultPrincipal();
+            this.getTaskType();
             $('#addContact').on('hidden.bs.modal', () => {
                 // 清空state
                 this.cancleContact()
-            })
+            });
             $('#seeContact').on('hidden.bs.modal', () => {
                 // 清空state
                 this.cancleContact()
-            })
+            });
 
             this.getClientTask() // 为了默认展示任务数量 先在这里请求
         },
@@ -919,6 +820,7 @@
             getClient: function () {
                 fetch('get', '/clients/' + this.clientId, {include: 'principal,creator,tasks'}).then(response => {
                     this.clientInfo = response.data;
+                    this.clientName = response.data.company;
                     this.clientInfoCopy = JSON.parse(JSON.stringify(response.data))
                     this.canEditClient = response.data.power == 'true'
                     let params = {
@@ -950,9 +852,6 @@
             },
 
             getClientTask: function () {
-                // if (this.clientTasksInfo.length > 0) {
-                //     return
-                // }
                 let data = {
                     type: 'clients',
                     id: this.clientId,
@@ -1014,6 +913,7 @@
                     toastr.error('请输入职位！')
                     return
                 }
+                this.isAddButtonDisable = true;
                 let data = {
                     name: this.editConfig.name || '',
                     phone: this.editConfig.phone,
@@ -1023,7 +923,8 @@
                     other_contact_ways: this.editConfig.other_contact_ways
                 };
 
-                fetch(this.isEditContact ? 'post' : 'put', `/clients/${this.clientId}/contacts${!this.isEditContact ? '/' + this.editConfig.id : ''}`, data).then(response => {
+                fetch(this.isEditContact ? 'post' : 'put', `/clients/${this.clientId}/contacts${!this.isEditContact ? '/' + this.editConfig.id : ''}`, data).then(() => {
+                    this.isAddButtonDisable = false;
                     this.getClientContact();
                     this.getClient();
                     toastr.success(this.isEditContact ? '添加成功！' : '修改成功')
@@ -1048,6 +949,10 @@
             },
 
             editBaseInfo: function () {
+                if (this.$store.state.power.client.add !== 'true') {
+                    toastr.error('当前用户没有编辑客户的权限');
+                    return;
+                }
                 if (!this.canEditClient) {
                     toastr.error('您没有编辑概况的权限！')
                     return
@@ -1090,62 +995,11 @@
             },
 
             addTask: function () {
-                if (!this.taskType) {
-                    toastr.error('请选择任务类型')
-                    return
-                }
-                if (!this.taskName) {
-                    toastr.error('请填写任务名称')
-                    return
-                }
-                if (!this.taskPrincipalId) {
-                    toastr.error('请选择负责人')
-                    return
-                }
-                if (!this.taskLevel) {
-                    toastr.error('请选择任务优先级')
-                    return
-                }
-                if (!this.taskStartTime) {
-                    toastr.error('请选择开始时间')
-                    return
-                }
-
-                if (!this.taskEndTime) {
-                    toastr.error('请选择截止时间')
-                    return
-                }
-
-                if (this.taskStartTime > this.taskEndTime) {
-                    toastr.error('开始时间不能晚于截止时间')
-                    return
-                }
-
-
-                this.setDefaultPrincipal()
-                let data = {
-                    resource_type: 4,
-                    resourceable_id: this.clientId,
-                    title: this.taskName,
-                    type: this.taskType,
-                    principal_id: this.taskPrincipalId, // 负责人 principal_id
-                    priority: this.taskLevel,
-                    start_at: this.taskStartTime + ' ' + this.startMinutes,
-                    end_at: this.taskEndTime + ' ' + this.endMinutes,
-                    desc: this.taskIntroduce,
-                    participant_ids: this.participantIds
-                };
-
-
-                fetch('post', '/tasks', data).then(response => {
-                    toastr.success('创建成功');
-                    $('#addTask').modal('hide');
-                    this.editConfig = {}
-                    this.getClientTask()
-                    this.getClient();
-                    this.getClientTrail();
-                    this.getClientProject()
-                })
+                this.editConfig = {};
+                this.getClientTask();
+                this.getClient();
+                this.getClientTrail();
+                this.getClientProject()
             },
 
             changeTaskType: function (value) {
@@ -1180,6 +1034,10 @@
                 this.changeInfo.principal_id = value
             },
             changeEditStatus(value, config) {
+                 if (this.$store.state.power.client.add !== 'true') {
+                    toastr.error('当前用户没有编辑客户的权限');
+                    return;
+                }
                 if (!this.canAddContact && value) {
                     toastr.error('您没有新增联系人的权限！')
                     return
@@ -1290,7 +1148,11 @@
                 })
             },
             // 任务弹层
-            handleTask () {
+            handleTask() {
+                 if (this.$store.state.power.task.add !== 'true') {
+                    toastr.error('您没有新建任务的权限！');
+                    return;
+                }
                 if (this.power == 'false') {
                     toastr.error('您没有新建任务的权限！')
                     return
