@@ -46,6 +46,7 @@ const state = {
         trail: true,
     }, // 用户权限(新增)
     supplierDetails:{},//供应商详情
+    listPower:{},//列表里边的导入导出和新增的权限
 };
 
 export default new Vuex.Store({

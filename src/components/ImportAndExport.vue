@@ -4,16 +4,20 @@
             <slot></slot>
         </span>
         <span v-if="type === 'import'" style="width:100%">
-            <form action="" style="display:inline-block;width:100%;height:34px;" >
+            <form v-if="this.importPower" action="" style="display:inline-block;width:100%;height:34px;" >
                 <input type="file" :id="`import_${this.getRandom}`" name="avatar" accept=".xlsx" style="display:none" @change="importFile($event)">
                 <label :for="`import_${this.getRandom}`" style="width:100%">
                 <slot></slot>
                 </label>
             </form>
+            <label v-else @click="importFile()" style="width:100%">
+                <slot></slot>
+            </label>
         </span>
     </span>
 </template>
 <script>
+ import {mapState} from 'vuex'
 import axios from 'axios'
 import env from '../assets/js/env'
 //导入和导出调通的模块只有 客户
@@ -33,6 +37,10 @@ export default {
         //导出需要传递的参数
         params:{
             type:Object
+        },
+        power:{
+            type:String,
+            required:true
         }
     },
    
@@ -40,7 +48,20 @@ export default {
         return {
           getRandom:Math.round(Math.random() * 1000),
           file:'',
-          header:env.getHeaders()
+          header:env.getHeaders(),
+          importPower:true,
+          exportPower:true,
+        }
+    },
+    computed:{
+        ...mapState([
+            'listPower'
+        ])
+    },
+    watch:{
+        listPower:function(){
+            this.importPower = this.listPower[power].importPower
+            this.exportPower = this.listPower[power].exportPower
         }
     },
     mounted(){
@@ -48,7 +69,10 @@ export default {
     methods:{
         //导入
         importFile:function(event){
-            
+            if(!this.importPower){
+                toastr.error('您没有导入权限，请确认');
+                return false
+            }
             this.header['Content-Type'] = 'multipart/form-data;boundary = ' + new Date().getTime()
             this.file = event.target.files[0];
             let importUrl = `${env.apiUrl}/${this.moduleName}/import`
@@ -70,6 +94,10 @@ export default {
         },
         //导出
         exportFile:function(){
+            if(!this.exportPower){
+                toastr.error('您没有导出权限，请确认');
+                return false
+            }
             var xhh = new XMLHttpRequest();
             //导出参数
             let getParams = []
