@@ -67,11 +67,12 @@
                                 </tr>
                                 </tbody>
                             </table>
-                            <pagination :current_page="current_page" :method="getSales" :total_pages="total_pages"
-                                :total="total"></pagination>
+                           
                             <div style="margin: 6rem auto;width: 100px" v-if="broadCastInfo.length === 0">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
                             </div>
+                             <pagination :current_page="current_page" :method="getSales" :total_pages="total_pages"
+                                :total="total"></pagination>
                         </div>
                     </div>
                 </div>
@@ -100,7 +101,7 @@ export default {
              total: 0,
             current_page: 1,
             total_pages: 1,
-            readFlag:''
+            readFlag:2,
         }
           
     },
@@ -154,7 +155,7 @@ export default {
             })
         },
         //初始化数据
-        dataInit(params){
+        dataInit(params = 2){
             this.readFlag = params
             let _this = this
                 fetch('get', '/announcements?include=creator&status='+this.status+'&readflag='+params).then(function (response) {

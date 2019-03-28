@@ -62,7 +62,7 @@
                             </tr>
                             <tbody>
 
-                            <tr v-for="(item,index) in pageList" :key="index" class="pointer-content">
+                            <tr v-for="(item,index) in pageList" :key="index" class="pointer-content" style="cursor: pointer;">
                                 <td @click="redirectContractDetail(item.form_instance_number)">{{item.contract_number}}</td>
                                 <td @click="redirectContractDetail(item.form_instance_number)">{{item.title}}</td>
                                 <td @click="redirectContractDetail(item.form_instance_number)">{{item.form_name}}</td>

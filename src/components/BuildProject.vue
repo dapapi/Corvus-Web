@@ -450,12 +450,14 @@
                         }
                     }
                 }
-                this.submitDisable = true;
                 fetch('post', '/projects', this.projectBaseInfo).then(response => {
                     this.submitDisable = true;
                     $('#addProject').modal('hide');
                     $('#selectProjectType').modal('hide');
                     this.$router.push({path: `/projects/${response.data.id}`});
+                }).catch((params) => {
+                    _this.submitDisable = false;
+                    console.log(error);
                 });
             },
             addProjectBaseInfo(value, name) {
