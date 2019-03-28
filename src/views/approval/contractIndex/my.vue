@@ -47,13 +47,13 @@
                                     <th class="cell-300" scope="col">审批状态</th>
                                 </tr>
                                 <tbody>
-                                <tr v-for="project in projectsInfo" :key=project.id @click="goDetail(project.form_instance_number)">
+                                <tr v-for="project in projectsInfo" :key=project.id @click="goDetail(project.form_instance_number)" style="cursor: pointer;">
                                     <router-link :to="{path:'/approval/'+project.form_instance_number,query:{mode:'approver'}}"><td>{{project.form_instance_number}}</td></router-link>
-                                    <router-link :to="{path:'/approval/'+project.form_instance_number,query:{mode:'approver'}}"><td>{{project.title}}</td></router-link>
-                                    <router-link :to="{path:'/approval/'+project.form_instance_number,query:{mode:'approver'}}"><td>{{project.name}}</td></router-link>
+                                    <td>{{project.title}}</td>
+                                    <td>{{project.name}}</td>
                                     <!-- <td></td> -->
-                                    <router-link :to="{path:'/approval/'+project.form_instance_number,query:{mode:'approver'}}"><td>{{common.timeProcessing(project.created_at)}}</td></router-link>
-                                    <router-link :to="{path:'/approval/'+project.form_instance_number,query:{mode:'approver'}}"><td>{{getProgressName(project.form_status)}}</td></router-link>
+                                    <td>{{common.timeProcessing(project.created_at)}}</td>
+                                    <td>{{getProgressName(project.form_status)}}</td>
                                     <!-- <td></td> -->
                                 </tr>
                                 </tbody>
@@ -150,5 +150,6 @@ export default {
 <style >
     .project-search::-webkit-input-placeholder{
         font-weight: 200;
+        
     }
 </style>
