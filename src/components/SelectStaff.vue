@@ -308,7 +308,7 @@ export default {
         user-select: none;
         border: 1px solid #f2f2f2;
         overflow: hidden;
-        z-index: 1000;
+        z-index: 100000000 !important;
     }
     .normal-width{
         width: 100%;

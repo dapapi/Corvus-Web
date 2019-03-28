@@ -203,7 +203,7 @@
         },
         name: 'BuildProject',
         // projectType 项目类型   projectFieldsArr 不同项目类型的数据
-        props: ['projectType', 'projectFieldsArr', 'defaultData', 'mode'],
+        props: ['projectType', 'projectFieldsArr', 'defaultData', 'mode','formstatus'],
         data() {
             return {
                 visibleRangeArr: config.visibleRangeArr,
@@ -251,7 +251,9 @@
             };
         },
         created() {
-            this.getStars();
+            if(this.formstatus === 231){
+                this.getStars();
+            }
         },
         mounted() {
             this.user = JSON.parse(Cookies.get('user'));
@@ -448,12 +450,14 @@
                         }
                     }
                 }
-                this.submitDisable = true;
                 fetch('post', '/projects', this.projectBaseInfo).then(response => {
                     this.submitDisable = true;
                     $('#addProject').modal('hide');
                     $('#selectProjectType').modal('hide');
                     this.$router.push({path: `/projects/${response.data.id}`});
+                }).catch((params) => {
+                    _this.submitDisable = false;
+                    console.log(error);
                 });
             },
             addProjectBaseInfo(value, name) {

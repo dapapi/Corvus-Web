@@ -44,7 +44,7 @@
                             <li class="site-menu-item" v-for="subMenu in menu.data"
                                 :class="pageRoute === subMenu.code ? 'active': ''">
                                 <router-link :to="'/' + subMenu.code" class="animsition-link">
-                                    <span class="site-menu-title">{{ subMenu.name }}</span>
+                                    <span class="site-menu-title"><i :class="subMenu.icon" class="mr-2"></i>{{ subMenu.name }}</span>
                                 </router-link>
                             </li>
                         </ul>
@@ -69,8 +69,8 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations } from 'vuex';
-import Cookies from 'js-cookie';
+    import {mapState, mapGetters, mapMutations} from 'vuex';
+    import Cookies from 'js-cookie';
 
     export default {
         name: "LeftMenu",
@@ -251,6 +251,14 @@ import Cookies from 'js-cookie';
         display: none !important;
     }
 
+    .site-menu-sub {
+        box-shadow: 0 2px 7px 1px #E2E2E2;
+    }
+
+    .site-menu-sub .site-menu-item:hover {
+        background: rgba(40, 53, 147, .03);
+    }
+
     .menu-icon img {
         height: auto;
         width: 100%;
@@ -297,6 +305,7 @@ import Cookies from 'js-cookie';
         left: 80px;
         z-index: 100000;
         border: 1px solid #f7f7f7;
+        box-shadow: 0 2px 7px 1px #E2E2E2;
     }
 
     .console ul li {
