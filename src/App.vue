@@ -70,13 +70,15 @@
                 this.getUserList()
                 this.getDepartment()
                 this.getModuleRole()
+                this.getListPower()
             }
         },
         methods: {
             ...mapActions([
                 'getUserList',
                 'getDepartment',
-                'getModuleRole'
+                'getModuleRole',
+                'getListPower'
             ])
         }
     };
