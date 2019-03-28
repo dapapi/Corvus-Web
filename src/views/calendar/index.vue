@@ -62,7 +62,7 @@
                                                             {{ calendar.title }}
                                                         </div>
                                                         <div class="float-right position-relative"
-                                                             v-show="!calendar.starable_type || (calendar.starable_type && calendar.principal_id == userInfo.id)">
+                                                             v-show="calendar.starable_type !== 'star' || (calendar.starable_type === 'star' && calendar.principal_id == userInfo.id)">
                                                             <i class="iconfont icon-gengduo1" aria-hidden="true"
                                                                id="taskDropdown"
                                                                data-toggle="dropdown" aria-expanded="false"></i>
