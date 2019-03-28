@@ -50,10 +50,10 @@
                         </li>
                         <i v-if="isShow"
                            style="position: absolute;right:10px;top:10px;color: rgb(0, 176, 255);font-style: normal;"
-                           @click="getArtists(1,1)">签约中</i>
+                           @click="getArtists(1,1)" class="pointer-content">签约中</i>
                         <i v-if="!isShow"
                            style="position: absolute;right:10px;top:10px;color: rgb(0, 176, 255);font-style: normal;"
-                           @click="getBlogger(1,1)">签约中</i>
+                           @click="getBlogger(1,1)" class="pointer-content">签约中</i>
                     </ul>
                 </div>
 
@@ -281,7 +281,7 @@
                                 </td>
                                 <td @click="redirectBolggerDetail(artist.id)">{{ artist.nickname }}</td>
                                 <td @click="redirectBolggerDetail(artist.id)"
-                                    v-if="bloggerInfo.find(item=>item.sign_contract_status!==1)">暂无
+                                    v-if="bloggerInfo.find(item=>item.sign_contract_status!==1)||!artist.type">暂无
                                 </td>
                                 <td @click="redirectBolggerDetail(artist.id)" v-if=" artist.type">{{ artist.type.data.name }}</td>
                                 <td @click="redirectBolggerDetail(artist.id)"
@@ -301,6 +301,12 @@
                                             artist.communication_status).name}}
                                         </span>
 
+                                    </template>
+                                </td>
+                                 <td @click="redirectBolggerDetail(artist.id)"
+                                    v-if="artist.communication_status&&bloggerInfo.find(item=>item.sign_contract_status==0)">
+                                    <template>
+                                    
                                     </template>
                                 </td>
                                 <td @click="redirectBolggerDetail(artist.id)"
@@ -1043,6 +1049,7 @@
                     
                     if(response.data){
                         _this.bloggerInfo = response.data;
+                        console.log(response.data)
                     }
                     if (response.meta) {
                         _this.Bcurrent_page = response.meta.pagination.current_page;
@@ -1750,4 +1757,5 @@
         top: 10px;
         font-size: 12px;
     }
+
 </style>
