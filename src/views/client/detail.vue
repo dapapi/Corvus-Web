@@ -180,7 +180,7 @@
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                      style="width: 100%">
                             </div>
-                            <AddClientType @change="changeTrailType" :hidden="power.trail == 'false'"></AddClientType>
+                            <AddClientType @change="changeTrailType" :hidden="false"></AddClientType>
                             <pagination :current_page="current_page" :method="getClient"
                                         :total_pages="total_pages" :total="total"></pagination>
                         </div>
@@ -471,7 +471,7 @@
                                         <span class="px-10 d-block float-left pointer-content"
                                               style="color: #b9b9b9;"
                                               data-plugin="actionBtn" data-toggle="modal"
-                                              data-target="#addContact"
+
                                               @click="changeEditStatus(false,contact)"
                                         >
                                             <i class="iconfont icon-bianji2" aria-hidden="true"></i>
@@ -949,14 +949,14 @@
             },
 
             editBaseInfo: function () {
-                if (this.$store.state.power.client.add !== 'true') {
+                if (this.clientInfo.powers.edit_client !== 'true') {
                     toastr.error('当前用户没有编辑客户的权限');
                     return;
                 }
-                if (!this.canEditClient) {
-                    toastr.error('您没有编辑概况的权限！')
-                    return
-                }
+                // if (!this.canEditClient) {
+                //     toastr.error('您没有编辑概况的权限！')
+                //     return
+                // }
                 this.isEdit = true;
                 this.changeInfo = {};
             },
@@ -1034,12 +1034,15 @@
                 this.changeInfo.principal_id = value
             },
             changeEditStatus(value, config) {
-                 if (this.$store.state.power.client.add !== 'true') {
-                    toastr.error('当前用户没有编辑客户的权限');
-                    return;
-                }
-                if (!this.canAddContact && value) {
-                    toastr.error('您没有新增联系人的权限！')
+                //  if (this.$store.state.power.client.add !== 'true') {
+                //     toastr.error('当前用户没有编辑客户的权限');
+                //     return;
+                // }
+                if (value === false && this.clientInfo.powers.add_contact) {
+                    toastr.error('当前用户没有权限新增联系人')
+                    return
+                }else if(value === true && this.clientInfo.powers.edit_contact){
+                     toastr.error('当前用户没有权限编辑联系人')
                     return
                 }
                 $('#addContact').modal('show')
@@ -1077,6 +1080,11 @@
             // 获取要删除的信息
             setDelInfo(id) {
                 this.contactId = id
+                if(this.clientInfo.powers.del_contact !== 'true'){
+                    toastr.error('当前用户没有删除联系人的权限')
+                    return
+                }
+                $('#confirmFlag').modal('show')
             },
             // 选择地区
             changeAreaData(val) {
@@ -1149,14 +1157,14 @@
             },
             // 任务弹层
             handleTask() {
-                 if (this.$store.state.power.task.add !== 'true') {
-                    toastr.error('您没有新建任务的权限！');
-                    return;
-                }
-                if (this.power == 'false') {
-                    toastr.error('您没有新建任务的权限！')
-                    return
-                }
+                //  if (this.$store.state.power.task.add !== 'true') {
+                //     toastr.error('您没有新建任务的权限！');
+                //     return;
+                // }
+                // if (this.power == 'false') {
+                //     toastr.error('您没有新建任务的权限！')
+                //     return
+                // }
                 $('#addTask').modal('show')
             },
         }

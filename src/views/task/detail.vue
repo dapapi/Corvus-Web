@@ -125,17 +125,10 @@
                                     @click="submit">提交
                             </button>
                             <button type="button" class="btn btn-primary" data-plugin="actionBtn"
-<<<<<<< HEAD
                                     data-toggle="modal"
                                     v-if="questionInfo.reviewanswer
                                     && principalId === user.id 
                                     && hasAnsweredArr.length > 0 
-=======
-                                data-toggle="modal"
-                                v-if="questionInfo.reviewanswer
-                                    && principalId === user.id
-                                    && hasAnsweredArr.length > 0
->>>>>>> wx
                                     && hasAnsweredArr.length === questionInfo.reviewanswer.data.length
                                     && !questionInfo.excellent
                                 "
@@ -473,8 +466,7 @@
                                             {{ attachment.title }}
                                             <span class="float-right pl-10 pointer-content"
                                                   data-plugin="actionBtn" @click="setDelInfo(attachment.id)"
-                                                  data-toggle="modal"
-                                                  data-target="#confirmFlag">
+                                                  data-toggle="modal">
                                                   <i class="iconfont icon-shanchu1"></i> 删除</span>
                                             <span class="float-right px-10">|</span>
                                             <span class="float-right px-10 pointer-content"
@@ -710,9 +702,6 @@
                             response.data.affixes.data[i].size = this.unitConversion(size)
                         }
                     }
-
-                    this.canEdit = response.data.power == 'true'
-
                     this.oldInfo = JSON.parse(JSON.stringify(response.data));
                     this.taskInfo = response.data;
                     this.taskInfo.start_at = this.taskInfo.start_at.split(' ');
@@ -763,7 +752,7 @@
             },
 
             editBaseInfo: function () {
-                if (!this.canEdit) {
+                if (this.taskInfo.powers.edit_task !== 'true') {
                     toastr.error('您没有编辑任务的权限！')
                     return
                 }
@@ -1075,6 +1064,12 @@
             },
             setDelInfo(id) {
                 this.attachmentId = id
+                if(this.taskInfo.powers.del_task !== 'true'){
+                  toastr.error('当前用户没有删除任务的权限')
+                  return
+                }
+                $('confirmFlag').modal('show')
+
             },
             // 关闭新增任务
             closeAddTask() {
@@ -1232,7 +1227,7 @@
                 this.previewName = name
             },
             handleChildTask() {
-                if (this.power.task == 'false') {
+                if (this.taskInfo.powers.add_subtask == 'false') {
                     toastr.error('您没有权限新增子任务！')
                     return
                 }

@@ -84,7 +84,7 @@
         <customize-filter :data="customizeInfo" @change="customize" :cleanup="cleanUp"
                           @cleanupdone='cleanUp=false'></customize-filter>
 
-        <AddClientType :hidden="power.client == 'false'" @change="showAddModal"/>
+        <AddClientType :hidden="false" @change="showAddModal"/>
 
         <div class="modal fade" id="addClient" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
