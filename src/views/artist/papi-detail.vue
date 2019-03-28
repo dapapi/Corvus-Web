@@ -591,11 +591,15 @@
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-12 float-left"
-                                                 v-if="isShowPrivacy">
+                                                >
                                                 <div class="col-md-2 float-left text-right pl-0">孵化期</div>
-                                                <div class="col-md-10 float-left font-weight-bold">
+                                                <div class="col-md-10 float-left font-weight-bold" v-if="Incubationperiod!=='**'">
                                                     <EditGroupDatePicker :content="Incubationperiod" :is-edit="isEdit"
                                                                          @change="changeArtistHatch"></EditGroupDatePicker>
+                                                </div>
+                                                <div class="col-md-9 float-left font-weight-bold"
+                                                                v-if="Incubationperiod =='**'">
+                                                            {{Incubationperiod}}
                                                 </div>
                                             </div>
                                             <h5 class=" pt-10 clearfix col-md-12 float-left">更新信息</h5>
@@ -1259,7 +1263,6 @@ export default {
                 platformDate: '',
                 scoreId: '',
                 artistProjectsInfo: '',
-                isShowPrivacy: false,
                 allProjectsInfo: '',
                 searchKeyWord: '',
                 allTasksInfo: '',
@@ -1407,14 +1410,13 @@ export default {
                     this.platformDate = data.join(',');
                     //孵化期时间 
                     if (this.artistInfo.hatch_star_at !== "privacy" && this.artistInfo.hatch_end_at !== "privacy") {
-                        if(this.artistInfo.hatch_star_at !== null && this.artistInfo.hatch_end_at !== null){
-                            this.Incubationperiod = this.artistInfo.hatch_star_at + '|' + this.artistInfo.hatch_end_at
-                            
+                        if(this.artistInfo.hatch_star_at !== null || this.artistInfo.hatch_end_at !== null){
+                            this.Incubationperiod = this.artistInfo.hatch_star_at + '|' + this.artistInfo.hatch_end_at 
                         }else{
-                            this.Incubationperiod = ''
-                        }
-                        
-                        this.isShowPrivacy = true
+                            this.Incubationperiod = ''  
+                        }        
+                    }else{
+                        this.Incubationperiod = '**'
                     }
                     this.projectContractDefault = {
                         '昵称': response.data.nickname
@@ -2046,11 +2048,7 @@ export default {
                 if (!this.updatelevel) {
                     delete(this.changeArtistInfo.level)
                 }
-                if (!this.isShowPrivacy) {
-                    delete(this.changeArtistInfo.hatch_star_at)
-                    delete(this.changeArtistInfo.hatch_end_at)
-                }
-                if(this.artistInfo.hatch_star_at == '' || this.artistInfo.hatch_end_at == ''){
+                if(this.artistInfo.hatch_star_at == null || this.artistInfo.hatch_end_at == null){
                     delete(this.changeArtistInfo.hatch_star_at)
                     delete(this.changeArtistInfo.hatch_end_at)
                 }
