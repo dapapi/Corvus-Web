@@ -47,42 +47,44 @@
                                                        class="form-control project-search" style="height: 2rem;"
                                                        @blur="getCalendarList" @keyup.enter="getCalendarList">
                                             </div>
-                                            <div v-show="showAllCalendar" style="max-height: 350px;overflow-y: auto">
-                                                <ul>
-                                                    <li v-for="(calendar,index) in calendarList" :key="index"
-                                                        class="clearfix">
-                                                        <div class="calendar-checkbox float-left pointer-content"
-                                                             :style="'background-color:' + calendar.color"
-                                                             @click="checkCalendar(calendar.id)">
-                                                            <i class="md-check"
-                                                               v-show="selectedCalendar.indexOf(calendar.id) > -1"></i>
-                                                        </div>
-                                                        <div class="float-left col-md-9 pr-0"
-                                                             style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
-                                                            {{ calendar.title }}
-                                                        </div>
-                                                        <div class="float-right position-relative"
-                                                             v-show="calendar.starable_type !== 'star' || (calendar.starable_type === 'star' && calendar.principal_id == userInfo.id)">
-                                                            <i class="iconfont icon-gengduo1" aria-hidden="true"
-                                                               id="taskDropdown"
-                                                               data-toggle="dropdown" aria-expanded="false"></i>
-                                                            <div class="dropdown-menu"
-                                                                 aria-labelledby="taskDropdown">
-                                                                <a class="dropdown-item"
-                                                                   @click="getCalendarDetail(calendar.id)"
-                                                                   data-target="#addCalendar"
-                                                                   data-toggle="modal">编辑</a>
-                                                                <a class="dropdown-item" data-target="#delModel"
-                                                                   data-toggle="modal"
-                                                                   @click="deleteToastr('calendar', calendar)">删除</a>
+                                            <div style="max-height: 350px;overflow: hidden;position: relative;">
+                                                <div v-show="showAllCalendar" style="max-height: 350px;overflow-y: auto;">
+                                                    <ul style="padding-bottom: 30px;">
+                                                        <li v-for="(calendar,index) in calendarList" :key="index"
+                                                            class="clearfix">
+                                                            <div class="calendar-checkbox float-left pointer-content"
+                                                                 :style="'background-color:' + calendar.color"
+                                                                 @click="checkCalendar(calendar.id)">
+                                                                <i class="md-check"
+                                                                   v-show="selectedCalendar.indexOf(calendar.id) > -1"></i>
                                                             </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                                <div class="checkbox-custom checkbox-primary">
-                                                    <input type="checkbox" id="inputUnchecked"
-                                                           @change="selectAllCalendar">
-                                                    <label for="inputUnchecked">全选</label>
+                                                            <div class="float-left col-md-9 pr-0"
+                                                                 style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
+                                                                {{ calendar.title }}
+                                                            </div>
+                                                            <div class="float-right position-relative"
+                                                                 v-show="calendar.starable_type !== 'star' || (calendar.starable_type === 'star' && calendar.principal_id == userInfo.id)">
+                                                                <i class="iconfont icon-gengduo1" aria-hidden="true"
+                                                                   id="taskDropdown"
+                                                                   data-toggle="dropdown" aria-expanded="false"></i>
+                                                                <div class="dropdown-menu"
+                                                                     aria-labelledby="taskDropdown">
+                                                                    <a class="dropdown-item"
+                                                                       @click="getCalendarDetail(calendar.id)"
+                                                                       data-target="#addCalendar"
+                                                                       data-toggle="modal">编辑</a>
+                                                                    <a class="dropdown-item" data-target="#delModel"
+                                                                       data-toggle="modal"
+                                                                       @click="deleteToastr('calendar', calendar)">删除</a>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                    <div class="checkbox-custom checkbox-primary select-all-checkbox">
+                                                        <input type="checkbox" id="inputUnchecked"
+                                                               @change="selectAllCalendar">
+                                                        <label for="inputUnchecked">全选</label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -848,7 +850,7 @@
             },
 
             getCalendarList: function () {
-                this.calendarList = [];
+                let newCalendarList = [];
                 let data = {};
                 if (this.calendarTitle) {
                     data.title = this.calendarTitle
@@ -857,8 +859,9 @@
                     for (let i = 0; i < response.data.length; i++) {
                         response.data[i].name = response.data[i].title;
                         response.data[i].value = response.data[i].id;
-                        this.calendarList.push(response.data[i])
+                        newCalendarList.push(response.data[i])
                     }
+                    this.calendarList = newCalendarList;
                     if (data.title) {
                         this.selectedCalendar = [];
                         for (let i = 0; i < response.data.length; i++) {
@@ -1419,6 +1422,7 @@
                 }
                 fetch('put', '/calendars/' + this.calendarId, data).then(() => {
                     this.getCalendarList();
+                    this.calendarList.find(item => item.id == this.calendarId)
                     this.$refs.calendar.refresh();
                     $('#addCalendar').modal('hide');
                     toastr.success('修改成功')
@@ -1575,6 +1579,15 @@
     .project-search::-webkit-input-placeholder {
         font-weight: 200;
         font-size: 12px;
+    }
+
+    .select-all-checkbox {
+        position: absolute;
+        bottom: 0;
+        background-color: white;
+        width: 100%;
+        margin: 0;
+        padding-top: 10px;
     }
 
 </style>
