@@ -67,6 +67,8 @@
                                 </tr>
                                 </tbody>
                             </table>
+                            <pagination :current_page="current_page" :method="getSales" :total_pages="total_pages"
+                                :total="total"></pagination>
                             <div style="margin: 6rem auto;width: 100px" v-if="broadCastInfo.length === 0">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt="" style="width: 100%">
                             </div>
@@ -95,6 +97,10 @@ export default {
              memberList:[],
              isLoading:true,
              status:'',
+             total: 0,
+            current_page: 1,
+            total_pages: 1,
+            readFlag:''
         }
           
     },
@@ -149,12 +155,31 @@ export default {
         },
         //初始化数据
         dataInit(params){
+            this.readFlag = params
             let _this = this
                 fetch('get', '/announcements?include=creator&status='+this.status+'&readflag='+params).then(function (response) {
                     _this.broadCastInfo = response.data
+                    _this.total = response.meta.pagination.total;
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total_pages = response.meta.pagination.total_pages;
                     _this.isLoading = false
             })
         },
+        getSales (pageNum = 1) {
+                let _this = this;
+                let data = {
+                    page: pageNum,
+                    include: 'principal,client,expectations',
+                };
+                Object.assign(data, this.fetchData)
+                fetch('get', '/announcements?include=creator&status='+this.status+'&readflag='+this.readFlag).then(function (response) {
+                    _this.broadCastInfo = response.data;
+                    _this.total = response.meta.pagination.total;
+                    _this.current_page = response.meta.pagination.current_page;
+                    _this.total_pages = response.meta.pagination.total_pages;
+                    _this.isLoading = false;
+                })
+            },            
         // 重新请求
         refreshList(){
             this.dataInit()

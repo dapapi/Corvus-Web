@@ -252,18 +252,18 @@
 </template>
 
 <script>
-    import fetch from '../../assets/utils/fetch.js'
-    import config from '../../assets/js/config'
-    import {mapState} from 'vuex'
-    import Cookies from 'js-cookie'
-    import ImportAndExport from '@/components/ImportAndExport.vue'
-    import common from '../../assets/js/common'
+import fetch from '../../assets/utils/fetch.js';
+import config from '../../assets/js/config';
+import { mapState } from 'vuex';
+import Cookies from 'js-cookie';
+import ImportAndExport from '@/components/ImportAndExport.vue';
+import common from '../../assets/js/common';
 
-    export default {
-        components: {
-            ImportAndExport
-        },
-        data: function () {
+export default {
+  components: {
+    ImportAndExport,
+  },
+  data () {
             return {
                 common: common,
                 total: 0,
@@ -342,32 +342,32 @@
                 isAddButtonDisable: false,
             }
         },
-        created() {
-            this.getField()
-            if (this.userList.length > 0) {
-                this.memberList = this.userList
-            }
-            this.getCurrentUser()
-        },
-        mounted() {
-            this.getSales();
-            this.getClients();
-            this.getStars();
-            this.getIndustries();
-        },
-        computed: {
-            ...mapState([
-                'userList'
-            ]),
-            _userList() {
-                return this.userList
-            }
-        },
-        watch: {
-            _userList() {
-                this.memberList = this.userList
-            },
-            trailType: function () {
+  created() {
+    this.getField();
+    if (this.userList.length > 0) {
+      this.memberList = this.userList;
+    }
+    this.getCurrentUser();
+  },
+  mounted() {
+    this.getSales();
+    this.getClients();
+    this.getStars();
+    this.getIndustries();
+  },
+  computed: {
+    ...mapState([
+      'userList',
+    ]),
+    _userList() {
+      return this.userList;
+    },
+  },
+  watch: {
+    _userList() {
+      this.memberList = this.userList;
+    },
+    trailType () {
                 this.trailOriginArr = config.trailOrigin
                 if (this.trailType == 4) {
                     this.trailOriginArr = config.trailBloggerOrigin
@@ -378,44 +378,44 @@
                     $('.selectpicker').selectpicker('refresh');
                 })
             },
-            memberList: function (value) {
+    memberList (value) {
                 this.$nextTick(() => {
                     $('.selectpicker').selectpicker('render');
                     $('.selectpicker').selectpicker('refresh');
                 })
-            }
-        },
-        methods: {
-            getField() {
-                let _this = this
-                fetch('get', '/trails/filter_fields').then((params) => {
-                    _this.customizeInfo = params.data
-                })
             },
-            changeTrailOriginPerson(value) {
-                this.trailOriginPerson = value
-            },
-            changeEmail(value) {
-                this.email = value
-            },
-            getCurrentUser() {
-                fetch('get', '/users/my').then((response) => {
-                    this.currentUser = response.data
-                })
-            },
-            principalFilter(value) {
-                if (value) {
-                    this.fetchData.principal_ids = value.join(',')
-                }
-                this.fetchHandler('post', '/trails/filter', 'filter')
-            },
-            phoneValidate() {
-                let phone = this.trailContactPhone
-                if (!(/^1(3|4|5|7|8)\d{9}$/.test(phone))) {
-                    return false;
-                }
-            },
-            trailTypeValidate() {
+  },
+  methods: {
+    getField() {
+      const _this = this;
+      fetch('get', '/trails/filter_fields').then((params) => {
+        _this.customizeInfo = params.data;
+      });
+    },
+    changeTrailOriginPerson(value) {
+      this.trailOriginPerson = value;
+    },
+    changeEmail(value) {
+      this.email = value;
+    },
+    getCurrentUser() {
+      fetch('get', '/users/my').then((response) => {
+        this.currentUser = response.data;
+      });
+    },
+    principalFilter(value) {
+      if (value) {
+        this.fetchData.principal_ids = value.join(',');
+      }
+      this.fetchHandler('post', '/trails/filter', 'filter');
+    },
+    phoneValidate() {
+      const phone = this.trailContactPhone;
+      if (!(/^1(3|4|5|7|8)\d{9}$/.test(phone))) {
+        return false;
+      }
+    },
+    trailTypeValidate() {
                 if (!this.trailType) {
                     toastr.error("销售线索为必填");
                     return false;
@@ -459,75 +459,75 @@
                         // alert("手机号码有误，请重填");  
                         toastr.error("请输入正确的手机号码");
                         return false;
-                    } else {
+                    } 
                         return true;
-                    }
+                    
                 } else {
                     return true
                 }
             },
-            redirectPublicTrail() {
-                this.$router.push({path: '/publictrails'})
-            },
-            fetchHandler(methods, url, type, pageNum = 1) {
-                this.isLoading = true
-                let _this = this,
-                    fetchData = this.fetchData,
-                    newUrl
-                this.fetchData.include = 'include=principal,client,contact,recommendations,expectations'
-                if (type == 'filter') {
-                    fetchData = this.customizeCondition
-                    let keyword, status, principal_ids, pagenumber
-                    if (this.fetchData.keyword) {
-                        keyword = '&keyword=' + this.fetchData.keyword
-                    } else {
-                        keyword = ''
-                    }
-                    if (this.fetchData.status) {
-                        status = '&status=' + this.fetchData.status
-                    } else {
-                        status = ''
-                    }
-                    if (this.fetchData.principal_ids) {
-                        principal_ids = '&principal_ids=' + this.fetchData.principal_ids
-                    } else {
-                        principal_ids = ''
-                    }
-                    pagenumber = '&page=' + pageNum
-                    newUrl = url + '?' + this.fetchData.include + keyword + status + principal_ids + pagenumber
-                }
-                // console.log(this.fetchData)
-                this.exportParams = {
-                    keyword: this.fetchData.keyword,
-                    status: this.fetchData.status,
-                    principal_ids: this.fetchData.principal_ids,
-                }
-                fetch(methods, newUrl || url, fetchData).then((response) => {
-                    _this.trailsInfo = response.data
-                    _this.total = response.meta.pagination.total;
-                    _this.current_page = response.meta.pagination.current_page;
-                    _this.total_pages = response.meta.pagination.total_pages;
-                    _this.isLoading = false;
-                })
-            }
-            ,
+    redirectPublicTrail() {
+      this.$router.push({ path: '/publictrails' });
+    },
+    fetchHandler(methods, url, type, pageNum = 1) {
+      this.isLoading = true;
+      let _this = this,
+        fetchData = this.fetchData,
+        newUrl;
+      this.fetchData.include = 'include=principal,client,contact,recommendations,expectations';
+      if (type == 'filter') {
+        fetchData = this.customizeCondition;
+        let keyword, 
+status, 
+principal_ids, 
+pagenumber;
+        if (this.fetchData.keyword) {
+          keyword = `&keyword=${  this.fetchData.keyword}`;
+        } else {
+          keyword = '';
+        }
+        if (this.fetchData.status) {
+          status = `&status=${  this.fetchData.status}`;
+        } else {
+          status = '';
+        }
+        if (this.fetchData.principal_ids) {
+          principal_ids = `&principal_ids=${  this.fetchData.principal_ids}`;
+        } else {
+          principal_ids = '';
+        }
+        pagenumber = `&page=${  pageNum}`;
+        newUrl = `${url  }?${  this.fetchData.include  }${keyword  }${status  }${principal_ids  }${pagenumber}`;
+      }
+      // console.log(this.fetchData)
+      this.exportParams = {
+        keyword: this.fetchData.keyword,
+        status: this.fetchData.status,
+        principal_ids: this.fetchData.principal_ids,
+      };
+      fetch(methods, newUrl || url, fetchData).then((response) => {
+        _this.trailsInfo = response.data;
+        _this.total = response.meta.pagination.total;
+        _this.current_page = response.meta.pagination.current_page;
+        _this.total_pages = response.meta.pagination.total_pages;
+        _this.isLoading = false;
+      });
+    },            
             filterGo() {
-                this.fetchData.keyword = this.trailFilter
-                this.fetchHandler('post', '/trails/filter', 'filter')
-                // this.fetchHandler('get', '/trails/filter')
-
-            }
-            ,
+      this.fetchData.keyword = this.trailFilter;
+      this.fetchHandler('post', '/trails/filter', 'filter');
+      // this.fetchHandler('get', '/trails/filter')
+    },            
             progressStatusFilter(value) {
-                this.fetchData.status = value
-                this.fetchHandler('post', '/trails/filter', 'filter')
-                // this.fetchHandler('get', '/trails/filter')
-            },
-            // progressStatusFilter(value) {
-            //     this.fetchData.status = value
-            //     this.fetchHandler('get', '/trails/filter')
-            // },
-            getSales: function (pageNum = 1) {
+      this.fetchData.status = value;
+      this.fetchHandler('post', '/trails/filter', 'filter');
+      // this.fetchHandler('get', '/trails/filter')
+    },
+    // progressStatusFilter(value) {
+    //     this.fetchData.status = value
+    //     this.fetchHandler('get', '/trails/filter')
+    // },
+    getSales (pageNum = 1) {
                 let _this = this;
                 this.fetchHandler('post', '/trails/filter', 'filter', pageNum)
                 // let data = {
@@ -542,9 +542,8 @@
                 //     _this.total_pages = response.meta.pagination.total_pages;
                 //     _this.isLoading = false;
                 // })
-            }
-            ,
-            getIndustries: function () {
+            },            
+            getIndustries () {
                 let _this = this;
                 fetch('get', '/industries/all').then(function (response) {
                     for (let i = 0; i < response.data.length; i++) {
@@ -555,16 +554,14 @@
                         })
                     }
                 })
-            }
-            ,
-            getClients: function () {
+            },            
+            getClients () {
                 let _this = this;
                 fetch('get', '/clients/all').then(function (response) {
                     _this.companyArr = response.data
                 })
-            }
-            ,
-            getStars: function () {
+            },            
+            getStars () {
                 if (this.starsArr.length > 0) {
                     return
                 }
@@ -572,13 +569,12 @@
                     for (let i = 0; i < response.data.length; i++) {
                         this.starsArr.push({
                             name: response.data[i].name,
-                            value: response.data[i].flag + '-' + response.data[i].id,
+                            value: response.data[i].flag + ',' + response.data[i].id,
                         })
                     }
                 })
-            }
-            ,
-            customize: function (value) {
+            },            
+            customize (value) {
                 // let _this = this
                 this.customizeCondition = value
                 this.fetchHandler('post', '/trails/filter', 'filter')
@@ -639,41 +635,35 @@
                         this.cleanTempData()
                     })
                 }
-            }
-            ,
+            },            
             cleanTempData() {
-                this.trailName = ''
-                this.brandName = ''
-                this.selectCompany = ''
-                this.recommendStars = ''
-                this.targetStars = ''
-                this.trailContact = ''
-                this.trailContactPhone = ''
-                this.trailFee = ''
-                this.trailDesc = ''
-                this.industry = ''
-                this.trailType = ''
-                this.priority = ''
-                this.cooperation = ''
-            }
-            ,
-            redirectTrailDetail: function (trailId) {
+      this.trailName = '';
+      this.brandName = '';
+      this.selectCompany = '';
+      this.recommendStars = '';
+      this.targetStars = '';
+      this.trailContact = '';
+      this.trailContactPhone = '';
+      this.trailFee = '';
+      this.trailDesc = '';
+      this.industry = '';
+      this.trailType = '';
+      this.priority = '';
+      this.cooperation = '';
+    },            
+            redirectTrailDetail (trailId) {
                 this.$router.push({path: '/trails/' + trailId})
-            }
-            ,
+            },            
             changeTrailOriginPerson(value) {
-                this.trailOriginPerson = value
-            }
-            ,
-            changeTrailOrigin: function (value) {
+      this.trailOriginPerson = value;
+    },            
+            changeTrailOrigin (value) {
                 this.trailOrigin = value
-            }
-            ,
-            changeTrailOriginType: function (value) {
+            },            
+            changeTrailOriginType (value) {
                 this.trailOrigin = value
-            }
-            ,
-            changeCompanyName: function () {
+            },            
+            changeCompanyName () {
                 let companyInfo = this.$store.state.companyInfo;
                 if (companyInfo.value) {
                     this.selectCompany = {
@@ -685,56 +675,48 @@
                         company: companyInfo.name
                     }
                 }
-            }
-            ,
-            changePrincipal: function (value) {
+            },            
+            changePrincipal (value) {
                 if (this.$store.state.otherSlot.data) {
                     this.trailPrincipal = this.$store.state.otherSlot.data.name
                 } else {
                     this.trailPrincipal = ''
                 }
-            }
-            ,
-            changeTargetStars: function (value) {
+            },            
+            changeTargetStars (value) {
                 for (let i = 0; i < value.length; i++) {
-                    let item = value[i].split('-');
+                    let item = value[i].split(',');
                     value[i] = {
                         id: item[1],
                         flag: item[0]
                     };
                 }
                 this.targetStars = value
-            }
-            ,
-            changeRecommendStars: function (value) {
+            },            
+            changeRecommendStars (value) {
                 for (let i = 0; i < value.length; i++) {
-                    let item = value[i].split('-');
+                    let item = value[i].split(',');
                     value[i] = {
                         id: item[1],
                         flag: item[0]
                     };
                 }
                 this.recommendStars = value
-            }
-            ,
-            changeTrailFee: function (value) {
+            },            
+            changeTrailFee (value) {
                 this.trailFee = value
-            }
-            ,
-            changeCheckbox: function (e) {
+            },            
+            changeCheckbox (e) {
                 this.trailIsLocked = Number(e.target.checked)
-            }
-            ,
-            changeIndustry: function (value) {
+            },            
+            changeIndustry (value) {
                 this.industry = value
-            }
-            ,
-            changePriority: function (value) {
+            },            
+            changePriority (value) {
                 this.priority = value
-            }
-            ,
-            changeTrailType: function (value) {
-                if (this.$store.state.power.trail !== 'true') {
+            },            
+            changeTrailType (value) {
+                if(this.$store.state.power.trail.add !=='true'){
                     toastr.error('当前用户没有权限新增销售线索')
                     return
                 }
@@ -751,27 +733,23 @@
                 setTimeout(() => {
                     $('.selectpicker').selectpicker('refresh');
                 }, 500);
-            }
-            ,
-            changeTrailStatus: function (value) {
+            },            
+            changeTrailStatus (value) {
                 this.trailStatus = value
-            }
-            ,
-            changeCooperationType: function (value) {
+            },            
+            changeCooperationType (value) {
                 this.cooperation = value
-            }
-            ,
-            clearPrincipalFilter: function () {
+            },            
+            clearPrincipalFilter () {
                 this.fetchData.principal_ids = ''
                 this.fetchHandler('get', '/trails/filter')
                 this.$refs.principal_id.setValue('')
-            }
-            ,
+            },            
             goDetail(id) {
-                this.$router.push({path: '/trails/' + id})
-            }
-        }
-    }
+      this.$router.push({ path: `/trails/${  id}` });
+    },
+  },
+};
 </script>
 <style scoped>
     .error {

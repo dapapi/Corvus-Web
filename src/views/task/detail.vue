@@ -12,7 +12,6 @@
                     <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(3)" v-show="oldInfo.status == 1">终止</a>
                     <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(1)" v-show="oldInfo.status != 1">激活</a>
                     <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(2)" v-show="oldInfo.status == 1">完成</a>
-                    <!-- <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#customizeFieldContent">自定义字段</a> -->
                     <a class="dropdown-item" role="menuitem" @click="privacyTask(oldInfo.privacy ? 0 : 1)">
                         {{oldInfo.privacy ? '转公开':'转私密'}}</a>
                     <a class="dropdown-item" role="menuitem" @click="shouleDeleteTask">删除</a>
@@ -30,7 +29,8 @@
                            <i class="md-chevron-left"></i>回到主任务
                             </span>
                         </template>
-                        <i v-if="oldInfo.privacy" class="iconfont icon-zhuansimi" style="font-size: 20px; color: #F44336; float: right;"></i>
+                        <i v-if="oldInfo.privacy" class="iconfont icon-zhuansimi"
+                           style="font-size: 20px; color: #F44336; float: right;"></i>
                     </h4>
                     <div class="card-text clearfix example">
                         <div class="float-left pl-0 pr-2 col-md-1">
@@ -83,7 +83,7 @@
                 </div>
             </div>
 
-            <div style="display:-webkit-box">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start">
                 <div class="panel" style="width: calc(66% - 15px);z-index: 10;float:left;margin-right:30px">
 
                     <div class="col-md-12 tab-title">
@@ -130,8 +130,7 @@
                                     && principalId === user.id 
                                     && hasAnsweredArr.length > 0 
                                     && hasAnsweredArr.length === questionInfo.reviewanswer.data.length
-                                    && !questionInfo.excellent
-                                "
+                                    && !questionInfo.excellent"
                                     data-target="#push-reason">推优
                             </button>
                         </div>
@@ -1069,26 +1068,6 @@
             setDelInfo(id) {
                 this.attachmentId = id
             },
-            // 关闭新增任务
-            closeAddTask() {
-                this.taskName = ''
-                this.taskLevel = ''
-                this.$refs.taskLevel.setValue('1')
-                this.taskType = ''
-                this.$refs.taskType.setValue('')
-                this.startTime = ''
-                this.endTime = ''
-                this.startMinutes = ''
-                this.endMinutes = ''
-                this.taskIntroduce = ''
-                this.$refs.startTime.setValue('')
-                this.$refs.startMinutes.setValue('0')
-                this.$refs.endTime.setValue('')
-                this.$refs.endMinutes.setValue('0')
-                this.linkData = []
-                this.getLinkData()
-                this.setDefaultPrincipal()
-            },
             // 设置默认负责人
             setDefaultPrincipal() {
                 this.$store.commit('changeNewPrincipal', {
@@ -1231,8 +1210,8 @@
                 }
                 $('#addTask').modal('show')
             }
-        }
-    }
+        },
+    };
 </script>
 
 <style scoped>

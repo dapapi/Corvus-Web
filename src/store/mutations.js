@@ -84,5 +84,8 @@ export default {
     // 设置权限(新增)
     setUserPower(state, data) {
         state.power = data
+    },
+    setSupplierDetails(state,data){
+        state.supplierDetails = data
     }
 }

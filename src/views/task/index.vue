@@ -17,12 +17,14 @@
                                placeholder="请输入任务名称">
                     </div>
                     <div class="col-md-3 example float-left">
-                        <Selectors :options="taskTypeArr" @change="changeTaskTypeSearch" placeholder="请选择任务类型"></Selectors>
+                        <Selectors :options="taskTypeArr" @change="changeTaskTypeSearch"
+                                   placeholder="请选择任务类型"></Selectors>
                     </div>
                     <div class="col-md-3 example float-left">
-                        <Selectors :options="taskStatusArr" @change="changeTaskStatusSearch" placeholder="请选择任务状态"></Selectors>
+                        <Selectors :options="taskStatusArr" @change="changeTaskStatusSearch"
+                                   placeholder="请选择任务状态"></Selectors>
                     </div>
-                     <div class="col-md-3 example float-left">
+                    <div class="col-md-3 example float-left">
                         <DropDepartment :data="department" :showUser="true" @change="selectDepartment"/>
                     </div>
                 </div>
@@ -94,16 +96,20 @@
                                     {{ task.title }}
                                 </td>
                                 <td>{{task.resource ? task.resource.data.resource.data.title : ''}}
-                                    <template v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.name">
-                                        -  {{ task.resource.data.resourceable.data.name }}
+                                    <template
+                                            v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.name">
+                                        - {{ task.resource.data.resourceable.data.name }}
                                     </template>
-                                    <template v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.nickname">
-                                        -  {{ task.resource.data.resourceable.data.nickname }}
+                                    <template
+                                            v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.nickname">
+                                        - {{ task.resource.data.resourceable.data.nickname }}
                                     </template>
-                                    <template v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.title">
+                                    <template
+                                            v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.title">
                                         - {{ task.resource.data.resourceable.data.title }}
                                     </template>
-                                    <template v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.company">
+                                    <template
+                                            v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.company">
                                         - {{ task.resource.data.resourceable.data.company }}
                                     </template>
                                 </td>
@@ -128,9 +134,9 @@
                                  style="width: 100%">
                         </div>
                         <Pagination :current_page="current_page"
-                                        :method="getTasks"
-                                        :total_pages="total_pages"
-                                        :total="total"></Pagination>
+                                    :method="getTasks"
+                                    :total_pages="total_pages"
+                                    :total="total"></Pagination>
                     </div>
                 </div>
             </div>
@@ -154,10 +160,10 @@
 </template>
 
 <script>
-    import fetch from "../../assets/utils/fetch.js";
-    import config from "../../assets/js/config";
-    import Cookies from 'js-cookie'
-    import { mapState } from 'vuex'
+    import fetch from '../../assets/utils/fetch.js';
+    import config from '../../assets/js/config';
+    import Cookies from 'js-cookie';
+    import {mapState} from 'vuex';
 
     const taskStatusArr = [{name: "全部", value: ""}, ...config.taskStatusArr];
     export default {
@@ -184,7 +190,7 @@
                 resourceType: "", // 资源type
                 user: {}, // 个人信息
                 isLoading: true,
-                priorityArr:config.priorityArr,
+                priorityArr: config.priorityArr,
                 my: '',//tasks 筛选  3我负责的 2 我参与的 1我创建的 4我分配的
                 linkCurrentPage: 2, // 关联资源当前页数
                 linkTotalPage: 1, // 关联资源总页数
@@ -213,13 +219,12 @@
 
         methods: {
 
-            //任务列表的请求都用url = /tasks  上下联动筛选
+            // 任务列表的请求都用url = /tasks  上下联动筛选
             getTasks(pageNum = 1) {
-                
-                let params = {
+                const params = {
                     page: pageNum,
-                    my:this.my,
-                    include:"principal,pTask,tasks,resource.resourceable,resource.resource,participants"
+                    my: this.my,
+                    include: 'principal,pTask,tasks,resource.resourceable,resource.resource,participants',
                 };
 
                 if (this.searchDepartment) {
@@ -230,7 +235,7 @@
                     params.user = this.searchUser
                 }
 
-                let url = "/tasks";
+                const url = '/tasks';
 
                 if (this.taskNameSearch) {
                     params.keyword = this.taskNameSearch;
@@ -241,7 +246,7 @@
                 if (this.taskTypeSearch) {
                     params.type_id = this.taskTypeSearch;
                 }
-                fetch("get", url, params).then(response => {
+                fetch('get', url, params).then((response) => {
                     this.tasksInfo = response.data;
                     this.current_page = response.meta.pagination.current_page;
                     this.total = response.meta.pagination.total;
@@ -249,11 +254,10 @@
                     this.isLoading = false;
                 });
             },
-            //任务我的筛选
+            // 任务我的筛选
             getMyTasks(my) {
-                this.my = my
-                this.getTasks(1)
-                
+                this.my = my;
+                this.getTasks(1);
             },
 
             customize(value) {
@@ -271,11 +275,11 @@
                 this.taskStatusSearch = value;
                 this.getTasks();
             },
-            goDetail (id) {
+            goDetail(id) {
                 this.$router.push('/tasks/' + id)
             },
 
-            handleAdd () {
+            handleAdd() {
                 if (this.power.task == 'false') {
                     toastr.error('您没有新增任务的权限！')
                     return
@@ -283,7 +287,7 @@
                 $('#addTask').modal('show')
             },
             // 选择成员或部门
-            selectDepartment (data) {
+            selectDepartment(data) {
                 console.log(data)
                 if (data.type === 'department') {
                     this.searchUser = ''
@@ -311,8 +315,9 @@
             display: inline-block;
         }
     }
+
     table tbody tr {
-       cursor: pointer;
+        cursor: pointer;
     }
 
 </style>

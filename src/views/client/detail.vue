@@ -96,7 +96,7 @@
 
             </div>
 
-            <div style="display:-webkit-box;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start">
                 <div class="panel" style="width: calc(66% - 15px);float:left;margin-right:30px">
 
                     <div class="col-md-12">
@@ -458,7 +458,7 @@
                                     <td>{{ contact.position }}</td>
                                     <td>{{ clientInfo.principal?clientInfo.principal.data.name:'' }}</td>
                                     <td>
-                                        
+
                                         <span class="pr-10 d-block float-left pointer-content"
                                               style="color: #b9b9b9;"
                                               data-plugin="actionBtn" data-toggle="modal"
@@ -949,6 +949,10 @@
             },
 
             editBaseInfo: function () {
+                if (this.$store.state.power.client.add !== 'true') {
+                    toastr.error('当前用户没有编辑客户的权限');
+                    return;
+                }
                 if (!this.canEditClient) {
                     toastr.error('您没有编辑概况的权限！')
                     return
@@ -1030,6 +1034,10 @@
                 this.changeInfo.principal_id = value
             },
             changeEditStatus(value, config) {
+                 if (this.$store.state.power.client.add !== 'true') {
+                    toastr.error('当前用户没有编辑客户的权限');
+                    return;
+                }
                 if (!this.canAddContact && value) {
                     toastr.error('您没有新增联系人的权限！')
                     return
@@ -1141,6 +1149,10 @@
             },
             // 任务弹层
             handleTask() {
+                 if (this.$store.state.power.task.add !== 'true') {
+                    toastr.error('您没有新建任务的权限！');
+                    return;
+                }
                 if (this.power == 'false') {
                     toastr.error('您没有新建任务的权限！')
                     return

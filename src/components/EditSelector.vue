@@ -1,8 +1,12 @@
 <template>
     <div v-if="options.length > 0">
         <template v-if="isEditSelect">
-            <selectors :options="options" @change="changeSelect" @valuelistener='valueListener'
-                       ref="selector" :multiple="multiple"></selectors>
+            <!--是否需要changekey-->
+            <selectors v-if="!changeKey" :options="options" @change="changeSelect" @valuelistener='valueListener'
+                       ref="selector" :multiple="multiple" :changeKey="changeKey"></selectors>
+
+            <selectors v-else :options="options" @select="changeSelectKey" @valuelistener='valueListener'
+                       ref="selector" :multiple="multiple" :changeKey="changeKey"></selectors>
         </template>
         <template v-else>
             <template v-if="multiple && !contentHide">
@@ -22,7 +26,7 @@
 <script>
     export default {
         name: "EditSelector",
-        props: ['options', 'is-edit', 'content', 'multiple', 'contentHide'],
+        props: ['options', 'is-edit', 'content', 'multiple', 'contentHide','changeKey'],
         data() {
             return {
                 isEditSelect: false,
@@ -51,7 +55,12 @@
                 this.$emit('valuelistener', value)
             },
             changeSelect: function (value) {
+
                 this.$emit('change', value);
+            },
+            //获取changekey
+            changeSelectKey:function(key,value){
+                this.$emit('select', key, value)
             },
             setDefaultValue:function(val){
                 let _this = this;

@@ -104,26 +104,26 @@
                     </div>
                 </div>
             </div>
-            <div style="display: -webkit-box ">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start">
                 <div class="panel" style="width: calc(66% - 15px);float:left;margin-right:30px;">
                     <div class="col-md-12">
                         <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                             <li class="nav-item" role="presentation" v-if="artistInfo.sign_contract_status == 2">
                                 <a class="nav-link" :class="artistInfo.sign_contract_status == 2?'active':''"
-                                   data-toggle="tab" href="#forum-artist-schedule"
-                                   aria-controls="forum-base"
-                                   aria-expanded="false" role="tab">日程</a>
+                                    data-toggle="tab" href="#forum-artist-schedule"
+                                    aria-controls="forum-base"
+                                    aria-expanded="false" role="tab">日程</a>
                             </li>
                             <li class="nav-item" role="presentation" v-if="artistInfo.sign_contract_status == 2">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-projects"
-                                   aria-controls="forum-present"
-                                   aria-expanded="false" role="tab" @click="getProject()">项目</a>
+                                    aria-controls="forum-present"
+                                    aria-expanded="false" role="tab" @click="getProject()">项目</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link"
-                                   data-toggle="tab" href="#forum-artist-tasks"
-                                   aria-controls="forum-present"
-                                   aria-expanded="true" role="tab" @click="getTaskList()">
+                                    data-toggle="tab" href="#forum-artist-tasks"
+                                    aria-controls="forum-present"
+                                    aria-expanded="true" role="tab" @click="getTaskList()">
                                     <template v-if="allTaskList.length > 0">
                                         <ToolTips :title="`已完成数量${doneTaskNum}`">
                                             任务 ({{taskNum}})
@@ -136,8 +136,8 @@
                             </li>
                             <li class="nav-item" role="presentation" v-if="artistInfo.sign_contract_status == 2">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-work"
-                                   aria-controls="forum-present"
-                                   aria-expanded="false" role="tab" @click="getWoks()">作品库</a>
+                                    aria-controls="forum-present"
+                                    aria-expanded="false" role="tab" @click="getWoks()">作品库</a>
                             </li>
                             <!--<li class="nav-item" role="presentation" v-show="artistInfo.sign_contract_status == 2">-->
                             <!--<a class="nav-link" data-toggle="tab" href="#forum-artist-fans"-->
@@ -147,34 +147,34 @@
                             <li class="nav-item" role="presentation" @click="getArtistsBill()"
                                 v-if="artistInfo.sign_contract_status == 2">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-bill"
-                                   aria-controls="forum-present"
-                                   aria-expanded="false" role="tab">账单</a>
+                                    aria-controls="forum-present"
+                                    aria-expanded="false" role="tab">账单</a>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-base"
-                                   aria-controls="forum-present"
-                                   aria-expanded="false" role="tab"
-                                   :class="artistInfo.sign_contract_status == 2?'':'active'">概况</a>
+                                    aria-controls="forum-present"
+                                    aria-expanded="false" role="tab"
+                                    :class="artistInfo.sign_contract_status == 2?'':'active'">概况</a>
                             </li>
                         </ul>
                         <div class="tab-content px-0 nav-tabs-animate bg-white col-md-12">
                             <!--日历日程-->
                             <div class="tab-pane animation-fade  fixed-button-father" id="forum-artist-schedule"
-                                 role="tabpanel" :class="artistInfo.sign_contract_status == 2?'active':''">
+                                    role="tabpanel" :class="artistInfo.sign_contract_status == 2?'active':''">
                                 <div class="col-md-12">
                                     <calendar v-if="artistInfo.sign_contract_status == 2" :goto-date="selectedDate"
-                                              :calendars="calendarId" ref="calendar" @showToast="showToast"
-                                              @scheduleClick="showScheduleModal" :isModel="true"
-                                              @dayClick="showAddScheduleModal"></calendar>
+                                                :calendars="calendarId" ref="calendar" @showToast="showToast"
+                                                @scheduleClick="showScheduleModal" :isModel="true"
+                                                @dayClick="showAddScheduleModal"></calendar>
                                 </div>
                             </div>
                             <!--项目-->
                             <div class="tab-pane animation-fade  fixed-button-father" id="forum-artist-projects"
-                                 role="tabpanel">
+                                    role="tabpanel">
                                 <table class="table table-hover is-indent example" data-plugin="animateList"
-                                       data-animate="fade"
-                                       data-child="tr"
-                                       data-selectable="selectable">
+                                        data-animate="fade"
+                                        data-child="tr"
+                                        data-selectable="selectable">
                                     <tr class="animation-fade"
                                         style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                                         <th class="cell-300" scope="col">项目名称</th>
@@ -203,17 +203,17 @@
                                 </table>
                                 <div style="margin: 6rem auto;width: 100px" v-if="artistProjectsInfo.length === 0">
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
-                                         style="width: 100%">
+                                            style="width: 100%">
                                 </div>
                                 <pagination :current_page="current_page" :method="getProject" :total_pages="total_pages"
                                             :total="total"></pagination>
                             </div>
                             <!--任务-->
                             <div class="tab-pane animation-fade  fixed-button-father"
-                                 id="forum-artist-tasks"
-                                 role="tabpanel">
+                                    id="forum-artist-tasks"
+                                    role="tabpanel">
                                 <table class="table table-hover is-indent example" data-plugin="animateList"
-                                       data-animate="fade" data-child="tr">
+                                        data-animate="fade" data-child="tr">
                                     <tr class="animation-fade"
                                         style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                                         <th class="cell-300" scope="col">任务名称</th>
@@ -248,29 +248,29 @@
                                 </table>
                                 <div style="margin: 6rem auto;width: 100px" v-if="allTaskList.length === 0">
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
-                                         style="width: 100%">
+                                            style="width: 100%">
                                 </div>
                                 <pagination :current_page="current_page" :method="getTaskList"
                                             :total_pages="total_pages"
                                             :total="total"></pagination>
                                 <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
-                                     data-target="#addTask">
+                                        data-target="#addTask">
                                     <button type="button"
                                             class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                                         <i class="front-icon iconfont icon-tianjia1 animation-scale-up"
-                                           aria-hidden="true"
-                                           style="font-size:30px"></i>
+                                            aria-hidden="true"
+                                            style="font-size:30px"></i>
                                         <i class="back-icon iconfont icon-tianjia1 animation-scale-up"
-                                           aria-hidden="true"
-                                           style="font-size:30px"></i>
+                                            aria-hidden="true"
+                                            style="font-size:30px"></i>
                                     </button>
                                 </div>
                             </div>
                             <!--作品库-->
                             <div class="tab-pane animation-fade  fixed-button-father" id="forum-artist-work"
-                                 role="tabpanel">
+                                    role="tabpanel">
                                 <table class="table table-hover is-indent example" data-plugin="animateList"
-                                       data-animate="fade" data-child="tr">
+                                        data-animate="fade" data-child="tr">
                                     <tr class="animation-fade"
                                         style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                                         <th class="cell-300" scope="col">作品名称</th>
@@ -293,17 +293,17 @@
                                 </table>
                                 <div style="margin: 6rem auto;width: 100px" v-if="artistWorksInfo.length === 0">
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
-                                         style="width: 100%">
+                                            style="width: 100%">
                                 </div>
 
                                 <pagination :current_page="current_page" :method="getWoks" :total_pages="total_pages"
                                             :total="total"></pagination>
                                 <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
-                                     data-target="#addWork">
+                                        data-target="#addWork">
                                     <button type="button"
                                             class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                                         <i class="front-icon iconfont icon-tianjia1 animation-scale-up"
-                                           aria-hidden="true" style="font-size:30px"></i>
+                                            aria-hidden="true" style="font-size:30px"></i>
                                         <i class="back-icon md-close animation-scale-up" aria-hidden="true"></i>
                                     </button>
                                 </div>
@@ -311,13 +311,13 @@
                             </div>
                             <!--粉丝数据-->
                             <div class="tab-pane animation-fade fixed-button-father" id="forum-artist-fans"
-                                 role="tabpanel">
+                                    role="tabpanel">
                                 <div id="myChart"
-                                     style="width:80vw ;height:400px; margin-top:30px;padding-bottom: 20px"></div>
+                                        style="width:80vw ;height:400px; margin-top:30px;padding-bottom: 20px"></div>
                             </div>
                             <!--账单-->
                             <div class="tab-pane animation-fade   fixed-button-father" id="forum-artist-bill"
-                                 role="tabpanel">
+                                    role="tabpanel">
                                 <div class="clearfix my-10">
                                     <div class="float-left my-10 ml-10">
                                         <div class="float-left pr-40">收款金额 <span
@@ -334,14 +334,14 @@
                                             <template v-if="expense_type == 2">成本</template>
                                             <template v-if="expense_type == 1">收入</template>
                                             <i class="iconfont icon-plus-select-down pl-2" aria-hidden="true"
-                                               id="projectDropdown" data-toggle="dropdown" aria-expanded="false"></i>
+                                                id="projectDropdown" data-toggle="dropdown" aria-expanded="false"></i>
                                             <div class="dropdown-menu" aria-labelledby="projectDropdown" role="menu">
                                                 <a class="dropdown-item" role="menuitem" v-show="expense_type !== 0"
-                                                   @click="getArtistsBill(1,0)">全部</a>
+                                                    @click="getArtistsBill(1,0)">全部</a>
                                                 <a class="dropdown-item" role="menuitem" v-show="expense_type !== 2"
-                                                   @click="getArtistsBill(1,2)">成本</a>
+                                                    @click="getArtistsBill(1,2)">成本</a>
                                                 <a class="dropdown-item" role="menuitem" v-show="expense_type !== 1"
-                                                   @click="getArtistsBill(1,1)">收入</a>
+                                                    @click="getArtistsBill(1,1)">收入</a>
                                             </div>
                                         </th>
                                         <th class="cell-300" scope="col">项目名称</th>
@@ -363,7 +363,7 @@
 
                                 <div style="margin: 6rem auto;width: 100px" v-if="artistBillsInfo.length === 0">
                                     <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
-                                         style="width: 100%">
+                                            style="width: 100%">
                                 </div>
                                 <pagination :current_page="current_page" :method="getArtistsBill"
                                             :total_pages="total_pages"
@@ -371,18 +371,18 @@
                             </div>
                             <!--概况-->
                             <div class="tab-pane animation-fade   fixed-button-father" id="forum-artist-base"
-                                 role="tabpanel" :class="artistInfo.sign_contract_status == 2?'':'active'">
+                                    role="tabpanel" :class="artistInfo.sign_contract_status == 2?'':'active'">
                                 <div class="card">
                                     <div class="card-header card-header-transparent card-header-bordered"
-                                         style="position: relative;">
+                                            style="position: relative;">
                                         <div class="float-left font-weight-bold third-title">艺人信息</div>
                                         <div class="float-right pointer-content" v-show="!isEdit"
-                                             style="position:absolute;top:10px;right:30px;">
+                                                style="position:absolute;top:10px;right:30px;">
                                             <i class="iconfont icon-bianji2" aria-hidden="true"
-                                               @click="editBaseInfo"></i>
+                                                @click="editBaseInfo"></i>
                                         </div>
                                         <div class="float-right mr-40" v-show="isEdit"
-                                             style="position:absolute;top:5px;right:0px;">
+                                                style="position:absolute;top:5px;right:0px;">
                                             <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消
                                             </button>
                                             <button class="btn btn-primary" @click="changeArtist">确定</button>
@@ -395,15 +395,15 @@
                                                 <div class="col-md-3 float-left text-right pl-0">姓名</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditInput :content="artistInfo.name" :is-edit="isEdit"
-                                                               @change="(value) => changeArtistBaseInfo(value, 'name')"></EditInput>
+                                                                @change="(value) => changeArtistBaseInfo(value, 'name')"></EditInput>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                                 <div class="col-md-3 float-left text-right pl-0">性别</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditSelector :options="genderArr" :content="artistInfo.gender"
-                                                                  :is-edit="isEdit"
-                                                                  @change="(value) => changeArtistBaseInfo(value, 'gender')"></EditSelector>
+                                                                    :is-edit="isEdit"
+                                                                    @change="(value) => changeArtistBaseInfo(value, 'gender')"></EditSelector>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
@@ -424,25 +424,25 @@
                                                 <div class="col-md-3 float-left text-right pl-0">艺人来源</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditSelector :content="artistInfo.source"
-                                                                  :options="artistSourceArr"
-                                                                  :is-edit="isEdit"
-                                                                  @change="(value) => changeArtistBaseInfo(value, 'source')"></EditSelector>
+                                                                    :options="artistSourceArr"
+                                                                    :is-edit="isEdit"
+                                                                    @change="(value) => changeArtistBaseInfo(value, 'source')"></EditSelector>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                                 <div class="col-md-3 float-left text-right pl-0">沟通状态</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditSelector :content="artistInfo.communication_status"
-                                                                  :options="taiyangCommunicationStatusArr"
-                                                                  :is-edit="isEdit"
-                                                                  @change="(value) => changeArtistBaseInfo(value, 'communication_status')"></EditSelector>
+                                                                    :options="taiyangCommunicationStatusArr"
+                                                                    :is-edit="isEdit"
+                                                                    @change="(value) => changeArtistBaseInfo(value, 'communication_status')"></EditSelector>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                                 <div class="col-md-3 float-left text-right pl-0">星探</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditInput :content="artistInfo.artist_scout_name" :is-edit="isEdit"
-                                                               @change="(value) => changeArtistBaseInfo(value, 'artist_scout_name')"></EditInput>
+                                                                @change="(value) => changeArtistBaseInfo(value, 'artist_scout_name')"></EditInput>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height" style="height:64px;">
@@ -456,23 +456,23 @@
                                                 <div class="col-md-3 float-left text-right pl-0">与我司签约意向</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <ConditionalInput ref="condition" :is-edit="isEdit"
-                                                                      :content="artistInfo.intention"
-                                                                      :input-content="artistInfo.intention_desc"
-                                                                      :condition="2"
-                                                                      @change="(value) => changeArtistBaseInfo(value, 'intention')"></ConditionalInput>
+                                                                        :content="artistInfo.intention"
+                                                                        :input-content="artistInfo.intention_desc"
+                                                                        :condition="2"
+                                                                        @change="(value) => changeArtistBaseInfo(value, 'intention')"></ConditionalInput>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                                 <div class="col-md-3 float-left text-right pl-0">是否签约其他公司</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <ConditionalInput ref="condition1" :is-edit="isEdit"
-                                                                      :content="artistInfo.sign_contract_other"
-                                                                      :input-content="artistInfo.sign_contract_other_name"
-                                                                      :condition="1"
-                                                                      @change="(value) => changeArtistBaseInfo(value, 'sign_contract_other')"></ConditionalInput>
+                                                                        :content="artistInfo.sign_contract_other"
+                                                                        :input-content="artistInfo.sign_contract_other_name"
+                                                                        :condition="1"
+                                                                        @change="(value) => changeArtistBaseInfo(value, 'sign_contract_other')"></ConditionalInput>
                                                 </div>
                                             </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
+                                            
                                                 <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height"
                                                      style="height:64px;">
                                                     <div class="col-md-3 float-left text-right pl-0">地区</div>
@@ -616,9 +616,9 @@
                                                     </div>
                                                 </div>
 
-                                            </div>
+                                            
 
-                                            <h5 class="pl-15 pt-10">更新信息</h5>
+                                            <h5 class="pl-15 pt-10 clearfix col-md-12 float-left">更新信息</h5>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                                 <div class="col-md-3 float-left text-right pl-0">录入人</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
@@ -658,7 +658,8 @@
 
                         </div>
                     </div>
-                    <div class="panel" style="width: calc(34% - 15px);min-height:100%">
+                </div>
+                <div class="panel" style="width: calc(34% - 15px);min-height:100%">
                         <div class="col-md-12">
                             <div class="card col-md-12">
                                 <div class="card-header card-header-transparent card-header-bordered p-10"
@@ -674,7 +675,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
 
             </div>
 
@@ -1329,6 +1329,7 @@ export default {
       };
       fetch('get', `/stars/${this.artistId}`, data).then((response) => {
         this.artistInfo = response.data;
+        console.log(this.artistInfo)
         this.artistName = response.data.name;
         if (response.data.star_risk_point == 'privacy') {
           this.artistInfo.star_risk_point = '**';
@@ -2024,7 +2025,7 @@ export default {
     },
 
     editBaseInfo() {
-      if (this.$store.state.power.star !== 'true') {
+      if (this.$store.state.power.star.add !== 'true') {
         toastr.error('当前用户没有权限编辑艺人');
         return;
       }

@@ -1,17 +1,17 @@
 <template>
     <div class="tree-view-item">
        <div class="level" :class="`level-${menu.level}`" v-for="menu in menus" :key="menu.id">
-           <div class="list-group-item" v-if="menu.type ==='link'" :class="isSelected == menu.id?'selected':''">
-               <router-link class="link" v-bind:to="menu.url" @click.native="toggle(menu)" :class="menu.level>1?'pl-15':''">
-                   <span v-if="isShow" class="icon md-file-text font-size-18 mr-10 ml-15" ></span>
-                   {{menu.name}}
-                   <span v-if="menu.num>0&&unReadMsg>0" class="unRead" :class="menu.num>=100?'unReadLine':''">
-                       <template v-if="menu.num>=100">...</template>
-                       <template v-else>{{menu.num}}</template>
-                   </span>
-                </router-link>
-           </div>
-           <div v-if="menu.type === 'button'">
+            <router-link class="link" v-bind:to="menu.url" @click.native="toggle(menu)">
+                <div class="list-group-item" v-if="menu.type ==='link'" :class="isSelected == menu.id?'selected':''"> 
+                        <span v-if="isShow" class="icon md-file-text font-size-18 mr-10 ml-15" ></span>
+                        {{menu.name}}
+                        <span v-if="menu.num>0&&unReadMsg>0" class="unRead" :class="menu.num>=100?'unReadLine':''">
+                            <template v-if="menu.num>=100">...</template>
+                            <template v-else>{{menu.num}}</template>
+                        </span>
+                </div>
+            </router-link>
+            <div v-if="menu.type === 'button'">
                 <div class="list-group-item button heading" :class="{selected:isSelected == menu.id,expand:isExpanded.includes(menu.id)}" @click="toggle(menu)" >
                     <i class="icon md-caret-right mr-10 font-size-20" style="vertical-align: middle;"></i>
                     <span>{{menu.name}}
@@ -205,8 +205,8 @@ export default {
         position: relative;
         bottom:1px;
         position: absolute;
-        top: 3px;
-        right: 10px;
+        top: 16px;
+        right: 44px;
     }
     .unReadLine{
         line-height: 12px;
