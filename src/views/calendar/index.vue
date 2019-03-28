@@ -663,7 +663,7 @@
                 selectedDate: '',
                 calendarColor: '',
                 selectedCalendar: [],
-                oldSelectedCalendar: [],
+                oldSelectedCalendar: '',
                 delCalendarInfo: '',
                 meetingRomeShow: false,
                 calendarList: [],
@@ -768,6 +768,12 @@
         watch: {
             selectedCalendar(newValue) {
                 Cookies.set('selectedCalendar', newValue.join(','))
+            },
+
+            calendarTitle(newValue, oldValue) {
+                if (newValue && !oldValue) {
+                    this.oldSelectedCalendar = this.selectedCalendar;
+                }
             }
         },
 
@@ -805,7 +811,7 @@
         methods: {
             initCalendar: function () {
                 let data = Cookies.get('selectedCalendar');
-                if (Cookies.get('selectedCalendar')) {
+                if (data) {
                     data = data.split(',');
                     for (let i = 0; i < data.length; i++) {
                         data[i] = parseInt(data[i]);
@@ -854,13 +860,14 @@
                         this.calendarList.push(response.data[i])
                     }
                     if (data.title) {
-                        this.oldSelectedCalendar = this.selectedCalendar;
                         this.selectedCalendar = [];
                         for (let i = 0; i < response.data.length; i++) {
                             this.selectedCalendar.push(response.data[i].id)
                         }
                     } else {
-                        this.selectedCalendar = this.oldSelectedCalendar;
+                        if (this.oldSelectedCalendar) {
+                            this.selectedCalendar = this.oldSelectedCalendar;
+                        }
                     }
                 })
 
