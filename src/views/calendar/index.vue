@@ -848,7 +848,7 @@
             },
 
             getCalendarList: function () {
-                this.calendarList = [];
+                let newCalendarList = [];
                 let data = {};
                 if (this.calendarTitle) {
                     data.title = this.calendarTitle
@@ -857,8 +857,9 @@
                     for (let i = 0; i < response.data.length; i++) {
                         response.data[i].name = response.data[i].title;
                         response.data[i].value = response.data[i].id;
-                        this.calendarList.push(response.data[i])
+                        newCalendarList.push(response.data[i])
                     }
+                    this.calendarList = newCalendarList;
                     if (data.title) {
                         this.selectedCalendar = [];
                         for (let i = 0; i < response.data.length; i++) {
@@ -1419,6 +1420,7 @@
                 }
                 fetch('put', '/calendars/' + this.calendarId, data).then(() => {
                     this.getCalendarList();
+                    this.calendarList.find(item => item.id == this.calendarId)
                     this.$refs.calendar.refresh();
                     $('#addCalendar').modal('hide');
                     toastr.success('修改成功')
