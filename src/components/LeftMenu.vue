@@ -73,7 +73,7 @@
     import Cookies from 'js-cookie';
 
     export default {
-        name: 'LeftMenu',
+        name: "LeftMenu",
         data() {
             return {
                 menuData: [

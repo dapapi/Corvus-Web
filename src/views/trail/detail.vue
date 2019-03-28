@@ -888,7 +888,7 @@ export default {
     },
 
     editBaseInfo() {
-      if (this.$store.state.power.trail.add !== 'true') {
+      if (this.trailInfo.powers.edit_trails !== 'true') {
         toastr.error('当前用户没有编辑销售线索的权限');
         return;
       }

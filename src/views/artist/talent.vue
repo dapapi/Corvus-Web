@@ -338,7 +338,7 @@
         </div>
 
         <customize-filter :data="customizeContentType==='stars'?customizeInfoStars:customizeInfoBloggers"
-                          @change="customize" ref="removeDate" :isint="true"></customize-filter>
+                          @change="customize" ref="customize" :isint="true"></customize-filter>
 
         <div class="site-action" data-plugin="actionBtn" data-toggle="modal" @click='rightChecker("博主","addBolgger","blogger")' v-if="!isShow">
             <button type="button"
@@ -1441,6 +1441,7 @@
                     this.isShow = false
                     // this.$refs.removeDate.reset()
                 }
+                
             },
             giveBroker: function () {
                 let url, toast, data

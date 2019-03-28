@@ -93,28 +93,15 @@
                             <tbody>
                             <tr v-for="(task, index) in tasksInfo" :key="index" @click="goDetail(task.id)">
                                 <td class="pointer-content">
-                                    {{ task.title }}
+                                    {{ task.task_name }}
                                 </td>
-                                <td>{{task.resource ? task.resource.data.resource.data.title : ''}}
-                                    <template
-                                            v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.name">
-                                        - {{ task.resource.data.resourceable.data.name }}
-                                    </template>
-                                    <template
-                                            v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.nickname">
-                                        - {{ task.resource.data.resourceable.data.nickname }}
-                                    </template>
-                                    <template
-                                            v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.title">
-                                        - {{ task.resource.data.resourceable.data.title }}
-                                    </template>
-                                    <template
-                                            v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.company">
-                                        - {{ task.resource.data.resourceable.data.company }}
+                                <td>
+                                    <template v-if="task.resource_name">
+                                    {{ task.resource_name.name }} - {{ task.resource_type.title }}
                                     </template>
                                 </td>
                                 <!-- <td>暂无</td> -->
-                                <td>{{ task.type ? task.type.data ? task.type.data.title : '' : '' }}
+                                <td>{{ task.title }}
                                 </td>
                                 <td>
                                     <template v-if="task.status === 1"><span style="color:#FF9800">进行中</span></template>
@@ -123,7 +110,7 @@
                                     <template v-if="task.status === 4"><span style="color:#F44336">延期</span></template>
                                 </td>
                                 <td>
-                                    <template v-if="task.principal">{{ task.principal.data.name }}</template>
+                                    {{ task.name }}
                                 </td>
                                 <td>{{ task.end_at }}</td>
                             </tr>
@@ -215,6 +202,7 @@
                 name: this.user.nickname,
                 id: this.user.id
             })
+            this.getTaskType();
         },
 
         methods: {
@@ -224,7 +212,7 @@
                 const params = {
                     page: pageNum,
                     my: this.my,
-                    include: 'principal,pTask,tasks,resource.resourceable,resource.resource,participants',
+                    // include: 'principal,pTask,tasks,resource.resourceable,resource.resource,participants',
                 };
 
                 if (this.searchDepartment) {
@@ -235,7 +223,7 @@
                     params.user = this.searchUser
                 }
 
-                const url = '/tasks';
+                const url = '/task/all';
 
                 if (this.taskNameSearch) {
                     params.keyword = this.taskNameSearch;
@@ -248,9 +236,12 @@
                 }
                 fetch('get', url, params).then((response) => {
                     this.tasksInfo = response.data;
-                    this.current_page = response.meta.pagination.current_page;
-                    this.total = response.meta.pagination.total;
-                    this.total_pages = response.meta.pagination.total_pages;
+                    // this.current_page = response.meta.pagination.current_page;
+                    // this.total = response.meta.pagination.total;
+                    // this.total_pages = response.meta.pagination.total_pages;
+                    this.current_page = response.current_page;
+                    this.total = response.total;
+                    this.total_pages = response.per_page != 0 ? response.total / response.per_page : 0;
                     this.isLoading = false;
                 });
             },
@@ -288,7 +279,6 @@
             },
             // 选择成员或部门
             selectDepartment(data) {
-                console.log(data)
                 if (data.type === 'department') {
                     this.searchUser = ''
                     this.searchDepartment = data.id
@@ -297,7 +287,17 @@
                     this.searchDepartment = ''
                 }
                 this.getTasks()
-            }
+            },
+            // 获取任务类型列表
+            getTaskType() {
+                fetch('get', '/task_types').then(res => {
+                    const data = res.data
+                    this.taskTypeArr = data.map(n => {
+                        return {name: n.title, value: n.id}
+                    })
+                    this.taskTypeArr.unshift({name: '全部', value: ''})
+               })
+            },
         }
     };
 </script>

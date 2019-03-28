@@ -179,6 +179,7 @@ export default {
   mounted() {
     this.getField();
     this.getClients();
+    this.getStars();
     // this.getFilterProjects();
     this.getMyProjects('my_principal');
     if (this.userList.length > 0) {
@@ -385,6 +386,19 @@ export default {
     addInfo (value, name) {
                 this.addInfoArr[name] = value
             },
+            getStars () {
+                if (this.starsArr.length > 0) {
+                    return
+                }
+                fetch('get', '/starandblogger', {sign_contract_status: 2}).then(response => {
+                    for (let i = 0; i < response.data.length; i++) {
+                        this.starsArr.push({
+                            name: response.data[i].name,
+                            value: response.data[i].flag + ',' + response.data[i].id,
+                        })
+                    }
+                })
+            },  
 
   },
 };
