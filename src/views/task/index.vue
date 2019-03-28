@@ -93,10 +93,10 @@
                             <tbody>
                             <tr v-for="(task, index) in tasksInfo" :key="index" @click="goDetail(task.id)">
                                 <td class="pointer-content">
-                                    {{my? task.title : task.task_name }}
+                                    {{my || searchDepartment || searchUser ? task.title : task.task_name }}
                                 </td>
                                 <td>
-                                    <template v-if="my">
+                                    <template v-if="my || searchDepartment || searchUser">
                                         {{task.resource ? task.resource.data.resource.data.title : ''}}
                                         <template
                                                 v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.name">
@@ -130,7 +130,7 @@
                                     <template v-if="task.status === 4"><span style="color:#F44336">延期</span></template>
                                 </td>
                                 <td>
-                                    <template v-if="task.principal && my">{{ task.principal.data.name }}</template>
+                                    <template v-if="task.principal && (my || searchDepartment || searchUser)">{{ task.principal.data.name }}</template>
                                     <template v-else>
                                         {{ task.name }}
                                     </template>
@@ -249,11 +249,10 @@
 
                 let url = '/task/all';
 
-                if (this.my) {
+                if (this.my || this.searchDepartment || this.searchUser) {
                     params.include = 'principal,pTask,tasks,resource.resourceable,resource.resource,participants'
                     url = '/tasks'
                 }
-
 
                 if (this.taskNameSearch) {
                     params.keyword = this.taskNameSearch;
@@ -266,7 +265,7 @@
                 }
                 fetch('get', url, params).then((response) => {
                     this.tasksInfo = response.data;
-                    if (this.my) {
+                    if (this.my|| this.searchDepartment || this.searchUser) {
                         this.current_page = response.meta.pagination.current_page;
                         this.total = response.meta.pagination.total;
                         this.total_pages = response.meta.pagination.total_pages;
