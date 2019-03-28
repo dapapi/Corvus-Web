@@ -44,7 +44,7 @@
                             <li class="site-menu-item" v-for="subMenu in menu.data"
                                 :class="pageRoute === subMenu.code ? 'active': ''">
                                 <router-link :to="'/' + subMenu.code" class="animsition-link">
-                                    <span class="site-menu-title">{{ subMenu.name }}</span>
+                                    <span class="site-menu-title"><i :class="subMenu.icon" class="mr-2"></i>{{ subMenu.name }}</span>
                                 </router-link>
                             </li>
                         </ul>
@@ -69,159 +69,164 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations } from 'vuex';
-import Cookies from 'js-cookie';
+    import {mapState, mapGetters, mapMutations} from 'vuex';
+    import Cookies from 'js-cookie';
 
-export default {
-  name: 'LeftMenu',
-  data() {
-    return {
-      menuData: [
-        {
-          name: '我的',
-          code: 'my',
-          image: 'https://res-crm.papitube.com/image/login-icon/wode.png',
-          hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-wode.png',
-          // data: [
-          //     {
-          //         name: '工作台',
-          //         code: 'my'
-          //     },
-          //     {
-          //         name: '报表',
-          //         code: 'reports'
-          //     }
-          // ]
+    export default {
+        name: 'LeftMenu',
+        data() {
+            return {
+                menuData: [
+                    {
+                        name: '我的',
+                        code: 'my',
+                        image: 'https://res-crm.papitube.com/image/login-icon/wode.png',
+                        hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-wode.png',
+                        // data: [
+                        //     {
+                        //         name: '工作台',
+                        //         code: 'my',
+                        //         icon: 'iconfont icon-gongzuotai'
+                        //     },
+                        //     {
+                        //         name: '报表',
+                        //         code: 'reports',
+                        //         icon: 'iconfont icon-baobiao'
+                        //     }
+                        // ]
+                    },
+                    {
+                        name: '日历',
+                        code: 'calendar',
+                        image: 'https://res-crm.papitube.com/image/login-icon/rili.png',
+                        hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-rili.png',
+                    },
+                    {
+                        name: '审批',
+                        code: 'approval',
+                        image: 'https://res-crm.papitube.com/image/login-icon/shenpi.png',
+                        hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-shenpi.png',
+                    },
+                    {
+                        name: '任务',
+                        code: 'tasks',
+                        image: 'https://res-crm.papitube.com/image/login-icon/renwu.png',
+                        hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-renwu.png',
+                    },
+                    {
+                        name: '项目',
+                        code: 'projects',
+                        image: 'https://res-crm.papitube.com/image/login-icon/xiangmu.png',
+                        hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-xiangmu.png',
+                    },
+                    {
+                        name: '线索',
+                        code: 'trails',
+                        image: 'https://res-crm.papitube.com/image/login-icon/xiansuo.png',
+                        hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-xiansuo.png',
+                    },
+                    {
+                        name: '客户',
+                        code: 'clients',
+                        image: 'https://res-crm.papitube.com/image/login-icon/kehu.png',
+                        hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-kehu.png',
+                    },
+                    {
+                        name: 'Talent',
+                        code: 'talent',
+                        image: 'https://res.papitube.com/corvus/images/talent.png',
+                        hoverImage: 'https://res.papitube.com/corvus/images/select-talent.png',
+                    },
+                    {
+                        name: '人事',
+                        image: 'https://res-crm.papitube.com/image/login-icon/renshi.png',
+                        hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-renshi.png',
+                        data: [
+                            {
+                                name: '公告',
+                                code: 'broadcast',
+                                icon: 'iconfont icon-laba',
+                            },
+                            {
+                                name: '通讯录',
+                                code: 'address',
+                                icon: 'iconfont icon-tongxunlu',
+                            },
+                            // {
+                            //     name: '简报',
+                            //     code: 'brief',
+                            //     icon: 'iconfont icon-wenjian',
+                            // },
+                            // {
+                            //     name: '仪表盘',
+                            //     code: 'dashboard',
+                            //     icon: 'iconfont icon-panel',
+                            // }
+                        ],
+                    },
+                ],
+                pageRoute: '',
+                visible: false,
+                // avatar: ''
+            };
         },
-        {
-          name: '日历',
-          code: 'calendar',
-          image: 'https://res-crm.papitube.com/image/login-icon/rili.png',
-          hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-rili.png',
+        computed: {
+            ...mapState([
+                'unReadMsg',
+                'canPassBack', // 能否进入后台
+                'avatar',
+            ]),
         },
-        {
-          name: '审批',
-          code: 'approval',
-          image: 'https://res-crm.papitube.com/image/login-icon/shenpi.png',
-          hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-shenpi.png',
+
+        created() {
+            if (Cookies.get('user')) {
+                const avatar = JSON.parse(Cookies.get('user')).avatar;
+                const power = JSON.parse(Cookies.get('user')).power;
+                this.setUserAvatar(avatar);
+                this.setUserPower(power);
+            }
         },
-        {
-          name: '任务',
-          code: 'tasks',
-          image: 'https://res-crm.papitube.com/image/login-icon/renwu.png',
-          hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-renwu.png',
+
+        mounted() {
+            document.body.onclick = () => {
+                this.visible = false;
+            };
         },
-        {
-          name: '项目',
-          code: 'projects',
-          image: 'https://res-crm.papitube.com/image/login-icon/xiangmu.png',
-          hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-xiangmu.png',
-        },
-        {
-          name: '线索',
-          code: 'trails',
-          image: 'https://res-crm.papitube.com/image/login-icon/xiansuo.png',
-          hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-xiansuo.png',
-        },
-        {
-          name: '客户',
-          code: 'clients',
-          image: 'https://res-crm.papitube.com/image/login-icon/kehu.png',
-          hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-kehu.png',
-        },
-        {
-          name: 'Talent',
-          code: 'talent',
-          image: 'https://res.papitube.com/corvus/images/talent.png',
-          hoverImage: 'https://res.papitube.com/corvus/images/select-talent.png',
-        },
-        {
-          name: '人事',
-          image: 'https://res-crm.papitube.com/image/login-icon/renshi.png',
-          hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-renshi.png',
-          data: [
-            {
-              name: '公告',
-              code: 'broadcast',
+        watch: {
+            '$route': function (to, from) {
+                this.pageRoute = to.path.split('/')[1];
             },
-            {
-              name: '通讯录',
-              code: 'address',
-            },
-            // {
-            //     name: '简报',
-            //     code: 'brief'
-            // },
-            // {
-            //     name: '仪表盘',
-            //     code: 'dashboard'
-            // }
-          ],
+
         },
-      ],
-      pageRoute: '',
-      visible: false,
-      // avatar: ''
+        methods: {
+            ...mapMutations([
+                'setUserAvatar',
+                'setUserPower',
+            ]),
+            showBackModel() {
+                this.visible = !this.visible;
+            },
+            // 退出登录
+            layout() {
+                this.visible = false;
+                Cookies.remove('user');
+                Cookies.remove('CORVUS-ACCESS-TOKEN');
+                Cookies.remove('selectedCalendar');
+                window.location.href = '/login';
+            },
+            goManagement() {
+                this.visible = false;
+                if (this.canPassBack) {
+                    window.open('/apps');
+                } else {
+                    toastr.error('您没有进入后台的权限！');
+                }
+            },
+            hideBackModel() {
+                this.visible = false;
+            },
+        },
     };
-  },
-  computed: {
-    ...mapState([
-      'unReadMsg',
-      'canPassBack', // 能否进入后台
-      'avatar',
-    ]),
-  },
-
-  created() {
-    if (Cookies.get('user')) {
-      const avatar = JSON.parse(Cookies.get('user')).avatar;
-      const power = JSON.parse(Cookies.get('user')).power;
-      this.setUserAvatar(avatar);
-      this.setUserPower(power);
-      console.log(power);
-    }
-  },
-
-  mounted() {
-    document.body.onclick = () => {
-      this.visible = false;
-    };
-  },
-  watch: {
-    '$route': function(to, from) {
-      this.pageRoute = to.path.split('/')[1];
-    },
-
-  },
-  methods: {
-    ...mapMutations([
-      'setUserAvatar',
-      'setUserPower',
-    ]),
-    showBackModel() {
-      this.visible = !this.visible;
-    },
-    // 退出登录
-    layout() {
-      this.visible = false;
-      Cookies.remove('user');
-      Cookies.remove('CORVUS-ACCESS-TOKEN');
-      Cookies.remove('selectedCalendar');
-      window.location.href = '/login';
-    },
-    goManagement() {
-      this.visible = false;
-      if (this.canPassBack) {
-        window.open('/apps');
-      } else {
-        toastr.error('您没有进入后台的权限！');
-      }
-    },
-    hideBackModel() {
-      this.visible = false;
-    },
-  },
-};
 </script>
 
 <style scoped>
@@ -249,6 +254,14 @@ export default {
 
     .site-menu > .site-menu-item:hover .base-icon {
         display: none !important;
+    }
+
+    .site-menu-sub {
+        box-shadow: 0 2px 7px 1px #E2E2E2;
+    }
+
+    .site-menu-sub .site-menu-item:hover {
+        background: rgba(40, 53, 147, .03);
     }
 
     .menu-icon img {
@@ -297,6 +310,7 @@ export default {
         left: 80px;
         z-index: 100000;
         border: 1px solid #f7f7f7;
+        box-shadow: 0 2px 7px 1px #E2E2E2;
     }
 
     .console ul li {
