@@ -10,7 +10,7 @@
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end">
                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
-                       data-target="#distributionproducer" @click="distributionPerson('publicity')">分配制作人</a>
+                    @click="distributionPerson('publicity')">分配制作人</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
                     <a class="dropdown-item" role="menuitem" @click="contractlist(artistInfo.sign_contract_status)">
                         <template v-if="artistInfo.sign_contract_status == 1">签约</template>
@@ -1888,7 +1888,7 @@ export default {
                 })
             },
     editBaseInfo () {
-                 if(this.$store.state.power.blogger.add !=='true'){
+                 if(this.artistInfo.powers.edit_blogger !=='true'){
                     toastr.error('当前用户没有权限编辑博主')
                     return
                 }
@@ -1901,6 +1901,11 @@ export default {
                 this.isStatrtEdit = true
             },
     distributionPerson (value) {
+                if(this.artistInfo.powers.edit_produser !=='true'){
+                    toastr.error('当前用户没有权限分配制作人')
+                    return
+                }
+                $('#distributionproducer').modal('show')
                 this.distributionType = value;
                 if (this.artistInfo[value].data.length > 0) {
                     this.$store.state.participantsInfo = Object.assign([], this.artistInfo[value].data)

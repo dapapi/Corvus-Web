@@ -434,7 +434,7 @@
                                     </div>
                                     <div class="float-left col-md-2 text-right" style="padding: .715rem 0">
                                         <span class="pointer-content hover-content" data-toggle="modal"
-                                              data-target="#addBill">
+                                              @click='canAddBill'>
                                             <template
                                                     v-if="!projectBillMetaInfo.divide">
                                                 <i class="iconfont icon-tianjia pr-5"></i>新增结算单
@@ -511,7 +511,7 @@
                                     </ul>
                                     <div class="float-right" style="padding: .715rem 0">
                                         <span class="pointer-content hover-content" data-toggle="modal"
-                                              data-target="#addPaybackTime" @click="editProjectPaybackTime(false)">
+                                               @click="editProjectPaybackTime(false)">
                                             <i class="iconfont icon-tianjia pr-5"></i>新建回款期次</span>
                                     </div>
                                 </div>
@@ -584,7 +584,6 @@
                                             <div class="float-right text-right" style="color: #cccccc;width: 20%;">
                                                 <i class="iconfont icon-bianji2 pr-40 pointer-content"
                                                    data-toggle="modal"
-                                                   data-target="#addPaybackTime"
                                                    @click="editProjectPaybackTime(true, returnMoney)"></i>
                                                 <i class="iconfont icon-shanchu1 pointer-content"
                                                    data-toggle="modal" data-target="#paybackDel"
@@ -1658,7 +1657,18 @@ export default {
   },
 
   methods: {
-
+      canAddBill(){
+        if(this.projectBillMetaInfo.divide && this.projectInfo.powers.edit_bill !== 'true'){
+            // $('#addPaybackTime').modal('')
+            toastr.error('当前用户没有编辑结算单权限')
+            return 
+        }else if(!this.projectBillMetaInfo.divide && this.projectInfo.powers.add_bill !== 'true'){
+            toastr.error('当前用户没有新增结算单权限')
+            return 
+        }else{
+            $('#addBill').modal('show')
+        }
+      },
     getProject () {
                 let data = {
                     include: 'principal,participants,tasks,creator,fields,trail.expectations.broker,trail.expectations.publicity,trail.client,relate_tasks,relate_projects,type',
@@ -2067,6 +2077,19 @@ export default {
             },
 
     editProjectPaybackTime (type, payback) {
+        if(type === false && this.projectInfo.powers.add_returned_money !== 'true'){
+            // $('#addPaybackTime').modal('')
+            toastr.error('当前用户没有新建回款期次权限')
+            return 
+        }
+        else if(type === true && this.projectInfo.powers.edit_returned_money !== 'true'){
+            toastr.error('当前用户没有编辑回款期次权限')
+            return 
+        }else{
+            $('#addPaybackTime').modal('show')
+        }
+        
+
                 this.isEditProjectPayback = type;
                 if (type) {
                     this.projectReturnName = payback.issue_name;
@@ -2172,15 +2195,15 @@ export default {
                     this.allTasksInfo = response.data
                 })
             },
-            editBaseInfo: function () {
-                if (this.$store.state.power.project.add !== 'true') {
-                    toastr.error('当前用户没有权限编辑项目')
-                    return
-                }
-                this.isEdit = true;
-                this.changeInfo = {};
-                this.addInfoArr = {};
-            },
+    editBaseInfo () {
+        if (this.projectInfo.powers.edit_project !== 'true') {
+            toastr.error('当前用户没有编辑项目的权限')
+            return
+        }
+        this.isEdit = true;
+        this.changeInfo = {};
+        this.addInfoArr = {};
+    },
 
     changeProjectBaseInfo (value, name) {
                 switch (name) {
