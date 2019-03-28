@@ -190,7 +190,7 @@
         },
         computed: {
             ...mapState([
-                'power',
+                'listPower',
                 'department',
             ])
         },
@@ -271,7 +271,7 @@
             },
 
             handleAdd() {
-                if (this.power.task == 'false') {
+                if (this.listPower.task.add == 'false') {
                     toastr.error('您没有新增任务的权限！')
                     return
                 }

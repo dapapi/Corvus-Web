@@ -794,6 +794,10 @@
             },
 
             shouleDeleteTask() {
+                if (this.taskInfo.powers.del_task == 'false') {
+                    toastr.error('您没有权限删除任务！')
+                    return
+                }
                 $("#delTask").modal();
             },
 
@@ -1067,6 +1071,12 @@
             },
             setDelInfo(id) {
                 this.attachmentId = id
+                // if(this.taskInfo.powers.del_task !== 'true'){
+                //   toastr.error('当前用户没有删除任务的权限')
+                //   return
+                // }
+                $('confirmFlag').modal('show')
+
             },
             // 设置默认负责人
             setDefaultPrincipal() {

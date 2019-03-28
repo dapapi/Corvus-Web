@@ -180,7 +180,7 @@
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                      style="width: 100%">
                             </div>
-                            <AddClientType @change="changeTrailType" :hidden="power.trail == 'false'"></AddClientType>
+                            <AddClientType @change="changeTrailType" :hidden="listPower.trail?listPower.trail.add === 'false' : true"></AddClientType>
                             <pagination :current_page="current_page" :method="getClient"
                                         :total_pages="total_pages" :total="total"></pagination>
                         </div>
@@ -481,7 +481,7 @@
                                         <span class="pl-10 d-block float-left pointer-content" style="color: #b9b9b9"
                                               data-plugin="actionBtn" @click="setDelInfo(contact.id)"
                                               data-toggle="modal"
-                                              data-target="#confirmFlag" typeText="删除">
+                                              typeText="删除">
                                             <i class="iconfont icon-shanchu1" aria-hidden="true"></i>
                                         </span>
                                     </td>
@@ -769,7 +769,7 @@
         },
         computed: {
             ...mapState([
-                'power'
+                'listPower'
             ]),
             completeNum() {
                 return this.clientTasksInfo.filter(n => n.status === 2).length
@@ -822,7 +822,7 @@
                     this.clientInfo = response.data;
                     this.clientName = response.data.company;
                     this.clientInfoCopy = JSON.parse(JSON.stringify(response.data))
-                    this.canEditClient = response.data.power == 'true'
+                    // this.canEditClient = response.data.power == 'true'
                     let params = {
                         type: 'change',
                         data: response.data.principal.data
@@ -1034,12 +1034,15 @@
                 this.changeInfo.principal_id = value
             },
             changeEditStatus(value, config) {
-                 if (this.$store.state.power.client.add !== 'true') {
-                    toastr.error('当前用户没有编辑客户的权限');
-                    return;
-                }
-                if (!this.canAddContact && value) {
-                    toastr.error('您没有新增联系人的权限！')
+                //  if (this.$store.state.power.client.add !== 'true') {
+                //     toastr.error('当前用户没有编辑客户的权限');
+                //     return;
+                // }
+                if (value === 'true' && this.clientInfo.powers.add_contact) {
+                    toastr.error('当前用户没有权限新增联系人')
+                    return
+                }else if(value === 'false' && this.clientInfo.powers.edit_contact){
+                     toastr.error('当前用户没有权限编辑联系人')
                     return
                 }
                 $('#addContact').modal('show')
@@ -1149,11 +1152,7 @@
             },
             // 任务弹层
             handleTask() {
-                 if (this.$store.state.power.task.add !== 'true') {
-                    toastr.error('您没有新建任务的权限！');
-                    return;
-                }
-                if (this.power == 'false') {
+                if (this.listPower.task.add === 'false') {
                     toastr.error('您没有新建任务的权限！')
                     return
                 }
