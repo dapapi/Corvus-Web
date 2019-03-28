@@ -399,8 +399,6 @@
                     }
                     if (this.clientPrincipalIdSearch.length > 0) {
                         this.customizeCondition.principal_ids = this.clientPrincipalIdSearch
-                    }else{
-                        this.customizeCondition.principal_ids = []
                     }
                     if (this.clientLevelSearch) {
                         status= '&grade=' + this.clientLevelSearch
