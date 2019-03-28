@@ -80,7 +80,7 @@
                                                             </div>
                                                         </li>
                                                     </ul>
-                                                    <div class="checkbox-custom checkbox-primary select-all-checkbox"">
+                                                    <div class="checkbox-custom checkbox-primary select-all-checkbox">
                                                         <input type="checkbox" id="inputUnchecked"
                                                                @change="selectAllCalendar">
                                                         <label for="inputUnchecked">全选</label>
