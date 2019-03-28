@@ -11,7 +11,7 @@
                     <i class="iconfont icon-daochu px-5 font-size-20 pr-20 pointer-content" title="导出"
                        aria-hidden="true"></i>
                 </ImportAndExport>
-                <ImportAndExport class="float-left" :type="'import'" :moduleName="'clients'" :power="'client'">
+                <ImportAndExport class="float-left" :type="'import'" :moduleName="'clients'" :power="'client'" @reload="getClients">
                     <i class="iconfont icon-daoru font-size-20 pointer-content" title="导入" aria-hidden="true"></i>
                 </ImportAndExport>
             </div>
