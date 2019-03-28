@@ -61,6 +61,7 @@ export default {
             instance.post(importUrl, formData)
             .then(function (response) {
                toastr.success('导入成功')
+               window.location.reload()
             })
             .catch(function (error) {
                 console.log(error);
