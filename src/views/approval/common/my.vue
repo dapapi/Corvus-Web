@@ -57,7 +57,7 @@
                                     <th class="cell-300" scope="col">审批状态</th>
                                 </tr>
                                 <tbody>
-                                <tr v-for="project in projectsInfo" :key=project.id @click="goDetail(project.form_instance_number)">
+                                <tr v-for="project in projectsInfo" :key=project.id @click="goDetail(project.form_instance_number)" style="cursor: pointer;">
                                     <router-link :to="{path:'/approval/'+project.form_instance_number,query:{mode:'approver'}}"><td>{{project.form_instance_number}}</td></router-link>
                                      <!-- <td>{{project.form_instance_number}}</td>                               -->
                                     <!-- <td>{{project.title}}</td> -->
