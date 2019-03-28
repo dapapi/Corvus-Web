@@ -81,7 +81,7 @@
                 noticeDiff: {
                     id: '',
                     operate: 0
-                }
+                },
             }
         },
         computed: {
@@ -188,12 +188,14 @@
         },
         methods: {
             noticeChanger(value) {
+                console.log('notice');
                 if (this.formid && this.mode === 'detail') {
                     fetch('post', '/approval_instances/' + this.formid + '/participant', value)
                 }
 
             },
             getApprover(value) {
+                console.log('getapp',value);
                 if (!this.mode) {
                     if (!value) {
                         return

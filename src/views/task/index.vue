@@ -226,6 +226,15 @@
                     my: this.my,
                     include: 'principal,pTask,tasks,resource.resourceable,resource.resource,participants',
                 };
+
+                if (this.searchDepartment) {
+                    params.department = this.searchDepartment
+                }
+
+                if (this.searchUser) {
+                    params.user = this.searchUser
+                }
+
                 const url = '/tasks';
 
                 if (this.taskNameSearch) {
