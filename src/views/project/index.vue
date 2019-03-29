@@ -339,7 +339,7 @@ export default {
             },
 
     changeProjectType (value) {
-                if(this.$store.state.power.project.add !=='true'){
+                if(this.$store.state.listPower.project.add !=='true'){
                     toastr.error('当前用户没有权限新增项目')
                     return
                 }

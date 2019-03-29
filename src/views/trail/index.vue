@@ -7,11 +7,11 @@
                         class="iconfont icon-jiantou_xiayiye font-size-22 pr-5"></i>公海池</span>
             </h1>
             <div class="page-header-actions">
-                <ImportAndExport class="float-left" :type="'export'" :moduleName="'trails'" :params="exportParams" :power="trail">
+                <ImportAndExport class="float-left" :type="'export'" :moduleName="'trails'" :params="exportParams" :power="'trail'">
                     <a class="iconfont icon-daochu font-size-20 pr-20 pointer-content" aria-hidden="true"
                        title="导出线索"></a>
                 </ImportAndExport>
-                <ImportAndExport class="float-left" :type="'import'" :moduleName="'trails'" :power="trail">
+                <ImportAndExport class="float-left" :type="'import'" :moduleName="'trails'" :power="'trail'" @reload="getSales">
                     <a class="iconfont icon-daoru px-5 font-size-20 pointer-content" aria-hidden="true"
                        title="导入线索"></a>
                 </ImportAndExport>
@@ -716,7 +716,7 @@ pagenumber;
                 this.priority = value
             },            
             changeTrailType (value) {
-                if(this.$store.state.power.trail.add !=='true'){
+                if(this.$store.state.listPower.trail.add !=='true'){
                     toastr.error('当前用户没有权限新增销售线索')
                     return
                 }
