@@ -9,7 +9,7 @@
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end" v-if="!isShow" ref="colse">
-                    <ImportAndExport :type="'import'" :moduleName="'bloggers'" :power="'blogger'" @importFile="importFile" @reload="getArtists"> 
+                    <ImportAndExport :type="'import'" :moduleName="'bloggers'" :power="'blogger'" @importFile="importFile">
                         <a class="dropdown-item" role="menuitem">导入</a>
                     </ImportAndExport>
                     <ImportAndExport :type="'export'" :moduleName="'bloggers'" :power="'blogger'" :params="exportParams">
@@ -20,7 +20,7 @@
                 </div>
                 <div class="dropdown-menu  dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end" v-if="isShow" ref="colse">
-                    <ImportAndExport :type="'import'" :moduleName="'stars'" :power="'star'" @importFile="importFile"  @reload="getBlogger">
+                    <ImportAndExport :type="'import'" :moduleName="'stars'" :power="'star'" @importFile="importFile">
                         <a class="dropdown-item" role="menuitem">导入</a>
                     </ImportAndExport>
                     <ImportAndExport :type="'export'" :moduleName="'stars'" :power="'star'" :params="exportParams">
@@ -42,20 +42,20 @@
                             <a class="nav-link" data-toggle="tab" href="#forum-artist"
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab" :class="isShow?'active':''" @click="tab('start')">艺人</a>
-                            <i v-if="isShow"
-                            style="position: absolute;right:10px;top:10px;color: rgb(0, 176, 255);font-style: normal;"
-                            @click="getArtists(1,1)" class="pointer-content">签约中</i>
+                            
                         </li>
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" data-toggle="tab" href="#forum-blogger"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab" :class="!isShow?'active':''" @click="tab('bloggers')">博主</a>
-                            <i 
+                           
+                        </li>
+                        <i v-if="isShow"
+                            style="position: absolute;right:10px;top:10px;color: rgb(0, 176, 255);font-style: normal;"
+                            @click="getArtists(1,1)" class="pointer-content">签约中</i>
+                         <i v-if="!isShow"
                                 style="position: absolute;right:10px;top:10px;color: rgb(0, 176, 255);font-style: normal;"
                                 @click="getBlogger(1,1)" class="pointer-content">签约中</i>
-                        </li>
-                        
-                       
                     </ul>
                 </div>
 
