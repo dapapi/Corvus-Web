@@ -84,7 +84,7 @@
         <customize-filter :data="customizeInfo" @change="customize" :cleanup="cleanUp"
                           @cleanupdone='cleanUp=false'></customize-filter>
 
-        <AddClientType :hidden="false" @change="showAddModal"/>
+        <AddClientType :hidden="listPower.client?listPower.client.add === 'false':true" @change="showAddModal"/>
 
         <div class="modal fade" id="addClient" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
@@ -267,14 +267,8 @@
         computed: {
             ...mapState([
                 'userList',
-                'power'
+                'listPower'
             ])
-        },
-
-        watch : {
-            power () {
-                console.log(this.power)
-            }
         },
 
         methods: {
