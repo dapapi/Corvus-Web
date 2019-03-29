@@ -28,6 +28,7 @@ axios.interceptors.request.use((config) => {
     return config;
 }, (error) => {
     const {response} = error
+    console.log(response)
     toastr.error(response.data.message);
     return Promise.reject(error);
 });
@@ -35,11 +36,15 @@ axios.interceptors.request.use((config) => {
 //返回状态判断
 axios.interceptors.response.use((res) => {
     if (res.status < 200 && res.status > 300) {
+        
         return Promise.reject(res);
-    }
+    } else if (res.status_code < 200 && res.status_code > 300){
+        
+        return Promise.reject(res);
+    }else{}
+    
     return res;
 },(error) => {
-    console.log(response)
     const {response: {status}} = error
     const {response} = error
     if (status === 401) {
@@ -53,9 +58,8 @@ axios.interceptors.response.use((res) => {
             toastr.error(response.data.message);
         }
     } else if (status === 403) {
-        // alert(333)
-        console.log(response)
-        toastr.error(response.data.message||response.message)
+        
+        toastr.error(response.data.message)
     } else {
         toastr.error(response.data.message);
     }
