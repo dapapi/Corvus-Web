@@ -14,6 +14,7 @@
                         @click="distributionPerson('broker')">分配经理人</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
                         @click="distributionPerson('publicity')">分配宣传人</a>
+                    <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
                     <a class="dropdown-item" role="menuitem" @click="contractlist(artistInfo.sign_contract_status)">
                         <template v-if="artistInfo.sign_contract_status == 1">签约</template>
                         <template v-if="artistInfo.sign_contract_status == 2">解约</template>
@@ -420,8 +421,12 @@
                                             </div>
                                             <div class="card-text py-20 px-0 clearfix col-md-6 float-left edit-height">
                                                 <div class="col-md-3 float-left text-right pl-0">年龄</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
+                                                <div class="col-md-9 float-left font-weight-bold" v-if="artistInfo.birthday!=='**'">
                                                     {{artistInfo.birthday|jsGetAge}}
+                                                </div>
+                                                 <div class="col-md-9 float-left font-weight-bold"
+                                                         v-if="artistInfo.birthday=='**'">
+                                                        {{artistInfo.birthday}}
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
@@ -1160,6 +1165,56 @@
                     </div>
                 </div>
             </div>
+              <!--隐私设置-->
+            <div class="modal fade" id="addPrivacy" aria-hidden="true" aria-labelledby="addLabelForm"
+                role="dialog" tabindex="-1" data-backdrop="static">
+                <div class="modal-dialog modal-simple">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                                <i class="iconfont icon-guanbi" aria-hidden="true"></i>
+                            </button>
+                            <h4 class="modal-title">隐私设置</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="example">
+                                <div class="col-md-2 text-right float-left">年龄</div>
+                                <div class="col-md-10 float-left">
+                                    <add-member :type="'birthday'"></add-member>
+                                </div>
+                            </div>
+                            <div class="example">
+                                <div class="col-md-2 text-right float-left">潜在风险点</div>
+                                <div class="col-md-10 float-left">
+                                    <add-member :type="'star_risk_point'"></add-member>
+                                </div>
+                            </div>
+                            <div class="example">
+                                <div class="col-md-2 text-right float-left">手机号</div>
+                                <div class="col-md-10 float-left">
+                                    <add-member :type="'phone'"></add-member>
+                                </div>
+                            </div>
+                            <div class="example">
+                                <div class="col-md-2 text-right float-left">微信</div>
+                                <div class="col-md-10 float-left">
+                                    <add-member :type="'wechat'"></add-member>
+                                </div>
+                            </div>
+                            <div class="example">
+                                <div class="col-md-2 text-right float-left">邮箱</div>
+                                <div class="col-md-10 float-left">
+                                    <add-member :type="'email'"></add-member>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                            <button class="btn btn-primary" type="submit" @click="setPrivacy">确定</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!--附件预览-->
             <ApprovalGreatModule :formData='formDate' :detailpage='isDetail'
                                  :default-value="{value:projectContractDefault,id:$route.params.id}"></ApprovalGreatModule>
@@ -1332,6 +1387,7 @@ export default {
     $('#changeSchedule').on('hidden.bs.modal', () => {
       _this.initAddScheduleModal();
     });
+    this.getPrivacy() //获取隐私设置
   },
 
   methods: {
@@ -1401,6 +1457,66 @@ export default {
         this.total_pages = response.meta.pagination.total_pages;
       });
     },
+    //隐私设置
+    setPrivacy:function(){
+            let data = {
+                    birthday: this.$store.state.birthdayInfo, //年龄
+                    star_risk_point : this.$store.state.star_risk_pointInfo,//潜在风险点
+                    phone : this.$store.state.phoneInfo,//手机号
+                    wechat : this.$store.state.wechatInfo,//微信
+                    email : this.$store.state.emailInfo  ,//邮箱
+                };
+                let sendData = {
+                    birthday: [],
+                    star_risk_point:[],
+                    phone:[],
+                    wechat:[],
+                    email:[]
+                };
+                for (const key in data) {
+                    for (let i = 0; i < data[key].length; i++) {
+                        sendData[key].push(data[key][i].id)
+                    }
+                }
+            
+                fetch('post', `/stars/${this.$route.params.id}/privacyUser`, sendData).then(function () {
+                    toastr.success('隐私设置成功')
+                    $('#addPrivacy').modal('hide')
+            })
+    },
+    getPrivacy () {
+                let data = {
+                    star_id: this.$route.params.id
+                };
+                fetch('get', `/privacyUsers?include=creator`, data).then(response => {
+                    let allPrivacyUsers = response.data;
+                    console.log(allPrivacyUsers)
+                    this.$store.state.birthdayInfo = [];
+                    this.$store.state.star_risk_pointInfo = []
+                    this.$store.state.phoneInfo = []
+                    this.$store.state.wechatInfo = []
+                    this.$store.state.emailInfo = []
+                    if (allPrivacyUsers) {
+                        for (let i = 0; i < allPrivacyUsers.length; i++) {
+                            if(allPrivacyUsers[i].field == 'birthday'){
+                                this.$store.state.birthdayInfo.push(allPrivacyUsers[i].creator.data)  
+                            }
+                            if(allPrivacyUsers[i].field == 'star_risk_point'){
+                                this.$store.state.star_risk_pointInfo.push(allPrivacyUsers[i].creator.data)  
+                            }
+                            if(allPrivacyUsers[i].field == 'phone'){
+                                this.$store.state.phoneInfo.push(allPrivacyUsers[i].creator.data)  
+                            }
+                            if(allPrivacyUsers[i].field == 'wechat'){
+                                this.$store.state.wechatInfo.push(allPrivacyUsers[i].creator.data)  
+                            }
+                            if(allPrivacyUsers[i].field == 'email'){
+                                this.$store.state.emailInfo.push(allPrivacyUsers[i].creator.data)  
+                            }
+                        }
+                    }
+                })
+            },
     getCalendar() {
       this.artistId = this.$route.params.id;
 
