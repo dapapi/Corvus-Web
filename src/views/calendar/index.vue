@@ -393,7 +393,8 @@
                         <div class="example" v-if="scheduleData.participants && !noPermission">
                             <div class="col-md-2 px-0 float-left">参与人</div>
                             <div class="col-md-10 pl-0 float-left">
-                                <AddMember type="add" participantsSingle="isParticipant" @change="changeScheduleParticipants"></AddMember>
+                                <AddMember type="add" participantsSingle="isParticipant"
+                                           @change="changeScheduleParticipants"></AddMember>
                             </div>
                         </div>
                         <div class="example" v-if="scheduleData.desc && !noPermission">
@@ -1595,4 +1596,11 @@
         padding-top: 10px;
     }
 
+    .page-aside {
+        overflow-y: auto;
+    }
+
+    .page-aside::-webkit-scrollbar {
+        display: none
+    }
 </style>
