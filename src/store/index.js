@@ -18,6 +18,11 @@ const state = {
     divisionInfo:[],
     incubationInfo:[],
     billInfo:[],
+    birthdayInfo:[],
+    star_risk_pointInfo:[],
+    phoneInfo:[],
+    wechatInfo:[],
+    emailInfo:[],
     //隐私设置--参数结束
     principalInfo: {},
     newPrincipalInfo: {},

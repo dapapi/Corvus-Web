@@ -58,18 +58,19 @@ export default {
                     return this.$store.state.incubationInfo
                 }else if(this.type === 'bill'){
                     return this.$store.state.billInfo
-                }else if(this.otherslot){
-                    return this.$store.state.otherSlot
                 }else if(this.type === 'birthday'){
-                    return this.$store.state.birthday
+                    return this.$store.state.birthdayInfo
                 }else if(this.type === 'star_risk_point'){
-                    return this.$store.state.star_risk_point
+                    return this.$store.state.star_risk_pointInfo
                 }else if(this.type === 'phone'){
-                    return this.$store.state.phone
+                    return this.$store.state.phoneInfo
                 }else if(this.type === 'wechat'){
-                    return this.$store.state.wechat
+                    return this.$store.state.wechatInfo
                 }else if(this.type === 'email'){
-                    return this.$store.state.email
+                    return this.$store.state.emailInfo
+                }
+                else if(this.otherslot){
+                    return this.$store.state.otherSlot
                 }
                 
                 else {
@@ -119,7 +120,17 @@ export default {
         participantInfo = this.$store.state.incubationInfo;
       } else if (this.type === 'bill') {
         participantInfo = this.$store.state.billInfo;
-      } else if (this.otherslot) {
+      }else if(this.type === 'birthday'){
+        participantInfo = this.$store.state.birthdayInfo
+    }else if(this.type === 'star_risk_point'){
+        participantInfo = this.$store.state.star_risk_pointInfo
+    }else if(this.type === 'phone'){
+        participantInfo = this.$store.state.phoneInfo
+    }else if(this.type === 'wechat'){
+        participantInfo = this.$store.state.wechatInfo
+    }else if(this.type === 'email'){
+        participantInfo = this.$store.state.emailInfo
+    } else if (this.otherslot) {
         participantInfo = this.$store.state.otherSlot;
       } else {
         participantInfo = this.$store.state.newParticipantsInfo;

@@ -1383,6 +1383,7 @@ export default {
     $('#changeSchedule').on('hidden.bs.modal', () => {
       _this.initAddScheduleModal();
     });
+    // this.getPrivacy() //获取隐私设置
   },
 
   methods: {
@@ -1455,11 +1456,11 @@ export default {
     //隐私设置
     setPrivacy:function(){
             let data = {
-                    birthday: this.$store.state.birthday, //年龄
-                    star_risk_point : this.$store.state.star_risk_point,//潜在风险点
-                    phone : this.$store.state.phone,//手机号
-                    wechat : this.$store.state.wechat,//微信
-                    email : this.$store.state.email,//邮箱
+                    birthday: this.$store.state.birthdayInfo, //年龄
+                    star_risk_point : this.$store.state.star_risk_pointInfo,//潜在风险点
+                    phone : this.$store.state.phoneInfo,//手机号
+                    wechat : this.$store.state.wechatInfo,//微信
+                    email : this.$store.state.emailInfo  ,//邮箱
                 };
                 let sendData = {
                     birthday: [],
@@ -1473,12 +1474,29 @@ export default {
                         sendData[key].push(data[key][i].id)
                     }
                 }
-                fetch('put', `/stars/${this.$route.params.id}/privacyUser`, sendData).then(function () {
-                    console.log(sendData)
+            
+                fetch('post', `/stars/${this.$route.params.id}/privacyUser`, sendData).then(function () {
                     toastr.success('隐私设置成功')
                     $('#addPrivacy').modal('hide')
             })
     },
+    // getPrivacy () {
+    //             let data = {
+    //                 stars_id: this.$route.params.id
+    //             };
+    //             fetch('get', `/privacyUsers?include=creator`, data).then(response => {
+    //                 let allPrivacyUsers = response.data;
+    //                 console.log(allPrivacyUsers)
+    //                 // this.$store.state.incubationInfo = [];
+
+    //                 // if (allPrivacyUsers) {
+    //                 //     for (let i = 0; i < allPrivacyUsers.length; i++) {
+    //                 //         this.$store.state.incubationInfo.push(allPrivacyUsers[i].creator.data)
+
+    //                 //     }
+    //                 // }
+    //             })
+    //         },
     getCalendar() {
       this.artistId = this.$route.params.id;
 

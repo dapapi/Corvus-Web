@@ -1969,6 +1969,7 @@ export default {
                 };
                 fetch('get', `/privacyUsers?include=creator`, data).then(response => {
                     let allPrivacyUsers = response.data;
+                    console.log(allPrivacyUsers)
                     this.$store.state.incubationInfo = [];
 
                     if (allPrivacyUsers) {
