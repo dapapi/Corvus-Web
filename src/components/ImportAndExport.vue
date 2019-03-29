@@ -88,7 +88,24 @@ export default {
                this.$emit('reload')//导入成功刷新数据
             })
             .catch(function (error) {
-                console.log(error);
+                const {response: {status}} = error
+                const {response} = error
+                if (status === 401) {
+                    env.getStatusCode()[401]()
+                } else if (status === 422) {
+                    const errors = response.data.errors
+                    const errInfoArr = Object.keys(errors)
+                    if (errInfoArr.length > 0) {
+                        toastr.error(errors[errInfoArr[0]]);
+                    } else {
+                        toastr.error(response.data.message);
+                    }
+                } else if (status === 403) {
+                    
+                    toastr.error(response.data.message)
+                } else {
+                    toastr.error(response.data.message);
+                }
             });
             
         },
