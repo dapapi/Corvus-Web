@@ -41,7 +41,7 @@ export default {
         //获取导出和导入的权限模块名称
         power:{
             type:String,
-            required:true
+            // required:true
         }
     },
     
@@ -50,8 +50,9 @@ export default {
           getRandom:Math.round(Math.random() * 1000),
           file:'',
           header:env.getHeaders(),
-          importPower:true,
-          exportPower:true,
+          importPower:'false',
+          exportPower:'false',
+          route:''
         }
     },
     computed:{
@@ -59,10 +60,21 @@ export default {
             'listPower'
         ])
     },
+    mounted(){
+        this.route = this.$route.path
+    },
     watch:{
+        //第一次加载判断是否有权限列表
         listPower:function(){
             this.importPower = this.listPower[this.power].import
-            this.exportPower = this.listPower[this.power].export   
+            this.exportPower = this.listPower[this.power].export  
+        },
+        //路由跳转重新赋值权限
+        route:function(){
+            if(JSON.stringify(this.listPower)!=='{}'){
+                this.importPower = this.listPower[this.power].import
+                this.exportPower = this.listPower[this.power].export   
+            }
         }
     },
     methods:{
