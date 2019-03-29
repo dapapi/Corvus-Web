@@ -1038,10 +1038,10 @@
                 //     toastr.error('当前用户没有编辑客户的权限');
                 //     return;
                 // }
-                if (value === 'true' && this.clientInfo.powers.add_contact) {
+                if (value === true && this.clientInfo.powers.add_contact !== 'true') {
                     toastr.error('当前用户没有权限新增联系人')
                     return
-                }else if(value === 'false' && this.clientInfo.powers.edit_contact){
+                }else if(value === false && this.clientInfo.powers.edit_contact !== 'true'){
                      toastr.error('当前用户没有权限编辑联系人')
                     return
                 }
