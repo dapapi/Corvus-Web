@@ -36,4 +36,10 @@ export default {
     getIsExpanded:function(state){
         return state.isExpanded
     },
+    getSupplierDetails:function(state){
+        return state.supplierDetails
+    },
+    getListPower:function(state){
+        return state.listPower
+    }
 }

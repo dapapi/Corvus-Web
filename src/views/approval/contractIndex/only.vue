@@ -50,10 +50,10 @@
                                     <th class="cell-300" scope="col">审批状态</th>
                                 </tr>
                                 <tbody>
-                                <tr v-for="project in projectsInfo" :key='project.id'>
-                                    
-                                    <router-link :to="'/approval/'+project.form_instance_number"><td>{{project.form_instance_number}}</td></router-link>                                    
-                                  
+                                <tr v-for="project in projectsInfo" :key='project.id' @click="goDetail(project.form_instance_number)" style="cursor: pointer;">
+
+                                    <router-link :to="'/approval/'+project.form_instance_number"><td>{{project.form_instance_number}}</td></router-link>
+
                                     <td>{{project.title}}</td>
                                     <td>{{project.name}}</td>
                                     <!-- <td></td> -->
@@ -79,73 +79,76 @@
 </template>
 
 <script>
-import {CONTRACT_INDEX_CONFIG} from '@/views/approval/contractIndex/contractIndexData'
-    import {PROJECT_CONFIG} from '@/views/approval/project/projectConfig'
+import { CONTRACT_INDEX_CONFIG } from '@/views/approval/contractIndex/contractIndexData';
+import { PROJECT_CONFIG } from '@/views/approval/project/projectConfig';
 
-    import fetch from '@/assets/utils/fetch.js'
-    import common from '@/assets/js/common'
-    export default {
-        name: "only",
-        data() {
-            return {
-                common: common,
-                total: 1,
-                current_page: 1,
-                total_pages: 1,
-                keywords: '',
-                projectsInfo: [],
-                contractList:CONTRACT_INDEX_CONFIG.contractIndex,
-                projectProgress:PROJECT_CONFIG.approvalProgress,
-                pageType : 1,
-                status:1,
-            }
-        },
-        mounted(){
-            this.getList(1)
-        },
-        computed:{
-            getProgressName(){
-                return function(params){
-                   return  this.projectProgress.find(item=>item.id == params).value
-                }
-            }
-        },
-        methods: {
-            getProjects: function (pageNum = 1, signStatus) {
-                let _this = this
-                let data = {
-                    page: pageNum,
-                    include: 'principal,trail.expectations',
-                    status:this.pageType
-                };
-                 if (signStatus) {
-                    data.sign_contract_status = signStatus
-                }
-                fetch('get', '/approvals_contract/notify', data).then(response => {
-                    _this.projectsInfo = response.data
-                   _this.total = response.meta.pagination.total;
-                    _this.current_page = response.meta.pagination.current_page;
-                    _this.total_pages = response.meta.pagination.total_pages;
-                })
-            },
-            getList(params) {
-                    let _this = this 
-                    let currentStatus = params
-                if(isNaN(params)){
-                    currentStatus = this.status
-                }else{
-                    this.status = currentStatus
-                }
-                this.pageType = currentStatus
-                    fetch('get','/approvals_contract/notify?status='+currentStatus+'&keywords='+this.keywords).then((params) => {
-                        _this.projectsInfo = params.data
-                       _this.total = params.meta.pagination.total;
-                    _this.current_page = params.meta.pagination.current_page;
-                    _this.total_pages = params.meta.pagination.total_pages;
-                    })
-            }
-        }
-    }
+import fetch from '@/assets/utils/fetch.js';
+import common from '@/assets/js/common';
+export default {
+  name: 'only',
+  data() {
+    return {
+      common,
+      total: 1,
+      current_page: 1,
+      total_pages: 1,
+      keywords: '',
+      projectsInfo: [],
+      contractList: CONTRACT_INDEX_CONFIG.contractIndex,
+      projectProgress: PROJECT_CONFIG.approvalProgress,
+      pageType: 1,
+      status: 1,
+    };
+  },
+  mounted() {
+    this.getList(1);
+  },
+  computed: {
+    getProgressName() {
+      return function (params) {
+        return this.projectProgress.find(item => item.id == params).value;
+      };
+    },
+  },
+  methods: {
+    goDetail(id) {
+      this.$router.push(`/approval/${  id}`);
+    },
+    getProjects(pageNum = 1, signStatus) {
+      const _this = this;
+      const data = {
+        page: pageNum,
+        include: 'principal,trail.expectations',
+        status: this.pageType,
+      };
+      if (signStatus) {
+        data.sign_contract_status = signStatus;
+      }
+      fetch('get', '/approvals_contract/notify', data).then((response) => {
+        _this.projectsInfo = response.data;
+        _this.total = response.meta.pagination.total;
+        _this.current_page = response.meta.pagination.current_page;
+        _this.total_pages = response.meta.pagination.total_pages;
+      });
+    },
+    getList(params) {
+      const _this = this;
+      let currentStatus = params;
+      if (isNaN(params)) {
+        currentStatus = this.status;
+      } else {
+        this.status = currentStatus;
+      }
+      this.pageType = currentStatus;
+      fetch('get', `/approvals_contract/notify?status=${currentStatus}&keywords=${this.keywords}`).then((params) => {
+        _this.projectsInfo = params.data;
+        _this.total = params.meta.pagination.total;
+        _this.current_page = params.meta.pagination.current_page;
+        _this.total_pages = params.meta.pagination.total_pages;
+      });
+    },
+  },
+};
 </script>
 
 <style >

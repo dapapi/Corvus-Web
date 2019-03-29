@@ -10,10 +10,11 @@
                 <div data-role="container" class="scrollable-container" style="height: 691px; width: 259px;">
                     <div data-role="content" class="scrollable-content" style="width: 259px;">
                         <section class="page-aside-section">
-                            <h5 class="page-title pl-30 mb-20">仪表盘<i class="iconfont icon-xinjianmenhu pl-100"  data-toggle="modal" data-target="#dashboard"></i></h5>
-                                <div class="level" :class="`level-${menu.level}`" v-for="menu in urlData" :key="menu.id">
-                                    <div class="list-group-item selected" v-if="menu.type ==='link'" >
-                                        <router-link class="link" v-bind:to="menu.url"  :class="menu.level>1?'pl-15':''">
+                            <h5 class="page-title pl-30 mb-20">仪表盘</h5>
+
+                                <div class="level" :class="`level-${menu.level}`" v-for="(menu,index) in urlData" :key="index">
+                                    <div class="list-group-item selected" v-if="menu.type ==='link'" :class="isSelected == menu.id?'selected':''">
+                                        <router-link class="link" v-bind:to="menu.url"  :class="menu.level>1?'pl-15':''"  @click="toggle(menu)">
                                         {{menu.name}}
                                         </router-link>     
                                     </div>
@@ -25,9 +26,7 @@
                                         <div class="dropdown-menu dropdown-menu-left" aria-labelledby="org-dropdown"
                                             role="menu" x-placement="bottom-start" style="min-width: 0;">
                                             <a class="dropdown-item" role="menuitem" data-toggle="modal"
-                                            data-target="#Editor">编辑</a>
-                                            <a class="dropdown-item" role="menuitem" data-toggle="modal"
-                                            data-target="#Delete">删除</a>
+                                            data-target="#Editor">查看</a>
                                         </div>
                                     </div>
                                 </div>
@@ -42,7 +41,7 @@
         
         <router-view/>
         <!-- 新建仪表盘 -->
-         <div class="modal fade" id="dashboard" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
+         <!-- <div class="modal fade" id="dashboard" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
              tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -86,7 +85,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <!-- 编辑仪表盘 -->
          <div class="modal fade" id="Editor" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
              tabindex="-1" data-backdrop="static">
@@ -96,29 +95,31 @@
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
                             <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
-                        <h4 class="modal-title">编辑</h4>
+                        <h4 class="modal-title">查看</h4>
                     </div>
                     <div class="modal-body">
                         <div class="example">
                             <div class="col-md-2 text-right float-left">部门</div>
                             <div class="col-md-10 float-left pl-0">
-                                 <Selectors @change="department"
-                                            :placeholder="'研发管理部'"></Selectors>
+                                <!-- <Selectors @change="department"
+                                            :placeholder="'研发管理部'"></Selectors> -->
+                                研发管理部
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">名称</div>
                             <div class="col-md-10 float-left pl-0">
-                                 <input type="text" class="form-control" v-model="dashboardName" :placeholder="'研发管理部仪表盘'">
+                                 <!-- <input type="text" class="form-control" v-model="dashboardName" :placeholder="'研发管理部仪表盘'"> -->
+                                 研发管理部仪表盘
                             </div>
                         </div>
-                        <div class="example">
+                        <!-- <div class="example">
                             <div class="col-md-2 text-right float-left">仪表盘描述</div>
                             <div class="col-md-10 float-left pl-0">
                                 <textarea name="" rows="5" class="form-control" 
                                           v-model="dashboard_describe" ></textarea>
                             </div>
-                        </div>
+                        </div> -->
                          <div class="example">
                             <div class="col-md-2 text-right float-left">成员</div>
                             <div class="col-md-10 float-left pl-0">
@@ -134,7 +135,7 @@
             </div>
         </div>
         <!--删除仪表盘-->
-        <div class="modal fade" id="Delete" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
+        <!-- <div class="modal fade" id="Delete" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
              tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -157,11 +158,13 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </template>
 
 <script>
+    import {mapState} from 'vuex'
+    import fetch from '../../assets/utils/fetch.js'
     export default {
         name: "home",
         data() {
@@ -169,8 +172,8 @@
                 urlData: [
                     {
                         id: 1,
-                        name: '商务仪表盘',
-                        url: '/dashboard/commerce',
+                        name: '',
+                        url: '',
                         type: 'link',
                         isSelected: false,
                         level: 1,
@@ -180,13 +183,62 @@
                 departmentDate:'',//仪表盘部门值
                 dashboardName:'',//仪表盘名称
                 dashboard_describe:'',//仪表盘描述
-                
+                canRun:true,
             }
         },
+        mounted(){
+            this.getDashboard()
+        },
+        computed:{
+         ...mapState([
+           'isSelected',//从vuex里获取切换之后的选中id
+       ]),
+        mounted(){
+        this.$nextTick(()=>{
+           this.setExpand(this.menus,this.urlRoute)
+        }) 
+        },
+        updated(){
+            if(this.canRun == true){
+                this.setExpand(this.menus,this.urlRoute)
+            }
+        },
+    },
         methods:{
             department:function(value){
                 this.departmentDate = value
+            },
+            getDashboard:function(){
+                let _this = this
+                fetch('get', '/dashboards').then(function (response) {   
+                    response.data.forEach((item,index)=>{
+                        _this.urlData.forEach(data=>{  
+                            data.id =  index
+                            data.name = item.name
+                            data.url = '/dashboard/' +  item.id
+                        })
+                       
+                    })
+                    
+                })
+                console.log(_this.urlData)
+            },
+            toggle(menu){
+                this.setExpand(this.menus, menu.url)
+            },
+            setExpand:function(source, url) {
+            let sourceItem = '';
+            for (let i = 0; i < source.length; i++) {
+                sourceItem = JSON.stringify(source[i]); // 把菜单项转为字符串
+                if (sourceItem.indexOf(url) > -1) { // 查找当前 URL 所对应的子菜单属于哪一个祖先菜单
+                        this.canRun = false
+                        this.$store.dispatch('changeIsSelected',source[i].id)
+                        this.$store.state.isExpanded.push(source[i].id)
+                        this.$store.dispatch('changeIsExpanded',this.$store.state.isExpanded)
+                    }
+                }
             }
+        
         }
     }
 </script>

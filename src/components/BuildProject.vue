@@ -156,7 +156,7 @@
                             </template>
                             <template v-if="field.field_type === 12">
                                 <ApprovalCheckBoxGroup :optionData="platformLists" select-all='false'
-                                               @change="(value) => addInfo(value, field.id )" :isLine="true">
+                                                       @change="(value) => addInfo(value, field.id )" :isLine="true">
                                     <template slot-scope="scope">
                                         <span>{{scope.row.name}}</span>
                                     </template>
@@ -180,7 +180,8 @@
                     <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click='refreshAddProjectModal'>
                         取消
                     </button>
-                    <button class="btn btn-primary" type="submit" @click="addProject" :disabled="submitDisable">确定</button>
+                    <button class="btn btn-primary" type="submit" @click="addProject" :disabled="submitDisable">确定
+                    </button>
                 </div>
             </div>
         </div>
@@ -189,331 +190,315 @@
 </template>
 
 <script>
-import config from '../assets/js/config.js';
-import fetch from '../assets/utils/fetch.js';
-import ApprovalProgress from '@/components/ForApproval/ApprovalProgress';
-import Cookies from 'js-cookie';
-import { mapState } from 'vuex';
-import ApprovalCheckBoxGroup from '@/components/ForApproval/ApprovalCheckBoxGroup';
+    import config from '../assets/js/config.js';
+    import fetch from '../assets/utils/fetch.js';
+    import ApprovalProgress from '@/components/ForApproval/ApprovalProgress';
+    import Cookies from 'js-cookie';
+    import {mapState} from 'vuex';
+    import ApprovalCheckBoxGroup from '@/components/ForApproval/ApprovalCheckBoxGroup';
 
-export default {
-  components: {
-    ApprovalProgress, ApprovalCheckBoxGroup,
-  },
-  name: 'BuildProject',
-  // projectType 项目类型   projectFieldsArr 不同项目类型的数据
-  props: ['projectType', 'projectFieldsArr', 'defaultData', 'mode'],
-  data() {
-    return {
-      visibleRangeArr: config.visibleRangeArr,
-      levelArr: config.levelArr,
-      trailsArr: [],
-      trailOrigin: '',
-      // trailOriginArr: config.trailOrigin,
-      trailStatusArr: config.trailStatusArr,
-      cooperationTypeArr: config.cooperationTypeArr,
-      starsArr: [],
-      bloggerArr: [],
-      startTime: '',
-      trailOriginContent: '',
-      trailsAllInfo: [],
-      addInfoArr: {},
-      projectBaseInfo: {
-        trail: {},
-        notice: [],
-      },
-      projectFields: [],
-      approver: [],
-      newArray: [],
-      user: '',
-      cooperationDefault: '',
-      trailStatusDefault: '',
-      submitDisable: false,
-      platformLists: [
-        {
-          value: '全平台',
-          name: '全平台',
+    export default {
+        components: {
+            ApprovalProgress, ApprovalCheckBoxGroup,
         },
-        {
-          value: '抖音',
-          name: '抖音',
-        },
-        {
-          value: '小红书',
-          name: '小红书',
-        },
-        {
-          value: 'B站',
-          name: 'B站',
-        },
-
-      ],
-    };
-  },
-  created() {
-    this.getStars();
-  },
-  mounted() {
-    this.user = JSON.parse(Cookies.get('user'));
-  },
-  watch: {
-    projectFieldsArr(newValue) {
-      return this.projectFields = newValue;
-    },
-    projectType() {
-      this.getTrail();
-      this.defaultDataFilter();
-    },
-  },
-
-  computed: {
-    ...mapState([
-      'userList',
-    ]),
-    trailOriginArr() {
-      const organization_id = JSON.parse(Cookies.get('user')).organization_id;
-      if (organization_id == 412) {
-        return config.trailBloggerOrigin;
-      }
-      return config.trailOrigin;
-    },
-  },
-
-
-  methods: {
-    defaultDataFilter() {
-      if (!this.defaultData) {
-        return;
-      }
-      this.newArray = this.defaultData.fields.filter(params => params.hasOwnProperty('values'));
-    },
-    refreshAddProjectModal() {
-      if (!this.$refs.trails) {
-        return;
-      }
-      this.$refs.trails.setValue('');
-      this.$refs.projectNameRef.refresh();
-      this.$refs.priorityLevel.setValue('');
-      this.$refs.visibleRange.setValue('');
-      this.$refs.intentionArtist.setValue('');
-      this.$refs.startTime.setValue('');
-      this.$refs.endTime.setValue('');
-      this.$refs.desc.refresh();
-      this.$refs.projectFee.setValue('');
-      this.$refs.trailOrigin.setValue('');
-      this.trailOriginContent = '';
-      this.trailOrigin = '';
-      this.projectBaseInfo = { trail: {}, notice: [] };
-      this.$store.dispatch('changePrincipal', { data: {} });
-      this.$store.dispatch('changePrincipal', { type: 'selector', data: {} });
-      this.$store.dispatch('changeParticipantsInfo', { data: [] });
-      this.projectFields = [];
-    },
-    setDefaultValue() {
-      if (this.defaultData && this.$refs) {
-        this.$refs.projectNameRef.refresh(this.defaultData.list.title);
-        this.$refs.priorityLevel.setValue(this.defaultData.list.priority);
-        Object.assign(this.projectBaseInfo, { priority: this.defaultData.list.priority });
-        this.$refs.startTime.setValue(this.defaultData.list.start_at);
-        this.$refs.endTime.setValue(this.defaultData.list.end_at);
-        this.$refs.projectExpenditureFee.setValue(this.defaultData.list.projected_expenditure);
-        this.$store.dispatch('changePrincipal', this.defaultData.list.principal);
-      }
-    },
-    addProjectTrail(value) {
-      if (!value) {
-        return;
-      }
-      this.projectBaseInfo.trail = {
-        id: value[0],
-      };
-      const trailInfo = this.trailsAllInfo.find(item => item.id == value);
-      this.$store.dispatch('changePrincipal', {
-        data: trailInfo.principal.data,
-      });
-      this.projectBaseInfo.principal_id = trailInfo.principal.data.id;
-      const artistsArr = [];
-      for (let i = 0; i < trailInfo.starexpectations.data.length; i++) {
-        artistsArr.push(`${trailInfo.starexpectations.data[i].flag}-${trailInfo.starexpectations.data[i].id}`);
-      }
-      for (let i = 0; i < trailInfo.bloggerexpectations.data.length; i++) {
-        artistsArr.push(`${trailInfo.bloggerexpectations.data[i].flag}-${trailInfo.bloggerexpectations.data[i].id}`);
-      }
-      this.$refs.intentionArtist.setValue(artistsArr);
-      this.projectBaseInfo.expectations = artistsArr;
-      this.$refs.priorityLevel.setValue(trailInfo.priority);
-      this.projectBaseInfo.priority = trailInfo.priority;
-      this.$refs.projectFee.setValue(trailInfo.fee);
-      this.$refs.trailOrigin.setValue(trailInfo.resource_type);
-      if (this.projectType == 3) {
-        this.$refs.projectCooperation.setValue(trailInfo.cooperation_type);
-        this.$refs.projectTrailStatus.setValue(trailInfo.status);
-      }
-      this.trailOrigin = trailInfo.resource_type;
-      this.projectBaseInfo.trail.id = trailInfo.id;
-      switch (trailInfo.resource_type) {
-        case 1:
-          this.trailOriginContent = JSON.parse(JSON.stringify(trailInfo.resource));
-          break;
-        case 2:
-          this.trailOriginContent = JSON.parse(JSON.stringify(trailInfo.resource));
-          break;
-        case 3:
-          this.trailOriginContent = JSON.parse(JSON.stringify(trailInfo.resource));
-          break;
-        case 4:
-          this.$store.dispatch('changePrincipal', {
-            type: 'selector',
-            data: this.memberFinder(trailInfo.resource),
-          });
-          break;
-        case 5:
-          this.$store.dispatch('changePrincipal', {
-            type: 'selector',
-            data: this.memberFinder(trailInfo.resource),
-          });
-          break;
-        default:
-          break;
-      }
-    },
-
-    getStars() {
-      fetch('get', '/starandblogger', { sign_contract_status: 2 }).then((response) => {
-        for (let i = 0; i < response.data.length; i++) {
-          this.starsArr.push({
-            name: response.data[i].name,
-            value: `${response.data[i].flag}-${response.data[i].id}`,
-          });
-        }
-      });
-    },
-
-    getTrail() {
-      const data = {
-        include: 'principal,starexpectations,bloggerexpectations',
-        type: this.projectType,
-      };
-      this.trailsArr = [];
-      fetch('get', '/trails/all', data).then((response) => {
-        for (let i = 0; i < response.data.length; i++) {
-          this.trailsArr.push({
-            name: response.data[i].title,
-            id: response.data[i].id,
-            value: response.data[i].id,
-          });
-        }
-        this.trailsAllInfo = response.data;
-        this.$refs.trails.refresh();
-        const _this = this;
-        if (_this.defaultData) {
-          _this.setDefaultValue();
-          _this.$nextTick(() => {
-            _this.$refs.trails.setValue(_this.defaultData.trailInfo.data.id);
-            _this.$nextTick(() => {
-              _this.addProjectTrail(_this.defaultData.trailInfo.data.id);
-            });
-          });
-        } else if (!_this.$store.state.newPrincipalInfo.id) {
-          _this.$store.dispatch('changePrincipal', {
-            data: {
-              id: _this.user.id,
-              name: _this.user.nickname,
-            },
-          });
-        }
-      });
-    },
-
-    memberFinder(value) {
-      return this.userList.find(item => item.id == value);
-    },
-
-    addProject() {
-      if (this.projectBaseInfo.start_at > this.projectBaseInfo.end_at) {
-        toastr.error('结束时间必须晚于开始时间,请重新选择时间');
-        return;
-      }
-      this.projectBaseInfo.fields = this.addInfoArr;
-      this.projectBaseInfo.type = this.projectType;
-
-      if (this.projectBaseInfo.trail && this.projectBaseInfo.trail.resource_type) {
-        const resource = this.projectBaseInfo.trail.resource_type;
-        if (resource == 1 || resource == 2 || resource == 3) {
-          this.projectBaseInfo.trail.resource = this.trailOriginContent;
-        } else if (resource == 4 || resource == 5) {
-          this.projectBaseInfo.trail.resource = this.$store.state.selectPrincipalInfo.id;
-        }
-      }
-      const tempPart = this.$store.state.newParticipantsInfo;
-      if (tempPart.length > 0) {
-        this.projectBaseInfo.notice = [];
-        for (const key in tempPart) {
-          if (tempPart[key].notice_id) {
-            this.projectBaseInfo.notice.push(tempPart[key].notice_id);
-          } else {
-            this.projectBaseInfo.notice.push(tempPart[key].id);
-          }
-        }
-      }
-      this.submitDisable = true;
-      const _this = this;
-      fetch('post', '/projects', this.projectBaseInfo).then((response) => {
-        _this.submitDisable = false;
-        $('#addProject').modal('hide');
-        $('#selectProjectType').modal('hide');
-        _this.$router.push({ path: `/projects/${response.data.id}` });
-      });
-    },
-
-    addProjectBaseInfo(value, name) {
-      switch (name) {
-        case 'principal_id':
-          value = this.$store.state.newPrincipalInfo.id;
-          break;
-        case 'start_at':
-          this.startTime = value;
-          break;
-        case 'fee':
-          this.projectBaseInfo.trail.fee = value;
-          return;
-        case 'resource_type':
-          this.trailOrigin = value;
-          this.projectBaseInfo.trail.resource_type = value;
-          return;
-        case 'expectations':
-          for (let i = 0; i < value.length; i++) {
-            const item = value[i].split('-');
-            value[i] = {
-              id: item[1],
-              flag: item[0],
+        name: 'BuildProject',
+        // projectType 项目类型   projectFieldsArr 不同项目类型的数据
+        props: ['projectType', 'projectFieldsArr', 'defaultData', 'mode','formstatus'],
+        data() {
+            return {
+                visibleRangeArr: config.visibleRangeArr,
+                levelArr: config.levelArr,
+                trailsArr: [],
+                trailOrigin: '',
+                // trailOriginArr: config.trailOrigin,
+                trailStatusArr: config.trailStatusArr,
+                cooperationTypeArr: config.cooperationTypeArr,
+                starsArr: [],
+                bloggerArr: [],
+                startTime: '',
+                trailOriginContent: '',
+                trailsAllInfo: [],
+                addInfoArr: {},
+                projectBaseInfo: {
+                    trail: {},
+                    notice: [],
+                },
+                projectFields: [],
+                approver: [],
+                newArray: [],
+                user: '',
+                cooperationDefault: '',
+                trailStatusDefault: '',
+                submitDisable: false,
+                platformLists: [
+                    {
+                        value: '全平台',
+                        name: '全平台',
+                    },
+                    {
+                        value: '抖音',
+                        name: '抖音',
+                    },
+                    {
+                        value: '小红书',
+                        name: '小红书',
+                    },
+                    {
+                        value: 'B站',
+                        name: 'B站',
+                    },
+                ],
             };
-          }
-
-          this.projectBaseInfo.trail.expectations = value;
-          return;
-        case 'cooperation_type':
-          this.projectBaseInfo.trail.cooperation_type = value;
-          return;
-        case 'status':
-          this.projectBaseInfo.trail.status = value;
-          return;
-      }
-      this.projectBaseInfo[name] = value;
-    },
-
-    addInfo(value, name) {
-      this.addInfoArr[name] = value;
-    },
-  },
-};
+        },
+        created() {
+            this.getStars();
+        },
+        watch: {
+            projectFieldsArr(newValue) {
+                return this.projectFields = newValue;
+            },
+            projectType() {
+                this.getTrail();
+                this.defaultDataFilter();
+            },
+        },
+        computed: {
+            ...mapState([
+                'userList',
+            ]),
+            trailOriginArr() {
+                const organization_id = JSON.parse(Cookies.get('user')).organization_id;
+                if (organization_id == 412) {
+                    return config.trailBloggerOrigin;
+                }
+                return config.trailOrigin;
+            },
+        },
+        methods: {
+            defaultDataFilter() {
+                if (!this.defaultData) {
+                    return;
+                }
+                this.newArray = this.defaultData.fields.filter(params => params.hasOwnProperty('values'));
+            },
+            refreshAddProjectModal() {
+                if (!this.$refs.trails) {
+                    return;
+                }
+                this.$refs.trails.setValue('');
+                this.$refs.projectNameRef.refresh();
+                this.$refs.priorityLevel.setValue('');
+                this.$refs.visibleRange.setValue('');
+                this.$refs.intentionArtist.setValue('');
+                this.$refs.startTime.setValue('');
+                this.$refs.endTime.setValue('');
+                this.$refs.desc.refresh();
+                this.$refs.projectFee.setValue('');
+                this.$refs.trailOrigin.setValue('');
+                this.trailOriginContent = '';
+                this.trailOrigin = '';
+                this.projectBaseInfo = {trail: {}, notice: []};
+                this.$store.dispatch('changePrincipal', {data: {}});
+                this.$store.dispatch('changePrincipal', {type: 'selector', data: {}});
+                this.$store.dispatch('changeParticipantsInfo', {data: []});
+                this.projectFields = [];
+            },
+            setDefaultValue() {
+                if (this.defaultData && this.$refs) {
+                    this.$refs.projectNameRef.refresh(this.defaultData.list.title);
+                    this.$refs.priorityLevel.setValue(this.defaultData.list.priority);
+                    Object.assign(this.projectBaseInfo, {priority: this.defaultData.list.priority});
+                    this.$refs.startTime.setValue(this.defaultData.list.start_at);
+                    this.$refs.endTime.setValue(this.defaultData.list.end_at);
+                    this.$refs.projectExpenditureFee.setValue(this.defaultData.list.projected_expenditure);
+                    this.$store.dispatch('changePrincipal', this.defaultData.list.principal);
+                }
+            },
+            addProjectTrail(value) {
+                if (!value) {
+                    return;
+                }
+                this.projectBaseInfo.trail = {
+                    id: value[0],
+                };
+                const trailInfo = this.trailsAllInfo.find(item => item.id == value);
+                this.$store.dispatch('changePrincipal', {
+                    data: trailInfo.principal.data,
+                });
+                this.projectBaseInfo.principal_id = trailInfo.principal.data.id;
+                const artistsArr = [];
+                for (let i = 0; i < trailInfo.starexpectations.data.length; i++) {
+                    artistsArr.push(`${trailInfo.starexpectations.data[i].flag}-${trailInfo.starexpectations.data[i].id}`);
+                }
+                for (let i = 0; i < trailInfo.bloggerexpectations.data.length; i++) {
+                    artistsArr.push(`${trailInfo.bloggerexpectations.data[i].flag}-${trailInfo.bloggerexpectations.data[i].id}`);
+                }
+                this.$refs.intentionArtist.setValue(artistsArr);
+                this.projectBaseInfo.expectations = artistsArr;
+                this.$refs.priorityLevel.setValue(trailInfo.priority);
+                this.projectBaseInfo.priority = trailInfo.priority;
+                this.$refs.projectFee.setValue(trailInfo.fee);
+                this.$refs.trailOrigin.setValue(trailInfo.resource_type);
+                if (this.projectType == 3) {
+                    this.$refs.projectCooperation.setValue(trailInfo.cooperation_type);
+                    this.$refs.projectTrailStatus.setValue(trailInfo.status);
+                }
+                this.trailOrigin = trailInfo.resource_type;
+                this.projectBaseInfo.trail.id = trailInfo.id;
+                switch (trailInfo.resource_type) {
+                    case 1:
+                        this.trailOriginContent = JSON.parse(JSON.stringify(trailInfo.resource));
+                        break;
+                    case 2:
+                        this.trailOriginContent = JSON.parse(JSON.stringify(trailInfo.resource));
+                        break;
+                    case 3:
+                        this.trailOriginContent = JSON.parse(JSON.stringify(trailInfo.resource));
+                        break;
+                    case 4:
+                        this.$store.dispatch('changePrincipal', {
+                            type: 'selector',
+                            data: this.memberFinder(trailInfo.resource),
+                        });
+                        break;
+                    case 5:
+                        this.$store.dispatch('changePrincipal', {
+                            type: 'selector',
+                            data: this.memberFinder(trailInfo.resource),
+                        });
+                        break;
+                    default:
+                        break;
+                }
+            },
+            getStars() {
+                fetch('get', '/starandblogger', {sign_contract_status: 2}).then((response) => {
+                    for (let i = 0; i < response.data.length; i++) {
+                        this.starsArr.push({
+                            name: response.data[i].name,
+                            value: `${response.data[i].flag}-${response.data[i].id}`,
+                        });
+                    }
+                });
+            },
+            getTrail() {
+                const data = {
+                    include: 'principal,starexpectations,bloggerexpectations',
+                    type: this.projectType,
+                };
+                this.trailsArr = [];
+                fetch('get', '/trails/all', data).then((response) => {
+                    for (let i = 0; i < response.data.length; i++) {
+                        this.trailsArr.push({
+                            name: response.data[i].title,
+                            id: response.data[i].id,
+                            value: response.data[i].id,
+                        });
+                    }
+                    this.trailsAllInfo = response.data;
+                    this.$refs.trails.refresh();
+                    const _this = this;
+                    if (_this.defaultData) {
+                        _this.setDefaultValue();
+                        _this.$nextTick(() => {
+                            _this.$refs.trails.setValue(_this.defaultData.trailInfo.data.id);
+                            _this.$nextTick(() => {
+                                _this.addProjectTrail(_this.defaultData.trailInfo.data.id);
+                            });
+                        });
+                    } else if (!_this.$store.state.newPrincipalInfo.id) {
+                        _this.$store.dispatch('changePrincipal', {
+                            data: {
+                                id: _this.user.id,
+                                name: _this.user.nickname,
+                            },
+                        });
+                    }
+                });
+            },
+            memberFinder(value) {
+                return this.userList.find(item => item.id == value);
+            },
+            addProject() {
+                if (this.projectBaseInfo.start_at > this.projectBaseInfo.end_at) {
+                    toastr.error('结束时间必须晚于开始时间,请重新选择时间');
+                    return;
+                }
+                this.projectBaseInfo.fields = this.addInfoArr;
+                this.projectBaseInfo.type = this.projectType;
+                if (this.projectBaseInfo.trail && this.projectBaseInfo.trail.resource_type) {
+                    const resource = this.projectBaseInfo.trail.resource_type;
+                    if (resource == 1 || resource == 2 || resource == 3) {
+                        this.projectBaseInfo.trail.resource = this.trailOriginContent;
+                    } else if (resource == 4 || resource == 5) {
+                        this.projectBaseInfo.trail.resource = this.$store.state.selectPrincipalInfo.id;
+                    }
+                }
+                const tempPart = this.$store.state.newParticipantsInfo;
+                if (tempPart.length > 0) {
+                    this.projectBaseInfo.notice = [];
+                    for (const key in tempPart) {
+                        if (tempPart[key].notice_id) {
+                            this.projectBaseInfo.notice.push(tempPart[key].notice_id);
+                        } else {
+                            this.projectBaseInfo.notice.push(tempPart[key].id);
+                        }
+                    }
+                }
+                fetch('post', '/projects', this.projectBaseInfo).then(response => {
+                    this.submitDisable = true;
+                    $('#addProject').modal('hide');
+                    $('#selectProjectType').modal('hide');
+                    this.$router.push({path: `/projects/${response.data.id}`});
+                }).catch((params) => {
+                    _this.submitDisable = false;
+                    console.log(error);
+                });
+            },
+            addProjectBaseInfo(value, name) {
+                switch (name) {
+                    case 'principal_id':
+                        value = this.$store.state.newPrincipalInfo.id;
+                        break;
+                    case 'start_at':
+                        this.startTime = value;
+                        break;
+                    case 'fee':
+                        this.projectBaseInfo.trail.fee = value;
+                        return;
+                    case 'resource_type':
+                        this.trailOrigin = value;
+                        this.projectBaseInfo.trail.resource_type = value;
+                        return;
+                    case 'expectations':
+                        for (let i = 0; i < value.length; i++) {
+                            const item = value[i].split('-');
+                            value[i] = {
+                                id: item[1],
+                                flag: item[0],
+                            };
+                        }
+                        this.projectBaseInfo.trail.expectations = value;
+                        return;
+                    case 'cooperation_type':
+                        this.projectBaseInfo.trail.cooperation_type = value;
+                        return;
+                    case 'status':
+                        this.projectBaseInfo.trail.status = value;
+                        return;
+                }
+                this.projectBaseInfo[name] = value;
+            },
+            addInfo(value, name) {
+                this.addInfoArr[name] = value;
+            },
+        },
+    };
 </script>
 
 <style lang="css" scoped>
-
     .modal-body .example {
         display: flex;
         align-items: center;
     }
-
 </style>

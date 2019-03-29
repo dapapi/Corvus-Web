@@ -65,7 +65,7 @@
                 </div>
                 <div class="tab-pane animation-fade" :id="'forum-department' + this._uid" role="tabpanel">
                     <div v-for="department in departmentUsers" :key='department.id+Math.random()'>
-                        <departments-item :data="department" @change="memberChange" :type="type"
+                        <departments-item :data="department" @change="memberChange" :type="type" :otherslot='otherslot'
                                           :multiple="multiple" :member-type="memberType"></departments-item>
                     </div>
                 </div>
@@ -76,40 +76,40 @@
 </template>
 
 <script>
-    import fetch from '../assets/utils/fetch.js'
-    import { mapState } from 'vuex'
+import { mapState } from 'vuex';
+import fetch from '../assets/utils/fetch.js';
 
-    export default {
-        props: ['multiple', 'member-type', 'type', 'otherslot','submit'],
-        data() {
-            return {
-                normalUsers: {},
-                departmentUsers: {},
-                teamShow: true,
-                searchKeyWord: '',
-                params: {
-                    type: this.type,
-                    data: ''
-                }
-            }
-        },
+export default {
+  props: ['multiple', 'member-type', 'type', 'otherslot', 'submit'],
+  data() {
+    return {
+      normalUsers: {},
+      departmentUsers: {},
+      teamShow: true,
+      searchKeyWord: '',
+      params: {
+        type: this.type,
+        data: '',
+      },
+    };
+  },
 
-        computed: {
-            ...mapState([
-                'department',
-                'userList'
-            ]),
+  computed: {
+    ...mapState([
+      'department',
+      'userList',
+    ]),
 
-            _department () {
-                return this.department
-            },
-            _userList () {
-                return this.userList
-            },
-            principalInfo: function () {
+    _department() {
+      return this.department;
+    },
+    _userList() {
+      return this.userList;
+    },
+    principalInfo() {
                 if (this.type === 'change') {
                     return this.$store.state.principalInfo
-                } else if (this.type === 'selector') {
+                } if (this.type === 'selector') {
                     return this.$store.state.selectPrincipalInfo
                 }else if(this.otherslot){
                     return this.$store.state.otherSlot
@@ -118,10 +118,10 @@
                 }
             },
 
-            participantsInfo: function () {
+    participantsInfo() {
                 if (this.type === 'change') {
                     return this.$store.state.participantsInfo
-                } else if(this.type ==='collect'){
+                } if(this.type ==='collect'){
                     return this.$store.state.collectInfo
                 }else if(this.type === 'pay'){
                     return this.$store.state.payInfo
@@ -133,122 +133,149 @@
                     return this.$store.state.incubationInfo
                 }else if(this.type === 'bill'){
                     return this.$store.state.billInfo
+                }else if(this.type === 'birthday'){
+                    return this.$store.state.birthdayInfo
+                }else if(this.type === 'star_risk_point'){
+                    return this.$store.state.star_risk_pointInfo
+                }else if(this.type === 'phone'){
+                    return this.$store.state.phoneInfo
+                }else if(this.type === 'wechat'){
+                    return this.$store.state.wechatInfo
+                }else if(this.type === 'email'){
+                    return this.$store.state.emailInfo
                 }else if(this.otherslot){
                     return this.$store.state.otherSlot
                 }
                 else {
                     return this.$store.state.newParticipantsInfo
                 }
-            }
-        },
-
-        mounted() {
-            if (this.department.length >0) {
-                this.departmentUsers = this.department
-            }
-            if (this.userList.length > 0) {
-                this.normalUsers = this.userList
-            }
-        },
-
-        watch: {
-            _department () {
-                this.departmentUsers = this.department
             },
-            _userList () {
-                this.normalUsers = this.userList
-            }
-        },
+  },
 
-        methods: {
-            closeTeam: function () {
-                this.teamShow = !this.teamShow
-            },
-
-            selectAllMember: function () {
-                let participantInfo = '';
-                if (this.type === 'change') {
-                    participantInfo = this.$store.state.participantsInfo;
-                } else if(this.type ==='collect'){
-                    participantInfo = this.$store.state.collectInfo
-                }else if(this.type === 'pay'){
-                    participantInfo = this.$store.state.payInfo
-                }else if(this.type === 'contract'){
-                    participantInfo = this.$store.state.contractInfo
-                }else if(this.type === 'division'){
-                    participantInfo = this.$store.state.divisionInfo
-                }else if(this.type === 'incubation'){
-                    participantInfo = this.$store.state.incubationInfo
-                }else if(this.type === 'bill'){
-                    participantInfo = this.$store.state.billInfo
-                }
-                else if(this.otherslot){
-                    participantInfo = this.$store.state.otherSlot
-                }
-                else {
-                    participantInfo = this.$store.state.newParticipantsInfo;
-                }
-                for (let i = 0; i < this.normalUsers.length; i++) {
-                    if (!participantInfo.find(item => item.id == this.normalUsers[i].id)) {
-                        participantInfo.push(this.normalUsers[i])
-                    }
-                }
-                this.params.data = participantInfo;
-                if(this.otherslot){
-                    this.$store.dispatch('changeOtherSlot', this.params.data);
-                }else{
-                    this.$store.dispatch('changeParticipantsInfo', this.params);
-                }
-                this.$emit('change', false)
-            },
-
-            selectMember: function (user) {
-                if (this.memberType === 'principal') {
-                    this.params.data = user;
-                    this.$store.dispatch('changePrincipal', this.params);
-                } else if (this.memberType === 'participant') {
-                    let participantInfo = '';
-                    if (this.type === 'change') {
-                        participantInfo = this.$store.state.participantsInfo;
-                    } else if(this.type ==='collect'){
-                        participantInfo = this.$store.state.collectInfo
-                    }else if(this.type === 'pay'){
-                        participantInfo = this.$store.state.payInfo
-                    }else if(this.type === 'contract'){
-                        participantInfo = this.$store.state.contractInfo
-                    }else if(this.type === 'division'){
-                        participantInfo = this.$store.state.divisionInfo
-                    }else if(this.type === 'incubation'){
-                        participantInfo = this.$store.state.incubationInfo
-                    }else if(this.type === 'bill'){
-                        participantInfo = this.$store.state.billInfo
-                    } else if(this.otherslot){
-                        participantInfo = this.$store.state.otherSlot
-                    }
-                    else {
-                        participantInfo = this.$store.state.newParticipantsInfo;
-                    }
-
-                    if (participantInfo.find(item => item.id == user.id)) {
-                        participantInfo.splice(participantInfo.map(item => item.id).indexOf(user.id), 1)
-                    } else {
-                        participantInfo.push(user)
-                    }
-                    this.params.data = participantInfo;
-                    if(this.otherslot){
-                    this.$store.dispatch('changeOtherSlot', this.params.data);
-                }else{
-                    this.$store.dispatch('changeParticipantsInfo', this.params);
-                }
-                }
-                this.$emit('change', false)
-            },
-
-            memberChange: function () {
-                this.$emit('change', false)
-            }
-        }
+  mounted() {
+    if (this.department.length > 0) {
+      this.departmentUsers = this.department;
     }
+    if (this.userList.length > 0) {
+      this.normalUsers = this.userList;
+    }
+  },
+
+  watch: {
+    _department() {
+      this.departmentUsers = this.department;
+    },
+    _userList() {
+      this.normalUsers = this.userList;
+    },
+  },
+
+  methods: {
+    closeTeam() {
+      this.teamShow = !this.teamShow;
+    },
+
+    selectAllMember() {
+      let participantInfo = '';
+      if (this.type === 'change') {
+        participantInfo = this.$store.state.participantsInfo;
+      } else if (this.type === 'collect') {
+        participantInfo = this.$store.state.collectInfo;
+      } else if (this.type === 'pay') {
+        participantInfo = this.$store.state.payInfo;
+      } else if (this.type === 'contract') {
+        participantInfo = this.$store.state.contractInfo;
+      } else if (this.type === 'division') {
+        participantInfo = this.$store.state.divisionInfo;
+      } else if (this.type === 'incubation') {
+        participantInfo = this.$store.state.incubationInfo;
+      } else if (this.type === 'bill') {
+        participantInfo = this.$store.state.billInfo;
+      }else if(this.type === 'birthday'){
+        participantInfo = this.$store.state.birthdayInfo
+    }else if(this.type === 'star_risk_point'){
+        participantInfo = this.$store.state.star_risk_pointInfo
+    }else if(this.type === 'phone'){
+        participantInfo = this.$store.state.phoneInfo
+    }else if(this.type === 'wechat'){
+        participantInfo = this.$store.state.wechatInfo
+    }else if(this.type === 'email'){
+        participantInfo = this.$store.state.emailInfo
+    }else if (this.otherslot) {
+        participantInfo = this.$store.state.otherSlot;
+      } else {
+        participantInfo = this.$store.state.newParticipantsInfo;
+      }
+      for (let i = 0; i < this.normalUsers.length; i++) {
+        if (!participantInfo.find(item => item.id == this.normalUsers[i].id)) {
+          participantInfo.push(this.normalUsers[i]);
+        }
+      }
+      this.params.data = participantInfo;
+      if (this.otherslot) {
+        this.$store.dispatch('changeOtherSlot', this.params.data);
+      }else {
+        this.$store.dispatch('changeParticipantsInfo', this.params);
+      }
+      this.$emit('change', false);
+    },
+
+    selectMember(user) {
+      if (this.memberType === 'principal') {
+        this.params.data = user;
+        this.$store.dispatch('changePrincipal', this.params);
+      } else if (this.memberType === 'participant') {
+        let participantInfo = '';
+        if (this.type === 'change') {
+          participantInfo = this.$store.state.participantsInfo;
+        } else if (this.type === 'collect') {
+          participantInfo = this.$store.state.collectInfo;
+        } else if (this.type === 'pay') {
+          participantInfo = this.$store.state.payInfo;
+        } else if (this.type === 'contract') {
+          participantInfo = this.$store.state.contractInfo;
+        } else if (this.type === 'division') {
+          participantInfo = this.$store.state.divisionInfo;
+        } else if (this.type === 'incubation') {
+          participantInfo = this.$store.state.incubationInfo;
+        } else if (this.type === 'bill') {
+          participantInfo = this.$store.state.billInfo;
+        }else if(this.type === 'birthday'){
+        participantInfo = this.$store.state.birthdayInfo
+        }else if(this.type === 'star_risk_point'){
+            participantInfo = this.$store.state.star_risk_pointInfo
+        }else if(this.type === 'phone'){
+            participantInfo = this.$store.state.phoneInfo
+        }else if(this.type === 'wechat'){
+            participantInfo = this.$store.state.wechatInfo
+        }else if(this.type === 'email'){
+            participantInfo = this.$store.state.emailInfo
+        } else if (this.otherslot) {
+          participantInfo = this.$store.state.otherSlot;
+        } else {
+          participantInfo = this.$store.state.newParticipantsInfo;
+        }
+
+        if (participantInfo.find(item => item.id == user.id)) {
+          participantInfo.splice(participantInfo.map(item => item.id).indexOf(user.id), 1);
+        } else {
+          participantInfo.push(user);
+        }
+        this.params.data = participantInfo;
+        if (this.otherslot) {
+          this.$store.dispatch('changeOtherSlot', this.params.data);
+        }else {
+          this.$store.dispatch('changeParticipantsInfo', this.params);
+        }
+      }
+      this.$emit('change', false);
+    },
+
+    memberChange() {
+      this.$emit('change', false);
+    },
+  },
+};
 </script>
 
 <style>
@@ -311,7 +338,7 @@
         user-select: none;
         border: 1px solid #f2f2f2;
         overflow: hidden;
-        z-index: 1000;
+        z-index: 100000000 !important;
     }
     .normal-width{
         width: 100%;
@@ -332,4 +359,3 @@
         font-weight: 400;
     }
 </style>
-

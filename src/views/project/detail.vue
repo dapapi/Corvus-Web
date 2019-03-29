@@ -50,9 +50,15 @@
                                  v-if="projectInfo.trail && projectInfo.trail.data.expectations">
                                 <template v-for="artist in projectInfo.trail.data.expectations.data">
                                     <template v-if="artist.name">
+                                        <template v-if="artist.broker && artist.broker.data.length > 0">
+                                            {{ artist.broker.data[0].department.name }} -
+                                        </template>
                                         {{ artist.name }}
                                     </template>
                                     <template v-else>
+                                        <template v-if="artist.publicity && artist.publicity.data.length > 0">
+                                            {{ artist.publicity.data[0].department.name }} -
+                                        </template>
                                         {{ artist.nickname }}
                                     </template>
                                 </template>
@@ -84,11 +90,11 @@
                                 <i class="iconfont icon-gengduo pr-2" aria-hidden="true"></i>项目类型
                             </div>
                             <div class="font-weight-bold float-left">
-                                    <template v-if="projectInfo.type === 1">影视项目</template>
-                                    <template v-if="projectInfo.type === 2">综艺项目</template>
-                                    <template v-if="projectInfo.type === 3">商务项目</template>
-                                    <template v-if="projectInfo.type === 4">商务项目</template>
-                                    <template v-if="projectInfo.type === 5">基础项目</template>
+                                <template v-if="projectInfo.type === 1">影视项目</template>
+                                <template v-if="projectInfo.type === 2">综艺项目</template>
+                                <template v-if="projectInfo.type === 3">商务项目</template>
+                                <template v-if="projectInfo.type === 4">商务项目</template>
+                                <template v-if="projectInfo.type === 5">基础项目</template>
                             </div>
                         </div>
                     </div>
@@ -168,7 +174,7 @@
                 </div>
             </div>
 
-            <div style="display:-webkit-box">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start">
                 <div class="panel" style="width: calc(66% - 15px);z-index: 100;float:left;margin-right:30px" v-if="projectInfo.title">
                     <div class="col-md-12">
                         <ul class="nav nav-tabs nav-tabs-line" role="tablist">
@@ -428,7 +434,7 @@
                                     </div>
                                     <div class="float-left col-md-2 text-right" style="padding: .715rem 0">
                                         <span class="pointer-content hover-content" data-toggle="modal"
-                                              data-target="#addBill">
+                                              @click='canAddBill'>
                                             <template
                                                     v-if="!projectBillMetaInfo.divide">
                                                 <i class="iconfont icon-tianjia pr-5"></i>新增结算单
@@ -505,7 +511,7 @@
                                     </ul>
                                     <div class="float-right" style="padding: .715rem 0">
                                         <span class="pointer-content hover-content" data-toggle="modal"
-                                              data-target="#addPaybackTime" @click="editProjectPaybackTime(false)">
+                                               @click="editProjectPaybackTime(false)">
                                             <i class="iconfont icon-tianjia pr-5"></i>新建回款期次</span>
                                     </div>
                                 </div>
@@ -578,7 +584,6 @@
                                             <div class="float-right text-right" style="color: #cccccc;width: 20%;">
                                                 <i class="iconfont icon-bianji2 pr-40 pointer-content"
                                                    data-toggle="modal"
-                                                   data-target="#addPaybackTime"
                                                    @click="editProjectPaybackTime(true, returnMoney)"></i>
                                                 <i class="iconfont icon-shanchu1 pointer-content"
                                                    data-toggle="modal" data-target="#paybackDel"
@@ -659,7 +664,7 @@
                                         </div>
                                     </div>
                                     <div class="py-20" v-if="projectInfo.title">
-                                        
+
                                         <div class="clearfix">
                                             <h5 class="pl-15">基本资料</h5>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
@@ -850,7 +855,7 @@
                                             </div>
                                         </div>
 
-                                        
+
                                         <h5 class="pl-15 pt-10">更新信息</h5>
                                         <div class="clearfix">
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
@@ -940,96 +945,7 @@
             </div>
         </div>
         <!-- 新建任务 -->
-        <div class="modal fade" id="addTask" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1" data-backdrop="static">
-            <div class="modal-dialog modal-simple">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
-                        </button>
-                        <h4 class="modal-title">新增任务</h4>
-                    </div>
-                    <div class="modal-body">
-
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">关联资源</div>
-                            <div class="col-md-10 float-left pl-0">
-                                项目 - {{ projectInfo.title }}
-                            </div>
-                        </div>
-                        <div class="example" v-if="taskTypeArr.length > 0">
-                            <div class="col-md-2 text-right float-left">任务类型</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <selectors :options="taskTypeArr" ref="taskType"
-                                           @change="changeTaskType"></selectors>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">任务名称</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <input type="text" class="form-control" placeholder="请输入任务名称"
-                                       v-model="taskName">
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">负责人</div>
-                            <div class="col-md-5 float-left pl-0">
-                                <input-selectors :placeholder="'请选择负责人'"
-                                                 @change="principalChange"></input-selectors>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">参与人</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <add-member @change="participantChange"></add-member>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left pl-0">任务优先级</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <selectors :options="priorityArr" ref="taskLevel"
-                                           @change="changeTaskLevel"></selectors>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">开始时间</div>
-                            <div class="col-md-5 float-left pl-0">
-                                <datepicker ref="startTime" @change="changeStartTime"></datepicker>
-                            </div>
-                            <div class="col-md-5 float-left pl-0">
-                                <!-- <timepicker ref="startMinutes" :default="startMinutes"
-                                            @change="changeStartMinutes"></timepicker> -->
-                                <TimeChoice @change="changeStartMinutes" ref="startMinutes"></TimeChoice>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">截止时间</div>
-                            <div class="col-md-5 float-left pl-0">
-                                <datepicker ref="endTime" @change="changeEndTime" :startDate="startTime"></datepicker>
-                            </div>
-                            <div class="col-md-5 float-left pl-0">
-                                <!-- <timepicker ref="endMinutes" :default="endMinutes"
-                                            @change="changeEndMinutes"></timepicker> -->
-                                <TimeChoice @change="changeEndMinutes" ref="endMinutes"></TimeChoice>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">任务说明</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <textarea class="form-control" name="taskDescription" title=""
-                                          v-model="taskIntroduce"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" type="submit" @click="addTask">确定</button>
-                    </div>
-
-                </div>
-            </div>
-        </div>
+        <AddTask :resourceable_id="projectId" resource_type="3" :resource_title="projectName" resource_name="项目" @success="addTask"></AddTask>
         <!-- 隐私设置 -->
         <div class="modal fade" id="addPrivacy" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
@@ -1177,7 +1093,8 @@
                             <div class="col-md-2 text-right float-left px-0">计划回款金额</div>
                             <div class="col-md-10 float-left">
                                 <NumberSpinner ref="paybackMoney"
-                                               @change="(value) => addProjectReturn(value, 'plan_returned_money')" :min="0" :max="1000000000" :precision="2" :value="0"></NumberSpinner>
+                                               @change="(value) => addProjectReturn(value, 'plan_returned_money')"
+                                               :min="0" :max="1000000000" :precision="2" :value="0"></NumberSpinner>
                             </div>
                         </div>
                         <div class="example">
@@ -1198,7 +1115,7 @@
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
                         <template v-if="!isEditProjectPayback">
-                            <button class="btn btn-primary" type="submit" @click="addProjectPayback">确定</button>
+                            <button class="btn btn-primary" type="submit" :disable="isPaybackDisable" @click="addProjectPayback">确定</button>
                         </template>
                         <template v-else>
                             <button class="btn btn-primary" type="submit" @click="editProjectPayback">确定</button>
@@ -1252,7 +1169,8 @@
                             <div class="col-md-2 text-right float-left px-0">回款金额</div>
                             <div class="col-md-10 float-left">
                                 <NumberSpinner ref="paybackMoney1"
-                                               @change="(value) => addProjectReturn(value, 'plan_returned_money')" :min="0" :max="1000000000" :precision="2" :value="0"></NumberSpinner>
+                                               @change="(value) => addProjectReturn(value, 'plan_returned_money')"
+                                               :min="0" :max="1000000000" :precision="2" :value="0"></NumberSpinner>
                             </div>
                         </div>
                         <div class="example">
@@ -1281,7 +1199,7 @@
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消
                         </button>
                         <template v-if="!isEditProjectPaybackTime">
-                            <button class="btn btn-primary" type="submit" @click="addProjectPaybackTime">确定</button>
+                            <button class="btn btn-primary" type="submit" :disabled="isPaybackButtonDisable" @click="addProjectPaybackTime">确定</button>
                         </template>
                         <template v-else>
                             <button class="btn btn-primary" type="submit" @click="editProjectPayback">确定</button>
@@ -1330,7 +1248,8 @@
                             <div class="col-md-2 text-right float-left px-0">开票金额</div>
                             <div class="col-md-10 float-left">
                                 <NumberSpinner ref="paybackMoney2"
-                                               @change="(value) => addProjectReturn(value, 'plan_returned_money')" :min="0" :max="1000000000" :precision="2" :value="0"></NumberSpinner>
+                                               @change="(value) => addProjectReturn(value, 'plan_returned_money')"
+                                               :min="0" :max="1000000000" :precision="2" :value="0"></NumberSpinner>
                             </div>
                         </div>
                         <div class="example">
@@ -1358,7 +1277,7 @@
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
                         <template v-if="!isEditProjectPaybackTime">
-                            <button class="btn btn-primary" type="submit" @click="addProjectPaybackTime">确定</button>
+                            <button class="btn btn-primary" type="submit" :disabled="isPaybackButtonDisable" @click="addProjectPaybackTime">确定</button>
                         </template>
                         <template v-else>
                             <button class="btn btn-primary" type="submit" @click="editProjectPayback">确定</button>
@@ -1494,7 +1413,7 @@
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
                         <template
                                 v-if="!projectBillMetaInfo.divide">
-                            <button class="btn btn-primary" type="submit" @click="addProjectBill">确定</button>
+                            <button class="btn btn-primary" type="submit" :disable="isBillButtonDisable" @click="addProjectBill">确定</button>
                         </template>
                         <template v-else>
                             <button class="btn btn-primary" type="submit" @click="changeProjectBill">确定</button>
@@ -1539,13 +1458,13 @@
 </template>
 
 <script>
-    import fetch from '../../assets/utils/fetch.js'
-    import config from '../../assets/js/config'
-    import common from '../../assets/js/common'
-    import Cookies from 'js-cookie'
+import fetch from '../../assets/utils/fetch.js';
+import config from '../../assets/js/config';
+import common from '../../assets/js/common';
+import Cookies from 'js-cookie';
 
-    export default {
-        data: function () {
+export default {
+  data () {
             return {
                 common: common,
                 total: 0,
@@ -1561,13 +1480,6 @@
                 priorityArr: config.priorityArr,
                 cooperationTypeArr: config.cooperationTypeArr,
                 trailStatusArr: config.trailStatusArr,
-                taskLevel: '',
-                taskName: '',
-                startTime: '',
-                endTime: '',
-                startMinutes: '00:00',
-                endMinutes: '00:00',
-                taskIntroduce: '',
                 projectTasksInfo: [],
                 withdrawalReason: '',
                 companyArr: [],
@@ -1680,6 +1592,10 @@
                 projectProgress: '',
                 cooperationOther: '',
                 cooperationKeyId: '',
+                projectName: '',
+                isBillButtonDisable: false,
+                isPaybackButtonDisable: false,
+                isPaybackDisable: false,
             }
         },
 
@@ -1718,56 +1634,50 @@
                 this.cancelChangeBill();
             });
 
-            $('#addTask').on('hidden.bs.modal', () => {
-                this.taskName = '';
-                this.taskLevel = '';
-                this.$refs.taskLevel.setValue('');
-                this.taskType = '';
-                this.$refs.taskType.setValue('');
-                this.startTime = '';
-                this.endTime = '';
-                this.startMinutes = '';
-                this.endMinutes = '';
-                this.taskIntroduce = '';
-                this.$refs.startTime.setValue('');
-                this.$refs.startMinutes.setValue('0');
-                this.$refs.endTime.setValue('');
-                this.$refs.endMinutes.setValue('0');
-                this.$store.commit('changeNewPrincipal', {});
-                this.$store.commit('changeNewParticipantsInfo', [])
-            })
         },
 
         watch: {
             projectReturnDesc: function (newValue) {
                 this.addProjectReturn(newValue, 'desc')
             },
-            routerId(id) {
-                this.projectId = id;
-                setTimeout(() => {
-                    this.getProject();
-                }, 100);
-            }
-        },
-        computed: {
-            completeNum() {
-                return this.projectTasksInfo.filter(n => n.status === 2).length
-            },
-            routerId() {
-                return this.$route.params.id
-            },
-        },
+    routerId(id) {
+      this.projectId = id;
+      setTimeout(() => {
+        this.getProject();
+      }, 100);
+    },
+  },
+  computed: {
+    completeNum() {
+      return this.projectTasksInfo.filter(n => n.status === 2).length;
+    },
+    routerId() {
+      return this.$route.params.id;
+    },
+  },
 
-        methods: {
-
-            getProject: function () {
+  methods: {
+      canAddBill(){
+        if(this.projectBillMetaInfo.divide && this.projectInfo.powers.edit_bill !== 'true'){
+            // $('#addPaybackTime').modal('')
+            toastr.error('当前用户没有编辑结算单权限')
+            return 
+        }else if(!this.projectBillMetaInfo.divide && this.projectInfo.powers.add_bill !== 'true'){
+            toastr.error('当前用户没有新增结算单权限')
+            return 
+        }else{
+            $('#addBill').modal('show')
+        }
+      },
+    getProject () {
                 let data = {
-                    include: 'principal,participants,tasks,creator,fields,trail.expectations,trail.client,relate_tasks,relate_projects,type',
+                    include: 'principal,participants,tasks,creator,fields,trail.expectations.broker,trail.expectations.publicity,trail.client,relate_tasks,relate_projects,type',
                 };
                 fetch('get', '/projects/' + this.projectId, data).then(response => {
                     this.oldInfo = JSON.parse(JSON.stringify(response));
                     let fieldsArr = response.meta.fields.data;
                     this.metaInfo = response.meta;
+                    this.projectName = response.data.title;
                     for (let i = 0; i < fieldsArr.length; i++) {
                         if (fieldsArr[i].field_type === 2 || fieldsArr[i].field_type === 6) {
                             fieldsArr[i].contentArr = [];
@@ -1830,8 +1740,8 @@
                     this.getStars()
                 })
             },
-            //隐私设置
-            setPrivacy: function () {
+    // 隐私设置
+    setPrivacy () {
 
                 let data = {
                     fee: this.$store.state.payInfo, //预计订单收入
@@ -1855,7 +1765,7 @@
                     $('#addPrivacy').modal('hide')
                 })
             },
-            getPrivacy: function () {
+    getPrivacy () {
                 let data = {
                     project_id: this.$route.params.id
                 };
@@ -1884,7 +1794,7 @@
                 })
             },
 
-            getApprovalsFormData: function () {
+    getApprovalsFormData () {
                 let data = {
                     type: 'projects'
                 };
@@ -1900,14 +1810,14 @@
                 })
             },
 
-            cancelPrivacy: function () {
+    cancelPrivacy () {
                 this.$store.state.divisionInfo = [];
                 this.$store.state.payInfo = [];
                 this.$store.state.contractInfo = [];
                 this.$store.state.collectInfo = []
             },
 
-            getStars: function () {
+    getStars () {
                 if (this.starsArr.length > 0) {
                     return
                 }
@@ -1922,7 +1832,7 @@
                 })
             },
 
-            getClients: function () {
+    getClients () {
                 let _this = this;
                 fetch('get', '/clients/all').then(function (response) {
                     for (let i = 0; i < response.data.length; i++) {
@@ -1936,7 +1846,7 @@
                 })
             },
 
-            getProjectTasks: function () {
+    getProjectTasks () {
                 fetch('get', '/projects/' + this.projectId + '/tasks').then(response => {
                     this.projectTasksInfo = response.data;
                     this.total = response.meta.pagination.total;
@@ -1945,7 +1855,7 @@
                 })
             },
 
-            getProjectTasking: function () {
+    getProjectTasking () {
                 let data = {
                     status: 1,
                 };
@@ -1954,7 +1864,7 @@
                 })
             },
 
-            getProjectBill: function () {
+    getProjectBill () {
                 fetch('get', '/projects/' + this.projectId + '/bill').then(response => {
                     this.projectBillsInfo = response.data;
                     this.projectBillMetaInfo = JSON.parse(JSON.stringify(response.meta));
@@ -1980,19 +1890,21 @@
             },
 
             addProjectBill: function () {
+                this.isBillButtonDisable = true;
                 let data = {
                     expenses: this.billExpenses,
                     my_divide: this.myDivide,
                     star: this.divideArrInfo,
                 };
                 fetch('post', '/projects/' + this.projectId + '/store/bill', data).then(() => {
+                    this.isBillButtonDisable = false;
                     this.getProjectBill();
                     toastr.success('添加成功');
                     $('#addBill').modal('hide');
                 })
             },
 
-            changeProjectBill: function () {
+    changeProjectBill () {
                 let data = {
                     expenses: this.billExpenses,
                     my_divide: this.myDivide,
@@ -2005,7 +1917,7 @@
                 })
             },
 
-            cancelChangeBill: function () {
+    cancelChangeBill () {
                 this.myDivide = this.projectBillMetaInfo.my_divide;
                 this.billExpenses = this.projectBillMetaInfo.expenses;
                 if (this.projectBillMetaInfo.divide) {
@@ -2023,7 +1935,7 @@
                 }
             },
 
-            getProjectContract: function (callback) {
+    getProjectContract (callback) {
                 fetch('get', '/approvals_contract/projectList', {project_id: this.projectId}).then(response => {
                     this.projectContractInfo = response.data;
                     this.total = response.meta.pagination.total;
@@ -2035,7 +1947,7 @@
                 });
             },
 
-            getProjectReturned: function (contractId) {
+    getProjectReturned (contractId) {
                 this.contractId = contractId;
                 let data = {
                     include: 'money.type,practicalsum,invoicesum',
@@ -2052,7 +1964,7 @@
                 });
             },
 
-            getProjectsReturned: function () {
+    getProjectsReturned () {
                 if (!this.projectContractInfo) {
                     this.getProjectContract((data) => {
                         this.getProjectReturned(data[0].form_instance_number);
@@ -2082,12 +1994,12 @@
                 })
             },
 
-            changeProjectProgress: function (status) {
+    changeProjectProgress (status) {
                 this.projectProgress = status;
                 $('#changeProjectProgress').modal('show')
             },
 
-            addProjectProgress: function () {
+    addProjectProgress () {
                 fetch('put', '/projects/' + this.projectId + '/course', {status: this.projectProgress}).then(response => {
                     let flagInfo = this.projectProgressInfo.find(item => item.status == this.projectProgress);
                     flagInfo['finisher'] = response.data.user;
@@ -2100,7 +2012,7 @@
                 })
             },
 
-            getProjectProgress: function () {
+    getProjectProgress () {
                 fetch('get', '/projects/' + this.projectId + '/course').then(response => {
                     if (response.data.length > 0) {
                         let courses = response.data;
@@ -2123,7 +2035,7 @@
                 })
             },
 
-            addProjectReturn: function (value, name) {
+    addProjectReturn (value, name) {
                 if (name === 'principal_id') {
                     value = this.$store.state.newPrincipalInfo.id
                 }
@@ -2131,17 +2043,19 @@
             },
 
             addProjectPayback: function () {
+                this.isPaybackDisable = true;
                 this.projectReturnData.contract_id = this.contractId;
                 this.projectReturnData.principal_id = this.user.id;
                 this.projectReturnData.issue_name = this.paybackLength;
                 fetch('post', '/projects/' + this.projectId + '/returned/money', this.projectReturnData).then(() => {
+                    this.isPaybackDisable = false;
                     $('#addPaybackTime').modal('hide');
                     toastr.success('添加成功');
                     this.getProjectReturned(this.contractId)
                 })
             },
 
-            editProjectPayback: function () {
+    editProjectPayback () {
                 fetch('put', '/returned/money/' + this.projectReturnId, this.projectReturnData).then(() => {
                     $('#addPaybackTime').modal('hide');
                     $('#addPayback').modal('hide');
@@ -2151,18 +2065,31 @@
                 })
             },
 
-            delProjectPayback: function (paybackId) {
+    delProjectPayback (paybackId) {
                 this.delPaybackId = paybackId
             },
 
-            delProjectPaybackCallback: function () {
+    delProjectPaybackCallback () {
                 fetch('delete', '/returned/money/' + this.delPaybackId).then(() => {
                     toastr.success('删除成功');
                     this.getProjectReturned(this.contractId)
                 })
             },
 
-            editProjectPaybackTime: function (type, payback) {
+    editProjectPaybackTime (type, payback) {
+        if(type === false && this.projectInfo.powers.add_returned_money !== 'true'){
+            // $('#addPaybackTime').modal('')
+            toastr.error('当前用户没有新建回款期次权限')
+            return 
+        }
+        else if(type === true && this.projectInfo.powers.edit_returned_money !== 'true'){
+            toastr.error('当前用户没有编辑回款期次权限')
+            return 
+        }else{
+            $('#addPaybackTime').modal('show')
+        }
+        
+
                 this.isEditProjectPayback = type;
                 if (type) {
                     this.projectReturnName = payback.issue_name;
@@ -2173,14 +2100,16 @@
                 }
             },
 
-            addProjectPaybackTime: function () {
+    addProjectPaybackTime () {
                 if (!this.projectReturnData.project_returned_money_type_id) {
                     toastr.error('请选择票据类型或付款方式')
                     return
                 }
+                this.isPaybackButtonDisable = true;
                 this.projectReturnData.contract_id = this.contractId;
                 this.projectReturnData.principal_id = this.user.id;
-                fetch('post', '/projects/' + this.projectId + '/returned/' + this.paybackTime.id + '/money', this.projectReturnData).then(response => {
+                fetch('post', '/projects/' + this.projectId + '/returned/' + this.paybackTime.id + '/money', this.projectReturnData).then(() => {
+                    this.isPaybackButtonDisable = false;
                     $('#addPayback').modal('hide');
                     $('#addInvoice').modal('hide');
                     toastr.success('添加成功');
@@ -2188,15 +2117,15 @@
                 })
             },
 
-            redirectContract: function (contractId) {
+    redirectContract (contractId) {
                 this.$router.push({path: '/approval/' + contractId})
             },
 
-            selectedPaybackTime: function (payback) {
+    selectedPaybackTime (payback) {
                 this.paybackTime = payback;
             },
 
-            editProjectPaybackRecording: function (recording, payback, type) {
+    editProjectPaybackRecording (recording, payback, type) {
                 this.isEditProjectPaybackTime = true;
                 this.projectReturnName = recording.issue_name;
                 this.projectReturnDesc = recording.desc;
@@ -2213,59 +2142,38 @@
                 this.paybackTime = payback;
             },
 
-            setTaskPrincipal: function () {
+    setTaskPrincipal () {
                 this.$store.dispatch('changePrincipal', {data: {id: this.user.id, name: this.user.nickname}})
             },
 
-            redirectTask: function (taskId) {
+    redirectTask (taskId) {
                 this.$router.push({path: '/tasks/' + taskId})
             },
 
-            redirectTrail: function (trailId) {
+    redirectTrail (trailId) {
                 this.$router.push({path: '/trails/' + trailId})
             },
 
-            redirectProject: function (projectId) {
+    redirectProject (projectId) {
                 this.$router.push({path: '/projects/' + projectId})
             },
 
-            filterProjectFee: function (value) {
+    filterProjectFee (value) {
                 this.filterFee = value;
             },
 
-            changeTrailOrigin: function (value) {
+    changeTrailOrigin (value) {
                 this.trailInfo.resource = '';
                 this.email = '';
                 this.changeInfo.resource_type = value;
             },
 
-            addTask: function () {
-                let participant_ids = [];
-                for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
-                    participant_ids.push(this.$store.state.newParticipantsInfo[i].id)
-                }
-                let data = {
-                    resource_type: 3,
-                    resourceable_id: this.projectId,
-                    type: this.taskType,
-                    title: this.taskName,
-                    principal_id: this.$store.state.newPrincipalInfo.id,
-                    participant_ids: participant_ids,
-                    priority: this.taskLevel,
-                    start_at: this.startTime + ' ' + this.startMinutes,
-                    end_at: this.endTime + ' ' + this.endMinutes,
-                    desc: this.taskIntroduce
-                };
-                fetch('post', '/tasks', data).then(response => {
-                    toastr.success('创建成功');
-                    $('#addTask').modal('hide');
-                    this.projectTasksInfo.push(response.data);
-                    // this.getProjectTasking();
-                    this.getProject();
-                })
+            addTask: function (response) {
+                this.projectTasksInfo.push(response.data);
+                this.getProject();
             },
 
-            getTaskType: function () {
+    getTaskType () {
                 fetch('get', '/task_types').then(response => {
                     for (let i = 0; i < response.data.length; i++) {
                         this.taskTypeArr.push({
@@ -2276,24 +2184,28 @@
                 })
             },
 
-            getAllProjects: function () {
+    getAllProjects () {
                 fetch('get', '/projects/all').then(response => {
                     this.allProjectsInfo = response.data
                 })
             },
 
-            getAllTasks: function () {
+    getAllTasks () {
                 fetch('get', '/tasksAll').then(response => {
                     this.allTasksInfo = response.data
                 })
             },
-            editBaseInfo: function () {
-                this.isEdit = true;
-                this.changeInfo = {};
-                this.addInfoArr = {};
-            },
+    editBaseInfo () {
+        if (this.projectInfo.powers.edit_project !== 'true') {
+            toastr.error('当前用户没有编辑项目的权限')
+            return
+        }
+        this.isEdit = true;
+        this.changeInfo = {};
+        this.addInfoArr = {};
+    },
 
-            changeProjectBaseInfo: function (value, name) {
+    changeProjectBaseInfo (value, name) {
                 switch (name) {
                     case 'principal_id':
                         if (value === this.projectInfo.principal.data.id) {
@@ -2414,7 +2326,7 @@
                 this.changeInfo[name] = value
             },
 
-            changeProjectInfo: function () {
+    changeProjectInfo () {
                 let data = this.changeInfo;
                 if (data.start_at) {
                     if (data.end_at && (data.start_at > data.end_at)) {
@@ -2467,7 +2379,7 @@
                 })
             },
 
-            cancelEdit: function () {
+    cancelEdit () {
                 this.projectInfo = this.oldInfo.data;
                 let fieldsArr = this.oldInfo.meta.fields.data;
                 this.metaInfo = this.oldInfo.meta;
@@ -2515,43 +2427,43 @@
                 this.addInfoArr = {};
             },
 
-            changeTaskType: function (value) {
+    changeTaskType (value) {
                 this.taskType = value
             },
 
-            principalChange: function (value) {
+    principalChange (value) {
 
             },
 
-            participantChange: function (value) {
+    participantChange (value) {
 
             },
 
-            changeTaskLevel: function (value) {
+    changeTaskLevel (value) {
                 this.taskLevel = value
             },
 
-            changeStartTime: function (value) {
+    changeStartTime (value) {
                 this.startTime = value
             },
 
-            changeStartMinutes: function (value) {
+    changeStartMinutes (value) {
                 this.startMinutes = value
             },
 
-            changeEndMinutes: function (value) {
+    changeEndMinutes (value) {
                 this.endMinutes = value
             },
 
-            changeEndTime: function (value) {
+    changeEndTime (value) {
                 this.endTime = value
             },
 
-            doWithdrawal: function (value) {
+    doWithdrawal (value) {
 
             },
 
-            addInfo: function (value, name) {
+    addInfo (value, name) {
                 if (name === this.cooperationKeyId) {
                     this.cooperationOther = value;
                 }
@@ -2561,7 +2473,7 @@
                 this.addInfoArr[name] = value
             },
 
-            changeToastrText: function (status) {
+    changeToastrText (status) {
                 if (status === 2) {
                     this.changeProjectStatusText = '完成 " ' + this.projectInfo.title + ' " 项目吗？'
                 } else if (status === 3) {
@@ -2572,7 +2484,7 @@
                 this.projectChangeStatus = status
             },
 
-            changeProjectStatus: function () {
+    changeProjectStatus () {
                 let _this = this;
                 fetch('put', '/projects/' + this.projectId + '/status', {status: this.projectChangeStatus}).then(function () {
                     toastr.success('修改成功');
@@ -2580,7 +2492,7 @@
                 })
             },
 
-            selectProjectLinkage: function (value) {
+    selectProjectLinkage (value) {
                 this.linkageResource = value;
                 if (!this.allProjectsInfo) {
                     this.getAllProjects()
@@ -2590,7 +2502,7 @@
                 }
             },
 
-            selectResource: function (type, value) {
+    selectResource (type, value) {
                 let index = this.linkageSelectedIds[type].indexOf(value);
                 if (index > -1) {
                     this.linkageSelectedIds[type].splice(index, 1)
@@ -2599,17 +2511,17 @@
                 }
             },
 
-            addLinkageResource: function () {
+    addLinkageResource () {
                 let _this = this;
                 fetch('post', '/projects/' + this.projectId + '/relates', this.linkageSelectedIds).then(function () {
                     toastr.success('关联成功');
                     $('#addLinkage').modal('hide');
                     _this.getProject()
                 })
-            }
+            },
 
-        }
-    }
+  },
+};
 </script>
 
 <style lang="scss" scoped>

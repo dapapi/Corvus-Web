@@ -81,7 +81,7 @@
                 noticeDiff: {
                     id: '',
                     operate: 0
-                }
+                },
             }
         },
         computed: {

@@ -47,41 +47,45 @@
                                                        class="form-control project-search" style="height: 2rem;"
                                                        @blur="getCalendarList" @keyup.enter="getCalendarList">
                                             </div>
-                                            <div v-show="showAllCalendar" style="max-height: 350px;overflow-y: auto">
-                                                <ul>
-                                                    <li v-for="(calendar,index) in calendarList" :key="index"
-                                                        class="clearfix">
-                                                        <div class="calendar-checkbox float-left pointer-content"
-                                                             :style="'background-color:' + calendar.color"
-                                                             @click="checkCalendar(calendar.id)">
-                                                            <i class="md-check"
-                                                               v-show="selectedCalendar.indexOf(calendar.id) > -1"></i>
-                                                        </div>
-                                                        <div class="float-left col-md-9 pr-0"
-                                                             style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
-                                                            {{ calendar.title }}
-                                                        </div>
-                                                        <div class="float-right position-relative">
-                                                            <i class="iconfont icon-gengduo1" aria-hidden="true"
-                                                               id="taskDropdown"
-                                                               data-toggle="dropdown" aria-expanded="false"></i>
-                                                            <div class="dropdown-menu"
-                                                                 aria-labelledby="taskDropdown">
-                                                                <a class="dropdown-item"
-                                                                   @click="getCalendarDetail(calendar.id)"
-                                                                   data-target="#addCalendar"
-                                                                   data-toggle="modal">编辑</a>
-                                                                <a class="dropdown-item" data-target="#delModel"
-                                                                   data-toggle="modal"
-                                                                   @click="deleteToastr('calendar', calendar)">删除</a>
+                                            <div style="max-height: 350px;overflow: hidden;position: relative;">
+                                                <div v-show="showAllCalendar"
+                                                     style="max-height: 350px;overflow-y: auto;">
+                                                    <ul style="padding-bottom: 30px;">
+                                                        <li v-for="(calendar,index) in calendarList" :key="index"
+                                                            class="clearfix">
+                                                            <div class="calendar-checkbox float-left pointer-content"
+                                                                 :style="'background-color:' + calendar.color"
+                                                                 @click="checkCalendar(calendar.id)">
+                                                                <i class="md-check"
+                                                                   v-show="selectedCalendar.indexOf(calendar.id) > -1"></i>
                                                             </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                                <div class="checkbox-custom checkbox-primary">
-                                                    <input type="checkbox" id="inputUnchecked"
-                                                           @change="selectAllCalendar">
-                                                    <label for="inputUnchecked">全选</label>
+                                                            <div class="float-left col-md-9 pr-0"
+                                                                 style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
+                                                                {{ calendar.title }}
+                                                            </div>
+                                                            <div class="float-right position-relative"
+                                                                 v-show="calendar.starable_type !== 'star' || (calendar.starable_type === 'star' && calendar.principal_id == userInfo.id)">
+                                                                <i class="iconfont icon-gengduo1" aria-hidden="true"
+                                                                   id="taskDropdown"
+                                                                   data-toggle="dropdown" aria-expanded="false"></i>
+                                                                <div class="dropdown-menu"
+                                                                     aria-labelledby="taskDropdown">
+                                                                    <a class="dropdown-item"
+                                                                       @click="getCalendarDetail(calendar.id)"
+                                                                       data-target="#addCalendar"
+                                                                       data-toggle="modal">编辑</a>
+                                                                    <a class="dropdown-item" data-target="#delModel"
+                                                                       data-toggle="modal"
+                                                                       @click="deleteToastr('calendar', calendar)">删除</a>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                    <div class="checkbox-custom checkbox-primary select-all-checkbox">
+                                                        <input type="checkbox" id="inputUnchecked"
+                                                               @change="selectAllCalendar">
+                                                        <label for="inputUnchecked">全选</label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -189,8 +193,6 @@
                                 <datepicker @change="changeStartTime" ref="scheduleStartDate"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-show="!isScheduleAllday">
-                                <!-- <timepicker :default="startMinutes" @change="changeStartMinutes"
-                                            ref="scheduleStartMinute"></timepicker> -->
                                 <TimeChoice @change="changeStartMinutes" ref="scheduleStartMinute"></TimeChoice>
                             </div>
                         </div>
@@ -201,8 +203,6 @@
                                             :startDate="startTime"></datepicker>
                             </div>
                             <div class="col-md-5 float-left pl-0" v-show="!isScheduleAllday">
-                                <!-- <timepicker :default="endMinutes" @change="changeEndMinutes"
-                                            ref="scheduleEndMinute"></timepicker> -->
                                 <TimeChoice @change="changeEndMinutes" ref="scheduleEndMinute"></TimeChoice>
                             </div>
                         </div>
@@ -303,7 +303,9 @@
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="cancelSchedule">取消
                         </button>
                         <template v-if="scheduleType === 'add'">
-                            <button class="btn btn-primary" type="submit" @click="addSchedule">确定</button>
+                            <button class="btn btn-primary" type="submit" :disable="isAddButtonDisable"
+                                    @click="addSchedule">确定
+                            </button>
                         </template>
                         <template v-if="scheduleType === 'edit'">
                             <button class="btn btn-primary" type="submit" @click="changeSchedule">确定</button>
@@ -320,7 +322,7 @@
                 <div class="modal-content" v-if="getScheduleFinish">
                     <div class="modal-header">
                         <div style="order: 2">
-                            <span v-show="!noPermission">
+                            <span v-show="!noPermission && !isParticipant">
                                 <i class="iconfont icon-bianji2 pr-4 font-size-16 pointer-content"
                                    @click="changeScheduleType('edit')" aria-hidden="true"></i>
                                 <FileUploader is-icon="true" class="float-left" @change="fileUpload"></FileUploader>
@@ -391,7 +393,8 @@
                         <div class="example" v-if="scheduleData.participants && !noPermission">
                             <div class="col-md-2 px-0 float-left">参与人</div>
                             <div class="col-md-10 pl-0 float-left">
-                                <AddMember type="add" @change="changeScheduleParticipants"></AddMember>
+                                <AddMember type="add" participantsSingle="isParticipant"
+                                           @change="changeScheduleParticipants"></AddMember>
                             </div>
                         </div>
                         <div class="example" v-if="scheduleData.desc && !noPermission">
@@ -468,15 +471,23 @@
                             </div>
                         </div>
                         <div class="example">
+                            <div class="col-md-2 text-right float-left">负责人</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <InputSelectors placeholder="请选择负责人" @change="principalChange"></InputSelectors>
+                            </div>
+                        </div>
+                        <div class="example">
                             <div class="col-md-2 text-right float-left">参与人</div>
                             <div class="col-md-10 float-left pl-0">
-                                <add-member></add-member>
+                                <AddMember></AddMember>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
                             <template v-if="calendarActionType === 'add'">
-                                <button class="btn btn-primary" type="submit" @click="addCalendar">确定</button>
+                                <button class="btn btn-primary" type="submit" :disable="isAddCalendarButtonDisable"
+                                        @click="addCalendar">确定
+                                </button>
                             </template>
                             <template v-else>
                                 <button class="btn btn-primary" type="submit" @click="changeCalendar">确定</button>
@@ -656,7 +667,7 @@
                 selectedDate: '',
                 calendarColor: '',
                 selectedCalendar: [],
-                oldSelectedCalendar: [],
+                oldSelectedCalendar: '',
                 delCalendarInfo: '',
                 meetingRomeShow: false,
                 calendarList: [],
@@ -701,6 +712,10 @@
                 conditionLength: 0,
                 selectorHidden: [],
                 calendarTitle: '',
+                isAddButtonDisable: false,
+                isAddCalendarButtonDisable: false,
+                principal: '',
+                isParticipant: false,
             }
         },
         mounted() {
@@ -708,34 +723,21 @@
             this.getCalendarList();
             this.getResources();
             this.selectProjectLinkage();
-            let _this = this;
-            $('#addCalendar').on('hidden.bs.modal', function () {
-                _this.$store.dispatch('changeParticipantsInfo', {data: []});
-                _this.starId = '';
-                _this.starFlag = '';
-                _this.scheduleName = '';
-                _this.checkColor = '';
-                _this.calendarVisible = 1;
-                _this.$refs.linkageStar.setValue('');
-                _this.$refs.visibleSelector.setValue('');
-
-            });
-
-            $('#changeSchedule').on('hidden.bs.modal', function () {
-                _this.initAddScheduleModal();
-            });
-
-            $('#checkSchedule').on('hide.bs.modal', function () {
-                if (_this.scheduleType !== 'edit') {
-                    _this.$store.dispatch('changeParticipantsInfo', {data: []});
-                }
-                _this.getScheduleFinish = false
-            });
-
-            $('#addMembers').on('hidden.bs.modal', function () {
-                _this.$store.dispatch('changeParticipantsInfo', {type: 'change', data: []});
-            });
-            $('#addCalendar').on('show.bs.modal', () => {
+            $('#addCalendar').on('hidden.bs.modal', () => {
+                this.$store.dispatch('changeParticipantsInfo', {data: []});
+                this.starId = '';
+                this.starFlag = '';
+                this.scheduleName = '';
+                this.checkColor = '';
+                this.calendarVisible = 1;
+                this.$refs.linkageStar.setValue('');
+                this.$refs.visibleSelector.setValue('');
+                this.$store.commit('changeNewPrincipal', {
+                    name: this.userInfo.nickname,
+                    id: this.userInfo.id
+                });
+                this.principal = this.userInfo.id;
+            }).on('show.bs.modal', () => {
                 this.$store.dispatch('changeParticipantsInfo', {
                     data: [{
                         icon_url: this.userInfo.avatar,
@@ -743,14 +745,40 @@
                     }]
                 });
             });
+
+            $('#changeSchedule').on('hidden.bs.modal', () => {
+                this.initAddScheduleModal();
+            });
+
+            $('#checkSchedule').on('hide.bs.modal', () => {
+                if (this.scheduleType !== 'edit') {
+                    this.$store.dispatch('changeParticipantsInfo', {data: []});
+                }
+                this.getScheduleFinish = false
+            });
+
+            $('#addMembers').on('hidden.bs.modal', () => {
+                this.$store.dispatch('changeParticipantsInfo', {type: 'change', data: []});
+            });
             this.globalClick(this.removeSelector);
             this.initCalendar();
             this.userInfo = JSON.parse(Cookies.get('user'));
+            this.$store.commit('changeNewPrincipal', {
+                name: this.userInfo.nickname,
+                id: this.userInfo.id
+            });
+            this.principal = this.userInfo.id;
         },
 
         watch: {
             selectedCalendar(newValue) {
                 Cookies.set('selectedCalendar', newValue.join(','))
+            },
+
+            calendarTitle(newValue, oldValue) {
+                if (newValue && !oldValue) {
+                    this.oldSelectedCalendar = this.selectedCalendar;
+                }
             }
         },
 
@@ -788,7 +816,7 @@
         methods: {
             initCalendar: function () {
                 let data = Cookies.get('selectedCalendar');
-                if (Cookies.get('selectedCalendar')) {
+                if (data) {
                     data = data.split(',');
                     for (let i = 0; i < data.length; i++) {
                         data[i] = parseInt(data[i]);
@@ -825,7 +853,7 @@
             },
 
             getCalendarList: function () {
-                this.calendarList = [];
+                let newCalendarList = [];
                 let data = {};
                 if (this.calendarTitle) {
                     data.title = this.calendarTitle
@@ -834,16 +862,18 @@
                     for (let i = 0; i < response.data.length; i++) {
                         response.data[i].name = response.data[i].title;
                         response.data[i].value = response.data[i].id;
-                        this.calendarList.push(response.data[i])
+                        newCalendarList.push(response.data[i])
                     }
+                    this.calendarList = newCalendarList;
                     if (data.title) {
-                        this.oldSelectedCalendar = this.selectedCalendar;
                         this.selectedCalendar = [];
                         for (let i = 0; i < response.data.length; i++) {
                             this.selectedCalendar.push(response.data[i].id)
                         }
                     } else {
-                        this.selectedCalendar = this.oldSelectedCalendar;
+                        if (this.oldSelectedCalendar) {
+                            this.selectedCalendar = this.oldSelectedCalendar;
+                        }
                     }
                 })
 
@@ -861,9 +891,15 @@
                     this.calendarVisible = response.data.privacy;
                     this.$refs.visibleSelector.setValue(response.data.privacy);
                     this.$store.dispatch('changeParticipantsInfo', {data: response.data.participants.data});
+                    let principalInfo = {};
+                    if (response.data.principal) {
+                        principalInfo = response.data.principal.data;
+                        this.principal = response.data.principal.data.id
+                    }
+                    this.$store.dispatch('changePrincipal', {data: principalInfo});
                     if (response.data.starable) {
                         let starId = response.data.starable.data.id;
-                        let starFlag = response.data.starable.data.flag
+                        let starFlag = response.data.starable.data.flag;
                         this.starId = starId;
                         this.starFlag = starFlag;
                         this.$refs.linkageStar.setValue(starFlag + '-' + starId)
@@ -923,6 +959,12 @@
                 this.$router.replace({path: '/tasks/' + taskId});
             },
 
+            principalChange(value) {
+                if (value) {
+                    this.principal = value.id;
+                }
+            },
+
             selectProjectLinkage: function (value) {
                 this.linkageResource = value;
                 if (!this.allProjectsInfo) {
@@ -971,19 +1013,6 @@
                 fetch('delete', '/schedules/' + this.scheduleData.id + '/affixes/' + affixId).then(() => {
                     toastr.success('删除成功');
                     this.scheduleData.affixes.data.splice(this.scheduleData.affixes.data.map(item => item.id).indexOf(affixId), 1)
-                })
-            },
-
-            delScheduleLinkage: function (type, value) {
-                let url = '';
-                if (type === 'project') {
-                    url = '/schedules/' + this.scheduleData.id + '/projects/' + value
-                } else if (type === 'task') {
-                    url = '/schedules/' + this.scheduleData.id + '/tasks/' + value
-                }
-                fetch('delete', url).then(() => {
-                    toastr.success('删除成功');
-                    this.scheduleData[type].data.splice(this.scheduleData[type].data.map(item => item.id).indexOf(value), 1)
                 })
             },
 
@@ -1046,6 +1075,9 @@
                     }
                     this.noPermission = false;
                     this.scheduleData = response.data;
+                    if (response.data.calendar.data.starable_type === 'star' && this.userInfo.id != response.data.calendar.data.principal_id) {
+                        this.isParticipant = true;
+                    }
                     if (this.scheduleData.privacy) {
                         this.schedulePrivacy = true
                     }
@@ -1237,6 +1269,7 @@
                         }
                     }
                 }
+                this.isAddButtonDisable = true;
                 let data = {
                     title: this.scheduleName,
                     calendar_id: this.scheduleCalendar,
@@ -1267,6 +1300,7 @@
                     data.task_ids = this.linkageSelectedIds.tasks;
                 }
                 fetch('post', '/schedules', data).then(() => {
+                    this.isAddButtonDisable = false;
                     this.$refs.calendar.refresh();
                     $('#changeSchedule').modal('hide');
                     toastr.success('添加成功')
@@ -1343,10 +1377,12 @@
             },
 
             addCalendar: function () {
+                this.isAddCalendarButtonDisable = true;
                 let data = {
                     title: this.scheduleName,
                     color: this.checkColor,
                     privacy: this.calendarVisible,
+                    principal_id: this.principal
                 };
                 if (this.starId) {
                     data.star = {
@@ -1362,6 +1398,7 @@
                     }
                 }
                 fetch('post', '/calendars', data).then(response => {
+                    this.isAddCalendarButtonDisable = false;
                     $('#addCalendar').modal('hide');
                     this.calendarList.push(response.data);
                     toastr.success('添加成功')
@@ -1373,6 +1410,7 @@
                     title: this.scheduleName,
                     color: this.checkColor,
                     privacy: this.calendarVisible,
+                    principal_id: this.principal,
                 };
 
                 if (this.starId) {
@@ -1390,6 +1428,7 @@
                 }
                 fetch('put', '/calendars/' + this.calendarId, data).then(() => {
                     this.getCalendarList();
+                    this.calendarList.find(item => item.id == this.calendarId)
                     this.$refs.calendar.refresh();
                     $('#addCalendar').modal('hide');
                     toastr.success('修改成功')
@@ -1548,4 +1587,20 @@
         font-size: 12px;
     }
 
+    .select-all-checkbox {
+        position: absolute;
+        bottom: 0;
+        background-color: white;
+        width: 100%;
+        margin: 0;
+        padding-top: 10px;
+    }
+
+    .page-aside {
+        overflow-y: auto;
+    }
+
+    .page-aside::-webkit-scrollbar {
+        display: none
+    }
 </style>

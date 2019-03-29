@@ -48,11 +48,11 @@
                                             <div class="float-left mb-10 col-md-11" style="margin-left:-10px">
                                                 <p class="text-left mb-5"><span class="module_title mr-5 title">{{moduleList.find(item=>item.id ==moduleType).name}}助手</span><i
                                                         class="timesR">{{item2.created_at}}</i></p>
-                                                <p class="desc txt text-left font-size-16">{{item2.message_title}}</p>
+                                                <p class="desc txt text-left font-size-16">{{item2.title}}</p>
                                             </div>
                                         </div>
                                         <div class="content py-15 pl-40 col-md-8 ml-80"
-                                             @click="msgStatus(item2.message_id,item2.module,item2.module_data_id)">
+                                             @click="msgStatus(item2.id,item2.module,item2.module_data_id)">
                                             <span class="is_read" v-show="item2.state == 1"></span>
                                             <div class="title font-size-16 mb-15">{{item2.message_subheading}}</div>
                                             <div class="row">
@@ -67,13 +67,15 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div v-if="messageList.length === 0" style="margin: 6rem auto;width: 100px">
+                            <div v-if='JSON.stringify(messageList) == "{}"' style="margin: 6rem auto;width: 100px">
                                 <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                      style="width: 100%">
                             </div>
                             <!--list-->
                         </div>
                     </div>
+                    <pagination :current_page="current_page" :method="renderMsg" :total_pages="total_pages"
+                                    :total="total"></pagination>
                 </div>
             </div>
         </div>
@@ -199,7 +201,7 @@
                 messageFilter: "全部消息",   //消息过滤器状态
                 //   moduleList:[],//模块list
                 moduleType: '',
-                messageList: [],//消息list
+                messageList: {},//消息list
                 iconList: {//每个模块的icon
                     announcenment: "icon-notice",
                     attendance: "icon-shijian",
@@ -235,7 +237,10 @@
                 end_at: '',
                 start_at: '',
                 endBigTime: '',
-                startBigTime: ''
+                startBigTime: '',
+                total: 0,
+                current_page: 1,
+                total_pages: 1,
 
             };
         },
@@ -278,12 +283,26 @@
                 }
                 this.renderMsg()
             },
-            renderMsg: function () {
+            renderMsg: function (page=1) {
                 if (this.$route.query.moduleType) {
                     this.moduleType = this.$route.query.moduleType
-                    fetch('get', `${env.apiUrl}/getmsg?include=recive.data&module=${this.moduleType}&state=${this.state}`).then((res) => {
+                    fetch('get', `${env.apiUrl}/mobile_get_message?page=${page}&module=${this.moduleType}&state=${this.state}`).then((res) => {
 
-                        this.messageList = res.data
+                        let dataList = res.data
+                        this.total = res.meta.pagination.total
+                        this.current_page = res.meta.pagination.current_page
+                        this.total_pages = res.meta.pagination.total_pages
+                        this.messageList = {}
+                        for (let i = 0; i < dataList.length; i++) {
+
+                            let iTime = dataList[i].created_at.split(' ')[0] 
+                            if (this.messageList.hasOwnProperty(iTime)) {
+                                this.messageList[iTime].push(dataList[i])
+                            }else{
+                                this.messageList[iTime]=[]
+                                this.messageList[iTime].push(dataList[i])
+                            }       
+                        }
                     })
                 } else {
                     //如果没有moduleType  跳转
@@ -441,7 +460,8 @@
         }
         .content {
             position: relative;
-            color: #999
+            color: #999;
+            cursor: pointer;
         }
         .is_read {
             display: inline-block;

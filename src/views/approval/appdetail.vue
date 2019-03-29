@@ -83,7 +83,7 @@
                         <h6 class="page-title mx-15">{{list.title}}</h6>
                         <span class="mx-15">编号：{{list.form_instance_number}}</span>
                     </div>
-                    
+
                     <div class="col-md-10">
                         <div class="example">
                             <div class="col-md-2 float-left text-right">申请人</div>
@@ -148,29 +148,29 @@
                                     <div class="col-md-8 float-left detail-value"
                                          v-if="item.values && String(item.values.data.value).includes('http')"
                                          @click='previewHandler(item.values.data.value)'>
-                                        <figure style="text-align:center" class="float-left"> 
+                                        <figure style="text-align:center" class="float-left">
                                             <img src="@/assets/img/attachment.png" alt="" style="width:20px">
                                             <p>点击查看</p>
                                         </figure>
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </div>
                     <div class="caption" v-if="info.contract_archive">
                         <h6 class="page-title mx-15">归档信息</h6>
                     </div>
-                    
+
                     <div class="col-md-10" v-if="info.contract_archive">
                         <div class="example">
                             <div class="col-md-2 float-left text-right">归档描述</div>
                             <div class="col-md-4 float-left">{{info.contract_archive.comment}}
                             </div>
-                           
+
                             <div class="col-md-2 float-left text-right">附件</div>
                              <div class=" float-left detail-value"
                                     @click='previewHandler(archivesArr)'>
-                                <figure style="text-align:center" class="float-left"> 
+                                <figure style="text-align:center" class="float-left">
                                     <img src="@/assets/img/attachment.png" alt="" style="width:20px">
                                     <p>点击查看</p>
                                 </figure>
@@ -205,7 +205,7 @@
                         </div>
                     </div>
                 </div>
-               
+
                 <div class="panel">
                     <div class="card col-md-12">
                         <div class="card-header card-header-transparent card-header-bordered">
@@ -219,13 +219,13 @@
                     </div>
                 </div>
             </div>
-         <DocPreview :url='$store.state.previewurl' detailpage='true' />
+         <DocPreview :url='$store.state.previewurl' :detailpage='isDetail' />
 
             <!-- <DocPreview :url='previewUrl' detailpage='true'/> -->
         </div>
         <BuildProject :project-type="projectTypeTemp" :project-fields-arr="projectFieldsArr" mode='detail'
-                      :default-data='{fields:(info.fields && info.fields.data),list:list,trailInfo:trailInfo}'></BuildProject>
-        <ApprovalGreatModule :form-data='formData' singlemode='true' :default-data='detailData' :contract_id='$route.params.id'/>
+                      :default-data='{fields:(info.fields && info.fields.data),list:list,trailInfo:trailInfo}' v-if="list.form_status !== 231" :formstatus='list.form_status' ></BuildProject>
+        <ApprovalGreatModule :form-data='formData' singlemode='true' :default-data='detailData' :contract_id='$route.params.id' :detailpage='isDetail' v-if="list.form_status !== 231"/>
         <ApprovalGoModal :mode='approvalMode' :id='list.form_instance_number' @approvaldone='approvalDone'/>
         <div class="modal fade  bootbox" id="docPreviewSelector" aria-labelledby="docPreviewPositionCenter" data-backdrop="static"
              role="dialog" tabindex="-1">
@@ -255,215 +255,237 @@
 
 </template>
 <script>
-    import fetch from '@/assets/utils/fetch'
-    import {PROJECT_CONFIG} from '@/views/approval/project/projectConfig'
-    import ApprovalGreatModule from '@/components/ApprovalGreatModule'
-    import ApprovalProgress from '@/components/ForApproval/ApprovalProgress'
-    import common from '../../assets/js/common'
+import fetch from '@/assets/utils/fetch';
+import { PROJECT_CONFIG } from '@/views/approval/project/projectConfig';
+import ApprovalGreatModule from '@/components/ApprovalGreatModule';
+import ApprovalProgress from '@/components/ForApproval/ApprovalProgress';
+import common from '../../assets/js/common';
 
-    export default {
-        name: 'approvalDetail',
-        components: {
-            ApprovalProgress, ApprovalGreatModule
-        },
-        data() {
-            return {
-                common: common,
-                list: {},
-                info: {},
-                detailData: {},
-                projectType: '',
-                projectFieldsArr: [],
-                trailInfo: {},
-                firstFlag: true,
-                isLoading: true,
-                approvalMode: '',
-                pending: {},
-                currentId: '',
-                isCurrentApprover: false,
-                roleUser: [],
-                indexData: {},
-                formData: {},
-                previewUrl: '',
-                previewUrlArr: [],
-                projectTypeTemp:'',
-                detail_control:{},
-                msg:'',
-                archivesArr:''
-            }
-        },
+export default {
+  name: 'approvalDetail',
+  components: {
+    ApprovalProgress, ApprovalGreatModule,
+  },
+  data() {
+    return {
+      common,
+      list: {},
+      info: {},
+      detailData: {},
+      projectType: '',
+      projectFieldsArr: [],
+      trailInfo: {},
+      firstFlag: true,
+      isLoading: true,
+      approvalMode: '',
+      pending: {},
+      currentId: '',
+      isCurrentApprover: undefined,
+      roleUser: [],
+      indexData: [],
+      formData: {},
+      previewUrl: '',
+      previewUrlArr: [],
+      projectTypeTemp: '',
+      detail_control: {},
+      msg: '',
+      archivesArr: '',
+      isDetail: true,
+      indexDataCommon: [],
+      waitingForFlag:true,
 
-        mounted() {
-            this.getFormList()
-            this.getData()
-        },
-        computed: {
-            isApproverMode() {
-                if (this.$route.query.mode === 'approver') {
-                    return true
-                } else {
-                    return false
-                }
-            },
-            currentStatus() {
-                switch (this.list.form_status) {
-                    case 232:
-                        return '已审批'
-                    case 231:
-                        return '待审批'
-                    case 233:
-                        return '已拒绝'
-                    case 234:
-                        return '已撤销'
-                    case 235:
-                        return '已作废'
-                }
-            },
+    };
+  },
 
-        },
-        methods: {
-            approvalReminder(){
-                fetch('put', '/approval_instances/'+this.$route.params.id+'/remind').then((params) => {
-                    toastr.success('提醒成功')
-                })
-            },
-            previewHandler(params) {
-            this.$store.dispatch('changePreview',params)
-                $('#docPreviewSelector').modal('hide')
-                this.previewUrlArr = String(params).split(',')
-                if (this.previewUrlArr.length === 1) {
-                    $('#docPreview').modal('show')
-                    this.previewUrl = this.previewUrlArr[0]
-                } else {
-                    $('#docPreviewSelector').modal('show')
-                }
-            },
-            getFormList() {
-                let _this = this
-                fetch('get', '/approvals/contracts').then((params) => {
-                    _this.indexData = params.data
-                    _this.isLoading = false
-                })
-            },
-            pullUp(params) {
-                this.formData = params
-                this.$nextTick((params) => {
-                    $('#approval-great-module').modal('show') 
-                })
-            },
-            approvalDone(params = '审批成功') {
-                if (this.list.project_number) {
-                    this.$refs.approvalProgress.getApprover(this.list.project_number)
-                } else {
-                    this.$refs.approvalProgress.getApprover(this.list.form_instance_number)
-                }
-                this.getData()
-                toastr.success(params)
-                this.$emit('unreadupdate')
-            },
-            getCurrentApprover() {
-                let _this = this
-                this.roleUser = []
-                fetch('get', '/users/my?include=roleUser').then((params) => {
-                    _this.currentId = params.data.id
-                    for (const key in params.data.roleUser.data) {
-                        _this.roleUser.push(params.data.roleUser.data[key].role_id)
-                    }
-                    // _this.roleUser = params.data.roleUser.data[0].role_id
-                    if (_this.currentId === _this.pending.id || _this.roleUser.includes(_this.pending.id)) {
-                        _this.isCurrentApprover = true
-                    } else {
-                        _this.isCurrentApprover = false
-                    }
-                })
-            },
-            waitingFor(params) {
-                if (params) {
-                    this.pending = params
-                    this.getCurrentApprover()
-                }
+  mounted() {
+    this.getData();
+  },
+  computed: {
+    isApproverMode() {
+      if (this.$route.query.mode === 'approver') {
+        return true;
+      }
+      return false;
+    },
+    currentStatus() {
+      switch (this.list.form_status) {
+        case 232:
+          return '已审批';
+        case 231:
+          return '待审批';
+        case 233:
+          return '已拒绝';
+        case 234:
+          return '已撤销';
+        case 235:
+          return '已作废';
+      }
+    },
 
-            },
-            addProjectTimeout(params) {
-                this.isLoading = true
-                if (this.firstFlag === true) {
-                    setTimeout(() => {
-                        this.addProject(params)
-                        this.firstFlag = false
-                        this.isLoading = false
-                    }, 3000);
-                } else {
-                    this.addProject(params)
-                    this.isLoading = false
-                }
-
-            },
-            addProject(value) {
-                this.projectType = value;
-                let _this = this
-                if (this.list.title.includes('合同')) {
-                    this.pullUp(this.indexData.find(item => item.form_id === this.projectType))
-                } else {
-                    this.selectProjectType(function () {
-                        _this.projectTypeTemp = _this.projectType
-                        $('#addProject').modal('show')
-                    });
-                }
-            },
-
-            selectProjectType(callback) {
-                fetch('get', '/project_fields', {
-                    type: this.projectType,
-                    status: 1,
-                }).then(response => {
-                    for (let i = 0; i < response.data.length; i++) {
-                        if (response.data[i].field_type === 2 || response.data[i].field_type === 6) {
-                            response.data[i].contentArr = [];
-                            for (let j = 0; j < response.data[i].content.length; j++) {
-                                response.data[i].contentArr.push({
-                                    value: response.data[i].content[j],
-                                    name: response.data[i].content[j]
-                                })
-                            }
-                        }
-                    }
-                    this.projectFieldsArr = response.data;
-                    callback();
-                });
-            },
-            approvalHandler(params) {
-                this.approvalMode = params
-                $('#approvalGo').modal('show')
-            },
-            getData() {
-                let _this = this
-                fetch('get', '/approval_instances/' + this.$route.params.id + '?include=principal,creator,fields,trail,detail_control').then((params) => {
-                    let {meta} = params
-                    _this.list = params.data
-                    _this.projectType = params.data.type
-                    _this.info = meta
-                    let {fields: {data}} = meta
-                    _this.detailData = data
-                    _this.trailInfo = params.data.trail
-                    _this.detail_control = params.meta.detail_control
-                    let tempArr = []
-                    if(meta.contract_archive){
-                        for (const key in meta.contract_archive.archives.data) {
-                            tempArr.push(meta.contract_archive.archives.data[key].url)
-                        }
-                        _this.archivesArr = tempArr.join(',')
-                    }
-                })
-            },
-            participantChange: function (value) {
-                let flagArr = [];
-                for (let i = 0; i < value.length; i++) {
-                    flagArr.push(value[i].id)
-                }
-                this.participants = flagArr
-            },
+  },
+  methods: {
+    approvalReminder() {
+      fetch('put', `/approval_instances/${this.$route.params.id}/remind`).then((params) => {
+        toastr.success('提醒成功');
+      });
+    },
+    previewHandler(params) {
+      this.$store.dispatch('changePreview', params);
+      $('#docPreviewSelector').modal('hide');
+      this.previewUrlArr = String(params).split(',');
+      if (this.previewUrlArr.length === 1) {
+        $('#docPreview').modal('show');
+        this.previewUrl = this.previewUrlArr[0];
+      } else {
+        $('#docPreviewSelector').modal('show');
+      }
+    },
+    getFormList() {
+      const _this = this;
+      fetch('get', '/approvals/contracts').then((params) => {
+        _this.indexData = params.data;
+        _this.isLoading = false;
+      });
+      fetch('get', '/approvals/').then((params) => {
+        _this.indexDataCommon = params.data;
+        _this.isLoading = false;
+      });
+    },
+    pullUp(params) {
+      this.formData = params;
+      this.$nextTick((params) => {
+        $('#approval-great-module').modal('show');
+      });
+    },
+    approvalDone(params = '审批成功') {
+      if (this.list.project_number) {
+        this.$refs.approvalProgress.getApprover(this.list.project_number);
+      } else {
+        this.$refs.approvalProgress.getApprover(this.list.form_instance_number);
+      }
+      this.getData();
+      toastr.success(params);
+      this.$emit('unreadupdate');
+    },
+    getCurrentApprover() {
+      const _this = this;
+      this.roleUser = [];
+      fetch('get', '/users/my?include=roleUser').then((params) => {
+        _this.currentId = params.data.id;
+        for (const key in params.data.roleUser.data) {
+          _this.roleUser.push(params.data.roleUser.data[key].role_id);
         }
-    }
+        // _this.roleUser = params.data.roleUser.data[0].role_id
+        if (_this.currentId === _this.pending.id || _this.roleUser.includes(_this.pending.id)) {
+          _this.isCurrentApprover = true;
+        } else {
+          _this.isCurrentApprover = false;
+        }
+      });
+    },
+    waitingFor(params) {
+      if (params && this.waitingForFlag === true) {
+        this.waitingForFlag = false
+        this.pending = params;
+        this.getCurrentApprover();
+      }
+    },
+    addProjectTimeout(params) {
+      this.isLoading = true;
+      if (this.firstFlag === true) {
+        setTimeout(() => {
+          this.addProject(params);
+          this.firstFlag = false;
+          this.isLoading = false;
+        }, 3000);
+      } else {
+        this.addProject(params);
+        this.isLoading = false;
+      }
+    },
+    addProject(value) {
+      // console.log(value);
+      this.projectType = value;
+      const _this = this;
+      if (!this.list.id) {
+        const Temp1 = this.indexData.find(item => item.form_id === this.projectType);
+        let TempArr = [],
+          Temp2;
+        for (const key in this.indexDataCommon) {
+          for (const zed in this.indexDataCommon[key].forms.data) {
+            TempArr.push(this.indexDataCommon[key].forms.data[zed]);
+          }
+        }
+        Temp2 = TempArr.find(item => item.form_id === this.projectType);
+        const formData = Temp1 || Temp2;
+        // console.log(formData);
+        this.pullUp(formData);
+      } else {
+        this.selectProjectType(() => {
+          _this.projectTypeTemp = _this.projectType;
+          $('#addProject').modal('show');
+        });
+      }
+    },
+
+    selectProjectType(callback) {
+      fetch('get', '/project_fields', {
+        type: this.projectType,
+        status: 1,
+      }).then((response) => {
+        for (let i = 0; i < response.data.length; i++) {
+          if (response.data[i].field_type === 2 || response.data[i].field_type === 6) {
+            response.data[i].contentArr = [];
+            for (let j = 0; j < response.data[i].content.length; j++) {
+              response.data[i].contentArr.push({
+                value: response.data[i].content[j],
+                name: response.data[i].content[j],
+              });
+            }
+          }
+        }
+        this.projectFieldsArr = response.data;
+        callback();
+      });
+    },
+    approvalHandler(params) {
+      this.approvalMode = params;
+      $('#approvalGo').modal('show');
+    },
+    getData() {
+      const _this = this;
+      fetch('get', `/approval_instances/${this.$route.params.id}?include=principal,creator,fields,trail,detail_control`).then((params) => {
+        const { meta } = params;
+        // console.log(params);
+        _this.list = params.data;
+        _this.projectType = params.data.type;
+        _this.info = meta;
+        const { fields: { data } } = meta;
+        _this.detailData = data;
+        _this.trailInfo = params.data.trail;
+        _this.detail_control = params.meta.detail_control;
+        const tempArr = [];
+        if (meta.contract_archive) {
+          for (const key in meta.contract_archive.archives.data) {
+            tempArr.push(meta.contract_archive.archives.data[key].url);
+          }
+          _this.archivesArr = tempArr.join(',');
+        }
+        _this.isLoading = false
+      if(_this.list.form_status !== 231){
+      _this.getFormList();
+      }
+      });
+    },
+    participantChange(value) {
+      const flagArr = [];
+      for (let i = 0; i < value.length; i++) {
+        flagArr.push(value[i].id);
+      }
+      this.participants = flagArr;
+    },
+  },
+};
 </script>
 <style scoped>
     * {
@@ -630,5 +652,3 @@
 
     }
 </style>
-
-

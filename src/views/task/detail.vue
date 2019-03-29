@@ -12,7 +12,6 @@
                     <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(3)" v-show="oldInfo.status == 1">终止</a>
                     <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(1)" v-show="oldInfo.status != 1">激活</a>
                     <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(2)" v-show="oldInfo.status == 1">完成</a>
-                    <!-- <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#customizeFieldContent">自定义字段</a> -->
                     <a class="dropdown-item" role="menuitem" @click="privacyTask(oldInfo.privacy ? 0 : 1)">
                         {{oldInfo.privacy ? '转公开':'转私密'}}</a>
                     <a class="dropdown-item" role="menuitem" @click="shouleDeleteTask">删除</a>
@@ -30,6 +29,8 @@
                            <i class="md-chevron-left"></i>回到主任务
                             </span>
                         </template>
+                        <i v-if="oldInfo.privacy" class="iconfont icon-zhuansimi"
+                           style="font-size: 20px; color: #F44336; float: right;"></i>
                     </h4>
                     <div class="card-text clearfix example">
                         <div class="float-left pl-0 pr-2 col-md-1">
@@ -82,7 +83,7 @@
                 </div>
             </div>
 
-            <div style="display:-webkit-box">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start">
                 <div class="panel" style="width: calc(66% - 15px);z-index: 10;float:left;margin-right:30px">
 
                     <div class="col-md-12 tab-title">
@@ -90,13 +91,13 @@
                             <template v-if="questionId && visible">
                                 <li class="nav-item" role="presentation" @click="tabIndex = 0">
                                     <a class="nav-link active" data-toggle="tab" href="#forum-task-question"
-                                    aria-controls="forum-base"
-                                    aria-expanded="true" role="tab">问卷详情</a>
+                                       aria-controls="forum-base"
+                                       aria-expanded="true" role="tab">问卷详情</a>
                                 </li>
                                 <li class="nav-item" role="presentation" @click="tabIndex = 1">
                                     <a class="nav-link" data-toggle="tab" href="#forum-task-base"
-                                    aria-controls="forum-base"
-                                    aria-expanded="false" role="tab">概况</a>
+                                       aria-controls="forum-base"
+                                       aria-expanded="false" role="tab">概况</a>
                                 </li>
                             </template>
 
@@ -119,24 +120,24 @@
                         </ul>
                         <div class="" v-if="questionId && visible && tabIndex === 0">
                             <button type="button"
-                                class="btn btn-primary"
-                                v-if="!~hasAnsweredArr.indexOf(user.id) && canSend"
-                                @click="submit">提交
+                                    class="btn btn-primary"
+                                    v-if="!~hasAnsweredArr.indexOf(user.id) && canSend"
+                                    @click="submit">提交
                             </button>
                             <button type="button" class="btn btn-primary" data-plugin="actionBtn"
-                                data-toggle="modal"
-                                v-if="questionInfo.reviewanswer
+                                    data-toggle="modal"
+                                    v-if="questionInfo.reviewanswer
                                     && principalId === user.id 
                                     && hasAnsweredArr.length > 0 
                                     && hasAnsweredArr.length === questionInfo.reviewanswer.data.length
-                                    && !questionInfo.excellent
-                                "
-                                data-target="#push-reason">推优
+                                    && !questionInfo.excellent"
+                                    data-target="#push-reason">推优
                             </button>
                         </div>
                     </div>
                     <div class="tab-content nav-tabs-animate bg-white col-md-12" v-if="taskInfo">
-                        <div class="tab-pane animation-fade active"  v-if="questionId && visible" id="forum-task-question" role="tabpanel">
+                        <div class="tab-pane animation-fade active" v-if="questionId && visible"
+                             id="forum-task-question" role="tabpanel">
                             <div class="card">
                                 <div class="card-block">
                                     <h4 style="color: #3F51B5">平均分
@@ -146,14 +147,15 @@
                                     <div class="row">
                                         <div class="col-md-12 clearfix" style="padding-right: 0;">
                                             <div class="progress" data-labeltype="percentage" data-goal="-40"
-                                                data-plugin="progress" style="width: calc(100% - 100px); float:left;">
+                                                 data-plugin="progress" style="width: calc(100% - 100px); float:left;">
                                                 <div class="progress-bar progress-bar-warning" aria-valuemin="-100"
-                                                    aria-valuemax="0" aria-valuenow="-40" role="progressbar"
-                                                    :style="{width: `${questionInfo.reviewanswer.length === 0 ? 0 : hasAnsweredArr.length / questionInfo.reviewanswer.data.length * 100}%`}">
+                                                     aria-valuemax="0" aria-valuenow="-40" role="progressbar"
+                                                     :style="{width: `${questionInfo.reviewanswer.length === 0 ? 0 : hasAnsweredArr.length / questionInfo.reviewanswer.data.length * 100}%`}">
                                                 </div>
                                             </div>
                                             <div style="width: 50px; padding-left: 10px; float: left;">
-                                                {{questionInfo.reviewanswer.length === 0 ? 0 : ~~((hasAnsweredArr.length /
+                                                {{questionInfo.reviewanswer.length === 0 ? 0 : ~~((hasAnsweredArr.length
+                                                /
                                                 questionInfo.reviewanswer.data.length * 100))}}%
                                             </div>
                                         </div>
@@ -162,7 +164,7 @@
                                         <template v-for="(item, index) in questionInfo.reviewanswer.data">
                                             <div style="position: relative; display: inline-block" :key="index">
                                                 <Avatar :imgUrl="item.users.data.icon_url" style="margin: 5px;"/>
-                                                <div :class="hasAnsweredArr.indexOf(item.users.data.id) > -1 ? 'has-answer': 'un-answer'" ></div>
+                                                <div :class="hasAnsweredArr.indexOf(item.users.data.id) > -1 ? 'has-answer': 'un-answer'"></div>
                                                 <!-- hasAnsweredArr -->
                                             </div>
                                         </template>
@@ -179,7 +181,8 @@
                                         <div class="col-md-1 float-left text-right pl-0">视频名称</div>
                                         <div class="col-md-11 float-left font-weight-bold">
                                             <div class="edit-wrap">
-                                                {{ questionInfo.production ? questionInfo.production.data[0].nickname : '' }}
+                                                {{ questionInfo.production ? questionInfo.production.data[0].nickname :
+                                                '' }}
                                             </div>
                                         </div>
                                     </div>
@@ -187,7 +190,8 @@
                                         <div class="col-md-1 float-left text-right pl-0">阅转比</div>
                                         <div class="col-md-11 float-left font-weight-bold">
                                             <div class="edit-wrap">
-                                                {{ questionInfo.production ? questionInfo.production.data[0].read_proportion :
+                                                {{ questionInfo.production ?
+                                                questionInfo.production.data[0].read_proportion :
                                                 '' }}
                                             </div>
                                         </div>
@@ -213,8 +217,10 @@
                                         <div class="col-md-11 float-left font-weight-bold">
                                             <!-- <a
                                                 :href="questionInfo.production ? questionInfo.production.data[0].link : ''"> -->
-                                            <div class="edit-wrap" style="color: #3298DC; cursor: pointer; width: 100%;" @click="openUrl(questionInfo.production)">
-                                                {{ questionInfo.production ? questionInfo.production.data[0].link : '' }}
+                                            <div class="edit-wrap" style="color: #3298DC; cursor: pointer; width: 100%;"
+                                                 @click="openUrl(questionInfo.production)">
+                                                {{ questionInfo.production ? questionInfo.production.data[0].link : ''
+                                                }}
                                             </div>
                                             <!-- </a> -->
                                         </div>
@@ -222,15 +228,17 @@
 
                                     <div class="question" v-for="(items, index) in questionData" :key="index">
                                         <div class="name">{{index + 1}}. {{ items.title }}</div>
-                                        <div class="options clearfix" v-for="(item, _index) in items.items.data" :key="_index">
+                                        <div class="options clearfix" v-for="(item, _index) in items.items.data"
+                                             :key="_index">
                                             <div class="title">
                                                 <label>
-                                                    <div class="radio-custom radio-primary" style="display: inline-block;">
+                                                    <div class="radio-custom radio-primary"
+                                                         style="display: inline-block;">
                                                         <input type="radio" @click="answerList[index] = item"
-                                                            :disabled="hasAnsweredArr.includes(user.id)"
-                                                            :checked="answerList[index] === item.value
+                                                               :disabled="hasAnsweredArr.includes(user.id)"
+                                                               :checked="answerList[index] === item.value
                                                                     || items.selectrows.data.find(n => n.review_question_item_id === item.id && n.creator.data.id === user.id)"
-                                                            :name="items.id"/>
+                                                               :name="items.id"/>
                                                         <label></label>
                                                     </div>
                                                     {{ item.value }}: {{ item.title }}
@@ -239,26 +247,29 @@
                                             <div class="row">
                                                 <div class="col-md-8" style="padding-right: 0;">
                                                     <div class="progress" data-labeltype="percentage" data-goal="-40"
-                                                        data-plugin="progress" style="width: calc(100% - 100px); float: left;">
-                                                        <div class="progress-bar progress-bar-warning" aria-valuemin="-100"
-                                                            aria-valuemax="0" aria-valuenow="-40" role="progressbar"
-                                                            :style="{width: `${items.selectrows.data.filter(n => n.review_question_item_id === item.id).length / hasAnsweredArr.length * 100}%`}">
+                                                         data-plugin="progress"
+                                                         style="width: calc(100% - 100px); float: left;">
+                                                        <div class="progress-bar progress-bar-warning"
+                                                             aria-valuemin="-100"
+                                                             aria-valuemax="0" aria-valuenow="-40" role="progressbar"
+                                                             :style="{width: `${items.selectrows.data.filter(n => n.review_question_item_id === item.id).length / hasAnsweredArr.length * 100}%`}">
                                                         </div>
                                                     </div>
                                                     <div style="width: 50px; padding-left: 10px; float: left;">
-                                                        {{ hasAnsweredArr.length > 0 ? (items.selectrows.data.filter(n =>
-                                                        n.review_question_item_id ===
-                                                        item.id).length / hasAnsweredArr.length * 100).toFixed(0): '0' }}%
+                                                        {{ hasAnsweredArr.length > 0 ?
+                                                        (items.selectrows.data.filter(n => n.review_question_item_id ===
+                                                        item.id).length / hasAnsweredArr.length * 100).toFixed(0) : '0'
+                                                        }}%
                                                     </div>
                                                     <div style="width: 50px; padding-left: 10px; float: right;">
-                                                        {{items.selectrows.data.filter(n => n.review_question_item_id ===
-                                                        item.id)?
+                                                        {{ items.selectrows.data.filter(n => n.review_question_item_id
+                                                        === item.id)?
                                                         items.selectrows.data.filter(n => n.review_question_item_id ===
-                                                        item.id).length
-                                                        :0}}票
+                                                        item.id).length : 0 }}票
                                                     </div>
                                                 </div>
-                                                <div class="col-md-4 clearfix" style="padding-left: 0; margin-top: -9px;">
+                                                <div class="col-md-4 clearfix"
+                                                     style="padding-left: 0; margin-top: -9px;">
                                                     <template v-for="(_item, nameIndex) in items.selectrows.data">
                                                         <Avatar v-if="_item.review_question_item_id === item.id"
                                                                 :imgUrl="_item.creator.data.icon_url" :key="nameIndex"
@@ -271,7 +282,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane animation-fade" :class="!questionId || !visible ? 'active': ''" id="forum-task-base" role="tabpanel">
+                        <div class="tab-pane animation-fade" :class="!questionId || !visible ? 'active': ''"
+                             id="forum-task-base" role="tabpanel">
                             <div class="card">
                                 <div class="card-header card-header-transparent card-header-bordered">
                                     <div class="float-left font-weight-bold third-title">任务详情</div>
@@ -297,21 +309,27 @@
                                         <div class="card-text py-10 px-0 clearfix col-md-8">
                                             <div class="col-md-2 float-left text-right pl-0">关联资源</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <span class="font-weight-bold" v-if="oldInfo.resource && oldInfo.resource.data && !isEdit">
+                                                <span class="font-weight-bold"
+                                                      v-if="oldInfo.resource && oldInfo.resource.data && !isEdit">
                                                     {{oldInfo.resource.data.resource.data.title}} -
-                                                    <template v-if="oldInfo.resource.data.resourceable_type === 'project'">{{ oldInfo.resource.data.resourceable.data.title }}</template>
-                                                    <template v-if="oldInfo.resource.data.resourceable_type === 'client'">{{ oldInfo.resource.data.resourceable.data.company }}</template>
+                                                    <template
+                                                            v-if="oldInfo.resource.data.resourceable_type === 'project'">{{ oldInfo.resource.data.resourceable.data.title }}</template>
+                                                    <template
+                                                            v-if="oldInfo.resource.data.resourceable_type === 'client'">{{ oldInfo.resource.data.resourceable.data.company }}</template>
                                                     <template v-if="oldInfo.resource.data.resourceable_type === 'star'">{{ oldInfo.resource.data.resourceable.data.name }}</template>
-                                                    <template v-if="oldInfo.resource.data.resourceable_type === 'blogger'">{{ oldInfo.resource.data.resourceable.data.nickname }}</template>
-                                                    <template v-if="oldInfo.resource.data.resourceable_type === 'trail'">{{ oldInfo.resource.data.resourceable.data.title }}</template>
+                                                    <template
+                                                            v-if="oldInfo.resource.data.resourceable_type === 'blogger'">{{ oldInfo.resource.data.resourceable.data.nickname }}</template>
+                                                    <template
+                                                            v-if="oldInfo.resource.data.resourceable_type === 'trail'">{{ oldInfo.resource.data.resourceable.data.title }}</template>
                                                 </span>
                                                 <template v-if="oldInfo.resource && oldInfo.resource.data && isEdit">
-                                                    <normal-linkage-selectors class="ml-0" ref="linkage" v-if="linkData.length>0" :myData="linkData"
-                                                        :data="linkData"
-                                                        :resource="oldInfo.resource ? oldInfo.resource.data.resource.data.code : ''"
-                                                        :resourceable="oldInfo.resource ? oldInfo.resource.data.resourceable.data.id : ''"
-                                                        @loadMore="getMoreChildLinkData"
-                                                        @change="addLinkage"></normal-linkage-selectors>
+                                                    <normal-linkage-selectors class="ml-0" ref="linkage"
+                                                                              v-if="linkData.length>0"
+                                                                              :myData="linkData"
+                                                                              :data="linkData"
+                                                                              :resource="oldInfo.resource ? oldInfo.resource.data.resource.data.code : ''"
+                                                                              :resourceable="oldInfo.resource ? oldInfo.resource.data.resourceable.data.id : ''"
+                                                                              @change="addLinkage"></normal-linkage-selectors>
                                                 </template>
                                             </div>
                                         </div>
@@ -345,13 +363,13 @@
                                                 </div>
                                                 <div v-show="isEdit">
                                                     <EditDatepicker class="col-md-6 px-0 float-left"
-                                                                :content="taskInfo.start_at[0]" :is-edit="isEdit"
-                                                                @change="(value) => changeTaskInfo(value, 'start_at')"></EditDatepicker>
+                                                                    :content="taskInfo.start_at[0]" :is-edit="isEdit"
+                                                                    @change="(value) => changeTaskInfo(value, 'start_at')"></EditDatepicker>
                                                     <EditTimeChoice class="col-md-6 px-0 float-left"
-                                                                :content="taskInfo.start_at[1]" :is-edit="isEdit"
-                                                                @change="(value) => changeTaskInfo(value, 'start_minutes')"></EditTimeChoice>
+                                                                    :content="taskInfo.start_at[1]" :is-edit="isEdit"
+                                                                    @change="(value) => changeTaskInfo(value, 'start_minutes')"></EditTimeChoice>
                                                 </div>
-                                                
+
                                             </div>
                                         </div>
                                         <div class="card-text py-10 px-0 clearfix col-md-8">
@@ -362,14 +380,14 @@
                                                 </div>
                                                 <div v-show="isEdit">
                                                     <EditDatepicker class="col-md-6 px-0 float-left"
-                                                                :content="taskInfo.end_at[0]" :is-edit="isEdit"
-                                                                @change="(value) => changeTaskInfo(value, 'end_at')"></EditDatepicker>
-                                                <!-- <EditTimepicker class="col-md-6 px-0 float-left"
-                                                                :content="taskInfo.end_at[1]" :is-edit="isEdit"
-                                                                @change="(value) => changeTaskInfo(value, 'end_minutes')"></EditTimepicker> -->
+                                                                    :content="taskInfo.end_at[0]" :is-edit="isEdit"
+                                                                    @change="(value) => changeTaskInfo(value, 'end_at')"></EditDatepicker>
+                                                    <!-- <EditTimepicker class="col-md-6 px-0 float-left"
+                                                                    :content="taskInfo.end_at[1]" :is-edit="isEdit"
+                                                                    @change="(value) => changeTaskInfo(value, 'end_minutes')"></EditTimepicker> -->
                                                     <EditTimeChoice class="col-md-6 px-0 float-left"
-                                                                :content="taskInfo.end_at[1]" :is-edit="isEdit"
-                                                                @change="(value) => changeTaskInfo(value, 'end_minutes')"></EditTimeChoice>
+                                                                    :content="taskInfo.end_at[1]" :is-edit="isEdit"
+                                                                    @change="(value) => changeTaskInfo(value, 'end_minutes')"></EditTimeChoice>
                                                     <!-- <EditTimepicker class="col-md-6 px-0 float-left"
                                                                 :content="taskInfo.end_at[1]" :is-edit="isEdit"
                                                                 @change="(value) => changeTaskInfo(value, 'end_minutes')"></EditTimepicker> -->
@@ -410,16 +428,19 @@
                                     <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                         <div class="col-md-3 float-left text-right pl-0">最近更新时间</div>
                                         <div class="col-md-9 float-left font-weight-bold">
-                                            {{ taskInfo.operate ? common.timeProcessing(taskInfo.operate.created_at) : ''  }}
+                                            {{ taskInfo.operate ? common.timeProcessing(taskInfo.operate.created_at) :
+                                            '' }}
                                         </div>
                                     </div>
-                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left" v-if="oldInfo.status === 2">
+                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
+                                         v-if="oldInfo.status === 2">
                                         <div class="col-md-3 float-left text-right pl-0">完成时间</div>
                                         <div class="col-md-9 float-left font-weight-bold">
                                             {{ taskInfo.complete_at }}
                                         </div>
                                     </div>
-                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left" v-if="oldInfo.status === 3">
+                                    <div class="card-text py-10 px-0 clearfix col-md-6 float-left"
+                                         v-if="oldInfo.status === 3">
                                         <div class="col-md-3 float-left text-right pl-0">停止时间</div>
                                         <div class="col-md-9 float-left font-weight-bold">
                                             {{ taskInfo.stop_at }}
@@ -444,8 +465,7 @@
                                             {{ attachment.title }}
                                             <span class="float-right pl-10 pointer-content"
                                                   data-plugin="actionBtn" @click="setDelInfo(attachment.id)"
-                                                  data-toggle="modal"
-                                                  data-target="#confirmFlag">
+                                                  data-toggle="modal">
                                                   <i class="iconfont icon-shanchu1"></i> 删除</span>
                                             <span class="float-right px-10">|</span>
                                             <span class="float-right px-10 pointer-content"
@@ -453,8 +473,9 @@
                                                   <i class="iconfont icon-download"></i> 下载</span>
                                             <span class="float-right px-10">{{ attachment.size }}</span>
                                             <a data-toggle="modal" data-target='#docPreview'
-                                                @click="previewFile(attachment.url, attachment.title)"
-                                                class="iconfont icon-liulan float-right px-10 pointer-content" style="color:#3f51b5 ;cursor:pointer"></a>
+                                               @click="previewFile(attachment.url, attachment.title)"
+                                               class="iconfont icon-liulan float-right px-10 pointer-content"
+                                               style="color:#3f51b5 ;cursor:pointer"></a>
                                         </li>
                                     </ul>
                                     <div style="margin: 6rem auto;width: 100px"
@@ -502,7 +523,7 @@
                             </div>
 
                             <div class="site-action fixed-button mt-20" data-plugin="actionBtn" data-toggle="modal"
-                                @click="handleChildTask">
+                                 @click="handleChildTask">
                                 <button type="button"
                                         class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                                     <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
@@ -536,84 +557,8 @@
             </div>
         </div>
 
-        <div class="modal fade" id="addChildTask" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1" data-backdrop="static">
-            <div class="modal-dialog modal-simple">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
-                        </button>
-                        <h4 class="modal-title">新增子任务</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left require">任务类型</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <selectors ref="taskType" :options="taskTypeArr" @change="addTaskType"></selectors>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left require">任务名称</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <input type="text" class="form-control" placeholder="请输入任务名称" v-model="taskName">
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left require">负责人</div>
-                            <div class="col-md-5 float-left pl-0">
-                                <input-selectors :placeholder="'请选择负责人'"
-                                                 @change="addPrincipal"></input-selectors>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">参与人</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <add-member @change="addParticipant"></add-member>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left pl-0 require">任务优先级</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <selectors :options="priorityArr" ref="taskLevel" @change="addTaskLevel"></selectors>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left require">开始时间</div>
-                            <div class="col-md-5 float-left pl-0">
-                                <datepicker ref='startTime' @change="addStartTime"></datepicker>
-                            </div>
-                            <div class="col-md-5 float-left pl-0">
-                                <!-- <timepicker ref="startMinutes" :default="startMinutes"
-                                            @change="addStartMinutes"></timepicker> -->
-                                <TimeChoice @change="addStartMinutes" ref="startMinutes"></TimeChoice>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left require">截止时间</div>
-                            <div class="col-md-5 float-left pl-0">
-                                <datepicker ref="endTime" @change="addEndTime" :startDate="startTime"></datepicker>
-                            </div>
-                            <div class="col-md-5 float-left pl-0">
-                                <!-- <timepicker ref="endMinutes" :default="endMinutes" @change="addEndMinutes"></timepicker> -->
-                                <TimeChoice @change="addEndMinutes" ref="endMinutes"></TimeChoice>
-                            </div>
-                        </div>
-                        <div class="example">
-                            <div class="col-md-2 text-right float-left">任务说明</div>
-                            <div class="col-md-10 float-left pl-0">
-                                <textarea class="form-control" name="taskDescription" id="" cols="30"
-                                          rows="5" title="" v-model="taskIntroduce"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" @click="addChildTask">确定</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <AddTask name="新增子任务" is-child="true" @success="addChildTask" :task-father-id="this.taskId"></AddTask>
+
         <flag @confirmFlag="deleteAttachment"/>
         <Modal id="push-reason" title="推荐原因" @onOK="submitPush">
             <div class="example">
@@ -635,7 +580,7 @@
     import config from '../../assets/js/config'
     import common from '../../assets/js/common'
     import Cookies from 'js-cookie'
-    import { mapState } from 'vuex'
+    import {mapState} from 'vuex'
 
     export default {
 
@@ -674,7 +619,6 @@
                 resourceableId: '', // 资源id
                 user: {}, // 个人信息
                 attachmentId: '', // 附件id
-                // routerId: this.$route.params.id || '',// 路由
                 questionData: [], // 问卷列表
                 answerList: [], // 答题列表
                 questionInfo: {
@@ -701,32 +645,18 @@
         },
 
         mounted() {
-            
+
             this.getTask();
-            $('#addChildTask').on('show.bs.modal', function () {
-                // this.showChildTask = true;
+            $('#addTask').on('show.bs.modal', function () {
                 this.isEdit = false;
             })
             this.user = JSON.parse(Cookies.get('user'))
-            // 负责人默认值的设置
-            this.$store.commit('changeNewPrincipal', {
-                name: this.user.nickname,
-                id: this.user.id
-            })
-            this.getTaskType()
-            $('#addChildTask').on('hidden.bs.modal', () => {
-                // 清空state
-                this.closeAddTask()
-            })
-
             $('#push-reason').on('hidden.bs.modal', () => {
                 this.pushReason = ''
             })
             // 请求问卷
             this.getQuestionId()
 
-            // this.checkPermission()
-            // this.checkAddPermission()
         },
 
         watch: {
@@ -745,9 +675,6 @@
                 }, 100)
                 $('#taskTab a:first').tab('show')
             },
-            resourceType () {
-                console.log(this.resourceType)
-            }
         },
 
         computed: {
@@ -774,9 +701,6 @@
                             response.data.affixes.data[i].size = this.unitConversion(size)
                         }
                     }
-
-                    this.canEdit = response.data.power == 'true'
-
                     this.oldInfo = JSON.parse(JSON.stringify(response.data));
                     this.taskInfo = response.data;
                     this.taskInfo.start_at = this.taskInfo.start_at.split(' ');
@@ -795,19 +719,19 @@
                     this.$store.dispatch('changePrincipal', params);
                     this.isLoading = false;
                     this.getLinkData()
-                    this.resourceType =  this.oldInfo.resource && this.oldInfo.resource.data.resource.data.type // 资源type
+                    this.resourceType = this.oldInfo.resource && this.oldInfo.resource.data.resource.data.type // 资源type
                     this.resourceableId = this.oldInfo.resource && this.oldInfo.resource.data.resourceable.data.id // 资源id
                 })
             },
 
             changeTaskInfo: function (value, name) {
-                
+
                 switch (name) {
                     case 'principal_id':
                         value = this.$store.state.principalInfo.id;
                         break;
                     case 'start_minutes':
-                    this.changeInfo.start_at = ''
+                        this.changeInfo.start_at = ''
                         if (this.changeInfo.start_at) {
                             this.changeInfo.start_at = this.changeInfo.start_at + ' ' + value
                         } else {
@@ -815,7 +739,7 @@
                         }
                         break;
                     case 'end_minutes':
-                    this.changeInfo.end_at = ''
+                        this.changeInfo.end_at = ''
                         if (this.changeInfo.end_at) {
                             this.changeInfo.end_at = this.changeInfo.end_at + ' ' + value
                         } else {
@@ -827,7 +751,7 @@
             },
 
             editBaseInfo: function () {
-                if (!this.canEdit) {
+                if (this.taskInfo.powers.edit_task !== 'true') {
                     toastr.error('您没有编辑任务的权限！')
                     return
                 }
@@ -865,7 +789,11 @@
                 })
             },
 
-            shouleDeleteTask () {
+            shouleDeleteTask() {
+                if (this.taskInfo.powers.del_task == 'false') {
+                    toastr.error('您没有权限删除任务！')
+                    return
+                }
                 $("#delTask").modal();
             },
 
@@ -941,8 +869,6 @@
                         }
                         if (JSON.stringify(data) !== "{}") {
                             fetch('post', '/tasks/' + this.taskId + '/participant', data).then(() => {
-                                // this.getTask();
-                                // toastr.success('修改成功')
                                 res(true)
                             }).catch(() => {
                                 rej(false)
@@ -952,7 +878,7 @@
                 }
 
                 const editAllInfo = async () => {
-                    
+
                     let resInfo = true
                     if (JSON.stringify(this.changeInfo) !== "{}") {
                         resInfo = await editTaskInfo()
@@ -968,11 +894,6 @@
                     }
                 }
                 editAllInfo()
-                // editAllInfo().then(res => {
-                //     if (res) {
-                //         toastr.success('修改成功')
-                //     }
-                // })
                 this.isEdit = false;
             },
 
@@ -992,7 +913,7 @@
             },
 
             deleteAttachment: function () {
-                fetch('delete', '/tasks/' + this.taskId + '/affixes/' + this.attachmentId, this.changeInfo).then(response => {
+                fetch('delete', '/tasks/' + this.taskId + '/affixes/' + this.attachmentId, this.changeInfo).then(() => {
                     toastr.success("删除成功");
                     let index = this.taskInfo.affixes.data.indexOf(this.taskInfo.affixes.data.find(item => item.id == this.attachmentId));
                     this.taskInfo.affixes.data.splice(index, 1);
@@ -1002,85 +923,9 @@
             downloadAttachment: function (attachmentId, attachmentUrl) {
                 window.open(attachmentUrl, '_blank');
             },
-            // 添加子任务
+
             addChildTask: function () {
-                if (!this.taskName) {
-                    toastr.error('请填写任务名称！')
-                    return
-                }
-                if (!this.taskType) {
-                    toastr.error('请选择任务类型！')
-                    return
-                }
-                if (!this.$store.state.newPrincipalInfo.id) {
-                    toastr.error('请选择负责人！')
-                    return
-                }
-                if (!this.taskLevel) {
-                    toastr.error('请选择任务优先级！')
-                    return
-                }
-                if (!this.startTime || !this.endTime) {
-                    toastr.error('请选择时间!')
-                    return
-                }
-                if ((this.startTime + " " + this.startMinutes) > (this.endTime + " " + this.endMinutes)) {
-                    toastr.error('开始时间不能晚于截止时间');
-                    return
-                }
-                let participant_ids = [];
-                for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
-                    participant_ids.push(this.$store.state.newParticipantsInfo[i].id)
-                }
-                let data = {
-                    title: this.taskName,
-                    type: this.taskType,
-                    principal_id: this.$store.state.newPrincipalInfo.id,
-                    participant_ids: participant_ids,
-                    priority: this.taskLevel,
-                    start_at: this.startTime + ' ' + this.startMinutes,
-                    end_at: this.endTime + ' ' + this.endMinutes,
-                    desc: this.taskIntroduce,
-                };
-                if (this.resourceType) {
-                    data.resource_type = this.resourceType
-                }
-                if (this.resourceableId) {
-                    data.resourceable_id = this.resourceableId
-                }
-                let self = this
-                fetch('post', '/tasks/' + this.taskId + '/subtask', data).then(function (response) {
-                    toastr.success('添加成功');
-                    $('#addChildTask').modal('hide');
-                    self.getTask();
-                })
-            },
-            addTaskType: function (value) {
-                this.taskType = value
-            },
-
-            addPrincipal: function (value) {
-                this.principal = value
-            },
-
-            addParticipant: function (value) {
-                let flagArr = [];
-                for (let i = 0; i < value.length; i++) {
-                    flagArr.push(value[i].id)
-                }
-                this.participants = flagArr
-            },
-
-            addTaskLevel: function (value) {
-                this.taskLevel = value
-            },
-
-            addStartTime: function (value) {
-                this.startTime = value
-            },
-
-            addEndTime: function (value) {
-                this.endTime = value
+                this.getTask();
             },
 
             addLinkage: function (type, value, id, index) {
@@ -1098,16 +943,8 @@
                 }
             },
 
-            addStartMinutes: function (value) {
-                this.startMinutes = value
-            },
-
-            addEndMinutes: function (value) {
-                this.endMinutes = value
-            },
             redirectTaskDetail: function (taskId) {
                 this.$router.push({path: '/tasks/' + taskId, force: true})
-                // this.$router.replace({path: '/tasks/' + taskId})
             },
             // 获取关联父资源数据
             getLinkData() {
@@ -1117,7 +954,6 @@
                             name: n.title,
                             id: n.type,
                             value: n.code,
-                            // type: n.type,
                             child: []
                         }
                     })
@@ -1142,10 +978,13 @@
                     let data = {}
                     this.linkCode = url
                     this.linkIndex = index
-                    if (url === 'bloggers' || url === 'stars') {
+
+                    let _url = url.substr(0, url.length - 1) + '/related'
+                    if (url === 'bloggers') {
+                        _url = url + '/all'
                         data.sign_contract_status = 2
                     }
-                    fetch('get', `/${url === 'bloggers' ? url + '/all' : url}`, data).then(res => {
+                    fetch('get', _url, data).then(res => {
                         const temp = this.linkData[index]
                         if (res.meta && res.meta.pagination) {
                             this.canLoadMore = true
@@ -1162,9 +1001,9 @@
                         })
                         this.resourceableId = temp.child[0].id
                         this.$set(this.linkData, index, temp)
-                        setTimeout(() => {
+                        this.$nextTick(() => {
                             this.$refs.linkage.refresh()
-                        }, 100)
+                        })
                     })
                 } else {
                     const temp = this.linkData[index]
@@ -1175,18 +1014,18 @@
                     }]
                     this.resourceableId = temp.child[0].id
                     this.$set(this.linkData, index, temp)
-                    setTimeout(() => {
+                    this.$nextTick(() => {
                         this.$refs.linkage.refresh()
-                    }, 100)
+                    })
                 }
 
             },
             // 关联子资源滚动到底加载更多
-            getMoreChildLinkData () {
+            getMoreChildLinkData() {
                 const url = this.linkCode
                 const index = this.linkIndex
                 if (url && this.canLoadMore) {
-                    
+
                     if (this.linkCurrentPage >= this.linkTotalPage) {
                         return
                     }
@@ -1196,7 +1035,7 @@
                     if (url === 'bloggers' || url === 'stars') {
                         data.sign_contract_status = 2
                     }
-                    fetch('get', `/${url === 'bloggers'? url + '/all' : url}`, data).then(res => {
+                    fetch('get', `/${url === 'bloggers' ? url + '/all' : url}`, data).then(res => {
                         this.linkCurrentPage = this.linkCurrentPage + 1
                         const temp = this.linkData[index]
                         // const temp = this.linkData
@@ -1210,9 +1049,9 @@
                         temp.child = [...temp.child, ...tempArr]
                         this.resourceableId = temp.child[0].id
                         this.$set(this.linkData, index, temp)
-                        setTimeout(() => {
+                        this.$nextTick(() => {
                             this.$refs.linkage.refresh()
-                        }, 100)
+                        })
                     })
                 }
             },
@@ -1228,26 +1067,12 @@
             },
             setDelInfo(id) {
                 this.attachmentId = id
-            },
-            // 关闭新增任务
-            closeAddTask() {
-                this.taskName = ''
-                this.taskLevel = ''
-                this.$refs.taskLevel.setValue('1')
-                this.taskType = ''
-                this.$refs.taskType.setValue('')
-                this.startTime = ''
-                this.endTime = ''
-                this.startMinutes = ''
-                this.endMinutes = ''
-                this.taskIntroduce = ''
-                this.$refs.startTime.setValue('')
-                this.$refs.startMinutes.setValue('0')
-                this.$refs.endTime.setValue('')
-                this.$refs.endMinutes.setValue('0')
-                this.linkData = []
-                this.getLinkData()
-                this.setDefaultPrincipal()
+                // if(this.taskInfo.powers.del_task !== 'true'){
+                //   toastr.error('当前用户没有删除任务的权限')
+                //   return
+                // }
+                $('confirmFlag').modal('show')
+
             },
             // 设置默认负责人
             setDefaultPrincipal() {
@@ -1346,7 +1171,7 @@
                 })
             },
             // 打开视频链接
-            openUrl (url) {
+            openUrl(url) {
                 if (url) {
                     let _url = url.data[0].link
                     if (_url.indexOf('http') < 0) {
@@ -1356,7 +1181,7 @@
                 }
             },
             // 新增评审任务（推优后，新增一个任务）
-            addQuestionTask () {
+            addQuestionTask() {
                 let data = {
                     // resource_type: this.resourceType ,
                     // resourceable_id: this.resourceableId,
@@ -1374,25 +1199,25 @@
                 })
             },
             // 获取品优团成员
-            getQuestionMember () {
+            getQuestionMember() {
                 fetch('get', '/data_dictionary/appraising/448').then(res => {
                     this.questionMemberList = res.data
                 })
             },
             // 预览附件
-            previewFile (url, name) {
+            previewFile(url, name) {
                 this.previewUrl = url
                 this.previewName = name
             },
-            handleChildTask () {
-                if (this.power.task == 'false') {
+            handleChildTask() {
+                if (this.taskInfo.powers.add_subtask == 'false') {
                     toastr.error('您没有权限新增子任务！')
                     return
                 }
-                $('#addChildTask').modal('show')
+                $('#addTask').modal('show')
             }
-        }
-    }
+        },
+    };
 </script>
 
 <style scoped>
@@ -1531,11 +1356,13 @@
         display: flex;
         align-items: center;
     }
+
     .tab-title button {
         position: absolute;
         top: 4px;
         right: 14px;
     }
+
     .has-answer, .un-answer {
         position: absolute;
         bottom: 4px;
@@ -1545,6 +1372,7 @@
         border-radius: 50%;
         background-color: #fff;
     }
+
     .has-answer:before, .un-answer:before {
         content: '';
         position: absolute;
@@ -1555,6 +1383,7 @@
         border-radius: 50%;
         background-color: #4DAF50;
     }
+
     .un-answer:before {
         background-color: #FF9800;
     }

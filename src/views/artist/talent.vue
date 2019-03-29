@@ -8,22 +8,22 @@
                 <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" id="taskDropdown"
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
-                     role="menu" x-placement="bottom-end" v-if="!isShow">
-                    <ImportAndExport :type="'import'" :moduleName="'bloggers'">
+                     role="menu" x-placement="bottom-end" v-if="!isShow" ref="colse">
+                    <ImportAndExport :type="'import'" :moduleName="'bloggers'" :power="'blogger'" @importFile="importFile">
                         <a class="dropdown-item" role="menuitem">导入</a>
                     </ImportAndExport>
-                    <ImportAndExport :type="'export'" :moduleName="'bloggers'" :params="exportParams">
+                    <ImportAndExport :type="'export'" :moduleName="'bloggers'" :power="'blogger'" :params="exportParams">
                         <a class="dropdown-item" role="menuitem">导出</a>
                     </ImportAndExport>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
                        :data-target="selectedArtistsArr.length>0&&'#giveProducer'" @click="judge">分配制作人</a>
                 </div>
                 <div class="dropdown-menu  dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
-                     role="menu" x-placement="bottom-end" v-if="isShow">
-                    <ImportAndExport :type="'import'" :moduleName="'stars'">
+                     role="menu" x-placement="bottom-end" v-if="isShow" ref="colse">
+                    <ImportAndExport :type="'import'" :moduleName="'stars'" :power="'star'" @importFile="importFile">
                         <a class="dropdown-item" role="menuitem">导入</a>
                     </ImportAndExport>
-                    <ImportAndExport :type="'export'" :moduleName="'stars'" :params="exportParams">
+                    <ImportAndExport :type="'export'" :moduleName="'stars'" :power="'star'" :params="exportParams">
                         <a class="dropdown-item" role="menuitem">导出</a>
                     </ImportAndExport>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#giveBroker"
@@ -42,18 +42,20 @@
                             <a class="nav-link" data-toggle="tab" href="#forum-artist"
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab" :class="isShow?'active':''" @click="tab('start')">艺人</a>
+                            
                         </li>
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" data-toggle="tab" href="#forum-blogger"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab" :class="!isShow?'active':''" @click="tab('bloggers')">博主</a>
+                           
                         </li>
                         <i v-if="isShow"
-                           style="position: absolute;right:10px;top:10px;color: rgb(0, 176, 255);font-style: normal;"
-                           @click="getArtists(1,1)">签约中</i>
-                        <i v-if="!isShow"
-                           style="position: absolute;right:10px;top:10px;color: rgb(0, 176, 255);font-style: normal;"
-                           @click="getBlogger(1,1)">签约中</i>
+                            style="position: absolute;right:10px;top:10px;color: rgb(0, 176, 255);font-style: normal;"
+                            @click="getArtists(1,1)" class="pointer-content">签约中</i>
+                         <i v-if="!isShow"
+                                style="position: absolute;right:10px;top:10px;color: rgb(0, 176, 255);font-style: normal;"
+                                @click="getBlogger(1,1)" class="pointer-content">签约中</i>
                     </ul>
                 </div>
 
@@ -281,7 +283,7 @@
                                 </td>
                                 <td @click="redirectBolggerDetail(artist.id)">{{ artist.nickname }}</td>
                                 <td @click="redirectBolggerDetail(artist.id)"
-                                    v-if="bloggerInfo.find(item=>item.sign_contract_status!==1)">暂无
+                                    v-if="bloggerInfo.find(item=>item.sign_contract_status!==1)||!artist.type">暂无
                                 </td>
                                 <td @click="redirectBolggerDetail(artist.id)" v-if=" artist.type">{{ artist.type.data.name }}</td>
                                 <td @click="redirectBolggerDetail(artist.id)"
@@ -301,6 +303,12 @@
                                             artist.communication_status).name}}
                                         </span>
 
+                                    </template>
+                                </td>
+                                 <td @click="redirectBolggerDetail(artist.id)"
+                                    v-if="artist.communication_status&&bloggerInfo.find(item=>item.sign_contract_status==0)">
+                                    <template>
+                                    
                                     </template>
                                 </td>
                                 <td @click="redirectBolggerDetail(artist.id)"
@@ -332,9 +340,9 @@
         </div>
 
         <customize-filter :data="customizeContentType==='stars'?customizeInfoStars:customizeInfoBloggers"
-                          @change="customize" ref="removeDate" :isint="true"></customize-filter>
+                          @change="customize" ref="customize" :isint="true"></customize-filter>
 
-        <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addBolgger" v-if="!isShow">
+        <div class="site-action" data-plugin="actionBtn" data-toggle="modal" @click='rightChecker("博主","addBolgger","blogger")' v-if="!isShow">
             <button type="button"
                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                 <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
@@ -469,7 +477,7 @@
                 </div>
             </div>
         </div>
-        <div class="site-action" data-plugin="actionBtn" data-toggle="modal" data-target="#addArtist" v-if="isShow">
+        <div class="site-action" data-plugin="actionBtn" data-toggle="modal" @click='rightChecker("艺人","addArtist","star")' v-if="isShow">
             <button type="button"
                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                 <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
@@ -928,16 +936,7 @@
         watch: {
             platformType: function () {
                 return this.platformType
-            }
-        },
-        computed:{
-            // typeHandler(){
-            //     if(this.currentStatus === 'start'){
-            //         return 'stars'
-            //     }else if(this.currentStatus === 'bloggers'){
-            //         return 'bloggers'
-            //     }
-            // },
+            }           
         },
         created() {
             this.getStarsField()
@@ -951,6 +950,16 @@
             $('table').asSelectable();
         },
         methods: {
+            importFile() {
+                this.$refs.colse.classList.remove('show')
+            },
+            rightChecker(value, params, type) {
+                if (this.$store.state.listPower[type].add !== 'true') {
+                    toastr.error('当前用户没有权限新增' + value)
+                    return
+                }
+                $('#'+params).modal('show')       
+            },
             getStarsField() {
                 let _this = this
                 fetch('get', '/stars/filter_fields').then((params) => {
@@ -993,7 +1002,6 @@
                     communication_status: this.listData.communication_status, //沟通状态
                 }
                 fetch('get', '/stars', this.listData).then(function (response) {
-                    console.log(response)
                     if (response.data) {
                         _this.artistsInfo = response.data;
                     }
@@ -1043,6 +1051,7 @@
                     
                     if(response.data){
                         _this.bloggerInfo = response.data;
+                        console.log(response.data)
                     }
                     if (response.meta) {
                         _this.Bcurrent_page = response.meta.pagination.current_page;
@@ -1422,18 +1431,19 @@
             tab: function (value) {
                 this.selectedArtistsArr = []
                 if (value == 'start') {
-                    this.$refs.removeDate.setValue({conditions:[]})
+                    this.$refs.customize.setValue({conditions:[]})
                     this.customizeCondition = {}
                     this.getArtists()                  
                     this.isShow = true
-                    this.$refs.removeDate.reset()
+                    this.$refs.customize.reset()
                 } else if (value == 'bloggers') {
-                    this.$refs.removeDate.setValue({conditions:[]})
+                    this.$refs.customize.setValue({conditions:[]})
                     this.customizeCondition  = {}
                     this.getBlogger()
                     this.isShow = false
-                    this.$refs.removeDate.reset()
+                    this.$refs.customize.reset()
                 }
+                
             },
             giveBroker: function () {
                 let url, toast, data
@@ -1749,4 +1759,5 @@
         top: 10px;
         font-size: 12px;
     }
+
 </style>

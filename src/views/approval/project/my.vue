@@ -50,7 +50,7 @@
                                     <th class="cell-300" scope="col">审批状态</th>
                                 </tr>
                                 <tbody>
-                                <tr v-for="project in projectsInfo" :key='project.form_instance_number' @click="goDetail(project.form_instance_number)">
+                                <tr v-for="project in projectsInfo" :key='project.form_instance_number' @click="goDetail(project.form_instance_number)" style="cursor: pointer;">
                                     <td>{{project.form_instance_number}}</td>
                                     <td>{{project.title}}</td>
                                     <td>{{project.name}}</td>

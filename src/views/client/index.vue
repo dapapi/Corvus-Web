@@ -2,13 +2,16 @@
     <div class="page">
         <Loading :is-loading="isLoading"></Loading>
         <div class="page-header page-header-bordered">
-            <h1 class="page-title">客户管理</h1>
+            <h1 class="page-title">客户管理
+                <!-- <router-link :to="{path:'/supplier/list'}" style="color: #3298dc;" class="pl-20 font-size-20 pointer-content"><i
+                        class="iconfont icon-jiantou_xiayiye font-size-22 pr-5"></i>供应商</router-link> -->
+            </h1>
             <div class="page-header-actions">
-                <ImportAndExport class="float-left" :type="'export'" :moduleName="'clients'" :params="exportParams">
+                <ImportAndExport class="float-left" :type="'export'" :moduleName="'clients'" :power="'client'" :params="exportParams">
                     <i class="iconfont icon-daochu px-5 font-size-20 pr-20 pointer-content" title="导出"
                        aria-hidden="true"></i>
                 </ImportAndExport>
-                <ImportAndExport class="float-left" :type="'import'" :moduleName="'clients'">
+                <ImportAndExport class="float-left" :type="'import'" :moduleName="'clients'" :power="'client'" @reload="getClients">
                     <i class="iconfont icon-daoru font-size-20 pointer-content" title="导入" aria-hidden="true"></i>
                 </ImportAndExport>
             </div>
@@ -81,7 +84,7 @@
         <customize-filter :data="customizeInfo" @change="customize" :cleanup="cleanUp"
                           @cleanupdone='cleanUp=false'></customize-filter>
 
-        <AddClientType :hidden="power.client == 'false'" @change="showAddModal"/>
+        <AddClientType :hidden="listPower.client?listPower.client.add === 'false':true" @change="showAddModal"/>
 
         <div class="modal fade" id="addClient" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
@@ -184,7 +187,7 @@
                         </div>
                         <div class="modal-footer">
                             <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                            <button class="btn btn-primary" type="submit" @click="addClient">确定</button>
+                            <button class="btn btn-primary" type="submit" :disable="isAddButtonDisable" @click="addClient">确定</button>
                         </div>
 
                     </div>
@@ -241,7 +244,8 @@
                 exportParams: {},//导出参数
                 canAdd: false, // 可以新增吗
                 fetchData: {},
-                customizeCondition: {}
+                customizeCondition: {},
+                isAddButtonDisable: false,
                 // canAdd: false, // 可以新增吗
             }
         },
@@ -257,20 +261,14 @@
                 this.cancelClient()
             })
             // this.checkPermission()
-            console.log(this.power)
+           
         },
 
         computed: {
             ...mapState([
                 'userList',
-                'power'
+                'listPower'
             ])
-        },
-
-        watch : {
-            power () {
-                console.log(this.power)
-            }
         },
 
         methods: {
@@ -297,11 +295,6 @@
                 if (this.clientPrincipalIdSearch.length > 0) {
                     params.principal_ids = this.clientPrincipalIdSearch
                 }
-                this.exportParams = {
-                    keyword: this.companyName,
-                    grade: this.clientLevelSearch,
-                    principal_ids: this.clientPrincipalIdSearch
-                }
                 if (this.companyName || this.clientLevelSearch || this.clientPrincipalIdSearch.length > 0) {
                     url = '/clients/filter'
                 }
@@ -316,8 +309,6 @@
             },
 
             addClient: function () {
-
-
                 if (!this.clientName) {
                     toastr.error('请输入公司名称！');
                     return
@@ -350,6 +341,10 @@
                     toastr.error('请填写联系人职位！')
                     return
                 }
+                if (!this.$store.state.newPrincipalInfo.id) {
+                    toastr.error('请选择负责人！')
+                }
+                this.isAddButtonDisable = true;
                 let data = {
                     type: this.clientType,
                     company: this.clientName,
@@ -370,31 +365,18 @@
                     client_rating: this.clientScale,
                     desc: this.clientRemark
                 };
-                if (!data.principal_id) {
-                    toastr.error('请选择负责人！')
-                }
 
-                let _this = this;
-                fetch('post', '/clients', data).then(function (response) {
+                fetch('post', '/clients', data).then(response => {
+                    this.isAddButtonDisable = false;
                     toastr.success('创建成功');
                     $("#addClient").modal("hide");
-                    _this.$router.push({path: 'clients/' + response.data.id});
+                    this.$router.push({path: 'clients/' + response.data.id});
                 })
             },
 
             customize: function (value) {
-                console.log(value)
                 this.customizeCondition = value
                 this.fetchHandler('post', '/clients/filter', 'filter')
-                // let _this = this
-                // fetch('post', '/clients/filter?include=principal', value).then((params) => {
-                //     _this.clientsInfo = params.data
-                //     _this.total = params.meta.pagination.total;
-                //     _this.total_pages = params.meta.pagination.total_pages;
-                //     _this.current_page = params.meta.pagination.current_page
-                //     _this.cleanUp = true
-                // })
-
             },
             fetchHandler(methods, url, type) {
                 let _this = this,
@@ -409,11 +391,6 @@
                     } else {
                         keyword = ''
                     }
-                    // if (this.clientPrincipalIdSearch) {
-                    //     principal_ids = '&principal_ids=' + this.clientPrincipalIdSearch
-                    // } else {
-                    //     principal_ids = ''
-                    // }
                     if (this.clientPrincipalIdSearch.length > 0) {
                         this.customizeCondition.principal_ids = this.clientPrincipalIdSearch
                     }
@@ -424,11 +401,7 @@
                     }
                     newUrl = url + '?' + this.fetchData.include + keyword + status 
                 }
-                this.exportParams = {
-                    keyword: this.fetchData.keyword,
-                    status: this.fetchData.status,
-                    principal_ids: this.fetchData.principal_ids,
-                }
+                
                 fetch(methods, newUrl || url, fetchData).then((response) => {
                     _this.clientsInfo = response.data
                     _this.total = response.meta.pagination.total;
@@ -436,9 +409,6 @@
                     _this.total_pages = response.meta.pagination.total_pages;
                     _this.isLoading = false;
                 })
-            },
-            redirectClientDetail: function (clientId) {
-                this.$router.push({path: 'clients/' + clientId});
             },
 
             changeClientType: function (value) {
@@ -454,17 +424,20 @@
             },
             filterGo() {
                 this.fetchData.keyword = this.companyName
+                this.exportParams.keyword = this.companyName
                 this.fetchHandler('post', '/clients/filter', 'filter')
-                // this.fetchHandler('get', '/trails/filter')
 
             },
             changePrincipalSelect(value) {
                 this.clientPrincipalIdSearch = value
+                this.exportParams.principal_ids = value
                 this.fetchHandler('post', '/clients/filter', 'filter')
             },
 
             changeClientLevelSelect(value) {
+               
                 this.clientLevelSearch = value
+                this.exportParams.status = value
                 this.fetchHandler('post', '/clients/filter', 'filter')
             },
 
@@ -518,7 +491,6 @@
                 this.$refs.clientContactType.setValue('')
                 this.$refs.region.reset()
                 this.ragion.province = {}
-                // principal_id: this.$store.state.newPrincipalInfo.id,
                 this.clientContact = ''
                 this.clientContactPhone = ''
                 this.clientContactPosition = ''
@@ -534,8 +506,8 @@
             goDetail(id) {
                 this.$router.push('/clients/' + id)
             },
-        }
-    }
+  },
+};
 </script>
 
 <style lang="scss" scoped>

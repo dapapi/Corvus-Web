@@ -44,7 +44,7 @@
                             <li class="site-menu-item" v-for="subMenu in menu.data"
                                 :class="pageRoute === subMenu.code ? 'active': ''">
                                 <router-link :to="'/' + subMenu.code" class="animsition-link">
-                                    <span class="site-menu-title">{{ subMenu.name }}</span>
+                                    <span class="site-menu-title"><i :class="subMenu.icon" class="mr-2"></i>{{ subMenu.name }}</span>
                                 </router-link>
                             </li>
                         </ul>
@@ -69,8 +69,8 @@
 </template>
 
 <script>
-    import {mapState, mapGetters, mapMutations} from 'vuex'
-    import Cookies from 'js-cookie'
+    import {mapState, mapGetters, mapMutations} from 'vuex';
+    import Cookies from 'js-cookie';
 
     export default {
         name: "LeftMenu",
@@ -85,11 +85,13 @@
                         // data: [
                         //     {
                         //         name: '工作台',
-                        //         code: 'my'
+                        //         code: 'my',
+                        //         icon: 'iconfont icon-gongzuotai'
                         //     },
                         //     {
                         //         name: '报表',
-                        //         code: 'reports'
+                        //         code: 'reports',
+                        //         icon: 'iconfont icon-baobiao'
                         //     }
                         // ]
                     },
@@ -97,7 +99,7 @@
                         name: '日历',
                         code: 'calendar',
                         image: 'https://res-crm.papitube.com/image/login-icon/rili.png',
-                        hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-rili.png'
+                        hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-rili.png',
                     },
                     {
                         name: '审批',
@@ -142,52 +144,54 @@
                         data: [
                             {
                                 name: '公告',
-                                code: 'broadcast'
+                                code: 'broadcast',
+                                icon: 'iconfont icon-laba',
                             },
                             {
                                 name: '通讯录',
-                                code: 'address'
+                                code: 'address',
+                                icon: 'iconfont icon-tongxunlu',
                             },
                             // {
                             //     name: '简报',
-                            //     code: 'brief'
+                            //     code: 'brief',
+                            //     icon: 'iconfont icon-wenjian',
                             // },
                             // {
                             //     name: '仪表盘',
-                            //     code: 'dashboard'
+                            //     code: 'dashboard',
+                            //     icon: 'iconfont icon-panel',
                             // }
-                        ]
-                    }
+                        ],
+                    },
                 ],
                 pageRoute: '',
                 visible: false,
                 // avatar: ''
-            }
+            };
         },
         computed: {
             ...mapState([
                 'unReadMsg',
                 'canPassBack', // 能否进入后台
-                'avatar'
-            ])
+                'avatar',
+            ]),
         },
 
-        created () {
-            if(Cookies.get('user')){
+        created() {
+            if (Cookies.get('user')) {
                 const avatar = JSON.parse(Cookies.get('user')).avatar;
-                const power = JSON.parse(Cookies.get('user')).power
-                this.setUserAvatar(avatar)
-                this.setUserPower(power)
+                this.setUserAvatar(avatar);
             }
         },
 
         mounted() {
             document.body.onclick = () => {
-                this.visible = false
-            }
+                this.visible = false;
+            };
         },
         watch: {
-            '$route'(to, from) {
+            '$route': function (to, from) {
                 this.pageRoute = to.path.split('/')[1];
             },
 
@@ -195,32 +199,31 @@
         methods: {
             ...mapMutations([
                 'setUserAvatar',
-                'setUserPower'
             ]),
             showBackModel() {
-                this.visible = !this.visible
+                this.visible = !this.visible;
             },
             // 退出登录
             layout() {
-                this.visible = false
+                this.visible = false;
                 Cookies.remove('user');
                 Cookies.remove('CORVUS-ACCESS-TOKEN');
                 Cookies.remove('selectedCalendar');
-                window.location.href = '/login'
+                window.location.href = '/login';
             },
             goManagement() {
-                this.visible = false
+                this.visible = false;
                 if (this.canPassBack) {
-                    window.open('/apps')
+                    window.open('/apps');
                 } else {
-                    toastr.error('您没有进入后台的权限！')
+                    toastr.error('您没有进入后台的权限！');
                 }
             },
             hideBackModel() {
-                this.visible = false
-            }
-        }
-    }
+                this.visible = false;
+            },
+        },
+    };
 </script>
 
 <style scoped>
@@ -248,6 +251,14 @@
 
     .site-menu > .site-menu-item:hover .base-icon {
         display: none !important;
+    }
+
+    .site-menu-sub {
+        box-shadow: 0 2px 7px 1px #E2E2E2;
+    }
+
+    .site-menu-sub .site-menu-item:hover {
+        background: rgba(40, 53, 147, .03);
     }
 
     .menu-icon img {
@@ -293,9 +304,10 @@
         background: #fff;
         position: absolute;
         top: 10px;
-        left: 101px;
+        left: 80px;
         z-index: 100000;
         border: 1px solid #f7f7f7;
+        box-shadow: 0 2px 7px 1px #E2E2E2;
     }
 
     .console ul li {
