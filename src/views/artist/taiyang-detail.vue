@@ -1371,7 +1371,7 @@ export default {
         if (response.data.wechat == 'privacy') {
           this.artistInfo.wechat = '**';
         } else {
-          this.artistInfo.wechat = response.data.birthday;
+          this.artistInfo.wechat = response.data.wechat;
         }
         if (response.data.email == 'privacy') {
           this.artistInfo.email = '**';
