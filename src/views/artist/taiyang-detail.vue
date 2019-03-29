@@ -14,6 +14,7 @@
                         @click="distributionPerson('broker')">分配经理人</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
                         @click="distributionPerson('publicity')">分配宣传人</a>
+                    <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
                     <a class="dropdown-item" role="menuitem" @click="contractlist(artistInfo.sign_contract_status)">
                         <template v-if="artistInfo.sign_contract_status == 1">签约</template>
                         <template v-if="artistInfo.sign_contract_status == 2">解约</template>
@@ -1160,6 +1161,56 @@
                     </div>
                 </div>
             </div>
+              <!--隐私设置-->
+            <div class="modal fade" id="addPrivacy" aria-hidden="true" aria-labelledby="addLabelForm"
+                role="dialog" tabindex="-1" data-backdrop="static">
+                <div class="modal-dialog modal-simple">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                                <i class="iconfont icon-guanbi" aria-hidden="true"></i>
+                            </button>
+                            <h4 class="modal-title">隐私设置</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="example">
+                                <div class="col-md-2 text-right float-left">年龄</div>
+                                <div class="col-md-10 float-left">
+                                    <add-member :type="'birthday'"></add-member>
+                                </div>
+                            </div>
+                            <div class="example">
+                                <div class="col-md-2 text-right float-left">潜在风险点</div>
+                                <div class="col-md-10 float-left">
+                                    <add-member :type="'star_risk_point'"></add-member>
+                                </div>
+                            </div>
+                            <div class="example">
+                                <div class="col-md-2 text-right float-left">手机号</div>
+                                <div class="col-md-10 float-left">
+                                    <add-member :type="'phone'"></add-member>
+                                </div>
+                            </div>
+                            <div class="example">
+                                <div class="col-md-2 text-right float-left">微信</div>
+                                <div class="col-md-10 float-left">
+                                    <add-member :type="'wechat'"></add-member>
+                                </div>
+                            </div>
+                            <div class="example">
+                                <div class="col-md-2 text-right float-left">邮箱</div>
+                                <div class="col-md-10 float-left">
+                                    <add-member :type="'email'"></add-member>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                            <button class="btn btn-primary" type="submit" @click="setPrivacy">确定</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!--附件预览-->
             <ApprovalGreatModule :formData='formDate' :detailpage='isDetail'
                                  :default-value="{value:projectContractDefault,id:$route.params.id}"></ApprovalGreatModule>
@@ -1400,6 +1451,33 @@ export default {
         this.total = response.meta.pagination.total;
         this.total_pages = response.meta.pagination.total_pages;
       });
+    },
+    //隐私设置
+    setPrivacy:function(){
+            let data = {
+                    birthday: this.$store.state.birthday, //年龄
+                    star_risk_point : this.$store.state.star_risk_point,//潜在风险点
+                    phone : this.$store.state.phone,//手机号
+                    wechat : this.$store.state.wechat,//微信
+                    email : this.$store.state.email,//邮箱
+                };
+                let sendData = {
+                    birthday: [],
+                    star_risk_point:[],
+                    phone:[],
+                    wechat:[],
+                    email:[]
+                };
+                for (const key in data) {
+                    for (let i = 0; i < data[key].length; i++) {
+                        sendData[key].push(data[key][i].id)
+                    }
+                }
+                fetch('put', `/stars/${this.$route.params.id}/privacyUser`, sendData).then(function () {
+                    console.log(sendData)
+                    toastr.success('隐私设置成功')
+                    $('#addPrivacy').modal('hide')
+            })
     },
     getCalendar() {
       this.artistId = this.$route.params.id;

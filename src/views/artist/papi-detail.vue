@@ -1958,6 +1958,7 @@ export default {
                     }
                 }
                 fetch('put', `/bloggers/${this.$route.params.id}/privacyUser`, sendData).then(function () {
+                    console.log(sendData)
                     toastr.success('隐私设置成功')
                     $('#addPrivacy').modal('hide')
                 })

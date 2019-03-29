@@ -60,7 +60,18 @@ export default {
                     return this.$store.state.billInfo
                 }else if(this.otherslot){
                     return this.$store.state.otherSlot
+                }else if(this.type === 'birthday'){
+                    return this.$store.state.birthday
+                }else if(this.type === 'star_risk_point'){
+                    return this.$store.state.star_risk_point
+                }else if(this.type === 'phone'){
+                    return this.$store.state.phone
+                }else if(this.type === 'wechat'){
+                    return this.$store.state.wechat
+                }else if(this.type === 'email'){
+                    return this.$store.state.email
                 }
+                
                 else {
                     
                     return this.$store.state.newParticipantsInfo

@@ -954,7 +954,7 @@
                 this.$refs.colse.classList.remove('show')
             },
             rightChecker(value, params, type) {
-                if (this.$store.state.power[type].add !== 'true') {
+                if (this.$store.state.listPower[type].add !== 'true') {
                     toastr.error('当前用户没有权限新增' + value)
                     return
                 }
@@ -1431,13 +1431,13 @@
             tab: function (value) {
                 this.selectedArtistsArr = []
                 if (value == 'start') {
-                    this.$refs.removeDate.setValue({conditions:[]})
+                    this.$refs.customize.setValue({conditions:[]})
                     this.customizeCondition = {}
                     this.getArtists()                  
                     this.isShow = true
                     this.$refs.customize.reset()
                 } else if (value == 'bloggers') {
-                    this.$refs.removeDate.setValue({conditions:[]})
+                    this.$refs.customize.setValue({conditions:[]})
                     this.customizeCondition  = {}
                     this.getBlogger()
                     this.isShow = false
