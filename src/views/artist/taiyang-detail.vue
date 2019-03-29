@@ -660,8 +660,8 @@
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                                 <div class="col-md-3 float-left text-right pl-0">最近更新时间</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
-                                                    <template v-if="artistInfo.last_follow_up_at">
-                                                        {{ common.timeProcessing(artistInfo.last_follow_up_at)}}
+                                                    <template v-if="artistInfo.last_updated_at">
+                                                        {{ common.timeProcessing(artistInfo.last_updated_at)}}
                                                     </template>
                                                     <template v-else>{{ common.timeProcessing(artistInfo.created_at) }}
                                                     </template>

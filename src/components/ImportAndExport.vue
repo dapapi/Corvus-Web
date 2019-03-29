@@ -4,13 +4,13 @@
             <slot></slot>
         </span>
         <span v-if="type === 'import'" style="width:100%">
-            <form v-if="this.importPower" action="" style="display:inline-block;width:100%;height:34px;" >
+            <form v-if="this.importPower === 'true'" action="" style="display:inline-block;width:100%;height:34px;" >
                 <input type="file" :id="`import_${this.getRandom}`" name="avatar" accept=".xlsx" style="display:none" @change="importFile($event)">
                 <label :for="`import_${this.getRandom}`" style="width:100%">
                 <slot></slot>
                 </label>
             </form>
-            <label v-else @click="importFile()" style="width:100%">
+            <label v-else @click="unImport" style="width:100%">
                 <slot></slot>
             </label>
         </span>
@@ -38,19 +38,21 @@ export default {
         params:{
             type:Object
         },
+        //获取导出和导入的权限模块名称
         power:{
             type:String,
-            required:true
+            // required:true
         }
     },
-   
+    
     data(){
         return {
           getRandom:Math.round(Math.random() * 1000),
           file:'',
           header:env.getHeaders(),
-          importPower:true,
-          exportPower:true,
+          importPower:'false',
+          exportPower:'false',
+          route:''
         }
     },
     computed:{
@@ -58,21 +60,31 @@ export default {
             'listPower'
         ])
     },
+    mounted(){
+        this.route = this.$route.path
+    },
     watch:{
+        //第一次加载判断是否有权限列表
         listPower:function(){
-            this.importPower = this.listPower[power].importPower
-            this.exportPower = this.listPower[power].exportPower
+            this.importPower = this.listPower[this.power].import
+            this.exportPower = this.listPower[this.power].export  
+        },
+        //路由跳转重新赋值权限
+        route:function(){
+            if(JSON.stringify(this.listPower)!=='{}'){
+                this.importPower = this.listPower[this.power].import
+                this.exportPower = this.listPower[this.power].export   
+            }
         }
     },
-    mounted(){
-    },
     methods:{
+        //没有导入权限
+        unImport:function(){
+            toastr.error('您没有导入权限，请确认');
+        },
         //导入
         importFile:function(event){
-            if(!this.importPower){
-                toastr.error('您没有导入权限，请确认');
-                return false
-            }
+            
             this.header['Content-Type'] = 'multipart/form-data;boundary = ' + new Date().getTime()
             this.file = event.target.files[0];
             let importUrl = `${env.apiUrl}/${this.moduleName}/import`
@@ -85,16 +97,34 @@ export default {
             instance.post(importUrl, formData)
             .then(function (response) {
                toastr.success('导入成功')
-               window.location.reload()
+               this.$emit('reload')//导入成功刷新数据
             })
             .catch(function (error) {
-                console.log(error);
+                const {response: {status}} = error
+                const {response} = error
+                if (status === 401) {
+                    env.getStatusCode()[401]()
+                } else if (status === 422) {
+                    const errors = response.data.errors
+                    const errInfoArr = Object.keys(errors)
+                    if (errInfoArr.length > 0) {
+                        toastr.error(errors[errInfoArr[0]]);
+                    } else {
+                        toastr.error(response.data.message);
+                    }
+                } else if (status === 403) {
+                    
+                    toastr.error(response.data.message)
+                } else {
+                    toastr.error(response.data.message);
+                }
             });
             
         },
         //导出
         exportFile:function(){
-            if(!this.exportPower){
+            
+            if(this.exportPower==="false"){
                 toastr.error('您没有导出权限，请确认');
                 return false
             }
