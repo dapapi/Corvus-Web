@@ -421,8 +421,12 @@
                                             </div>
                                             <div class="card-text py-20 px-0 clearfix col-md-6 float-left edit-height">
                                                 <div class="col-md-3 float-left text-right pl-0">年龄</div>
-                                                <div class="col-md-9 float-left font-weight-bold">
+                                                <div class="col-md-9 float-left font-weight-bold" v-if="artistInfo.birthday!=='**'">
                                                     {{artistInfo.birthday|jsGetAge}}
+                                                </div>
+                                                 <div class="col-md-9 float-left font-weight-bold"
+                                                         v-if="artistInfo.birthday=='**'">
+                                                        {{artistInfo.birthday}}
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
@@ -1482,19 +1486,35 @@ export default {
     },
     getPrivacy () {
                 let data = {
-                    stars_id: this.$route.params.id
+                    star_id: this.$route.params.id
                 };
                 fetch('get', `/privacyUsers?include=creator`, data).then(response => {
                     let allPrivacyUsers = response.data;
                     console.log(allPrivacyUsers)
-                    // this.$store.state.incubationInfo = [];
-
-                    // if (allPrivacyUsers) {
-                    //     for (let i = 0; i < allPrivacyUsers.length; i++) {
-                    //         this.$store.state.incubationInfo.push(allPrivacyUsers[i].creator.data)
-
-                    //     }
-                    // }
+                    this.$store.state.birthdayInfo = [];
+                    this.$store.state.star_risk_pointInfo = []
+                    this.$store.state.phoneInfo = []
+                    this.$store.state.wechatInfo = []
+                    this.$store.state.emailInfo = []
+                    if (allPrivacyUsers) {
+                        for (let i = 0; i < allPrivacyUsers.length; i++) {
+                            if(allPrivacyUsers[i].field == 'birthday'){
+                                this.$store.state.birthdayInfo.push(allPrivacyUsers[i].creator.data)  
+                            }
+                            if(allPrivacyUsers[i].field == 'star_risk_point'){
+                                this.$store.state.star_risk_pointInfo.push(allPrivacyUsers[i].creator.data)  
+                            }
+                            if(allPrivacyUsers[i].field == 'phone'){
+                                this.$store.state.phoneInfo.push(allPrivacyUsers[i].creator.data)  
+                            }
+                            if(allPrivacyUsers[i].field == 'wechat'){
+                                this.$store.state.wechatInfo.push(allPrivacyUsers[i].creator.data)  
+                            }
+                            if(allPrivacyUsers[i].field == 'email'){
+                                this.$store.state.emailInfo.push(allPrivacyUsers[i].creator.data)  
+                            }
+                        }
+                    }
                 })
             },
     getCalendar() {
