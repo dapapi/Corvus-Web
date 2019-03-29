@@ -52,7 +52,9 @@ axios.interceptors.response.use((res) => {
             toastr.error(response.data.message);
         }
     } else if (status === 403) {
-        toastr.error(response.data.message)
+        // alert(333)
+        console.log(response)
+        toastr.error(response.data.message||response.message)
     } else {
         toastr.error(response.data.message);
     }

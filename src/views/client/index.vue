@@ -7,11 +7,11 @@
                         class="iconfont icon-jiantou_xiayiye font-size-22 pr-5"></i>供应商</router-link>
             </h1>
             <div class="page-header-actions">
-                <ImportAndExport class="float-left" :type="'export'" :moduleName="'clients'" :params="exportParams">
+                <ImportAndExport class="float-left" :type="'export'" :moduleName="'clients'" :power="'client'" :params="exportParams">
                     <i class="iconfont icon-daochu px-5 font-size-20 pr-20 pointer-content" title="导出"
                        aria-hidden="true"></i>
                 </ImportAndExport>
-                <ImportAndExport class="float-left" :type="'import'" :moduleName="'clients'">
+                <ImportAndExport class="float-left" :type="'import'" :moduleName="'clients'" :power="'client'">
                     <i class="iconfont icon-daoru font-size-20 pointer-content" title="导入" aria-hidden="true"></i>
                 </ImportAndExport>
             </div>
@@ -84,7 +84,7 @@
         <customize-filter :data="customizeInfo" @change="customize" :cleanup="cleanUp"
                           @cleanupdone='cleanUp=false'></customize-filter>
 
-        <AddClientType :hidden="power.client == 'false'" @change="showAddModal"/>
+        <AddClientType :hidden="listPower.client?listPower.client.add === 'false':true" @change="showAddModal"/>
 
         <div class="modal fade" id="addClient" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
@@ -267,14 +267,8 @@
         computed: {
             ...mapState([
                 'userList',
-                'power'
+                'listPower'
             ])
-        },
-
-        watch : {
-            power () {
-                console.log(this.power)
-            }
         },
 
         methods: {
