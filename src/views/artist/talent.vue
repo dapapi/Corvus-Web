@@ -42,18 +42,20 @@
                             <a class="nav-link" data-toggle="tab" href="#forum-artist"
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab" :class="isShow?'active':''" @click="tab('start')">艺人</a>
+                            <i v-if="isShow"
+                            style="position: absolute;right:10px;top:10px;color: rgb(0, 176, 255);font-style: normal;"
+                            @click="getArtists(1,1)" class="pointer-content">签约中</i>
                         </li>
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" data-toggle="tab" href="#forum-blogger"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab" :class="!isShow?'active':''" @click="tab('bloggers')">博主</a>
+                            <i 
+                                style="position: absolute;right:10px;top:10px;color: rgb(0, 176, 255);font-style: normal;"
+                                @click="getBlogger(1,1)" class="pointer-content">签约中</i>
                         </li>
-                        <i v-if="isShow"
-                           style="position: absolute;right:10px;top:10px;color: rgb(0, 176, 255);font-style: normal;"
-                           @click="getArtists(1,1)" class="pointer-content">签约中</i>
-                        <i v-if="!isShow"
-                           style="position: absolute;right:10px;top:10px;color: rgb(0, 176, 255);font-style: normal;"
-                           @click="getBlogger(1,1)" class="pointer-content">签约中</i>
+                        
+                       
                     </ul>
                 </div>
 
@@ -1433,13 +1435,13 @@
                     this.customizeCondition = {}
                     this.getArtists()                  
                     this.isShow = true
-                    // this.$refs.removeDate.reset()
+                    this.$refs.customize.reset()
                 } else if (value == 'bloggers') {
                     this.$refs.removeDate.setValue({conditions:[]})
                     this.customizeCondition  = {}
                     this.getBlogger()
                     this.isShow = false
-                    // this.$refs.removeDate.reset()
+                    this.$refs.customize.reset()
                 }
                 
             },
