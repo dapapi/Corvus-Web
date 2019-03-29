@@ -81,11 +81,10 @@ export default {
     setUserAvatar(state, data) {
         state.avatar = data
     },
-    // 设置权限(新增)
-    setUserPower(state, data) {
-        state.power = data
-    },
     setSupplierDetails(state,data){
         state.supplierDetails = data
+    },
+    setListPower(state,data){
+        state.listPower = data
     }
 }
