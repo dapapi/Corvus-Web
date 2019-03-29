@@ -1062,6 +1062,7 @@
                     }
                     this.noPermission = false;
                     this.scheduleData = response.data;
+                    
                     if (this.scheduleData.privacy) {
                         this.schedulePrivacy = true
                     }

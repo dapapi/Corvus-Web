@@ -1345,7 +1345,6 @@ export default {
       };
       fetch('get', `/stars/${this.artistId}`, data).then((response) => {
         this.artistInfo = response.data;
-        console.log(this.artistInfo)
         this.artistName = response.data.name;
         if (response.data.star_risk_point == 'privacy') {
           this.artistInfo.star_risk_point = '**';

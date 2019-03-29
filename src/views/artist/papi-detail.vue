@@ -1503,6 +1503,7 @@ export default {
             },
     ScheduleBox (value) {
                 this.showScheduleModal(value)
+                console.log(value)
             },
     addSchedule () {
                 let startTime = '';
