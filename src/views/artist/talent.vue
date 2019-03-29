@@ -9,7 +9,7 @@
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end" v-if="!isShow" ref="colse">
-                    <ImportAndExport :type="'import'" :moduleName="'bloggers'" :power="'blogger'" @importFile="importFile">
+                    <ImportAndExport :type="'import'" :moduleName="'bloggers'" :power="'blogger'" @importFile="importFile" @reload="getArtists"> 
                         <a class="dropdown-item" role="menuitem">导入</a>
                     </ImportAndExport>
                     <ImportAndExport :type="'export'" :moduleName="'bloggers'" :power="'blogger'" :params="exportParams">
@@ -20,7 +20,7 @@
                 </div>
                 <div class="dropdown-menu  dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end" v-if="isShow" ref="colse">
-                    <ImportAndExport :type="'import'" :moduleName="'stars'" :power="'star'" @importFile="importFile">
+                    <ImportAndExport :type="'import'" :moduleName="'stars'" :power="'star'" @importFile="importFile"  @reload="getBlogger">
                         <a class="dropdown-item" role="menuitem">导入</a>
                     </ImportAndExport>
                     <ImportAndExport :type="'export'" :moduleName="'stars'" :power="'star'" :params="exportParams">
