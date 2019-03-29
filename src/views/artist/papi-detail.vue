@@ -214,7 +214,7 @@
                                               :calendars="calendarId" ref="calendar"
                                               @showToast="showToast"
                                               @scheduleClick="showScheduleModal"
-                                              @dayClick="showAddScheduleModal"></calendar>
+                                              @dayClick="showAddScheduleModal" :isModel="true"></calendar>
                                 </div>
                             </div>
                             <div class="tab-pane animation-fade fixed-button-father" id="forum-artist-projects"
