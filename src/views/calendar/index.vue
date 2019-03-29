@@ -48,7 +48,8 @@
                                                        @blur="getCalendarList" @keyup.enter="getCalendarList">
                                             </div>
                                             <div style="max-height: 350px;overflow: hidden;position: relative;">
-                                                <div v-show="showAllCalendar" style="max-height: 350px;overflow-y: auto;">
+                                                <div v-show="showAllCalendar"
+                                                     style="max-height: 350px;overflow-y: auto;">
                                                     <ul style="padding-bottom: 30px;">
                                                         <li v-for="(calendar,index) in calendarList" :key="index"
                                                             class="clearfix">
@@ -321,7 +322,7 @@
                 <div class="modal-content" v-if="getScheduleFinish">
                     <div class="modal-header">
                         <div style="order: 2">
-                            <span v-show="!noPermission">
+                            <span v-show="!noPermission && !isParticipant">
                                 <i class="iconfont icon-bianji2 pr-4 font-size-16 pointer-content"
                                    @click="changeScheduleType('edit')" aria-hidden="true"></i>
                                 <FileUploader is-icon="true" class="float-left" @change="fileUpload"></FileUploader>
@@ -392,7 +393,8 @@
                         <div class="example" v-if="scheduleData.participants && !noPermission">
                             <div class="col-md-2 px-0 float-left">参与人</div>
                             <div class="col-md-10 pl-0 float-left">
-                                <AddMember type="add" @change="changeScheduleParticipants"></AddMember>
+                                <AddMember type="add" participantsSingle="isParticipant"
+                                           @change="changeScheduleParticipants"></AddMember>
                             </div>
                         </div>
                         <div class="example" v-if="scheduleData.desc && !noPermission">
@@ -713,6 +715,7 @@
                 isAddButtonDisable: false,
                 isAddCalendarButtonDisable: false,
                 principal: '',
+                isParticipant: false,
             }
         },
         mounted() {
@@ -1072,6 +1075,9 @@
                     }
                     this.noPermission = false;
                     this.scheduleData = response.data;
+                    if (response.data.calendar.data.starable_type === 'star' && this.userInfo.id != response.data.calendar.data.principal_id) {
+                        this.isParticipant = true;
+                    }
                     if (this.scheduleData.privacy) {
                         this.schedulePrivacy = true
                     }
@@ -1590,4 +1596,11 @@
         padding-top: 10px;
     }
 
+    .page-aside {
+        overflow-y: auto;
+    }
+
+    .page-aside::-webkit-scrollbar {
+        display: none
+    }
 </style>
