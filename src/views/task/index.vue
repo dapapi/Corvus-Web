@@ -121,7 +121,13 @@
                                     </template>
                                 </td>
                                 <!-- <td>暂无</td> -->
-                                <td>{{ task.title }}
+                                <td>
+                                    <template v-if="my || searchDepartment || searchUser">
+                                        {{ task.type ? task.type.data ? task.type.data.title : '' : '' }}
+                                    </template>
+                                    <template v-else>
+                                        {{ task.title }}
+                                    </template>
                                 </td>
                                 <td>
                                     <template v-if="task.status === 1"><span style="color:#FF9800">进行中</span></template>

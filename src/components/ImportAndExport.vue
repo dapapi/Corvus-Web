@@ -41,7 +41,7 @@ export default {
         //获取导出和导入的权限模块名称
         power:{
             type:String,
-            required:true
+            // required:true
         }
     },
     
@@ -50,8 +50,9 @@ export default {
           getRandom:Math.round(Math.random() * 1000),
           file:'',
           header:env.getHeaders(),
-          importPower:true,
-          exportPower:true,
+          importPower:'false',
+          exportPower:'false',
+          route:''
         }
     },
     computed:{
@@ -59,10 +60,21 @@ export default {
             'listPower'
         ])
     },
+    mounted(){
+        this.route = this.$route.path
+    },
     watch:{
+        //第一次加载判断是否有权限列表
         listPower:function(){
             this.importPower = this.listPower[this.power].import
-            this.exportPower = this.listPower[this.power].export   
+            this.exportPower = this.listPower[this.power].export  
+        },
+        //路由跳转重新赋值权限
+        route:function(){
+            if(JSON.stringify(this.listPower)!=='{}'){
+                this.importPower = this.listPower[this.power].import
+                this.exportPower = this.listPower[this.power].export   
+            }
         }
     },
     methods:{
@@ -72,7 +84,7 @@ export default {
         },
         //导入
         importFile:function(event){
-            
+            let _this = this
             this.header['Content-Type'] = 'multipart/form-data;boundary = ' + new Date().getTime()
             this.file = event.target.files[0];
             let importUrl = `${env.apiUrl}/${this.moduleName}/import`
@@ -80,14 +92,13 @@ export default {
             formData.append('file', this.file);
             //创建一个干净的axios对象
             var instance = axios.create();
-            this.$emit('importFile')
+            // this.$emit('importFile')
             instance.defaults.headers = this.header
             instance.post(importUrl, formData)
             .then(function (response) {
                toastr.success('导入成功')
-               this.$emit('reload')//导入成功刷新数据
-            })
-            .catch(function (error) {
+               _this.$emit('reload')//导入成功刷新数据
+            }).catch(function (error) {
                 const {response: {status}} = error
                 const {response} = error
                 if (status === 401) {
