@@ -1383,7 +1383,7 @@ export default {
     $('#changeSchedule').on('hidden.bs.modal', () => {
       _this.initAddScheduleModal();
     });
-    // this.getPrivacy() //获取隐私设置
+    this.getPrivacy() //获取隐私设置
   },
 
   methods: {
@@ -1480,23 +1480,23 @@ export default {
                     $('#addPrivacy').modal('hide')
             })
     },
-    // getPrivacy () {
-    //             let data = {
-    //                 stars_id: this.$route.params.id
-    //             };
-    //             fetch('get', `/privacyUsers?include=creator`, data).then(response => {
-    //                 let allPrivacyUsers = response.data;
-    //                 console.log(allPrivacyUsers)
-    //                 // this.$store.state.incubationInfo = [];
+    getPrivacy () {
+                let data = {
+                    stars_id: this.$route.params.id
+                };
+                fetch('get', `/privacyUsers?include=creator`, data).then(response => {
+                    let allPrivacyUsers = response.data;
+                    console.log(allPrivacyUsers)
+                    // this.$store.state.incubationInfo = [];
 
-    //                 // if (allPrivacyUsers) {
-    //                 //     for (let i = 0; i < allPrivacyUsers.length; i++) {
-    //                 //         this.$store.state.incubationInfo.push(allPrivacyUsers[i].creator.data)
+                    // if (allPrivacyUsers) {
+                    //     for (let i = 0; i < allPrivacyUsers.length; i++) {
+                    //         this.$store.state.incubationInfo.push(allPrivacyUsers[i].creator.data)
 
-    //                 //     }
-    //                 // }
-    //             })
-    //         },
+                    //     }
+                    // }
+                })
+            },
     getCalendar() {
       this.artistId = this.$route.params.id;
 
