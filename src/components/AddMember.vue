@@ -8,7 +8,7 @@
                 </span>
                 <div class="splicer" v-if="otherslot && (index < selectMemberArr.length-1)"></div>
             </li>
-            <li class="addMember-item">
+            <li class="addMember-item" v-show="!participantsSingle">
                 <div class="addMember-trigger" :class="isMemberShow ? 'addMember-active': ''" :id="'selectStaff' + this._uid">
                     <div class="addMember-trigger-button" :class="selectMemberArr.length > 0 ? 'addMember-trigger-left' : ''"
                          @click="showMember"><i class="iconfont icon-tianjia"></i></div>
@@ -25,7 +25,7 @@
 <script>
 export default {
   name: '',
-  props: ['type', 'otherslot'],
+  props: ['type', 'otherslot', 'participantsSingle'],
   data() {
     return {
       isMemberShow: false,
