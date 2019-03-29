@@ -716,7 +716,7 @@ pagenumber;
                 this.priority = value
             },            
             changeTrailType (value) {
-                if(this.$store.state.power.trail.add !=='true'){
+                if(this.$store.state.listPower.trail.add !=='true'){
                     toastr.error('当前用户没有权限新增销售线索')
                     return
                 }
