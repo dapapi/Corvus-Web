@@ -1034,10 +1034,6 @@
                 this.changeInfo.principal_id = value
             },
             changeEditStatus(value, config) {
-                //  if (this.$store.state.power.client.add !== 'true') {
-                //     toastr.error('当前用户没有编辑客户的权限');
-                //     return;
-                // }
                 if (value === false && this.clientInfo.powers.add_contact) {
                     toastr.error('当前用户没有权限新增联系人')
                     return
@@ -1157,10 +1153,10 @@
             },
             // 任务弹层
             handleTask() {
-                //  if (this.$store.state.power.task.add !== 'true') {
-                //     toastr.error('您没有新建任务的权限！');
-                //     return;
-                // }
+                 if (this.$store.state.listPower.task.add !== 'true') {
+                    toastr.error('您没有新建任务的权限！');
+                    return;
+                }
                 // if (this.power == 'false') {
                 //     toastr.error('您没有新建任务的权限！')
                 //     return
