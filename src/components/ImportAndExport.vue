@@ -4,13 +4,13 @@
             <slot></slot>
         </span>
         <span v-if="type === 'import'" style="width:100%">
-            <form v-if="this.importPower" action="" style="display:inline-block;width:100%;height:34px;" >
+            <form v-if="this.importPower === 'true'" action="" style="display:inline-block;width:100%;height:34px;" >
                 <input type="file" :id="`import_${this.getRandom}`" name="avatar" accept=".xlsx" style="display:none" @change="importFile($event)">
                 <label :for="`import_${this.getRandom}`" style="width:100%">
                 <slot></slot>
                 </label>
             </form>
-            <label v-else @click="importFile()" style="width:100%">
+            <label v-else @click="unImport" style="width:100%">
                 <slot></slot>
             </label>
         </span>
@@ -38,12 +38,13 @@ export default {
         params:{
             type:Object
         },
+        //获取导出和导入的权限模块名称
         power:{
             type:String,
             required:true
         }
     },
-   
+    
     data(){
         return {
           getRandom:Math.round(Math.random() * 1000),
@@ -60,19 +61,18 @@ export default {
     },
     watch:{
         listPower:function(){
-            this.importPower = this.listPower[power].importPower
-            this.exportPower = this.listPower[power].exportPower
+            this.importPower = this.listPower[this.power].import
+            this.exportPower = this.listPower[this.power].export   
         }
     },
-    mounted(){
-    },
     methods:{
+        //没有导入权限
+        unImport:function(){
+            toastr.error('您没有导入权限，请确认');
+        },
         //导入
         importFile:function(event){
-            if(!this.importPower){
-                toastr.error('您没有导入权限，请确认');
-                return false
-            }
+            
             this.header['Content-Type'] = 'multipart/form-data;boundary = ' + new Date().getTime()
             this.file = event.target.files[0];
             let importUrl = `${env.apiUrl}/${this.moduleName}/import`
@@ -85,7 +85,7 @@ export default {
             instance.post(importUrl, formData)
             .then(function (response) {
                toastr.success('导入成功')
-               window.location.reload()
+               this.$emit('reload')//导入成功刷新数据
             })
             .catch(function (error) {
                 console.log(error);
@@ -94,7 +94,8 @@ export default {
         },
         //导出
         exportFile:function(){
-            if(!this.exportPower){
+            
+            if(this.exportPower==="false"){
                 toastr.error('您没有导出权限，请确认');
                 return false
             }

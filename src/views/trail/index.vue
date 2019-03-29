@@ -11,7 +11,7 @@
                     <a class="iconfont icon-daochu font-size-20 pr-20 pointer-content" aria-hidden="true"
                        title="导出线索"></a>
                 </ImportAndExport>
-                <ImportAndExport class="float-left" :type="'import'" :moduleName="'trails'" :power="trail">
+                <ImportAndExport class="float-left" :type="'import'" :moduleName="'trails'" :power="trail" @reload="getSales">
                     <a class="iconfont icon-daoru px-5 font-size-20 pointer-content" aria-hidden="true"
                        title="导入线索"></a>
                 </ImportAndExport>
