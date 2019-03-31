@@ -203,7 +203,7 @@
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-base"
                                    aria-controls="forum-present"
                                    aria-expanded="false" role="tab"
-                                   :class="artistInfo.sign_contract_status == 2?'':'active'">概况</a>
+                                   :class="artistInfo.sign_contract_status == 2?'':'active'" >概况</a>
                             </li>
                         </ul>
                         <div class="tab-content  px-0 nav-tabs-animate bg-white col-md-12">
@@ -1290,7 +1290,7 @@ export default {
         mounted() {
             this.getTaskDate();
             this.getCalendar();
-            this.charts();
+            // this.charts();
             this.getTaskNum();
             let _this = this;
             this.user = JSON.parse(Cookies.get('user'));
@@ -1311,6 +1311,7 @@ export default {
             this.getTimes()
             this.getResources();
             this.getPrivacy() //获取隐私设置
+            
         },
         methods: {
             charts: function () {
@@ -1423,17 +1424,7 @@ export default {
                     };
                     this.isLoading = false;
                 });
-                //任务状态跑组。试戏
-                fetch('get', '/task_types').then(response => {
-
-                    this.tasksType = response.data;
-                    response.data.forEach(item => {
-
-                        if (item.title == '视频评分') {
-                            this.scoreId = item.id
-                        }
-                    })
-                });
+               
                 fetch('get', '/bloggers/gettype').then(response => {
                     this.artistTypeArr = response.data
                 });
@@ -1860,6 +1851,17 @@ export default {
             },
             //任务数据
             getArtistTasks: function (page = 1) {
+                 //任务状态跑组。试戏
+                fetch('get', '/task_types').then(response => {
+
+                    this.tasksType = response.data;
+                    response.data.forEach(item => {
+
+                        if (item.title == '视频评分') {
+                            this.scoreId = item.id
+                        }
+                    })
+                });
                 fetch('get', '/bloggers/' + this.artistId + '/tasks', {
                     page: page
                 }).then(response => {
@@ -1868,6 +1870,7 @@ export default {
                     this.total = response.meta.pagination.total;
                     this.total_pages = response.meta.pagination.total_pages;
                 })
+
             },
     taskcancel () {
                 this.$store.state.newParticipantsInfo = []

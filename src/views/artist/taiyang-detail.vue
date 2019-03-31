@@ -1312,10 +1312,10 @@ export default {
     ApprovalGreatModule,
   },
   mounted() {
-    this.getTaskType();
+    
     this.getCalendar();
-    this.draw();
-    this.getArtistsBill();
+    // this.draw();
+    // this.getArtistsBill();
     this.getTaskDate();
     this.getProjectList();
     this.selectProjectLinkage();
@@ -1829,6 +1829,7 @@ export default {
     },
     // 获取任务列表
     getTaskList(page = 1) {
+        this.getTaskType();
       fetch('get', `/stars/${this.$route.params.id}/tasks/`, {
         page,
       }).then((response) => {

@@ -940,10 +940,10 @@
             this.getStarsField()
             this.getBloggerField()
             this.getStars();
+           
         },
         mounted() {
-            this.getArtists();
-            this.getBlogger();
+           
             this.getBlogType() //获取博主类型
             $('table').asSelectable();
         },
@@ -1422,20 +1422,23 @@
                 let organization_id = JSON.parse(Cookies.get('user')).organization_id
                 if (organization_id == 411) {
                     this.isShow = true
+                     this.getArtists();
+          
                 } else if (organization_id == 412) {
                     this.isShow = false
+                    this.getBlogger();
                 }
             },
             tab: function (value) {
                 this.selectedArtistsArr = []
                 if (value == 'start') {
-                    this.$refs.removeDate.setValue({conditions:[]})
+                    this.$refs.customize.setValue({conditions:[]})
                     this.customizeCondition = {}
                     this.getArtists()                  
                     this.isShow = true
                     // this.$refs.removeDate.reset()
                 } else if (value == 'bloggers') {
-                    this.$refs.removeDate.setValue({conditions:[]})
+                    this.$refs.customize.setValue({conditions:[]})
                     this.customizeCondition  = {}
                     this.getBlogger()
                     this.isShow = false
