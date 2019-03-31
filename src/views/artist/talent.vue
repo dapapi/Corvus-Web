@@ -158,8 +158,12 @@
                                 </td>
                                 <td @click="redirectArtistDetail(artist.id)">{{ artist.name }}</td>
                                 <td @click="redirectArtistDetail(artist.id)"
-                                    v-if="artistsInfo.find(item=>item.sign_contract_status==1)">
+                                    v-if="artistsInfo.find(item=>item.sign_contract_status==1)&&artist.birthday!=='privacy'">
                                     {{artist.birthday|jsGetAge}}
+                                </td>
+                                <td @click="redirectArtistDetail(artist.id)"
+                                    v-if="artistsInfo.find(item=>item.sign_contract_status==1)&&artist.birthday=='privacy'">
+                                    **
                                 </td>
                                 <td @click="redirectArtistDetail(artist.id)"
                                     v-if="artistsInfo.find(item=>item.sign_contract_status!==1)">暂无
@@ -1004,6 +1008,7 @@
                 fetch('get', '/stars', this.listData).then(function (response) {
                     if (response.data) {
                         _this.artistsInfo = response.data;
+                        console.log(_this.artistsInfo)
                     }
                     _this.artistsInfo.forEach(item => {
                         if (item.sign_contract_status) {

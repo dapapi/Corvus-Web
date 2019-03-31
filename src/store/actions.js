@@ -24,6 +24,16 @@ export default {
             data.commit('changeDivisionInfo', params.data)
         } else if (params.type === 'incubation') {
             data.commit('changeIncubationInfo', params.data)
+        } else if (params.type === 'birthday') {
+            data.commit('changeBirthdayInfo', params.data)
+        } else if (params.type === 'star_risk_point') {
+            data.commit('changeStar_risk_pointInfo', params.data)
+        } else if (params.type === 'phone') {
+            data.commit('changePhoneInfo', params.data)
+        } else if (params.type === 'wechat') {
+            data.commit('changeWechatInfo', params.data)
+        } else if (params.type === 'email') {
+            data.commit('changeEmailInfo', params.data)
         } else if (params.type === 'bill') {
             data.commit('changeBillInfo', params.data)
         } else {

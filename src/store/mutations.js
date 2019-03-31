@@ -19,6 +19,21 @@ export default {
     changeDivisionInfo: function (state, data) {
         state.divisionInfo = data
     },
+    changeBirthdayInfo: function (state, data) {
+        state.birthdayInfo = data
+    },
+    changeStar_risk_pointInfo: function (state, data) {
+        state.star_risk_pointInfo = data
+    },
+    changePhoneInfo: function (state, data) {
+        state.phoneInfo = data
+    },
+    changeWechatInfo : function (state, data) {
+        state.wechatInfo = data
+    },
+    changeEmailInfo: function (state, data) {
+        state.emailInfo = data
+    },
     changeIncubationInfo: function (state, data) {
         state.incubationInfo = data
     },
