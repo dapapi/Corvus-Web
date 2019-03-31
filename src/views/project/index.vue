@@ -118,12 +118,12 @@
 
         </div>
 
-        <customize-filter :data="customizeInfo" @change="customize" :stararr='starsArr' :cleanup="cleanUp"
+        <customize-filter v-if="canShow" :data="customizeInfo" @change="customize" :stararr='starsArr' :cleanup="cleanUp"
                           @cleanupdone='cleanUp=false'></customize-filter>
 
-        <AddClientType type="project" @change="changeProjectType"></AddClientType>
+        <!-- <AddClientType type="project" @change="changeProjectType"></AddClientType> -->
 
-        <BuildProject :project-fields-arr="projectFieldsArr" :project-type="projectType"></BuildProject>
+        <BuildProject v-if="canShow" :project-fields-arr="projectFieldsArr" :project-type="projectType"></BuildProject>
     </div>
 
 </template>
@@ -172,7 +172,8 @@ export default {
                 cleanUp: false,
                 exportParams: {},//导出参数
                 fetchData: {},
-                customizeCondition: {}
+                customizeCondition: {},
+                canShow:false,
             }
         },
 
@@ -324,6 +325,7 @@ export default {
                     my:this.getProjectStatus
                 }
                 fetch(methods, newUrl || url, fetchData).then((response) => {
+                    this.canShow = true
                     _this.projectsInfo = response.data
                     console.log(_this.projectsInfo)
                     _this.total = response.meta.pagination.total;

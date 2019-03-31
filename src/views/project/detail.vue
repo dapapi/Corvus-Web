@@ -5,7 +5,7 @@
             <h1 class="page-title d-inline">项目详情</h1>
 
             <div class="page-header-actions dropdown show task-dropdown float-right"
-                 v-if="projectInfo.approval_status == 232 || projectInfo.type == 5">
+                 v-if="canShow && projectInfo.approval_status == 232 || projectInfo.type == 5">
                 <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" id="taskDropdown"
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
@@ -945,9 +945,9 @@
             </div>
         </div>
         <!-- 新建任务 -->
-        <AddTask :resourceable_id="projectId" resource_type="3" :resource_title="projectName" resource_name="项目" @success="addTask"></AddTask>
+        <AddTask v-if="canShow" :resourceable_id="projectId" resource_type="3" :resource_title="projectName" resource_name="项目" @success="addTask"></AddTask>
         <!-- 隐私设置 -->
-        <div class="modal fade" id="addPrivacy" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShow" class="modal fade" id="addPrivacy" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -996,7 +996,7 @@
         </div>
         <!-- 撤单原因 -->
         <div class="modal fade" id="withdrawal" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1" v-if="projectInfo.type != 5" data-backdrop="static">
+             role="dialog" tabindex="-1" v-if="canShow && projectInfo.type != 5" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -1022,7 +1022,7 @@
             </div>
         </div>
         <!-- 修改项目进度 -->
-        <div class="modal fade modal-simple" id="changeProjectProgress" aria-labelledby="exampleModalTitle"
+        <div v-if="canShow" class="modal fade modal-simple" id="changeProjectProgress" aria-labelledby="exampleModalTitle"
              role="dialog"
              tabindex="-1" data-backdrop="static" aria-hidden="true">
             <div class="modal-dialog modal-simple">
@@ -1051,7 +1051,7 @@
         </div>
         <!-- 新建/修改回款期次 -->
         <div class="modal fade" id="addPaybackTime" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1" data-backdrop="static" v-if="projectInfo.type != 5">
+             role="dialog" tabindex="-1" data-backdrop="static" v-if="canShow && projectInfo.type != 5">
             <div class="modal-dialog modal-simple" v-if="projectInfo.title">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -1126,7 +1126,7 @@
         </div>
         <!-- 新建/修改回款记录 -->
         <div class="modal fade" id="addPayback" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1" data-backdrop="static" v-if="projectInfo.type != 5">
+             role="dialog" tabindex="-1" data-backdrop="static" v-if="canShow && projectInfo.type != 5">
             <div class="modal-dialog modal-simple" v-if="projectInfo.title">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -1210,7 +1210,7 @@
         </div>
         <!-- 新建/修改开票记录 -->
         <div class="modal fade" id="addInvoice" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1" v-if="projectInfo.type != 5">
+             role="dialog" tabindex="-1" v-if="canShow &&  projectInfo.type != 5">
             <div class="modal-dialog modal-simple" data-backdrop="static" v-if="projectInfo.title">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -1287,7 +1287,7 @@
             </div>
         </div>
         <!-- 关联资源 -->
-        <div class="modal fade" id="addLinkage" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShow" class="modal fade" id="addLinkage" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -1374,7 +1374,7 @@
         </div>
         <!-- 新增结算单 -->
         <div class="modal fade" id="addBill" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1" data-backdrop="static" v-if="projectInfo.type != 5">
+             role="dialog" tabindex="-1" data-backdrop="static" v-if="canShow && projectInfo.type != 5">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -1423,9 +1423,9 @@
             </div>
         </div>
 
-        <Flag :typeText="changeProjectStatusText" @confirmFlag='changeProjectStatus'/>
+        <Flag v-if="canShow" :typeText="changeProjectStatusText" @confirmFlag='changeProjectStatus'/>
         <!-- 删除回款相关 -->
-        <div class="modal fade" id="paybackDel" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShow" class="modal fade" id="paybackDel" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -1452,7 +1452,7 @@
             </div>
         </div>
 
-        <ApprovalGreatModule :formData="formData"
+        <ApprovalGreatModule v-if="canShow" :formData="formData"
                              :default-value="{value:projectContractDefault,id:$route.params.id}"></ApprovalGreatModule>
     </div>
 </template>
@@ -1596,6 +1596,7 @@ export default {
                 isBillButtonDisable: false,
                 isPaybackButtonDisable: false,
                 isPaybackDisable: false,
+                canShow:false,
             }
         },
 
@@ -1674,6 +1675,7 @@ export default {
                     include: 'principal,participants,tasks,creator,fields,trail.expectations.broker,trail.expectations.publicity,trail.client,relate_tasks,relate_projects,type',
                 };
                 fetch('get', '/projects/' + this.projectId, data).then(response => {
+                    this.canShow = true
                     this.oldInfo = JSON.parse(JSON.stringify(response));
                     let fieldsArr = response.meta.fields.data;
                     this.metaInfo = response.meta;

@@ -15,11 +15,9 @@
         </div>
 
         <div class="page-content container-fluid" v-if="trailInfo">
-
             <div class="panel col-md-12">
                 <div class="card-block">
                     <h4 class="card-title">{{ trailInfo.title }}</h4>
-
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left pl-0">
                             <div class="float-left pl-0 pr-2 col-md-3">
@@ -128,7 +126,7 @@
 
                 </div>
             </div>
-            <div style="display: flex; justify-content: space-between; align-items: flex-start">
+            <div v-if="canShow" style="display: flex; justify-content: space-between; align-items: flex-start">
                 <div class="panel" style="width: calc(66% - 15px);z-index: 100;float:left;margin-right:30px;">
 
                     <div class="col-md-12">
@@ -481,10 +479,10 @@
             </div>
         </div>
 
-        <addTask :resourceable_id="trailId" resource_type="5" :resource_title="trailName"
+        <addTask v-if="canShow" :resourceable_id="trailId" resource_type="5" :resource_title="trailName"
                  resource_name="销售线索" :lock_status="trailInfo.lock_status" @success="addTask"></addTask>
 
-        <div class="modal fade" id="refuseTrail" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShow" class="modal fade" id="refuseTrail" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -517,7 +515,7 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="recoverTrail" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShow" class="modal fade" id="recoverTrail" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -602,6 +600,7 @@ export default {
       lockUser: {},
       startTime: '',
       trailName: '',
+      canShow:false
     };
   },
   created() {
@@ -776,6 +775,7 @@ export default {
         include: 'principal,client,lockuser,contact,starexpectations,bloggerexpectations,starrecommendations,bloggerrecommendations,project',
       };
       fetch('get', `/trails/${this.trailId}`, data).then((response) => {
+        this.canShow = true
         this.lockUser = response.data.lockuser;
         this.trailType = response.data.type;
         this.trailInfo = response.data;
