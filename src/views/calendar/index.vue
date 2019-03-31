@@ -1,6 +1,5 @@
 <template>
     <div class="page">
-        <keep-alive>
             <div class="page-aside-left">
                 <div class="page-aside">
                     <div class="page-aside-inner page-aside-scroll scrollable is-enabled scrollable-vertical"
@@ -149,17 +148,17 @@
 
             </div>
 
-            <div class="calendar-toast" v-show="toastShow"
-                 :style="'position: absolute;top:' + toastY + 'px; left: ' + toastX + 'px;'">双击创建日程
-            </div>
+        <div  class="calendar-toast" v-show="toastShow"
+             :style="'position: absolute;top:' + toastY + 'px; left: ' + toastX + 'px;'">双击创建日程
+        </div>
 
-            <!-- 新建/修改 日程 -->
-            <div class="modal fade line-center" id="changeSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
-                 role="dialog" tabindex="-1" data-backdrop="static">
-                <div class="modal-dialog modal-simple">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <div style="order: 2">
+        <!-- 新建/修改 日程 -->
+        <div v-if="canShow" class="modal fade line-center" id="changeSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
+             role="dialog" tabindex="-1" data-backdrop="static">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div style="order: 2">
                             <span class="pointer-content hover-content mr-4" data-toggle="modal"
                                   data-target="#addLinkage">关联</span>
                                 <i class="iconfont icon-guanbi pointer-content" aria-hidden="true" data-dismiss="modal"></i>
@@ -315,14 +314,13 @@
                     </div>
                 </div>
             </div>
-
-            <!-- 查看日程 -->
-            <div class="modal fade" id="checkSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
-                 role="dialog" tabindex="-1" data-backdrop="static">
-                <div class="modal-dialog modal-simple">
-                    <div class="modal-content" v-if="getScheduleFinish">
-                        <div class="modal-header">
-                            <div style="order: 2">
+        <!-- 查看日程 -->
+        <div v-if="canShow" class="modal fade" id="checkSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
+             role="dialog" tabindex="-1" data-backdrop="static">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content" v-if="getScheduleFinish">
+                    <div class="modal-header">
+                        <div style="order: 2">
                             <span v-show="!noPermission && !isParticipant">
                                 <i class="iconfont icon-bianji2 pr-4 font-size-16 pointer-content"
                                    @click="changeScheduleType('edit')" aria-hidden="true"></i>
@@ -423,21 +421,29 @@
                 </div>
             </div>
 
-            <!-- 添加/修改 日历 -->
-            <div class="modal fade line-center" id="addCalendar" aria-hidden="true" aria-labelledby="addLabelForm"
-                 role="dialog" tabindex="-1" data-backdrop="static">
-                <div class="modal-dialog modal-simple">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                                <i class="iconfont icon-guanbi" aria-hidden="true"></i>
-                            </button>
-                            <template v-if="calendarActionType === 'add'">
-                                <h4 class="modal-title">添加日历</h4>
-                            </template>
-                            <template v-else>
-                                <h4 class="modal-title">修改日历</h4>
-                            </template>
+        <!-- 添加/修改 日历 -->
+        <div v-if="canShow" class="modal fade line-center" id="addCalendar" aria-hidden="true" aria-labelledby="addLabelForm"
+             role="dialog" tabindex="-1" data-backdrop="static">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
+                        </button>
+                        <template v-if="calendarActionType === 'add'">
+                            <h4 class="modal-title">添加日历</h4>
+                        </template>
+                        <template v-else>
+                            <h4 class="modal-title">修改日历</h4>
+                        </template>
+                    </div>
+                    <div class="modal-body">
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">标题</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <input type="text" class="form-control" title="" placeholder="请输入标题"
+                                       v-model="scheduleName">
+                            </div>
                         </div>
                         <div class="modal-body">
                             <div class="example">
@@ -501,7 +507,7 @@
             </div>
 
             <!-- 删除日历/日程 -->
-            <div class="modal fade" id="delModel" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
+            <div v-if="canShow" class="modal fade" id="delModel" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
                  tabindex="-1" data-backdrop="static">
                 <div class="modal-dialog modal-simple">
                     <div class="modal-content">
@@ -533,70 +539,71 @@
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- 日历批量添加成员 -->
-            <div class="modal fade" id="addMembers" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
-                 tabindex="-1" data-backdrop="static">
-                <div class="modal-dialog modal-simple" style="max-width: 50rem;">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" aria-hidden="true" data-dismiss="modal" class="close"><i
-                                    aria-hidden="true" class="iconfont icon-guanbi"></i></button>
-                            <h4 class="modal-title">批量添加成员</h4>
-                        </div>
-                        <div class="modal-body clearfix pt-10">
-                            <ListSelectMember :type="'change'"></ListSelectMember>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                            <button class="btn btn-primary" @click="addProjectMultipleMember">确定</button>
-                        </div>
+        <!-- 日历批量添加成员 -->
+        <div v-if="canShow" class="modal fade" id="addMembers" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
+             tabindex="-1" data-backdrop="static">
+            <div class="modal-dialog modal-simple" style="max-width: 50rem;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" aria-hidden="true" data-dismiss="modal" class="close"><i
+                                aria-hidden="true" class="iconfont icon-guanbi"></i></button>
+                        <h4 class="modal-title">批量添加成员</h4>
+                    </div>
+                    <div class="modal-body clearfix pt-10">
+                        <ListSelectMember :type="'change'"></ListSelectMember>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-primary" @click="addProjectMultipleMember">确定</button>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- 关联资源 -->
-            <div class="modal fade" id="addLinkage" aria-hidden="true" aria-labelledby="addLabelForm"
-                 role="dialog" tabindex="-1" data-backdrop="static">
-                <div class="modal-dialog modal-simple">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
-                                <i class="iconfont icon-guanbi" aria-hidden="true"></i>
-                            </button>
-                            <h4 class="modal-title">关联资源</h4>
-                        </div>
-                        <div class="modal-body">
-                            <div class="tab-pane p-20" role="tabpanel">
-                                <div class="nav-tabs-vertical" data-plugin="tabs" style="margin: 0 -20px -30px  -20px ">
-                                    <ul class="nav nav-tabs nav-tabs-line mr-25" role="tablist">
-                                        <li class="nav-item" role="presentation" @click="selectProjectLinkage('project')">
-                                            <a class="nav-link active" data-toggle="tab" href="#projectsPane"
-                                               aria-controls="exampleTabsLineLeftOne" role="tab" aria-selected="false">
-                                                项目</a>
-                                        </li>
-                                        <li class="nav-item" role="presentation" @click="selectProjectLinkage('task')">
-                                            <a class="nav-link" data-toggle="tab" href="#tasksPane"
-                                               aria-controls="exampleTabsLineLeftOne" role="tab" aria-selected="false">
-                                                任务</a>
-                                        </li>
-                                    </ul>
-                                    <div class="tab-content" style="max-height: 70vh;overflow-y: auto">
-                                        <div class="tab-pane active" id="projectsPane" role="tabpanel">
-                                            <div class="input-search mb-20" style="width: 70%">
-                                                <button type="submit" class="input-search-btn">
-                                                    <i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
-                                                </button>
-                                                <input type="text" class="form-control" name="" placeholder="搜索关键字..."
-                                                       v-model="searchKeyWord">
-                                            </div>
-                                            <ul class="nav">
-                                                <li class="nav-link pointer-content" style="width: 95%"
-                                                    v-for="(project,index) in allProjectsInfo" :key="index"
-                                                    v-show="project.title.indexOf(searchKeyWord) > -1"
-                                                    @click="selectResource('projects', project.id)">{{ project.title }}
-                                                    <span class="float-right"
-                                                          v-show="linkageSelectedIds.projects.indexOf(project.id) > -1">
+        <!-- 关联资源 -->
+        <div v-if="canShow" class="modal fade" id="addLinkage" aria-hidden="true" aria-labelledby="addLabelForm"
+             role="dialog" tabindex="-1" data-backdrop="static">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
+                        </button>
+                        <h4 class="modal-title">关联资源</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="tab-pane p-20" role="tabpanel">
+                            <div class="nav-tabs-vertical" data-plugin="tabs" style="margin: 0 -20px -30px  -20px ">
+                                <ul class="nav nav-tabs nav-tabs-line mr-25" role="tablist">
+                                    <li class="nav-item" role="presentation" @click="selectProjectLinkage('project')">
+                                        <a class="nav-link active" data-toggle="tab" href="#projectsPane"
+                                           aria-controls="exampleTabsLineLeftOne" role="tab" aria-selected="false">
+                                            项目</a>
+                                    </li>
+                                    <li class="nav-item" role="presentation" @click="selectProjectLinkage('task')">
+                                        <a class="nav-link" data-toggle="tab" href="#tasksPane"
+                                           aria-controls="exampleTabsLineLeftOne" role="tab" aria-selected="false">
+                                            任务</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content" style="max-height: 70vh;overflow-y: auto">
+                                    <div class="tab-pane active" id="projectsPane" role="tabpanel">
+                                        <div class="input-search mb-20" style="width: 70%">
+                                            <button type="submit" class="input-search-btn">
+                                                <i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
+                                            </button>
+                                            <input type="text" class="form-control" name="" placeholder="搜索关键字..."
+                                                   v-model="searchKeyWord">
+                                        </div>
+                                        <ul class="nav">
+                                            <li class="nav-link pointer-content" style="width: 95%"
+                                                v-for="(project,index) in allProjectsInfo" :key="index"
+                                                v-show="project.title.indexOf(searchKeyWord) > -1"
+                                                @click="selectResource('projects', project.id)">{{ project.title }}
+                                                <span class="float-right"
+                                                      v-show="linkageSelectedIds.projects.indexOf(project.id) > -1">
                                                     <i class="md-check"></i>
                                                 </span>
                                                 </li>
@@ -633,7 +640,6 @@
                     </div>
                 </div>
             </div>
-        </keep-alive>
     </div>
 
 </template>
@@ -717,6 +723,7 @@
                 isAddCalendarButtonDisable: false,
                 principal: '',
                 isParticipant: false,
+                canShow:false,
             }
         },
         mounted() {
@@ -859,7 +866,9 @@
                 if (this.calendarTitle) {
                     data.title = this.calendarTitle
                 }
+                
                 fetch('get', '/calendars/all', data).then(response => {
+                    this.canShow = true
                     for (let i = 0; i < response.data.length; i++) {
                         response.data[i].name = response.data[i].title;
                         response.data[i].value = response.data[i].id;

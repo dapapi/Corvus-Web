@@ -77,7 +77,7 @@
                     </i>
                 </h6>
             </div>
-            <div class="page-content container-fluid" v-if="info" style="height: 100%;">
+            <div  class="page-content container-fluid" v-if="info" style="height: 100%;">
                 <div class="panel col-md-12 col-lg-12 pb-10">
                     <div class="caption">
                         <h6 class="page-title mx-15">{{list.title}}</h6>
@@ -157,11 +157,11 @@
                             </div>
 
                         </div>
-                    <div class="caption" v-if="info.contract_archive">
+                    <div class="caption" v-if="canShow && info.contract_archive">
                         <h6 class="page-title mx-15">归档信息</h6>
                     </div>
 
-                    <div class="col-md-10" v-if="info.contract_archive">
+                    <div class="col-md-10" v-if="canShow && info.contract_archive">
                         <div class="example">
                             <div class="col-md-2 float-left text-right">归档描述</div>
                             <div class="col-md-4 float-left">{{info.contract_archive.comment}}
@@ -194,7 +194,7 @@
                             <div class="caption" style="border:0;">
                                 <h6 class="page-title pb-20" style="border-bottom:1px solid #e3e3e3">审批流程</h6>
                                 <div class="mb-20">
-                                    <ApprovalProgress mode='detail'
+                                    <ApprovalProgress v-if="canShow" mode='detail'
                                                       :formid='list.form_instance_number'
                                                       :formstatus='currentStatus'
                                                       @waitingfor='waitingFor'
@@ -206,7 +206,7 @@
                     </div>
                 </div>
 
-                <div class="panel">
+                <div v-if="canShow" class="panel">
                     <div class="card col-md-12">
                         <div class="card-header card-header-transparent card-header-bordered">
                             <h5>审批跟进</h5>
@@ -219,15 +219,13 @@
                     </div>
                 </div>
             </div>
-         <DocPreview :url='$store.state.previewurl' :detailpage='isDetail' />
-
-            <!-- <DocPreview :url='previewUrl' detailpage='true'/> -->
+         <DocPreview  v-if="canShow" :url='$store.state.previewurl' :detailpage='isDetail' />
         </div>
-        <BuildProject :project-type="projectTypeTemp" :project-fields-arr="projectFieldsArr" mode='detail'
-                      :default-data='{fields:(info.fields && info.fields.data),list:list,trailInfo:trailInfo}' v-if="list.form_status !== 231" :formstatus='list.form_status' ></BuildProject>
-        <ApprovalGreatModule :form-data='formData' singlemode='true' :default-data='detailData' :contract_id='$route.params.id' :detailpage='isDetail' v-if="list.form_status !== 231"/>
+        <BuildProject  :project-type="projectTypeTemp" :project-fields-arr="projectFieldsArr" mode='detail'
+                      :default-data='{fields:(info.fields && info.fields.data),list:list,trailInfo:trailInfo}' v-if="canShow && list.form_status !== 231" :formstatus='list.form_status' ></BuildProject>
+        <ApprovalGreatModule :form-data='formData' singlemode='true' :default-data='detailData' :contract_id='$route.params.id' :detailpage='isDetail' v-if="canShow && list.form_status !== 231"/>
         <ApprovalGoModal :mode='approvalMode' :id='list.form_instance_number' @approvaldone='approvalDone'/>
-        <div class="modal fade  bootbox" id="docPreviewSelector" aria-labelledby="docPreviewPositionCenter" data-backdrop="static"
+        <div v-if="canShow" class="modal fade  bootbox" id="docPreviewSelector" aria-labelledby="docPreviewPositionCenter" data-backdrop="static"
              role="dialog" tabindex="-1">
             <div class="modal-dialog modal-simple modal-center modal-lg">
                 <div class="modal-content">
@@ -293,7 +291,7 @@ export default {
       isDetail: true,
       indexDataCommon: [],
       waitingForFlag:true,
-
+      canShow:false,
     };
   },
 
@@ -455,6 +453,7 @@ export default {
     getData() {
       const _this = this;
       fetch('get', `/approval_instances/${this.$route.params.id}?include=principal,creator,fields,trail,detail_control`).then((params) => {
+        this.canShow = true
         const { meta } = params;
         // console.log(params);
         _this.list = params.data;

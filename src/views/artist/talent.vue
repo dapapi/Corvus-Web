@@ -4,7 +4,7 @@
         <div class="page-header page-header-bordered">
             <h1 class="page-title">Talent</h1>
 
-            <div class="page-header-actions dropdown show task-dropdown float-right" style="z-index:1000;right:50px">
+            <div v-if="canShow" class="page-header-actions dropdown show task-dropdown float-right" style="z-index:1000;right:50px">
                 <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" id="taskDropdown"
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
@@ -18,8 +18,8 @@
                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
                        :data-target="selectedArtistsArr.length>0&&'#giveProducer'" @click="judge">分配制作人</a>
                 </div>
-                <div class="dropdown-menu  dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
-                     role="menu" x-placement="bottom-end" v-if="isShow" ref="colse">
+                <div  class="dropdown-menu  dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
+                     role="menu" x-placement="bottom-end" v-if="isShow && canShow" ref="colse">
                     <ImportAndExport :type="'import'" :moduleName="'stars'" :power="'star'" @importFile="importFile">
                         <a class="dropdown-item" role="menuitem">导入</a>
                     </ImportAndExport>
@@ -343,10 +343,10 @@
 
         </div>
 
-        <customize-filter :data="customizeContentType==='stars'?customizeInfoStars:customizeInfoBloggers"
+        <customize-filter v-if="canShow" :data="customizeContentType==='stars'?customizeInfoStars:customizeInfoBloggers"
                           @change="customize" ref="customize" :isint="true"></customize-filter>
 
-        <div class="site-action" data-plugin="actionBtn" data-toggle="modal" @click='rightChecker("博主","addBolgger","blogger")' v-if="!isShow">
+        <div  class="site-action" data-plugin="actionBtn" data-toggle="modal" @click='rightChecker("博主","addBolgger","blogger")' v-if="!isShow && canShow">
             <button type="button"
                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                 <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
@@ -355,7 +355,7 @@
                    style="font-size:30px"></i>
             </button>
         </div>
-        <div class="modal fade" id="addBolgger" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShow" class="modal fade" id="addBolgger" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -481,7 +481,7 @@
                 </div>
             </div>
         </div>
-        <div class="site-action" data-plugin="actionBtn" data-toggle="modal" @click='rightChecker("艺人","addArtist","star")' v-if="isShow">
+        <div class="site-action" data-plugin="actionBtn" data-toggle="modal" @click='rightChecker("艺人","addArtist","star")' v-if="isShow && canShow">
             <button type="button"
                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                 <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
@@ -490,7 +490,7 @@
                    style="font-size:30px"></i>
             </button>
         </div>
-        <div class="modal fade" id="addArtist" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShow" class="modal fade" id="addArtist" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -714,7 +714,7 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="giveProducer" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShow" class="modal fade" id="giveProducer" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple" style="max-width: 50rem;">
                 <div class="modal-content">
@@ -737,7 +737,7 @@
         </div>
 
         <!--分配经理人-->
-        <div class="modal fade" id="giveBroker" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShow" class="modal fade" id="giveBroker" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -763,7 +763,7 @@
                 </div>
             </div>
         </div>
-        <DocPreview :url="previewUrl" :givenFileName="previewName"/>
+        <DocPreview v-if="canShow" :url="previewUrl" :givenFileName="previewName"/>
     </div>
 </template>
 <script>
@@ -934,6 +934,7 @@
                 currentpagename:'',
                 fetchData:{},
                 customizeCondition: {},
+                canShow:false,
                 // currentStatus:'start'
             }
         },
@@ -1176,7 +1177,8 @@
                 //     status: this.fetchData.status,
                 //     principal_ids: this.fetchData.communication_status,
                 // }
-                fetch(methods, newUrl || url, fetchData).then((response) => {
+                fetch(methods, newUrl || url, fetchData).then((response) => { 
+                        this.canShow = true
                          if (url == '/stars/filter') {
                         _this.artistsInfo = response.data
                         _this.current_page = response.meta.pagination.current_page;
