@@ -28,6 +28,8 @@
 </template>
 
 <script>
+    import Cookies from 'js-cookie';
+
     import fetch from '../../../assets/utils/fetch.js'
 
     export default {
@@ -71,9 +73,7 @@
                 });
             },
             whoAmI(){
-                fetch('get','/users/my').then((params) => {
-                    this.myOrganization = params.data.organization_id
-                })
+                this.myOrganization = JSON.parse(Cookies.get('user')).organization_id
             },
             selectProjectType(callback) {
                 fetch('get', '/project_fields', {

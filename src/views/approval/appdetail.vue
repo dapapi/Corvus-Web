@@ -258,6 +258,7 @@ import { PROJECT_CONFIG } from '@/views/approval/project/projectConfig';
 import ApprovalGreatModule from '@/components/ApprovalGreatModule';
 import ApprovalProgress from '@/components/ForApproval/ApprovalProgress';
 import common from '../../assets/js/common';
+import Cookies from 'js-cookie'
 
 export default {
   name: 'approvalDetail',
@@ -366,20 +367,16 @@ export default {
       this.$emit('unreadupdate');
     },
     getCurrentApprover() {
-      const _this = this;
       this.roleUser = [];
-      fetch('get', '/users/my?include=roleUser').then((params) => {
-        _this.currentId = params.data.id;
-        for (const key in params.data.roleUser.data) {
-          _this.roleUser.push(params.data.roleUser.data[key].role_id);
-        }
-        // _this.roleUser = params.data.roleUser.data[0].role_id
-        if (_this.currentId === _this.pending.id || _this.roleUser.includes(_this.pending.id)) {
-          _this.isCurrentApprover = true;
+      this.currentId = JSON.parse(Cookies.get('user')).id
+      for (const key in JSON.parse(Cookies.get('user')).role_user.data) {
+          this.roleUser.push(JSON.parse(Cookies.get('user')).role_user.data[key].role_id);
+      }
+        if (this.currentId === this.pending.id || this.roleUser.includes(this.pending.id)) {
+          this.isCurrentApprover = true;
         } else {
-          _this.isCurrentApprover = false;
+          this.isCurrentApprover = false;
         }
-      });
     },
     waitingFor(params) {
       if (params && this.waitingForFlag === true) {

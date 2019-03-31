@@ -178,11 +178,11 @@ export default {
         },
 
   mounted() {
-    this.getField();
     this.getClients();
     this.getStars();
     // this.getFilterProjects();
     this.getMyProjects('my_principal');
+    this.getField();
     if (this.userList.length > 0) {
       for (let i = 0; i < this.userList.length; i++) {
         this.allUsers.push({
@@ -226,20 +226,20 @@ export default {
                 this.getProjectStatus = value;
                 this.fetchHandler('post','/projects/filter','filter')
                 // this.getFilterProjects();
-            },
-            filterGo:function(){
-                this.fetchData.keyword = this.projectKeyword
-                this.fetchHandler('post','/projects/filter','filter')
-            },
-            getProjectSearch: function (type, value) {
-                if (type === 'principal_ids') {
-                    this.principal_ids = value.join(',');
-                } else if (type === 'project_type') {
-                    this.projectSearchType = value
-                }
-                // this.getFilterProjects();
-                this.fetchHandler('post','/projects/filter','filter')
-            },
+    },
+    filterGo:function(){
+        this.fetchData.keyword = this.projectKeyword
+        this.fetchHandler('post','/projects/filter','filter')
+    },
+    getProjectSearch: function (type, value) {
+        if (type === 'principal_ids') {
+            this.principal_ids = value.join(',');
+        } else if (type === 'project_type') {
+            this.projectSearchType = value
+        }
+        // this.getFilterProjects();
+        this.fetchHandler('post','/projects/filter','filter')
+    },
 
     getFilterProjects (pageNum = 1) {
                 let data = {
