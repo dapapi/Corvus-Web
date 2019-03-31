@@ -537,10 +537,16 @@ const VueRouter = new Router({
     ],
 });
 VueRouter.beforeEach((to, from, next) => {
-    const CancelToken = axios.CancelToken
-    store.source.cancel && store.source.cancel()
-    store.source = CancelToken.source()
-    next()
+    if(from.path === '/'){
+        // console.log(11111);
+        next()
+    }else{
+        const CancelToken = axios.CancelToken
+        store.source.cancel && store.source.cancel()
+        store.source = CancelToken.source()
+        next()
+    }
+    
 })
 
 export default VueRouter

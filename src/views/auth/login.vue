@@ -413,7 +413,7 @@ export default {
     fetchUserInfo(callback) {
       $.ajax({
         type: 'get',
-        url: `${env.apiUrl}/users/my?include=roleUser`,
+        url: `${env.apiUrl}/users/my`,
         headers: env.getHeaders(),
         statusCode: env.getStatusCode(),
       }).done((response) => {
@@ -423,7 +423,7 @@ export default {
           avatar: userData.icon_url,
           nickname: userData.name,
           organization_id: userData.organization_id,
-          role_user:userData.roleUser
+          // role_user:userData.roleUser
         };
         callback(json, userData.company);
       });
