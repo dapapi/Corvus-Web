@@ -278,7 +278,7 @@
                     } else {
                         this.current_page = response.current_page;
                         this.total = response.total;
-                        this.total_pages = response.per_page != 0 ? parseInt(response.total / response.per_page) : 0;
+                        this.total_pages = response.per_page != 0 ? Math.ceil(response.total / response.per_page) : 1;
                     }
                     this.isLoading = false;
                 });
