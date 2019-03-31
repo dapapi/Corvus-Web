@@ -11,9 +11,9 @@
                      role="menu" x-placement="bottom-end">
                     <!-- <a class="dropdown-item" role="menuitem" >分享</a> -->
                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
-                       data-target="#distributionBroker" @click="distributionPerson('broker')">分配经理人</a>
+                        @click="distributionPerson('broker')">分配经理人</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
-                       data-target="#distributionBroker" @click="distributionPerson('publicity')">分配宣传人</a>
+                        @click="distributionPerson('publicity')">分配宣传人</a>
                     <a class="dropdown-item" role="menuitem" @click="contractlist(artistInfo.sign_contract_status)">
                         <template v-if="artistInfo.sign_contract_status == 1">签约</template>
                         <template v-if="artistInfo.sign_contract_status == 2">解约</template>
@@ -299,7 +299,7 @@
                                 <pagination :current_page="current_page" :method="getWoks" :total_pages="total_pages"
                                             :total="total"></pagination>
                                 <div class="site-action fixed-button" data-plugin="actionBtn" data-toggle="modal"
-                                        data-target="#addWork">
+                                        @click="canAddWork">
                                     <button type="button"
                                             class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                                         <i class="front-icon iconfont icon-tianjia1 animation-scale-up"
@@ -659,8 +659,8 @@
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                                 <div class="col-md-3 float-left text-right pl-0">最近更新时间</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
-                                                    <template v-if="artistInfo.last_follow_up_at">
-                                                        {{ common.timeProcessing(artistInfo.last_follow_up_at)}}
+                                                    <template v-if="artistInfo.last_updated_at">
+                                                        {{ common.timeProcessing(artistInfo.last_updated_at)}}
                                                     </template>
                                                     <template v-else>{{ common.timeProcessing(artistInfo.created_at) }}
                                                     </template>
@@ -1335,7 +1335,13 @@ export default {
   },
 
   methods: {
-
+      canAddWork(){
+        if (this.artistInfo.powers.add_work !== 'true') {
+            toastr.error('当前用户没有权限新增作品');
+            return;
+        }
+        $('#addWork').modal('show') 
+      },
     // 获取艺人信息
     getArtist() {
       this.artistId = this.$route.params.id;
@@ -1345,6 +1351,7 @@ export default {
       };
       fetch('get', `/stars/${this.artistId}`, data).then((response) => {
         this.artistInfo = response.data;
+        console.log(this.artistInfo)
         this.artistName = response.data.name;
         if (response.data.star_risk_point == 'privacy') {
           this.artistInfo.star_risk_point = '**';
@@ -2059,7 +2066,7 @@ export default {
     },
 
     editBaseInfo() {
-      if (this.$store.state.power.star.add !== 'true') {
+      if (this.artistInfo.powers.edit_star !== 'true') {
         toastr.error('当前用户没有权限编辑艺人');
         return;
       }
@@ -2139,6 +2146,22 @@ export default {
     },
 
     distributionPerson(value) {
+        if (value == 'publicity' && this.artistInfo.powers.edit_publicity !== 'true') {
+            toastr.error('当前用户没有权限分配宣传人');
+            //  this.$nextTick((params) => {
+            //     $('#distributionBroker').modal('hide')     
+            // })
+            return;
+        }
+        if (value == 'broker' && this.artistInfo.powers.edit_broker !== 'true') {
+            toastr.error('当前用户没有权限分配经理人');
+            // this.$nextTick((params) => {
+            //     $('#distributionBroker').modal('hide')     
+            // })
+            return;
+        }
+        $('#distributionBroker').modal('show')   
+        // $('#distributionBroker').modal('hidden') 
       this.distributionType = value;
       if (this.artistInfo[value].data.length > 0) {
         this.$store.state.participantsInfo = Object.assign([], this.artistInfo[value].data);

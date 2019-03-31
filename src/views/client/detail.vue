@@ -471,7 +471,7 @@
                                         <span class="px-10 d-block float-left pointer-content"
                                               style="color: #b9b9b9;"
                                               data-plugin="actionBtn" data-toggle="modal"
-                                              data-target="#addContact"
+
                                               @click="changeEditStatus(false,contact)"
                                         >
                                             <i class="iconfont icon-bianji2" aria-hidden="true"></i>
@@ -949,14 +949,14 @@
             },
 
             editBaseInfo: function () {
-                if (this.$store.state.power.client.add !== 'true') {
+                if (this.clientInfo.powers.edit_client !== 'true') {
                     toastr.error('当前用户没有编辑客户的权限');
                     return;
                 }
-                if (!this.canEditClient) {
-                    toastr.error('您没有编辑概况的权限！')
-                    return
-                }
+                // if (!this.canEditClient) {
+                //     toastr.error('您没有编辑概况的权限！')
+                //     return
+                // }
                 this.isEdit = true;
                 this.changeInfo = {};
             },
@@ -1080,6 +1080,11 @@
             // 获取要删除的信息
             setDelInfo(id) {
                 this.contactId = id
+                if(this.clientInfo.powers.del_contact !== 'true'){
+                    toastr.error('当前用户没有删除联系人的权限')
+                    return
+                }
+                $('#confirmFlag').modal('show')
             },
             // 选择地区
             changeAreaData(val) {

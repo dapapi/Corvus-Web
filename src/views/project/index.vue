@@ -4,8 +4,8 @@
         <div class="page-header page-header-bordered">
             <h1 class="page-title">项目管理</h1>
             <div class="page-header-actions">
-                <ImportAndExport class="float-left" :type="'export'" :moduleName="'projects'" :params="exportParams">
-                    <a class="iconfont icon-daochu px-5 font-size-20 pr-20 pointer-content" aria-hidden="true" title="导出项目管理"></a>
+                <ImportAndExport class="float-left" :type="'export'" :moduleName="'projects'" :power="'project'" :params="exportParams">
+                    <i class="iconfont icon-daochu px-5 font-size-20 pr-20 pointer-content" aria-hidden="true" title="导出项目管理"></i>
                 </ImportAndExport>
             </div>
         </div>
@@ -179,6 +179,7 @@ export default {
   mounted() {
     this.getField();
     this.getClients();
+    this.getStars();
     // this.getFilterProjects();
     this.getMyProjects('my_principal');
     if (this.userList.length > 0) {
@@ -338,7 +339,7 @@ export default {
             },
 
     changeProjectType (value) {
-                if(this.$store.state.power.project.add !=='true'){
+                if(this.$store.state.listPower.project.add !=='true'){
                     toastr.error('当前用户没有权限新增项目')
                     return
                 }
@@ -385,6 +386,19 @@ export default {
     addInfo (value, name) {
                 this.addInfoArr[name] = value
             },
+            getStars () {
+                if (this.starsArr.length > 0) {
+                    return
+                }
+                fetch('get', '/starandblogger', {sign_contract_status: 2}).then(response => {
+                    for (let i = 0; i < response.data.length; i++) {
+                        this.starsArr.push({
+                            name: response.data[i].name,
+                            value: response.data[i].flag + ',' + response.data[i].id,
+                        })
+                    }
+                })
+            },  
 
   },
 };

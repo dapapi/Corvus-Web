@@ -9,10 +9,10 @@
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end" v-if="!isShow" ref="colse">
-                    <ImportAndExport :type="'import'" :moduleName="'bloggers'" @importFile="importFile">
+                    <ImportAndExport :type="'import'" :moduleName="'bloggers'" :power="'blogger'" @importFile="importFile">
                         <a class="dropdown-item" role="menuitem">导入</a>
                     </ImportAndExport>
-                    <ImportAndExport :type="'export'" :moduleName="'bloggers'" :params="exportParams">
+                    <ImportAndExport :type="'export'" :moduleName="'bloggers'" :power="'blogger'" :params="exportParams">
                         <a class="dropdown-item" role="menuitem">导出</a>
                     </ImportAndExport>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
@@ -20,10 +20,10 @@
                 </div>
                 <div class="dropdown-menu  dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end" v-if="isShow" ref="colse">
-                    <ImportAndExport :type="'import'" :moduleName="'stars'" @importFile="importFile">
+                    <ImportAndExport :type="'import'" :moduleName="'stars'" :power="'star'" @importFile="importFile">
                         <a class="dropdown-item" role="menuitem">导入</a>
                     </ImportAndExport>
-                    <ImportAndExport :type="'export'" :moduleName="'stars'" :params="exportParams">
+                    <ImportAndExport :type="'export'" :moduleName="'stars'" :power="'star'" :params="exportParams">
                         <a class="dropdown-item" role="menuitem">导出</a>
                     </ImportAndExport>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#giveBroker"
@@ -42,18 +42,20 @@
                             <a class="nav-link" data-toggle="tab" href="#forum-artist"
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab" :class="isShow?'active':''" @click="tab('start')">艺人</a>
+                            <i v-if="isShow"
+                            style="position: absolute;right:10px;top:10px;color: rgb(0, 176, 255);font-style: normal;"
+                            @click="getArtists(1,1)" class="pointer-content">签约中</i>
                         </li>
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" data-toggle="tab" href="#forum-blogger"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab" :class="!isShow?'active':''" @click="tab('bloggers')">博主</a>
+                            <i 
+                                style="position: absolute;right:10px;top:10px;color: rgb(0, 176, 255);font-style: normal;"
+                                @click="getBlogger(1,1)" class="pointer-content">签约中</i>
                         </li>
-                        <i v-if="isShow"
-                           style="position: absolute;right:10px;top:10px;color: rgb(0, 176, 255);font-style: normal;"
-                           @click="getArtists(1,1)" class="pointer-content">签约中</i>
-                        <i v-if="!isShow"
-                           style="position: absolute;right:10px;top:10px;color: rgb(0, 176, 255);font-style: normal;"
-                           @click="getBlogger(1,1)" class="pointer-content">签约中</i>
+                        
+                       
                     </ul>
                 </div>
 
@@ -338,7 +340,7 @@
         </div>
 
         <customize-filter :data="customizeContentType==='stars'?customizeInfoStars:customizeInfoBloggers"
-                          @change="customize" ref="removeDate" :isint="true"></customize-filter>
+                          @change="customize" ref="customize" :isint="true"></customize-filter>
 
         <div class="site-action" data-plugin="actionBtn" data-toggle="modal" @click='rightChecker("博主","addBolgger","blogger")' v-if="!isShow">
             <button type="button"
@@ -952,7 +954,7 @@
                 this.$refs.colse.classList.remove('show')
             },
             rightChecker(value, params, type) {
-                if (this.$store.state.power[type].add !== 'true') {
+                if (this.$store.state.listPower[type].add !== 'true') {
                     toastr.error('当前用户没有权限新增' + value)
                     return
                 }
@@ -1429,18 +1431,19 @@
             tab: function (value) {
                 this.selectedArtistsArr = []
                 if (value == 'start') {
-                    this.$refs.removeDate.setValue({conditions:[]})
+                    this.$refs.customize.setValue({conditions:[]})
                     this.customizeCondition = {}
                     this.getArtists()                  
                     this.isShow = true
-                    // this.$refs.removeDate.reset()
+                    this.$refs.customize.reset()
                 } else if (value == 'bloggers') {
-                    this.$refs.removeDate.setValue({conditions:[]})
+                    this.$refs.customize.setValue({conditions:[]})
                     this.customizeCondition  = {}
                     this.getBlogger()
                     this.isShow = false
-                    // this.$refs.removeDate.reset()
+                    this.$refs.customize.reset()
                 }
+                
             },
             giveBroker: function () {
                 let url, toast, data

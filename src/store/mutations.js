@@ -83,5 +83,8 @@ export default {
     },
     setSupplierDetails(state,data){
         state.supplierDetails = data
+    },
+    setListPower(state,data){
+        state.listPower = data
     }
 }
