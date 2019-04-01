@@ -351,6 +351,7 @@ export default {
     },
     approvalDone(params = '审批成功') {
       this.waitingForFlag = true
+      this.isCurrentApprover = false
       if (this.list.project_number) {
         this.$refs.approvalProgress.getApprover(this.list.project_number);
       } else {
@@ -457,7 +458,6 @@ export default {
       $('#approvalGo').modal('show');
     },
     getData() {
-      console.log(1111);
       const _this = this;
       fetch('get', `/approval_instances/${this.$route.params.id}?include=principal,creator,fields,trail,detail_control`).then((params) => {
         this.canShow = true
