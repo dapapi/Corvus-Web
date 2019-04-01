@@ -245,7 +245,9 @@
             ])
         },
         mounted(){
-           this.renderMsg(1)
+           if(this.moduleList.length>0){
+               this.renderMsg(1)
+           }
         },
         watch: {
             scheduleData: function () {
@@ -254,7 +256,12 @@
                 this.endBigTime = (this.end_at.split(' ')[1]).slice(0, 5)
                 this.startBigTime = (this.start_at.split(' ')[1]).slice(0, 5)
             },
-            "$route": "renderMsg"
+            $route:function(){
+                this.renderMsg(1)
+            },
+            moduleList:function(){
+                this.renderMsg(1)
+            }
         },
         
         methods: {
@@ -298,7 +305,7 @@
                 } else {
 
                     //如果没有moduleType  跳转
-                    this.$router.push(`/my/message?moduleType=207`)
+                    this.$router.push(`/my/message?moduleType=${this.moduleList[0].id}`)
                 }
 
 
