@@ -163,7 +163,7 @@
                                     <div class="all-menber clearfix">
                                         <template v-for="(item, index) in questionInfo.reviewanswer.data">
                                             <div style="position: relative; display: inline-block" :key="index">
-                                                <Avatar :imgUrl="item.users.data.icon_url" style="margin: 5px;"/>
+                                                <Avatar :imgUrl="item.users.data.user_url" style="margin: 5px;"/>
                                                 <div :class="hasAnsweredArr.indexOf(item.users.data.id) > -1 ? 'has-answer': 'un-answer'"></div>
                                                 <!-- hasAnsweredArr -->
                                             </div>
@@ -272,7 +272,7 @@
                                                      style="padding-left: 0; margin-top: -9px;">
                                                     <template v-for="(_item, nameIndex) in items.selectrows.data">
                                                         <Avatar v-if="_item.review_question_item_id === item.id"
-                                                                :imgUrl="_item.creator.data.icon_url" :key="nameIndex"
+                                                                :imgUrl="_item.creator.data.user_url" :key="nameIndex"
                                                                 style="margin: 5px;"/>
                                                     </template>
                                                 </div>
