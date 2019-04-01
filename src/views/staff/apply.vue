@@ -47,7 +47,7 @@
                     <ul class="list-group list-group-dividered list-group-full">
                         <li class="list-group-item" v-for="(item, index) in data" :key="index">
                             <div class="content" style="display: flex; justify-content: start; align-items: center;">
-                                <Avatar :imgUrl="item.user_url" style="margin-right: 10px; font-size: 14px; width: 40px; height: 40px" />
+                                <Avatar :imgUrl="item.icon_url" style="margin-right: 10px; font-size: 14px; width: 40px; height: 40px" />
                                 <div>
                                     <template v-if="status === 1">
                                         <div>{{item.name}}已发起入职申请，是否同意加入泰洋系？</div>
