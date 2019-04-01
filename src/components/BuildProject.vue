@@ -253,9 +253,6 @@
         created() {
             this.getStars();
         },
-        mounted() {
-            this.user = JSON.parse(Cookies.get('user'));
-        },
         watch: {
             projectFieldsArr(newValue) {
                 return this.projectFields = newValue;

@@ -20,7 +20,7 @@
             </div>
         </div>
 
-        <div class="page-content container-fluid">
+        <div  class="page-content container-fluid">
             <div class="panel col-md-12">
                 <div class="card-block clearfix pb-0">
                     <Upload @change='getUploadUrl' class="upload-image float-left mr-5"
@@ -660,14 +660,14 @@
 
         </div>
 
-        <div class="calendar-toast" v-show="toastShow"
+        <div v-if="canShow" class="calendar-toast" v-show="toastShow"
              :style="'position: absolute;top:' + toastY + 'px; left: ' + toastX + 'px;'">双击创建日程
         </div>
 
-        <AddTask :resourceable_id="artistId" resource_type="1" :resource_title="artistName" resource_name="博主"
+        <AddTask v-if="canShow" :resourceable_id="artistId" resource_type="1" :resource_title="artistName" resource_name="博主"
                  @success="addTask"></AddTask>
 
-        <div class="modal fade" id="addWork" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShow" class="modal fade" id="addWork" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -729,7 +729,7 @@
             </div>
         </div>
         <!--隐私设置-->
-        <div class="modal fade" id="addPrivacy" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShow" class="modal fade" id="addPrivacy" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -755,7 +755,7 @@
             </div>
         </div>
         <!-- 分配制作人-->
-        <div class="modal fade" id="distributionproducer" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShow" class="modal fade" id="distributionproducer" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple" style="max-width: 50rem;">
 
@@ -780,10 +780,10 @@
                 </div>
             </div>
         </div>
-        <ApprovalGreatModule :formData="formDate"
+        <ApprovalGreatModule v-if="canShow" :formData="formDate"
                              :default-value="{value:projectContractDefault,id:$route.params.id}"></ApprovalGreatModule>
         <!-- 新建/修改 日程 -->
-        <div class="modal fade line-center" id="changeSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShow" class="modal fade line-center" id="changeSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -937,7 +937,7 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="addLinkage" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShow" class="modal fade" id="addLinkage" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -1015,7 +1015,7 @@
             </div>
         </div>
         <!-- 查看日程 -->
-        <div class="modal fade" id="checkSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShow" class="modal fade" id="checkSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content" v-if="scheduleData">
@@ -1117,7 +1117,7 @@
             </div>
         </div>
         <!-- 删除日历/日程 -->
-        <div class="modal fade" id="delModel" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
+        <div v-if="canShow" class="modal fade" id="delModel" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
              tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -1279,6 +1279,7 @@ export default {
                 selectorHidden: [],
                 isAddScheduleButtonDisable: false,
                 isAddWorkButtonDisable: false,
+                canShow:false,
             }
         },
         components: {
@@ -1385,6 +1386,7 @@ export default {
                     include: 'creator,tasks,affixes,producer,type,publicity,trails.project,trails.client,trails.project.principal,trails.project.relate_project_bills_resource,operatelogs,publicity.department',
                 };
                 fetch('get', '/bloggers/' + this.artistId, data).then(response => {
+                    this.canShow = true
                     this.artistInfo = response.data;
                     this.uploadUrl = _this.artistInfo.avatar;
                     this.artistName = response.data.nickname;

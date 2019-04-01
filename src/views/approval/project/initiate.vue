@@ -23,11 +23,13 @@
             </div>
         </div>
 
-        <BuildProject :project-type="projectType" :project-fields-arr="projectFieldsArr"></BuildProject>
+        <BuildProject :project-type="projectType" :project-fields-arr="projectFieldsArr" v-if="canShow"></BuildProject>
     </div>
 </template>
 
 <script>
+    import Cookies from 'js-cookie';
+
     import fetch from '../../../assets/utils/fetch.js'
 
     export default {
@@ -55,6 +57,7 @@
                 projectType: '',
                 projectFieldsArr: [],
                 myOrganization:'',
+                canShow:false,
             }
         },
         created(){
@@ -70,15 +73,15 @@
                 });
             },
             whoAmI(){
-                fetch('get','/users/my').then((params) => {
-                    this.myOrganization = params.data.organization_id
-                })
+                this.myOrganization = JSON.parse(Cookies.get('user')).organization_id
             },
             selectProjectType(callback) {
                 fetch('get', '/project_fields', {
+                    
                     type: this.projectType,
                     status: 1,
                 }).then(response => {
+                    this.canShow = true
                     for (let i = 0; i < response.data.length; i++) {
                         if (response.data[i].field_type === 2 || response.data[i].field_type === 6) {
                             response.data[i].contentArr = [];

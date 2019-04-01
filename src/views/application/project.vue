@@ -111,12 +111,12 @@
 
         </div>
 
-        <customize-filter :data="customizeInfo" @change="customize" :stararr='starsArr' :cleanup="cleanUp"
+        <customize-filter v-if="canShow" :data="customizeInfo" @change="customize" :stararr='starsArr' :cleanup="cleanUp"
                           @cleanupdone='cleanUp=false'></customize-filter>
 
-        <AddClientType type="project" @change="changeProjectType"></AddClientType>
+        <AddClientType v-if="canShow" type="project" @change="changeProjectType"></AddClientType>
 
-        <BuildProject :project-fields-arr="projectFieldsArr" :project-type="projectType"></BuildProject>
+        <BuildProject v-if="canShow" :project-fields-arr="projectFieldsArr" :project-type="projectType"></BuildProject>
     </div>
 
 </template>
@@ -162,6 +162,7 @@
                 projectSearchType: '',
                 getProjectStatus: 'principal_id',
                 cleanUp: false,
+                canShow:false
             }
         },
 
@@ -242,6 +243,7 @@
                     data.principal_ids = this.principal_ids;
                 }
                 fetch('get', '/projects', data).then(response => {
+                    this.canShow = true
                     this.projectsInfo = response.data;
                     this.total = response.meta.pagination.total;
                     this.current_page = response.meta.pagination.current_page;

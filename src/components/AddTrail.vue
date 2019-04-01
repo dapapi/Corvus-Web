@@ -350,9 +350,10 @@
             },
 
             getCurrentUser() {
-                fetch('get', '/users/my').then((response) => {
-                    this.currentUser = response.data
-                })
+                this.currentUser = JSON.parse(Cookies.get('user'))
+                // fetch('get', '/users/my').then((response) => {
+                //     this.currentUser = response.data
+                // })
             },
 
             getStars: function () {
