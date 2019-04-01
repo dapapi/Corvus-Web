@@ -80,7 +80,6 @@ export default {
         getModule:function(){
             this.getModuleList()
             // fetch('get',`/getmodules`).then((res) => {
-            //     // console.log(res)
             //     let unRead =0
             //     for (let i = 0; i < res.data.length; i++) {
             //         if(res.data[i].unread){
@@ -105,12 +104,10 @@ export default {
         //判断浏览器是否支持弹出实例
         showMess:function(content){
             setTimeout(function () {
-                // console.log('1：'+Notification.permission);
                 //如果支持window.Notification 并且 许可不是拒绝状态
                 if(window.Notification && Notification.permission !== "denied") {
                     //Notification.requestPermission这是一个静态方法，作用就是让浏览器出现是否允许通知的提示
                     Notification.requestPermission(function(status) {
-                        // console.log('2: '+status);
                         //如果状态是同意
                         if (status === "granted") {
                             var m = new Notification('收到信息', {

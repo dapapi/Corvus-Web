@@ -538,7 +538,6 @@ const VueRouter = new Router({
 });
 VueRouter.beforeEach((to, from, next) => {
     if(from.path === '/'){
-        // console.log(11111);
         next()
     }else{
         const CancelToken = axios.CancelToken

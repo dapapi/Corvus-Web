@@ -20,7 +20,7 @@
                 <div class="modal-body">
                     <iframe v-if="['doc','docx','xls','xlsx','ppt','pptx'].includes(fileNameHandler)" class=" mt-30" :src='"https://view.officeapps.live.com/op/view.aspx?src="+url' width='100%' height='90%' frameborder='1'>
 			        </iframe>
-                    <img style="max-width:100%;" v-else-if="['png','gif','bmp','jpg','jpeg'].includes(fileNameHandler)" :src="url">
+                    <img style="max-width:100%;max-height:100%" v-else-if="['png','gif','bmp','jpg','jpeg'].includes(fileNameHandler)" :src="url">
                     <embed v-else-if="fileNameHandler === 'pdf'" :src="url" type="application/pdf" width="100%" height="100%">
                     <!-- <video v-else-if="['mp4','MP4','MOV','mov'].includes(fileNameHandler)" :src="url" controls height='100%' width='100%' type="video/mov"> -->
                         <!-- <source :src="url" type="video/mov"> -->
@@ -61,7 +61,6 @@ export default {
         document.getElementsByTagName('body')[0].classList.add('modal-open');
       });
     } else {
-      // console.log(this.detailpage);
     }
   },
   watch: {

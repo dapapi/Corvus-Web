@@ -144,7 +144,6 @@ export default {
            
            this.isIf = true
            let id = this.$store.state.newParticipantsInfo[0].id
-        //    console.log(id)
            fetch('post',`${env.apiUrl}/issues/${id}/follow_up`,{content:'跟进'}).then((res) => {
                 toastr.success('跟进成功');
                 this.$store.state.newParticipantsInfo = []

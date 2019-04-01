@@ -118,7 +118,6 @@ export default {
     },
     getListPower({commit}){
         fetch('get', `/user/list_power`).then((res) => {
-            // console.log(res.data)
           commit('setListPower', res.data.power)
         })
     }

@@ -301,6 +301,7 @@
                 }
 
                 fetch('get', url, params).then(response => {
+                    this.canShow = true
                     this.clientsInfo = response.data;
                     this.current_page = response.meta.pagination.current_page;
                     this.total = response.meta.pagination.total;
@@ -368,6 +369,7 @@
                 };
 
                 fetch('post', '/clients', data).then(response => {
+                    
                     this.isAddButtonDisable = false;
                     toastr.success('创建成功');
                     $("#addClient").modal("hide");
