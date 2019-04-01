@@ -28,7 +28,7 @@
                     </div>
                     <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
-                                data-toggle="modal" data-target="#customizeContent"
+                                data-toggle="modal" data-target="#customizeContent" @click='getField'
                                 data-placement="right" title="">
                             自定义筛选
                         </button>
@@ -119,7 +119,7 @@
         </div>
 
         <customize-filter v-if="canShow" :data="customizeInfo" @change="customize" :stararr='starsArr' :cleanup="cleanUp"
-                          @cleanupdone='cleanUp=false'></customize-filter>
+                          @cleanupdone='cleanUp=false' ref='customize' ></customize-filter>
 
         <AddClientType v-if="canShow" type="project" @change="changeProjectType"></AddClientType>
 
@@ -179,10 +179,10 @@ export default {
 
   mounted() {
     this.getClients();
-    this.getStars();
+    // this.getStars();
     // this.getFilterProjects();
     this.getMyProjects('my_principal');
-    this.getField();
+    // this.getField();
     if (this.userList.length > 0) {
       for (let i = 0; i < this.userList.length; i++) {
         this.allUsers.push({
@@ -220,6 +220,11 @@ export default {
       const _this = this;
       fetch('get', '/projects/filter_fields').then((params) => {
         _this.customizeInfo = params.data;
+        _this.$refs.customize.refresh()
+        this.$nextTick((params) => {
+            $('.selectpicker').selectpicker('refresh')
+            
+        })
       });
     },
     getMyProjects (value) {
@@ -275,7 +280,7 @@ export default {
     getClients () {
                 let _this = this;
                 fetch('get', '/clients/all').then(function (response) {
-                    this.canShow = true
+                    _this.canShow = true
                     for (let i = 0; i < response.data.length; i++) {
                         _this.companyArr.push({
                             name: response.data[i].company,
@@ -326,9 +331,8 @@ export default {
                     my:this.getProjectStatus
                 }
                 fetch(methods, newUrl || url, fetchData).then((response) => {
-                    this.canShow = true
+                    _this.canShow = true
                     _this.projectsInfo = response.data
-                    console.log(_this.projectsInfo)
                     _this.total = response.meta.pagination.total;
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total_pages = response.meta.pagination.total_pages;
@@ -386,7 +390,7 @@ export default {
                 });
             },
 
-    addInfo (value, name) {
+            addInfo (value, name) {
                 this.addInfoArr[name] = value
             },
             getStars () {
