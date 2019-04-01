@@ -43,7 +43,6 @@
                 this.Promptinglength += 1
             },
             delSelector: function (id) {
-                console.error(id)
                 this.data.push(id);
                 delete this.Remind[id]
             },

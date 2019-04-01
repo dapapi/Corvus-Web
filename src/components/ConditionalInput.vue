@@ -39,7 +39,6 @@
 
         watch: {
             context(newValue) {
-                // console.log(newValue)
                 this.$emit('change', {key: 'value', value: newValue})
             },
             isEdit(newValue) {

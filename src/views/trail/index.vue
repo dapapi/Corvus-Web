@@ -498,7 +498,6 @@ export default {
         pagenumber = `&page=${  pageNum}`;
         newUrl = `${url  }?${  this.fetchData.include  }${keyword  }${status  }${principal_ids  }${pagenumber}`;
       }
-      // console.log(this.fetchData)
       this.exportParams = {
         keyword: this.fetchData.keyword,
         status: this.fetchData.status,

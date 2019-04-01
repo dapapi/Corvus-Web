@@ -612,7 +612,6 @@
                 fetch('get','/console/director',{
                      page:page
                  }).then(function(resouce){
-                     console.log(resouce)
                     _this.defaultDate = resouce.data
                     _this.current_page = parseInt(resouce.meta.pagination.current_page);
                     _this.total = resouce.meta.pagination.total;
@@ -623,7 +622,6 @@
             getgroupingDate() {
                 let _this = this;
                 fetch('get', '/console/group?Accept=application/vnd.Corvus.v1+json').then(function (response) {
-                    console.log(response)
                     _this.groupingDate = response.data;
                     response.data.forEach(item=>{
                        _this.idArray.push(item.id) 

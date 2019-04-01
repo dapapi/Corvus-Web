@@ -255,7 +255,6 @@ export default {
                 return false
 
             }
-            console.log(this.addSupplierData.currency)
             if(this.addSupplierData.currency.length<1||!this.addSupplierData.currency[0].name||!this.addSupplierData.currency[0].account||!this.addSupplierData.currency[0].coin){
                 toastr.error('至少添加一个开户行信息')
                 return false

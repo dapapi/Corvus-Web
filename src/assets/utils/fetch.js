@@ -34,7 +34,6 @@ axios.interceptors.request.use((config) => {
     return config;
 }, (error) => {
     const {response} = error
-    console.log(response)
     toastr.error(response.data.message);
     return Promise.reject(error);
 });

@@ -361,7 +361,6 @@ export default {
       });
     },
     getProjects(pageNum = 1) {
-      console.log(pageNum);
       this.fetchHandler('post', `/${this.typeHandler}/filter`, 'filter', pageNum);
     },
     // 查询列表
