@@ -296,8 +296,9 @@
                         }
                     })
                 } else {
+
                     //如果没有moduleType  跳转
-                    this.$router.push(`/my/message?moduleType=${this.moduleList[0].id}`)
+                    this.$router.push(`/my/message?moduleType=207`)
                 }
 
 
