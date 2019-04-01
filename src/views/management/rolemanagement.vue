@@ -145,7 +145,7 @@
                                 <tbody style="border-top:1px solid #e3e3e3" v-if="item.group_id==1994731356">
                                 <tr v-for="v in defaultDate" :key="v.id" class="pointer-content">
                                     <td>
-                                        <Avatar :imgUrl="v.user_url"
+                                        <Avatar :imgUrl="v.icon_url"
                                                 style="margin-right: 10px; width: 28px;height: 28px;"/>
                                         {{v.name}}
                                     </td>
@@ -163,7 +163,7 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <Avatar :imgUrl="v.user_url"
+                                        <Avatar :imgUrl="v.icon_url"
                                                 style="margin-right: 10px; width: 28px;height: 28px;"/>
                                         {{v.name}}
                                     </td>
