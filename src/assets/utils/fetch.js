@@ -52,7 +52,7 @@ axios.interceptors.response.use((res) => {
     return res;
 },(error) => {
     // console.log(String(error =='Cancel'));
-    if (String(error =='Cancel')) {
+    if (String(error) =='Cancel') {
         console.log('Request canceled');
     } else {
     const {response: {status}} = error
