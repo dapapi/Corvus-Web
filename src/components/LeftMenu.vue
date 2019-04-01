@@ -1,4 +1,5 @@
 <template>
+    <keep-alive>
     <div class="site-menubar" style="height: 100%!important;top: 0;width: 80px" @click="hideBackModel">
         <div class="site-menubar-body">
             <div class="py-10 menu-icon"
@@ -65,7 +66,7 @@
             </div>
         </div>
     </div>
-
+    </keep-alive>
 </template>
 
 <script>

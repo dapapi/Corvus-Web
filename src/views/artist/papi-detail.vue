@@ -1,10 +1,10 @@
 <template>
-    <div class="page">
+    <div class="page" >
         <Loading :is-loading="isLoading"></Loading>
         <div class="page-header page-header-bordered">
             <h1 class="page-title d-inline">博主详情</h1>
 
-            <div class="page-header-actions dropdown show task-dropdown float-right">
+            <div class="page-header-actions dropdown show task-dropdown float-right" >
                 <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" id="taskDropdown"
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
@@ -20,9 +20,9 @@
             </div>
         </div>
 
-        <div class="page-content container-fluid">
+        <div class="page-content container-fluid" >
             <div class="panel col-md-12">
-                <div class="card-block clearfix pb-0">
+                <div class="card-block clearfix">
                     <Upload @change='getUploadUrl' class="upload-image float-left mr-5"
                             style="width:80px;height:80px;border-radius:50%;position:relative">
                         <div class="puls" :style="{ backgroundImage: 'url(' + uploadUrl + ')' }" v-if="uploadUrl">
@@ -34,7 +34,7 @@
                     <div class="float-left ml-10 mt-10" style="width:calc(100% - 100px)">
                         <h4 class="card-title">{{artistInfo.nickname}}</h4>
                         <div class=" clearfix example">
-                            <div class="col-md-5 float-left pl-0 mr-15" v-if="artistInfo.publicity">
+                            <div class="col-md-5 float-left pl-0 mr-15" >
                                 <div class="float-left pl-0 pr-2 col-md-12 mr-20">
                                     <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>制作人
                                     <span class="font-weight-bold pr-10"
@@ -203,10 +203,10 @@
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-base"
                                    aria-controls="forum-present"
                                    aria-expanded="false" role="tab"
-                                   :class="artistInfo.sign_contract_status == 2?'':'active'">概况</a>
+                                   :class="artistInfo.sign_contract_status == 2?'':'active'" @click="getType">概况</a>
                             </li>
                         </ul>
-                        <div class="tab-content  px-0 nav-tabs-animate bg-white col-md-12">
+                        <div class="tab-content  px-0 nav-tabs-animate bg-white col-md-12"  >
                             <div class="tab-pane animation-fade pb-20 fixed-button-father" id="forum-artist-schedule"
                                  role="tabpanel" :class="artistInfo.sign_contract_status == 2 ? 'active':''">
                                 <div class="col-md-12">
@@ -453,7 +453,7 @@
                                             <button class="btn btn-primary" @click="changeArtistBaseInfo">确定</button>
                                         </div>
                                     </div>
-                                    <div class="card-block px-0" v-if="artistInfo">
+                                    <div class="card-block px-0" v-if="artistInfo&&canShow" >
                                         <h5 class="pl-15">基本资料</h5>
                                         <div class="clearfix">
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
@@ -668,7 +668,7 @@
                  @success="addTask"></AddTask>
 
         <div class="modal fade" id="addWork" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1" data-backdrop="static">
+             role="dialog" tabindex="-1" data-backdrop="static" v-if="canShow">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -730,7 +730,7 @@
         </div>
         <!--隐私设置-->
         <div class="modal fade" id="addPrivacy" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1" data-backdrop="static">
+             role="dialog" tabindex="-1" data-backdrop="static" v-if="canShow">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -756,7 +756,7 @@
         </div>
         <!-- 分配制作人-->
         <div class="modal fade" id="distributionproducer" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1" data-backdrop="static">
+             role="dialog" tabindex="-1" data-backdrop="static" v-if="canShow">
             <div class="modal-dialog modal-simple" style="max-width: 50rem;">
 
                 <div class="modal-content">
@@ -784,7 +784,7 @@
                              :default-value="{value:projectContractDefault,id:$route.params.id}"></ApprovalGreatModule>
         <!-- 新建/修改 日程 -->
         <div class="modal fade line-center" id="changeSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1" data-backdrop="static">
+             role="dialog" tabindex="-1" data-backdrop="static" v-if="canShow">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -938,7 +938,7 @@
             </div>
         </div>
         <div class="modal fade" id="addLinkage" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1" data-backdrop="static">
+             role="dialog" tabindex="-1" data-backdrop="static" v-if="canShow">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -1016,7 +1016,7 @@
         </div>
         <!-- 查看日程 -->
         <div class="modal fade" id="checkSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1" data-backdrop="static">
+             role="dialog" tabindex="-1" data-backdrop="static" v-if="canShow">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content" v-if="scheduleData">
                     <div class="modal-header">
@@ -1082,10 +1082,10 @@
                             <div class="col-md-2 px-0 float-left">关联资源</div>
                             <div class="col-md-10 pl-0 float-left">
                                 <div class="pb-5" v-if="scheduleData.project"
-                                     v-for="project in scheduleData.project.data">
+                                     v-for="project in scheduleData.project.data" :key="project.id">
                                     <span>项目 - {{ project.title }}</span>
                                 </div>
-                                <div class="pb-5" v-if="scheduleData.task" v-for="task in scheduleData.task.data">
+                                <div class="pb-5" v-if="scheduleData.task" v-for="task in scheduleData.task.data" :key="task.id">
                                     <span>任务 - {{ task.title }}</span>
                                 </div>
                             </div>
@@ -1118,7 +1118,7 @@
         </div>
         <!-- 删除日历/日程 -->
         <div class="modal fade" id="delModel" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
-             tabindex="-1" data-backdrop="static">
+             tabindex="-1" data-backdrop="static" v-if="canShow">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -1279,6 +1279,7 @@ export default {
                 selectorHidden: [],
                 isAddScheduleButtonDisable: false,
                 isAddWorkButtonDisable: false,
+                canShow:false
             }
         },
         components: {
@@ -1288,7 +1289,6 @@ export default {
             this.getArtist()
         },
         mounted() {
-            this.getTaskDate();
             this.getCalendar();
             this.charts();
             this.getTaskNum();
@@ -1309,7 +1309,7 @@ export default {
                 _this.$refs.workReleaseTime.setValue('');
             })
             this.getTimes()
-            this.getResources();
+            
             this.getPrivacy() //获取隐私设置
         },
         methods: {
@@ -1382,10 +1382,11 @@ export default {
                 this.artistId = this.$route.params.id;
                 let _this = this;
                 let data = {
-                    include: 'creator,tasks,affixes,producer,type,publicity,trails.project,trails.client,trails.project.principal,trails.project.relate_project_bills_resource,operatelogs,publicity.department',
+                    include: 'creator,tasks,affixes,publicity,publicity.department',
                 };
                 fetch('get', '/bloggers/' + this.artistId, data).then(response => {
                     this.artistInfo = response.data;
+                    console.log(this.artistInfo )
                     this.uploadUrl = _this.artistInfo.avatar;
                     this.artistName = response.data.nickname;
                     if (this.artistInfo.intention) {
@@ -1422,26 +1423,22 @@ export default {
                         '昵称': response.data.nickname
                     };
                     this.isLoading = false;
+                     setTimeout(() => {
+                        this.canShow = true
+                    }, 200);
                 });
-                //任务状态跑组。试戏
-                fetch('get', '/task_types').then(response => {
-
-                    this.tasksType = response.data;
-                    response.data.forEach(item => {
-
-                        if (item.title == '视频评分') {
-                            this.scoreId = item.id
-                        }
-                    })
-                });
-                fetch('get', '/bloggers/gettype').then(response => {
-                    this.artistTypeArr = response.data
-                });
+              
+                
                 fetch('get', '/bloggers/select?include=users').then(response => {
                     response.data.forEach(item => {
                         _this.principalIds.push(item.users.data.id)
                     })
                 })
+            },
+            getType:function(){
+                fetch('get', '/bloggers/gettype').then(response => {
+                    this.artistTypeArr = response.data
+                });
             },
             getProject(page = 1) {
                 fetch('get', '/bloggers/' + this.artistId + '/project', {
@@ -1571,6 +1568,7 @@ export default {
                 })
             },
     showScheduleModal (schedule) {
+                this.getResources();
                 let data = {
                     include: 'calendar,participants,creator,material,affixes,project,task',
                 };
@@ -1859,6 +1857,17 @@ export default {
             },
             //任务数据
             getArtistTasks: function (page = 1) {
+                  //任务状态跑组。试戏
+                fetch('get', '/task_types').then(response => {
+
+                    this.tasksType = response.data;
+                    response.data.forEach(item => {
+
+                        if (item.title == '视频评分') {
+                            this.scoreId = item.id
+                        }
+                    })
+                });
                 fetch('get', '/bloggers/' + this.artistId + '/tasks', {
                     page: page
                 }).then(response => {
@@ -2417,7 +2426,7 @@ export default {
         border-radius: 50%;
         border: 1px solid #eee;
         background-repeat: no-repeat;
-        background-size: 100%;
+        background-size: 100% 100%;
         -moz-background-size: 100% 100%;
     }
 
