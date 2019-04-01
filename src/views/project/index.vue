@@ -121,7 +121,7 @@
         <customize-filter v-if="canShow" :data="customizeInfo" @change="customize" :stararr='starsArr' :cleanup="cleanUp"
                           @cleanupdone='cleanUp=false'></customize-filter>
 
-        <!-- <AddClientType type="project" @change="changeProjectType"></AddClientType> -->
+        <AddClientType v-if="canShow" type="project" @change="changeProjectType"></AddClientType>
 
         <BuildProject v-if="canShow" :project-fields-arr="projectFieldsArr" :project-type="projectType"></BuildProject>
     </div>
@@ -275,6 +275,7 @@ export default {
     getClients () {
                 let _this = this;
                 fetch('get', '/clients/all').then(function (response) {
+                    this.canShow = true
                     for (let i = 0; i < response.data.length; i++) {
                         _this.companyArr.push({
                             name: response.data[i].company,
