@@ -96,7 +96,6 @@ export default {
       this.$emit('change', { key: id, value: this.fileInfo, type: related_field });
     },
     uploadFile(e) {
-      console.log(e);
       const file = e.target.files[0];
       const putExtra = null;
       const type = file.type.split('/');

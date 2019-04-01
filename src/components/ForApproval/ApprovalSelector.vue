@@ -134,7 +134,6 @@ export default {
                                 this.valueListener = { id: this.options.find(item => item.name === this.consdata[0].control_value).id,name:this.consdata[0].control_value}
                                 this.setValue(this.valueListener)
                                 return
-                                // console.log(this.consdata[0].control_title,this.valueListener);
                             }
                         }else{
                             this.setValue(this.consdata[0].control_value.value)

@@ -68,7 +68,6 @@ export default {
     computed:{
         // isShow(params) {
         //     return (params)=>{
-        //     console.log(this.changeData[0]==1);
         //         if(this.data[params].form_control_pid == 1 && this.singlemode == 'true' && this.changeData[0] == 1){
         //             return false
         //         }else{

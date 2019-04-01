@@ -238,14 +238,8 @@
                     <div class="modal-body">
                         <div v-for="(item, index) in previewUrlArr" :key="index" @click='previewHandler(item)'>
                             {{item}}
-                            <!-- <figure>
-                                <img class="ml-20 mt-20 float-left" :src="item" style='max-width:400px;border:1px solid rgba(7,17,27,0.5)' :alt="item" >
-                            </figure> -->
                         </div>
                     </div>
-                    <!-- <div class="modal-footer">
-                        <button type="button" class="btn btn-default btn-pure waves-effect waves-light waves-round" data-dismiss="modal">关闭</button>
-                    </div> -->
                 </div>
             </div>
         </div>
@@ -356,6 +350,8 @@ export default {
       });
     },
     approvalDone(params = '审批成功') {
+      this.waitingForFlag = true
+      this.isCurrentApprover = false
       if (this.list.project_number) {
         this.$refs.approvalProgress.getApprover(this.list.project_number);
       } else {
@@ -381,7 +377,6 @@ export default {
         }
       });
       //  this.roleUser = [];
-      // console.log(JSON.parse(Cookies.get('user')));
       // this.currentId = JSON.parse(Cookies.get('user')).id
       // for (const key in JSON.parse(Cookies.get('user')).role_user.data) {
       //     this.roleUser.push(JSON.parse(Cookies.get('user')).role_user.data[key].role_id);
@@ -427,7 +422,6 @@ export default {
         }
         Temp2 = TempArr.find(item => item.form_id === this.projectType);
         const formData = Temp1 || Temp2;
-        // console.log(formData);
         this.pullUp(formData);
       } else {
         this.selectProjectType(() => {

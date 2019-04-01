@@ -132,7 +132,6 @@
                         tempArr.conditions.push(this.sendFilterData.conditions[key])
                     }
                 }
-                console.log(tempArr)
                 this.$emit('change', tempArr);
                 $('.modal').modal('hide');
             },
