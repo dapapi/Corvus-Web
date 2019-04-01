@@ -546,6 +546,8 @@
 import fetch from '../../assets/utils/fetch.js';
 import config from '../../assets/js/config';
 import common from '../../assets/js/common';
+import Cookies from 'js-cookie';
+
 
 export default {
   data() {
@@ -888,7 +890,7 @@ export default {
     },
 
     editBaseInfo() {
-      if (this.trailInfo.powers.edit_trails !== 'true') {
+      if (this.trailInfo.powers.edit_trail !== 'true') {
         toastr.error('当前用户没有编辑销售线索的权限');
         return;
       }
@@ -947,15 +949,12 @@ export default {
       this.changeInfo.lock = Number(value);
     },
     getCurrentUser() {
-      const _this = this;
-      fetch('get', '/users/my').then((response) => {
-        _this.currentUser = response.data;
-        if (!_this.$store.state.newPrincipalInfo.id && _this.currentUser) {
-          _this.principal = _this.currentUser.id;
+        this.currentUser = JSON.parse(Cookies.get('user'))
+        if (!this.$store.state.newPrincipalInfo.id && this.currentUser) {
+          this.principal = this.currentUser.id;
         } else {
-          _this.principal = _this.$store.state.newPrincipalInfo.id;
+          this.principal = this.$store.state.newPrincipalInfo.id;
         }
-      });
     },
     addTask() {
       this.getTrailTask();

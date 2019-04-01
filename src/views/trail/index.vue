@@ -400,9 +400,7 @@ export default {
       this.email = value;
     },
     getCurrentUser() {
-      fetch('get', '/users/my').then((response) => {
-        this.currentUser = response.data;
-      });
+        this.currentUser = JSON.parse(Cookies.get('user'))
     },
     principalFilter(value) {
       if (value) {
@@ -500,7 +498,6 @@ export default {
         pagenumber = `&page=${  pageNum}`;
         newUrl = `${url  }?${  this.fetchData.include  }${keyword  }${status  }${principal_ids  }${pagenumber}`;
       }
-      // console.log(this.fetchData)
       this.exportParams = {
         keyword: this.fetchData.keyword,
         status: this.fetchData.status,

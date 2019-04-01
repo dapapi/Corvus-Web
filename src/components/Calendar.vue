@@ -8,14 +8,14 @@
     import fetch from '../assets/utils/fetch.js'
     //isModel ===true  调用接口/schedules/all 艺人和博主都用这个接口 
     export default {
-        props: ['calendars', 'gotoDate', 'meetingRomeList', 'isMeeting', 'isModel', 'calendarView'],
+        props: ['calendars', 'gotoDate', 'meetingRomeList', 'isMeeting', 'isModel', 'calendarView', 'showToast'],
         data() {
             return {
                 startDate: '', //获取开始时间
                 endDate: '',  //获取结束时间
                 allScheduleInfo: '',
                 defaultView: 'month',
-                firstClickTime: '',
+                firstClickTime: 0,
                 clickDate: '',
             }
         },
@@ -109,7 +109,7 @@
                     let data = {
                         start_date: self.startDate,
                         end_date: self.endDate,
-                        include: 'calendar,creator,material'
+                        include: 'calendar'
                     };
                     if (meetingRomeList.length > 0) {
                         let materialsIds = [];
@@ -142,27 +142,22 @@
                     let currentDate = new Date();
                     let currentClickTime = currentDate.getTime();
                     let formatDate = self.timeReformat(date._d);
-                    if (!self.clickDate) {
-                        self.clickDate = formatDate;
-                    }
-                    if (self.firstClickTime && self.clickDate === formatDate) {
-                        if (currentClickTime - self.firstClickTime < 500) {
-                            self.$emit('dayClick', formatDate);
-                        }
-                    } else {
-                        self.$emit('showToast', allDay.pageX, allDay.pageY)
-                    }
+                    let flag = self.firstClickTime;
                     self.clickDate = formatDate;
                     self.firstClickTime = currentClickTime;
+                    if (currentClickTime - flag < 500) {
+                        self.$emit('dayClick', formatDate);
+                    } else {
+                        setTimeout(() => {
+                            self.$emit('showToast', allDay.pageX, allDay.pageY)
+                        }, 100)
+                    }
                 },
                 eventClick: function (event, jsEvent, view) {
                     let data = self.allScheduleInfo.find(item => item.id === event.id);
-                    // console.log(data)
                     self.$emit('scheduleClick', data)
                 },
                 eventMouseover: function (event, jsEvent, view) {
-                    // console.log(jsEvent)
-                    // console.log(view)
                 }
             });
 

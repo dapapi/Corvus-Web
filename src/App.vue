@@ -298,4 +298,9 @@
         cursor: pointer;
         text-decoration: none;
     }
+
+    .fade {
+        opacity: 0;
+        transition: opacity .05s linear!important;
+    }
 </style>

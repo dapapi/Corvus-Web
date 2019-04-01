@@ -1607,7 +1607,7 @@ export default {
             this.getClients();
             this.getTaskType();
             this.getProjectTasking();
-            this.getProjectTasks();
+            // this.getProjectTasks();
             this.getProjectProgress();
             this.user = JSON.parse(Cookies.get('user'));
             $('#addPaybackTime').on('hidden.bs.modal', () => {

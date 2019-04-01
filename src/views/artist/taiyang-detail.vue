@@ -4,7 +4,7 @@
         <div class="page-header page-header-bordered">
             <h1 class="page-title d-inline">艺人详情</h1>
 
-            <div class="page-header-actions dropdown show task-dropdown float-right">
+            <div class="page-header-actions dropdown show task-dropdown float-right" v-if="canShow">
                 <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" id="taskDropdown"
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
@@ -818,7 +818,7 @@
                         <div class="modal-header">
                             <div style="order: 2">
                             <span class="pointer-content hover-content mr-4" data-toggle="modal"
-                                  data-target="#addLinkage">关联</span>
+                                  data-target="#addLinkage" @click="getRelationDate">关联</span>
                                 <i class="iconfont icon-guanbi pointer-content" aria-hidden="true"
                                    data-dismiss="modal"></i>
                             </div>
@@ -1218,7 +1218,7 @@
             <!--附件预览-->
             <ApprovalGreatModule v-if="canShow" :formData='formDate' :detailpage='isDetail'
                                  :default-value="{value:projectContractDefault,id:$route.params.id}"></ApprovalGreatModule>
-            <DocPreview v-if="canShow" :url="previewUrl" :givenFileName="previewName" :detailpage='isDetail'/>
+            <DocPreview :url='$store.state.previewurl' :givenFileName="previewName" :detailpage='isDetail'/>
         </div>
     </div>
 </template>
@@ -1304,7 +1304,7 @@ export default {
       current_page: 1,
       total_pages: 1,
       allTaskList: [], // 获取任务列表
-      threeProjectList: [], // 获取三个项目
+    //   threeProjectList: [], // 获取三个项目
       expense_type: 0,
       incomesum: 0, // 账单 -- 收入总和
       expendituresum: 0, // 账单 -- 支出总和
@@ -1368,14 +1368,14 @@ export default {
     ApprovalGreatModule,
   },
   mounted() {
-    this.getTaskType();
+      
     this.getCalendar();
-    this.draw();
-    this.getArtistsBill();
+    // this.draw();
+    // this.getArtistsBill();
     this.getTaskDate();
-    this.getProjectList();
-    this.selectProjectLinkage();
-    this.getResources();
+    // this.getProjectList();
+    
+    
     this.user = JSON.parse(Cookies.get('user'));
     this.$store.commit('changeNewPrincipal', {
       name: this.user.nickname,
@@ -1404,11 +1404,14 @@ export default {
       this.artistId = this.$route.params.id;
 
       const data = {
-        include: 'publicity,broker,creator,tasks,affixes,trails.project.principal,works,trails.client,relate_project_bills_resource,',
+        include: 'publicity,broker,creator,tasks,affixes',
       };
       fetch('get', `/stars/${this.artistId}`, data).then((response) => {
-        this.canShow = true
         this.artistInfo = response.data;
+        this.isLoading = false;
+        setTimeout(() => {
+            this.canShow = true
+        }, 200);
         console.log(this.artistInfo)
         this.artistName = response.data.name;
         if (response.data.star_risk_point == 'privacy') {
@@ -1438,9 +1441,9 @@ export default {
         }
         this.uploadUrl = this.artistInfo.avatar;
         this.artistTasksInfo = response.data.tasks.data;// 任务数据
-        this.artistWorksInfo = response.data.works.data;// 作品数据
+        // this.artistWorksInfo = response.data.works.data;// 作品数据
         this.affixes = response.data.affixes.data;
-        this.isLoading = false;
+       
       });
     },
     getProject(page = 1) {
@@ -1492,7 +1495,6 @@ export default {
                 };
                 fetch('get', `/privacyUsers?include=creator`, data).then(response => {
                     let allPrivacyUsers = response.data;
-                    console.log(allPrivacyUsers)
                     this.$store.state.birthdayInfo = [];
                     this.$store.state.star_risk_pointInfo = []
                     this.$store.state.phoneInfo = []
@@ -1547,6 +1549,7 @@ export default {
 
     // 获取日历详情
     showScheduleModal(schedule) {
+        this.getResources();
       const data = {
         include: 'calendar,participants,creator,material,affixes,project,task',
       };
@@ -1722,6 +1725,9 @@ export default {
       } else {
         toastr.error('该艺人无对应艺人日历，请先创建艺人日历');
       }
+    },
+    getRelationDate:function(){
+        this.selectProjectLinkage();
     },
     selectProjectLinkage(value) {
       if (!this.allProjectsInfo) {
@@ -1954,6 +1960,7 @@ export default {
     },
     // 获取任务列表
     getTaskList(page = 1) {
+        this.getTaskType();
       fetch('get', `/stars/${this.$route.params.id}/tasks/`, {
         page,
       }).then((response) => {
@@ -1988,12 +1995,12 @@ export default {
       this.selectedDate = value;
       this.$refs.meetingRoom.setDate(value);
     },
-    // 获取三个项目
-    getProjectList() {
-      fetch('get', `/projects/star/${this.$route.params.id}`).then((response) => {
-        this.threeProjectList = response;
-      });
-    },
+    // // 获取三个项目
+    // getProjectList() {
+    //   fetch('get', `/projects/star/${this.$route.params.id}`).then((response) => {
+    //     this.threeProjectList = response;
+    //   });
+    // },
     // 粉丝数据
     draw() {
       const myChart = echarts.init(document.getElementById('myChart'));
@@ -2357,7 +2364,9 @@ export default {
       this.affixId = id;
     },
     previewFile(url, name) {
-      this.previewUrl = url;
+      // console.log(url,name);
+      // :url='$store.state.previewurl'
+      this.$store.state.previewurl = url;
       this.previewName = name;
     },
     // 删除附件

@@ -227,6 +227,7 @@
         mounted() {
             this.getTasks();
             this.user = JSON.parse(Cookies.get('user'))
+            
             // 负责人默认值的设置
             this.$store.commit('changeNewPrincipal', {
                 name: this.user.nickname,

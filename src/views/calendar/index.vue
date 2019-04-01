@@ -1,30 +1,30 @@
 <template>
     <div class="page">
-            <div class="page-aside-left">
-                <div class="page-aside">
-                    <div class="page-aside-inner page-aside-scroll scrollable is-enabled scrollable-vertical"
-                         style="position: relative;">
-                        <div data-role="container" class="scrollable-container">
-                            <div data-role="content" class="scrollable-content">
-                                <section class="page-aside-section">
-                                    <h5 class="page-title px-20 mb-45">
-                                        <span>日历</span>
-                                        <span class="float-right pointer-content" @click="changeCalendarActionType('add')">
+        <div class="page-aside-left">
+            <div class="page-aside">
+                <div class="page-aside-inner page-aside-scroll scrollable is-enabled scrollable-vertical"
+                     style="position: relative;">
+                    <div data-role="container" class="scrollable-container">
+                        <div data-role="content" class="scrollable-content">
+                            <section class="page-aside-section">
+                                <h5 class="page-title px-20 mb-45">
+                                    <span>日历</span>
+                                    <span class="float-right pointer-content" @click="changeCalendarActionType('add')">
                                         <i class="iconfont icon-tianjiarili"></i>
                                     </span>
-                                    </h5>
-                                    <div class="container-fluid">
-                                        <div style="border-bottom: 1px solid #D8D8D8;margin: 0 auto">
-                                            <InlineDatepicker @change="selectDate"></InlineDatepicker>
-                                        </div>
-                                        <div class="calendar-list">
-                                            <div>
-                                                <div class="calendar-title position-relative"
-                                                     style="line-height: 20px">
-                                                    <i class="iconfont icon-richeng pr-5"></i>
-                                                    <span @click="displayMeetingRoom"
-                                                          class="pointer-content">所有日历</span>
-                                                    <span class="px-5 pointer-content" @click="allCalendarShow">
+                                </h5>
+                                <div class="container-fluid">
+                                    <div style="border-bottom: 1px solid #D8D8D8;margin: 0 auto">
+                                        <InlineDatepicker @change="selectDate"></InlineDatepicker>
+                                    </div>
+                                    <div class="calendar-list">
+                                        <div>
+                                            <div class="calendar-title position-relative"
+                                                 style="line-height: 20px">
+                                                <i class="iconfont icon-richeng pr-5"></i>
+                                                <span @click="displayMeetingRoom"
+                                                      class="pointer-content">所有日历</span>
+                                                <span class="px-5 pointer-content" @click="allCalendarShow">
                                                             <template v-if="showAllCalendar">
                                                                 <i class="iconfont icon-xiajiantou"
                                                                    style="font-size:12px"></i>
@@ -34,65 +34,65 @@
                                                                    style="font-size:12px"></i>
                                                             </template>
                                                         </span>
-                                                    <span class="float-right pointer-content"
-                                                          @click="addMultipleMember">
+                                                <span class="float-right pointer-content"
+                                                      @click="addMultipleMember">
                                                             <i class="iconfont icon-tianjiarenyuan"></i>
                                                         </span>
-                                                </div>
-                                                <div class="input-search my-10">
-                                                    <button type="button" class="input-search-btn">
-                                                        <i aria-hidden="true" class="iconfont icon-buoumaotubiao13"></i>
-                                                    </button>
-                                                    <input type="text" placeholder="请输入日历名称" v-model="calendarTitle"
-                                                           class="form-control project-search" style="height: 2rem;"
-                                                           @blur="getCalendarList" @keyup.enter="getCalendarList">
-                                                </div>
-                                                <div style="max-height: 350px;overflow: hidden;position: relative;">
-                                                    <div v-show="showAllCalendar"
-                                                         style="max-height: 350px;overflow-y: auto;">
-                                                        <ul style="padding-bottom: 30px;">
-                                                            <li v-for="(calendar,index) in calendarList" :key="index"
-                                                                class="clearfix">
-                                                                <div class="calendar-checkbox float-left pointer-content"
-                                                                     :style="'background-color:' + calendar.color"
-                                                                     @click="checkCalendar(calendar.id)">
-                                                                    <i class="md-check"
-                                                                       v-show="selectedCalendar.indexOf(calendar.id) > -1"></i>
+                                            </div>
+                                            <div class="input-search my-10">
+                                                <button type="button" class="input-search-btn">
+                                                    <i aria-hidden="true" class="iconfont icon-buoumaotubiao13"></i>
+                                                </button>
+                                                <input type="text" placeholder="请输入日历名称" v-model="calendarTitle"
+                                                       class="form-control project-search" style="height: 2rem;"
+                                                       @blur="getCalendarList" @keyup.enter="getCalendarList">
+                                            </div>
+                                            <div style="max-height: 350px;overflow: hidden;position: relative;">
+                                                <div v-show="showAllCalendar"
+                                                     style="max-height: 350px;overflow-y: auto;">
+                                                    <ul style="padding-bottom: 30px;">
+                                                        <li v-for="(calendar,index) in calendarList" :key="index"
+                                                            class="clearfix">
+                                                            <div class="calendar-checkbox float-left pointer-content"
+                                                                 :style="'background-color:' + calendar.color"
+                                                                 @click="checkCalendar(calendar.id)">
+                                                                <i class="md-check"
+                                                                   v-show="selectedCalendar.indexOf(calendar.id) > -1"></i>
+                                                            </div>
+                                                            <div class="float-left col-md-9 pr-0"
+                                                                 style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
+                                                                {{ calendar.title }}
+                                                            </div>
+                                                            <div class="float-right position-relative"
+                                                                 v-show="calendar.starable_type !== 'star' || (calendar.starable_type === 'star' && calendar.principal_id == userInfo.id)">
+                                                                <i class="iconfont icon-gengduo1" aria-hidden="true"
+                                                                   id="taskDropdown"
+                                                                   data-toggle="dropdown" aria-expanded="false"></i>
+                                                                <div class="dropdown-menu"
+                                                                     aria-labelledby="taskDropdown">
+                                                                    <a class="dropdown-item"
+                                                                       @click="getCalendarDetail(calendar.id)"
+                                                                       data-target="#addCalendar"
+                                                                       data-toggle="modal">编辑</a>
+                                                                    <a class="dropdown-item" data-target="#delModel"
+                                                                       data-toggle="modal"
+                                                                       @click="deleteToastr('calendar', calendar)">删除</a>
                                                                 </div>
-                                                                <div class="float-left col-md-9 pr-0"
-                                                                     style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
-                                                                    {{ calendar.title }}
-                                                                </div>
-                                                                <div class="float-right position-relative"
-                                                                     v-show="calendar.starable_type !== 'star' || (calendar.starable_type === 'star' && calendar.principal_id == userInfo.id)">
-                                                                    <i class="iconfont icon-gengduo1" aria-hidden="true"
-                                                                       id="taskDropdown"
-                                                                       data-toggle="dropdown" aria-expanded="false"></i>
-                                                                    <div class="dropdown-menu"
-                                                                         aria-labelledby="taskDropdown">
-                                                                        <a class="dropdown-item"
-                                                                           @click="getCalendarDetail(calendar.id)"
-                                                                           data-target="#addCalendar"
-                                                                           data-toggle="modal">编辑</a>
-                                                                        <a class="dropdown-item" data-target="#delModel"
-                                                                           data-toggle="modal"
-                                                                           @click="deleteToastr('calendar', calendar)">删除</a>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                        </ul>
-                                                        <div class="checkbox-custom checkbox-primary select-all-checkbox">
-                                                            <input type="checkbox" id="inputUnchecked"
-                                                                   @change="selectAllCalendar">
-                                                            <label for="inputUnchecked">全选</label>
-                                                        </div>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                    <div class="checkbox-custom checkbox-primary select-all-checkbox">
+                                                        <input type="checkbox" id="inputUnchecked"
+                                                               @change="selectAllCalendar">
+                                                        <label for="inputUnchecked">全选</label>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div>
-                                                <div class="calendar-title">
-                                                    <i class="iconfont icon-richeng pr-5"></i>资源
-                                                    <span class="px-5 pointer-content" @click="allResourceShow">
+                                        </div>
+                                        <div>
+                                            <div class="calendar-title">
+                                                <i class="iconfont icon-richeng pr-5"></i>资源
+                                                <span class="px-5 pointer-content" @click="allResourceShow">
                                                             <template v-if="showAllResource">
                                                                 <i class="iconfont icon-xiajiantou"
                                                                    style="font-size:12px"></i>
@@ -102,58 +102,61 @@
                                                                    style="font-size:12px"></i>
                                                             </template>
                                                         </span>
-                                                    <span class="float-right pointer-content" v-show="isMeeting"
-                                                          @click="displayMeetingRoom">回到日历</span>
-                                                </div>
-                                                <div v-show="showAllResource">
-                                                    <div class="text-center pb-10">
+                                                <span class="float-right pointer-content" v-show="isMeeting"
+                                                      @click="displayMeetingRoom">回到日历</span>
+                                            </div>
+                                            <div v-show="showAllResource">
+                                                <div class="text-center pb-10">
                                                             <span class="pointer-content hover-content"
                                                                   @click="checkMeetingRoom(1)">会议室占用情况</span>
-                                                    </div>
-                                                    <div class="text-center pb-10">
+                                                </div>
+                                                <div class="text-center pb-10">
                                                             <span class="pointer-content hover-content"
                                                                   @click="checkMeetingRoom(2)">摄影棚占用情况</span>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
 
-                                </section>
-                            </div>
+                            </section>
                         </div>
-                        <div class="scrollable-bar scrollable-bar-vertical is-disabled scrollable-bar-hide"
-                             draggable="false">
-                            <div class="scrollable-bar-handle"></div>
-                        </div>
+                    </div>
+                    <div class="scrollable-bar scrollable-bar-vertical is-disabled scrollable-bar-hide"
+                         draggable="false">
+                        <div class="scrollable-bar-handle"></div>
                     </div>
                 </div>
-
-                <div class="page-main" style="background-color:#f3f4f5">
-                    <div class="page-header page-header-bordered">
-                        <h1 class="page-title">日程</h1>
-                    </div>
-                    <div class="page-content container-fluid">
-                        <div class="bg-white">
-                            <calendar :goto-date="selectedDate" v-if="!meetingRomeShow" @dayClick="showAddScheduleModal"
-                                      :calendars="selectedCalendar" :meeting-rome-list="meetingRomeList" ref="calendar"
-                                      :is-meeting="isMeeting" @calendarDisplay="checkMeetingRoom" @showToast="showToast"
-                                      @scheduleClick="showScheduleModal" :calendarView="calendarView"></calendar>
-                            <MeetingRoomCalendar v-show="meetingRomeShow" :meetingRomeList="meetingRomeList"
-                                                 ref="meetingRoom"
-                                                 @change="changeToCalendar"></MeetingRoomCalendar>
-                        </div>
-                    </div>
-                </div>
-
             </div>
 
-        <div  class="calendar-toast" v-show="toastShow"
-             :style="'position: absolute;top:' + toastY + 'px; left: ' + toastX + 'px;'">双击创建日程
+            <div class="page-main" style="background-color:#f3f4f5">
+                <div class="page-header page-header-bordered">
+                    <h1 class="page-title">日程</h1>
+                </div>
+                <div class="page-content container-fluid">
+                    <div class="bg-white">
+                        <calendar :goto-date="selectedDate" v-if="!meetingRomeShow" @dayClick="showAddScheduleModal"
+                                  :calendars="selectedCalendar" :meeting-rome-list="meetingRomeList" ref="calendar"
+                                  :is-meeting="isMeeting" @calendarDisplay="checkMeetingRoom" :showToast="showToast"
+                                  @showToast="showToast" @scheduleClick="showScheduleModal"
+                                  :calendarView="calendarView"></calendar>
+                        <MeetingRoomCalendar v-show="meetingRomeShow" :meetingRomeList="meetingRomeList"
+                                             ref="meetingRoom"
+                                             @change="changeToCalendar"></MeetingRoomCalendar>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="calendar-toast" v-show="toastShow"
+             :style="'position: absolute;top:' + toastY + 'px; left: ' + toastX + 'px;'"
+             style="margin-left: -100px;margin-top: -25px">双击创建日程
         </div>
 
         <!-- 新建/修改 日程 -->
-        <div v-if="canShow" class="modal fade line-center" id="changeSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShow" class="modal fade line-center" id="changeSchedule" aria-hidden="true"
+             aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -161,159 +164,159 @@
                         <div style="order: 2">
                             <span class="pointer-content hover-content mr-4" data-toggle="modal"
                                   data-target="#addLinkage">关联</span>
-                                <i class="iconfont icon-guanbi pointer-content" aria-hidden="true" data-dismiss="modal"></i>
-                            </div>
-                            <h5 class="modal-title">
-                                <template v-if="scheduleType === 'add'">
-                                    <h4 class="modal-title">新建日程</h4>
-                                </template>
-                                <template v-else>
-                                    <h4 class="modal-title">修改日程</h4>
-                                </template>
-                            </h5>
+                            <i class="iconfont icon-guanbi pointer-content" aria-hidden="true" data-dismiss="modal"></i>
                         </div>
-                        <div class="modal-body">
-                            <div class="example">
-                                <div class="col-md-2 text-right float-left">标题</div>
+                        <h5 class="modal-title">
+                            <template v-if="scheduleType === 'add'">
+                                <h4 class="modal-title">新建日程</h4>
+                            </template>
+                            <template v-else>
+                                <h4 class="modal-title">修改日程</h4>
+                            </template>
+                        </h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">标题</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <input type="text" class="form-control" title="" placeholder="请输入标题"
+                                       v-model="scheduleName">
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">日历</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <selectors :options="calendarList" ref="calendarSelector"
+                                           @change="selectScheduleCalendar"></selectors>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">开始时间</div>
+                            <div class="col-md-5 float-left pl-0">
+                                <datepicker @change="changeStartTime" ref="scheduleStartDate"></datepicker>
+                            </div>
+                            <div class="col-md-5 float-left pl-0" v-show="!isScheduleAllday">
+                                <TimeChoice @change="changeStartMinutes" ref="scheduleStartMinute"></TimeChoice>
+                            </div>
+                        </div>
+                        <div class="clearfix">
+                            <div class="col-md-2 text-right float-left line-fixed-height">结束时间</div>
+                            <div class="col-md-5 float-left pl-0">
+                                <datepicker @change="changeEndTime" ref="scheduleEndDate"
+                                            :startDate="startTime"></datepicker>
+                            </div>
+                            <div class="col-md-5 float-left pl-0" v-show="!isScheduleAllday">
+                                <TimeChoice @change="changeEndMinutes" ref="scheduleEndMinute"></TimeChoice>
+                            </div>
+                        </div>
+                        <div class="clearfix">
+                            <div class="col-md-2 text-right float-left"></div>
+                            <div class="col-md-10 float-left pl-0">
+                                <div class="checkbox-custom checkbox-primary">
+                                    <input type="checkbox" id="isScheduleAllday" @change="changeIsAllDay"
+                                           v-model="isScheduleAllday">
+                                    <label for="isScheduleAllday">全天</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix py-10">
+                            <div class="col-md-2 text-right float-left line-fixed-height">参与人</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <AddMember type="add"></AddMember>
+                            </div>
+                        </div>
+                        <div class="my-10 clearfix"
+                             v-show="linkageSelectedIds.projects.length > 0 || linkageSelectedIds.tasks.length > 0">
+                            <div class="col-md-2 text-right float-left">关联资源</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <div class="clearfix" v-for="(id,index) in linkageSelectedIds.projects" :key="index">
+                                    <span class="float-left">
+                                        项目 - {{ allProjectsInfo.find(item => item.id == id).title }}
+                                    </span>
+                                    <span class="float-right icon iconfont icon-shanchu1"
+                                          @click="delNewScheduleLinkage('projects', id)"></span>
+                                </div>
+                                <div class="clearfix" v-for="(id,index) in linkageSelectedIds.tasks" :key="index">
+                                    <span class="float-left">
+                                        任务 - {{ allTasksInfo.find(item => item.id == id).title }}
+                                    </span>
+                                    <span class="float-right icon iconfont icon-shanchu1"
+                                          @click="delNewScheduleLinkage('tasks', id)"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-show="showMore">
+                            <div class="pt-10 mb-20 clearfix">
+                                <div class="col-md-2 text-right float-left line-fixed-height">资源</div>
                                 <div class="col-md-10 float-left pl-0">
-                                    <input type="text" class="form-control" title="" placeholder="请输入标题"
-                                           v-model="scheduleName">
+                                    <selectors :options="allMeetingRomeList" ref="scheduleResource"
+                                               @change="changeScheduleMaterial"></selectors>
                                 </div>
                             </div>
                             <div class="example">
-                                <div class="col-md-2 text-right float-left">日历</div>
+                                <div class="col-md-2 text-right float-left">提醒</div>
                                 <div class="col-md-10 float-left pl-0">
-                                    <selectors :options="calendarList" ref="calendarSelector"
-                                               @change="selectScheduleCalendar"></selectors>
+                                    <!-- <AddRemind @change="changeScheduleRemind" :options="remindArr" :isCancel="isCancel"
+                                               :conditionLength="conditionLength" :selectorHidden="selectorHidden"
+                                               ref="scheduleRemind"></AddRemind> -->
+                                    <selectors :options="remindArr" ref="scheduleRemind"
+                                               @change="changeScheduleRemind"></selectors>
+                                </div>
+                            </div>
+                            <div class="clearfix my-20">
+                                <div class="col-md-2 text-right float-left line-fixed-height">重复</div>
+                                <div class="col-md-10 float-left pl-0">
+                                    <selectors :options="repeatArr" ref="scheduleRepeat"
+                                               @change="changeScheduleRepeat"></selectors>
+                                </div>
+                                <div class="col-md-2 float-left"></div>
+                                <div class="col-md-10 float-left pl-0 font-12 mt-5" style="color: #c3c3c3">重复周期为1年</div>
+                            </div>
+                            <div class="example">
+                                <div class="col-md-2 text-right float-left">位置</div>
+                                <div class="col-md-10 float-left pl-0">
+                                    <input type="text" class="form-control" title="" v-model="eventPlace">
                                 </div>
                             </div>
                             <div class="example">
-                                <div class="col-md-2 text-right float-left">开始时间</div>
-                                <div class="col-md-5 float-left pl-0">
-                                    <datepicker @change="changeStartTime" ref="scheduleStartDate"></datepicker>
-                                </div>
-                                <div class="col-md-5 float-left pl-0" v-show="!isScheduleAllday">
-                                    <TimeChoice @change="changeStartMinutes" ref="scheduleStartMinute"></TimeChoice>
-                                </div>
-                            </div>
-                            <div class="clearfix">
-                                <div class="col-md-2 text-right float-left line-fixed-height">结束时间</div>
-                                <div class="col-md-5 float-left pl-0">
-                                    <datepicker @change="changeEndTime" ref="scheduleEndDate"
-                                                :startDate="startTime"></datepicker>
-                                </div>
-                                <div class="col-md-5 float-left pl-0" v-show="!isScheduleAllday">
-                                    <TimeChoice @change="changeEndMinutes" ref="scheduleEndMinute"></TimeChoice>
+                                <div class="col-md-2 text-right float-left">备注</div>
+                                <div class="col-md-10 float-left pl-0">
+                                    <textarea class="form-control" title="" v-model="eventDesc"></textarea>
                                 </div>
                             </div>
                             <div class="clearfix">
                                 <div class="col-md-2 text-right float-left"></div>
                                 <div class="col-md-10 float-left pl-0">
                                     <div class="checkbox-custom checkbox-primary">
-                                        <input type="checkbox" id="isScheduleAllday" @change="changeIsAllDay"
-                                               v-model="isScheduleAllday">
-                                        <label for="isScheduleAllday">全天</label>
+                                        <input type="checkbox" id="onlyParticipantVisible" v-model="schedulePrivacy">
+                                        <label for="onlyParticipantVisible">仅参与人可见</label>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="clearfix py-10">
-                                <div class="col-md-2 text-right float-left line-fixed-height">参与人</div>
-                                <div class="col-md-10 float-left pl-0">
-                                    <AddMember type="add"></AddMember>
-                                </div>
-                            </div>
-                            <div class="my-10 clearfix"
-                                 v-show="linkageSelectedIds.projects.length > 0 || linkageSelectedIds.tasks.length > 0">
-                                <div class="col-md-2 text-right float-left">关联资源</div>
-                                <div class="col-md-10 float-left pl-0">
-                                    <div class="clearfix" v-for="(id,index) in linkageSelectedIds.projects" :key="index">
-                                    <span class="float-left">
-                                        项目 - {{ allProjectsInfo.find(item => item.id == id).title }}
-                                    </span>
-                                        <span class="float-right icon iconfont icon-shanchu1"
-                                              @click="delNewScheduleLinkage('projects', id)"></span>
-                                    </div>
-                                    <div class="clearfix" v-for="(id,index) in linkageSelectedIds.tasks" :key="index">
-                                    <span class="float-left">
-                                        任务 - {{ allTasksInfo.find(item => item.id == id).title }}
-                                    </span>
-                                        <span class="float-right icon iconfont icon-shanchu1"
-                                              @click="delNewScheduleLinkage('tasks', id)"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div v-show="showMore">
-                                <div class="pt-10 mb-20 clearfix">
-                                    <div class="col-md-2 text-right float-left line-fixed-height">资源</div>
-                                    <div class="col-md-10 float-left pl-0">
-                                        <selectors :options="allMeetingRomeList" ref="scheduleResource"
-                                                   @change="changeScheduleMaterial"></selectors>
-                                    </div>
-                                </div>
-                                <div class="example">
-                                    <div class="col-md-2 text-right float-left">提醒</div>
-                                    <div class="col-md-10 float-left pl-0">
-                                        <!-- <AddRemind @change="changeScheduleRemind" :options="remindArr" :isCancel="isCancel"
-                                                   :conditionLength="conditionLength" :selectorHidden="selectorHidden"
-                                                   ref="scheduleRemind"></AddRemind> -->
-                                        <selectors :options="remindArr" ref="scheduleRemind"
-                                                   @change="changeScheduleRemind"></selectors>
-                                    </div>
-                                </div>
-                                <div class="clearfix my-20">
-                                    <div class="col-md-2 text-right float-left line-fixed-height">重复</div>
-                                    <div class="col-md-10 float-left pl-0">
-                                        <selectors :options="repeatArr" ref="scheduleRepeat"
-                                                   @change="changeScheduleRepeat"></selectors>
-                                    </div>
-                                    <div class="col-md-2 float-left"></div>
-                                    <div class="col-md-10 float-left pl-0 font-12 mt-5" style="color: #c3c3c3">重复周期为1年</div>
-                                </div>
-                                <div class="example">
-                                    <div class="col-md-2 text-right float-left">位置</div>
-                                    <div class="col-md-10 float-left pl-0">
-                                        <input type="text" class="form-control" title="" v-model="eventPlace">
-                                    </div>
-                                </div>
-                                <div class="example">
-                                    <div class="col-md-2 text-right float-left">备注</div>
-                                    <div class="col-md-10 float-left pl-0">
-                                        <textarea class="form-control" title="" v-model="eventDesc"></textarea>
-                                    </div>
-                                </div>
-                                <div class="clearfix">
-                                    <div class="col-md-2 text-right float-left"></div>
-                                    <div class="col-md-10 float-left pl-0">
-                                        <div class="checkbox-custom checkbox-primary">
-                                            <input type="checkbox" id="onlyParticipantVisible" v-model="schedulePrivacy">
-                                            <label for="onlyParticipantVisible">仅参与人可见</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="pointer-content hover-content mt-20" @click="isShowMore">
-                                <div class="col-md-2 float-left"></div>
-                                <div class="col-md-10 float-left pl-0">
-                                    <template v-if="showMore">隐藏更多选项</template>
-                                    <template v-else>添加更多选项</template>
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="cancelSchedule">取消
+                        <div class="pointer-content hover-content mt-20" @click="isShowMore">
+                            <div class="col-md-2 float-left"></div>
+                            <div class="col-md-10 float-left pl-0">
+                                <template v-if="showMore">隐藏更多选项</template>
+                                <template v-else>添加更多选项</template>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="cancelSchedule">取消
+                        </button>
+                        <template v-if="scheduleType === 'add'">
+                            <button class="btn btn-primary" type="submit" :disable="isAddButtonDisable"
+                                    @click="addSchedule">确定
                             </button>
-                            <template v-if="scheduleType === 'add'">
-                                <button class="btn btn-primary" type="submit" :disable="isAddButtonDisable"
-                                        @click="addSchedule">确定
-                                </button>
-                            </template>
-                            <template v-if="scheduleType === 'edit'">
-                                <button class="btn btn-primary" type="submit" @click="changeSchedule">确定</button>
-                            </template>
-                        </div>
+                        </template>
+                        <template v-if="scheduleType === 'edit'">
+                            <button class="btn btn-primary" type="submit" @click="changeSchedule">确定</button>
+                        </template>
                     </div>
                 </div>
             </div>
+        </div>
         <!-- 查看日程 -->
         <div v-if="canShow" class="modal fade" id="checkSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
@@ -328,91 +331,90 @@
                                 <i class="iconfont icon-shanchu1 pr-4 font-size-16 pointer-content" data-toggle="modal"
                                    data-target="#delModel" aria-hidden="true" @click="deleteToastr('schedule')"></i>
                             </span>
-                                <i class="iconfont icon-guanbi pointer-content" aria-hidden="true" data-dismiss="modal"></i>
-                            </div>
-                            <h5 class="modal-title">{{ scheduleData.calendar.data.title }}</h5>
+                            <i class="iconfont icon-guanbi pointer-content" aria-hidden="true" data-dismiss="modal"></i>
                         </div>
-                        <div class="modal-body px-40">
+                        <h5 class="modal-title">{{ scheduleData.calendar.data.title }}</h5>
+                    </div>
+                    <div class="modal-body px-40">
+                        <div class="">
+                            <h4 class="my-20">{{ scheduleData.title }}</h4>
+                        </div>
+                        <div class="example">
                             <div class="">
-                                <h4 class="my-20">{{ scheduleData.title }}</h4>
-                            </div>
-                            <div class="example">
-                                <div class="">
-                                    <div class="col-md-3 float-left px-0">
-                                        <div class="">{{ (scheduleData.start_at.split(' ')[0]).split('-')[1] }}月
-                                            {{ (scheduleData.start_at.split(' ')[0]).split('-')[2] }}日
-                                            {{ scheduleData.start_at|getWeek(scheduleData.start_at) }}
-                                        </div>
-                                        <div class="big-time">{{ (scheduleData.start_at.split(' ')[1]).slice(0,5) }}</div>
+                                <div class="col-md-3 float-left px-0">
+                                    <div class="">{{ (scheduleData.start_at.split(' ')[0]).split('-')[1] }}月
+                                        {{ (scheduleData.start_at.split(' ')[0]).split('-')[2] }}日
+                                        {{ scheduleData.start_at|getWeek(scheduleData.start_at) }}
                                     </div>
-                                    <div class="col-md-2 float-left pl-0">
-                                        <div class="" style="color: white"> -</div>
-                                        <div class="big-time text-center"> -</div>
+                                    <div class="big-time">{{ (scheduleData.start_at.split(' ')[1]).slice(0,5) }}</div>
+                                </div>
+                                <div class="col-md-2 float-left pl-0">
+                                    <div class="" style="color: white"> -</div>
+                                    <div class="big-time text-center"> -</div>
+                                </div>
+                                <div class="col-md-3 float-left px-0">
+                                    <div class="">{{ (scheduleData.end_at.split(' ')[0]).split('-')[1] }}月
+                                        {{ (scheduleData.end_at.split(' ')[0]).split('-')[2] }}日
+                                        {{ scheduleData.end_at|getWeek(scheduleData.end_at) }}
                                     </div>
-                                    <div class="col-md-3 float-left px-0">
-                                        <div class="">{{ (scheduleData.end_at.split(' ')[0]).split('-')[1] }}月
-                                            {{ (scheduleData.end_at.split(' ')[0]).split('-')[2] }}日
-                                            {{ scheduleData.end_at|getWeek(scheduleData.end_at) }}
-                                        </div>
-                                        <div class="big-time">{{ (scheduleData.end_at.split(' ')[1]).slice(0,5) }}</div>
-                                    </div>
-                                    <div class="col-md-2 float-left" v-show="scheduleData.is_allday">
-                                        <div class="" style="color: white"> -</div>
-                                        <div class="big-time font-size-18" style="line-height: 75px">全天</div>
-                                    </div>
+                                    <div class="big-time">{{ (scheduleData.end_at.split(' ')[1]).slice(0,5) }}</div>
+                                </div>
+                                <div class="col-md-2 float-left" v-show="scheduleData.is_allday">
+                                    <div class="" style="color: white"> -</div>
+                                    <div class="big-time font-size-18" style="line-height: 75px">全天</div>
                                 </div>
                             </div>
-                            <div class="example" v-if="scheduleData.position">
-                                <div class="col-md-2 px-0 float-left">地点</div>
-                                <div class="col-md-10 pl-0 float-left">{{ scheduleData.position }}</div>
+                        </div>
+                        <div class="example" v-if="scheduleData.position">
+                            <div class="col-md-2 px-0 float-left">地点</div>
+                            <div class="col-md-10 pl-0 float-left">{{ scheduleData.position }}</div>
+                        </div>
+                        <div class="example" v-if="scheduleData.material">
+                            <div class="col-md-2 px-0 float-left">资源</div>
+                            <div class="col-md-10 pl-0 float-left">{{ scheduleData.material.data.name }}</div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 px-0 float-left">组织人</div>
+                            <div class="col-md-10 pl-0 float-left">
+                                {{ scheduleData.creator.data.name }}
                             </div>
-                            <div class="example" v-if="scheduleData.material">
-                                <div class="col-md-2 px-0 float-left">资源</div>
-                                <div class="col-md-10 pl-0 float-left">{{ scheduleData.material.data.name }}</div>
-                            </div>
-                            <div class="example">
-                                <div class="col-md-2 px-0 float-left">组织人</div>
-                                <div class="col-md-10 pl-0 float-left">
-                                    {{ scheduleData.creator.data.name }}
+                        </div>
+                        <div class="example"
+                             v-if="((scheduleData.project && scheduleData.project.data.length > 0) || (scheduleData.task && scheduleData.task.data.length > 0)) && !noPermission">
+                            <div class="col-md-2 px-0 float-left">关联资源</div>
+                            <div class="col-md-10 pl-0 float-left">
+                                <div class="pb-5" v-if="scheduleData.project"
+                                     v-for="project in scheduleData.project.data">
+                                    <span class="pointer-content" @click="redirectProject(project.moduleable_id)">项目 - {{ project.title }}</span>
+                                </div>
+                                <div class="pb-5" v-if="scheduleData.task" v-for="task in scheduleData.task.data">
+                                    <span class="pointer-content" @click="redirectTask(task.moduleable_id)">任务 - {{ task.title }}</span>
                                 </div>
                             </div>
-                            <div class="example"
-                                 v-if="((scheduleData.project && scheduleData.project.data.length > 0) || (scheduleData.task && scheduleData.task.data.length > 0)) && !noPermission">
-                                <div class="col-md-2 px-0 float-left">关联资源</div>
-                                <div class="col-md-10 pl-0 float-left">
-                                    <div class="pb-5" v-if="scheduleData.project"
-                                         v-for="project in scheduleData.project.data">
-                                        <span class="pointer-content" @click="redirectProject(project.moduleable_id)">项目 - {{ project.title }}</span>
-                                    </div>
-                                    <div class="pb-5" v-if="scheduleData.task" v-for="task in scheduleData.task.data">
-                                        <span class="pointer-content" @click="redirectTask(task.moduleable_id)">任务 - {{ task.title }}</span>
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="example" v-if="scheduleData.participants && !noPermission">
+                            <div class="col-md-2 px-0 float-left">参与人</div>
+                            <div class="col-md-10 pl-0 float-left">
+                                <AddMember type="add" participantsSingle="isParticipant"
+                                           @change="changeScheduleParticipants"></AddMember>
                             </div>
-                            <div class="example" v-if="scheduleData.participants && !noPermission">
-                                <div class="col-md-2 px-0 float-left">参与人</div>
-                                <div class="col-md-10 pl-0 float-left">
-                                    <AddMember type="add" participantsSingle="isParticipant"
-                                               @change="changeScheduleParticipants"></AddMember>
-                                </div>
-                            </div>
-                            <div class="example" v-if="scheduleData.desc && !noPermission">
-                                <div class="col-md-2 px-0 float-left">备注</div>
-                                <div class="col-md-10 pl-0 float-left">{{ scheduleData.desc }}</div>
-                            </div>
-                            <div class="example" v-if="scheduleData.affixes && scheduleData.affixes.data.length > 0">
-                                <div>附件</div>
-                                <div>
-                                    <div class="col-md-3 float-left text-center position-relative file-item"
-                                         v-for="(affix,index) in scheduleData.affixes.data" :key="index">
-                                        <div><i class="iconfont icon-wenjian" style="font-size: 36px"></i></div>
-                                        <div @click="openFile(affix.url)" class="pointer-content">{{ affix.title }}</div>
-                                        <div class="del-affix">
-                                            <i class="iconfont icon-liulan pointer-content mr-4"
-                                               @click="openFile(affix.url)"></i>
-                                            <i class="iconfont icon-shanchu1 pointer-content"
-                                               @click="delAffix(affix.id)"></i>
-                                        </div>
+                        </div>
+                        <div class="example" v-if="scheduleData.desc && !noPermission">
+                            <div class="col-md-2 px-0 float-left">备注</div>
+                            <div class="col-md-10 pl-0 float-left">{{ scheduleData.desc }}</div>
+                        </div>
+                        <div class="example" v-if="scheduleData.affixes && scheduleData.affixes.data.length > 0">
+                            <div>附件</div>
+                            <div>
+                                <div class="col-md-3 float-left text-center position-relative file-item"
+                                     v-for="(affix,index) in scheduleData.affixes.data" :key="index">
+                                    <div><i class="iconfont icon-wenjian" style="font-size: 36px"></i></div>
+                                    <div @click="openFile(affix.url)" class="pointer-content">{{ affix.title }}</div>
+                                    <div class="del-affix">
+                                        <i class="iconfont icon-liulan pointer-content mr-4"
+                                           @click="openFile(affix.url)"></i>
+                                        <i class="iconfont icon-shanchu1 pointer-content"
+                                           @click="delAffix(affix.id)"></i>
                                     </div>
                                 </div>
                             </div>
@@ -420,10 +422,11 @@
                     </div>
                 </div>
             </div>
+        </div>
 
         <!-- 添加/修改 日历 -->
-        <div v-if="canShow" class="modal fade line-center" id="addCalendar" aria-hidden="true" aria-labelledby="addLabelForm"
-             role="dialog" tabindex="-1" data-backdrop="static">
+        <div v-if="canShow" class="modal fade line-center" id="addCalendar" aria-hidden="true"
+             aria-labelledby="addLabelForm" role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -445,61 +448,53 @@
                                        v-model="scheduleName">
                             </div>
                         </div>
-                        <div class="modal-body">
-                            <div class="example">
-                                <div class="col-md-2 text-right float-left">标题</div>
-                                <div class="col-md-10 float-left pl-0">
-                                    <input type="text" class="form-control" title="" placeholder="请输入标题"
-                                           v-model="scheduleName">
-                                </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left"></div>
+                            <div class="col-md-10 float-left pl-0">
+                                <ul class="color-selector calendar-color-list">
+                                    <li v-for="(color,index) in colorArr" :style="'background-color: ' + color"
+                                        :key="index" @click="changeCalendarColor(color)">
+                                        <i class="md-check" v-if="color === checkColor"></i>
+                                    </li>
+                                </ul>
                             </div>
-                            <div class="example">
-                                <div class="col-md-2 text-right float-left"></div>
-                                <div class="col-md-10 float-left pl-0">
-                                    <ul class="color-selector calendar-color-list">
-                                        <li v-for="(color,index) in colorArr" :style="'background-color: ' + color"
-                                            :key="index" @click="changeCalendarColor(color)">
-                                            <i class="md-check" v-if="color === checkColor"></i>
-                                        </li>
-                                    </ul>
-                                </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">可见范围</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <selectors :options="visibleRangeArr" ref="visibleSelector"
+                                           @change="addCalendarVisible"></selectors>
                             </div>
-                            <div class="example">
-                                <div class="col-md-2 text-right float-left">可见范围</div>
-                                <div class="col-md-10 float-left pl-0">
-                                    <selectors :options="visibleRangeArr" ref="visibleSelector"
-                                               @change="addCalendarVisible"></selectors>
-                                </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">关联艺人</div>
+                            <div class="col-md-10 float-left pl-0" v-if="starsArr.length > 0">
+                                <selectors :options="starsArr" ref="linkageStar"
+                                           @change="addCalendarStar"></selectors>
                             </div>
-                            <div class="example">
-                                <div class="col-md-2 text-right float-left">关联艺人</div>
-                                <div class="col-md-10 float-left pl-0" v-if="starsArr.length > 0">
-                                    <selectors :options="starsArr" ref="linkageStar" @change="addCalendarStar"></selectors>
-                                </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">负责人</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <InputSelectors placeholder="请选择负责人" @change="principalChange"></InputSelectors>
                             </div>
-                            <div class="example">
-                                <div class="col-md-2 text-right float-left">负责人</div>
-                                <div class="col-md-10 float-left pl-0">
-                                    <InputSelectors placeholder="请选择负责人" @change="principalChange"></InputSelectors>
-                                </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">参与人</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <AddMember></AddMember>
                             </div>
-                            <div class="example">
-                                <div class="col-md-2 text-right float-left">参与人</div>
-                                <div class="col-md-10 float-left pl-0">
-                                    <AddMember></AddMember>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                                <template v-if="calendarActionType === 'add'">
-                                    <button class="btn btn-primary" type="submit" :disable="isAddCalendarButtonDisable"
-                                            @click="addCalendar">确定
-                                    </button>
-                                </template>
-                                <template v-else>
-                                    <button class="btn btn-primary" type="submit" @click="changeCalendar">确定</button>
-                                </template>
-                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                            <template v-if="calendarActionType === 'add'">
+                                <button class="btn btn-primary" type="submit" :disable="isAddCalendarButtonDisable"
+                                        @click="addCalendar">确定
+                                </button>
+                            </template>
+                            <template v-else>
+                                <button class="btn btn-primary" type="submit" @click="changeCalendar">确定</button>
+                            </template>
                         </div>
                     </div>
                 </div>
@@ -507,7 +502,8 @@
             </div>
 
             <!-- 删除日历/日程 -->
-            <div v-if="canShow" class="modal fade" id="delModel" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
+            <div v-if="canShow" class="modal fade" id="delModel" aria-hidden="true" aria-labelledby="addLabelForm"
+                 role="dialog"
                  tabindex="-1" data-backdrop="static">
                 <div class="modal-dialog modal-simple">
                     <div class="modal-content">
@@ -542,7 +538,8 @@
         </div>
 
         <!-- 日历批量添加成员 -->
-        <div v-if="canShow" class="modal fade" id="addMembers" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
+        <div v-if="canShow" class="modal fade" id="addMembers" aria-hidden="true" aria-labelledby="addLabelForm"
+             role="dialog"
              tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple" style="max-width: 50rem;">
                 <div class="modal-content">
@@ -606,40 +603,40 @@
                                                       v-show="linkageSelectedIds.projects.indexOf(project.id) > -1">
                                                     <i class="md-check"></i>
                                                 </span>
-                                                </li>
-                                            </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-pane" id="tasksPane" role="tabpanel">
+                                        <div class="input-search mb-20" style="width: 70%">
+                                            <button type="submit" class="input-search-btn">
+                                                <i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
+                                            </button>
+                                            <input type="text" class="form-control" name="" placeholder="搜索关键字..."
+                                                   v-model="searchKeyWord">
                                         </div>
-                                        <div class="tab-pane" id="tasksPane" role="tabpanel">
-                                            <div class="input-search mb-20" style="width: 70%">
-                                                <button type="submit" class="input-search-btn">
-                                                    <i class="iconfont icon-buoumaotubiao13" aria-hidden="true"></i>
-                                                </button>
-                                                <input type="text" class="form-control" name="" placeholder="搜索关键字..."
-                                                       v-model="searchKeyWord">
-                                            </div>
-                                            <ul class="nav">
-                                                <li class="nav-link pointer-content" style="width: 95%"
-                                                    v-for="(task,index) in allTasksInfo" :key="index"
-                                                    v-show="task.title.indexOf(searchKeyWord) > -1"
-                                                    @click="selectResource('tasks', task.id)">{{ task.title }}
-                                                    <span class="float-right"
-                                                          v-show="linkageSelectedIds.tasks.indexOf(task.id) > -1">
+                                        <ul class="nav">
+                                            <li class="nav-link pointer-content" style="width: 95%"
+                                                v-for="(task,index) in allTasksInfo" :key="index"
+                                                v-show="task.title.indexOf(searchKeyWord) > -1"
+                                                @click="selectResource('tasks', task.id)">{{ task.title }}
+                                                <span class="float-right"
+                                                      v-show="linkageSelectedIds.tasks.indexOf(task.id) > -1">
                                                     <i class="md-check"></i>
                                                 </span>
-                                                </li>
-                                            </ul>
-                                        </div>
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                            <button class="btn btn-primary" type="submit" @click="addLinkageResource">确定</button>
-                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <button class="btn btn-primary" type="submit" @click="addLinkageResource">确定</button>
                     </div>
                 </div>
             </div>
+        </div>
     </div>
 
 </template>
@@ -723,7 +720,7 @@
                 isAddCalendarButtonDisable: false,
                 principal: '',
                 isParticipant: false,
-                canShow:false,
+                canShow: false,
             }
         },
         mounted() {
@@ -731,43 +728,6 @@
             this.getCalendarList();
             this.getResources();
             this.selectProjectLinkage();
-            $('#addCalendar').on('hidden.bs.modal', () => {
-                this.$store.dispatch('changeParticipantsInfo', {data: []});
-                this.starId = '';
-                this.starFlag = '';
-                this.scheduleName = '';
-                this.checkColor = '';
-                this.calendarVisible = 1;
-                this.$refs.linkageStar.setValue('');
-                this.$refs.visibleSelector.setValue('');
-                this.$store.commit('changeNewPrincipal', {
-                    name: this.userInfo.nickname,
-                    id: this.userInfo.id
-                });
-                this.principal = this.userInfo.id;
-            }).on('show.bs.modal', () => {
-                this.$store.dispatch('changeParticipantsInfo', {
-                    data: [{
-                        icon_url: this.userInfo.avatar,
-                        id: this.userInfo.id
-                    }]
-                });
-            });
-
-            $('#changeSchedule').on('hidden.bs.modal', () => {
-                this.initAddScheduleModal();
-            });
-
-            $('#checkSchedule').on('hide.bs.modal', () => {
-                if (this.scheduleType !== 'edit') {
-                    this.$store.dispatch('changeParticipantsInfo', {data: []});
-                }
-                this.getScheduleFinish = false
-            });
-
-            $('#addMembers').on('hidden.bs.modal', () => {
-                this.$store.dispatch('changeParticipantsInfo', {type: 'change', data: []});
-            });
             this.globalClick(this.removeSelector);
             this.initCalendar();
             this.userInfo = JSON.parse(Cookies.get('user'));
@@ -786,6 +746,49 @@
             calendarTitle(newValue, oldValue) {
                 if (newValue && !oldValue) {
                     this.oldSelectedCalendar = this.selectedCalendar;
+                }
+            },
+            canShow(newValue) {
+                if (newValue) {
+                    this.$nextTick(() => {
+                        $('#addCalendar').on('hidden.bs.modal', () => {
+                            this.$store.dispatch('changeParticipantsInfo', {data: []});
+                            this.starId = '';
+                            this.starFlag = '';
+                            this.scheduleName = '';
+                            this.checkColor = '';
+                            this.calendarVisible = 1;
+                            this.$refs.linkageStar.setValue('');
+                            this.$refs.visibleSelector.setValue('');
+                            this.$store.commit('changeNewPrincipal', {
+                                name: this.userInfo.nickname,
+                                id: this.userInfo.id
+                            });
+                            this.principal = this.userInfo.id;
+                        }).on('show.bs.modal', () => {
+                            this.$store.dispatch('changeParticipantsInfo', {
+                                data: [{
+                                    icon_url: this.userInfo.avatar,
+                                    id: this.userInfo.id
+                                }]
+                            });
+                        });
+
+                        $('#changeSchedule').on('hidden.bs.modal', () => {
+                            this.initAddScheduleModal();
+                        });
+
+                        $('#checkSchedule').on('hide.bs.modal', () => {
+                            if (this.scheduleType !== 'edit') {
+                                this.$store.dispatch('changeParticipantsInfo', {data: []});
+                            }
+                            this.getScheduleFinish = false
+                        });
+
+                        $('#addMembers').on('hidden.bs.modal', () => {
+                            this.$store.dispatch('changeParticipantsInfo', {type: 'change', data: []});
+                        });
+                    }, 0)
                 }
             }
         },
@@ -866,9 +869,9 @@
                 if (this.calendarTitle) {
                     data.title = this.calendarTitle
                 }
-                
-                fetch('get', '/calendars/all', data).then(response => {
-                    this.canShow = true
+
+                fetch('get', '/calendars/index', data).then(response => {
+                    this.canShow = true;
                     for (let i = 0; i < response.data.length; i++) {
                         response.data[i].name = response.data[i].title;
                         response.data[i].value = response.data[i].id;
@@ -995,12 +998,9 @@
             },
 
             showToast: function (clientX, clientY) {
-                this.toastX = clientX - 100;
-                this.toastY = clientY - 25;
+                this.toastX = clientX;
+                this.toastY = clientY;
                 this.toastShow = true;
-                setTimeout(() => {
-                    this.toastShow = false
-                }, 1000)
             },
 
             addProjectMultipleMember: function () {
@@ -1102,6 +1102,8 @@
             },
 
             showAddScheduleModal: function (date) {
+                $('#changeSchedule').modal('show');
+                this.toastShow = false;
                 this.$refs.scheduleStartDate.setValue(date);
                 this.$refs.scheduleEndDate.setValue(date);
                 this.$store.dispatch('changeParticipantsInfo', {
@@ -1112,7 +1114,6 @@
                 });
                 this.startTime = date;
                 this.endTime = date;
-                $('#changeSchedule').modal('show')
             },
 
             deleteToastr: function (type, calendar = null) {
