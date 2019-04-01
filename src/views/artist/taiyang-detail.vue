@@ -1372,7 +1372,7 @@ export default {
     this.getCalendar();
     // this.draw();
     // this.getArtistsBill();
-    // this.getTaskDate();
+    this.getTaskDate();
     // this.getProjectList();
     
     
