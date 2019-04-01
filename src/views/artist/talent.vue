@@ -968,12 +968,14 @@
             getStarsField() {
                 let _this = this
                 fetch('get', '/stars/filter_fields').then((params) => {
+                    this.canShow = true
                     _this.customizeInfoStars = params.data
                 })
             },
             getBloggerField() {
                 let _this = this
                 fetch('get', '/bloggers/filter_fields').then((params) => {
+                    this.canShow = true
                     _this.customizeInfoBloggers = params.data
                 })
             },

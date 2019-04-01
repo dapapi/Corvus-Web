@@ -226,7 +226,6 @@
         },
         mounted() {
             this.getTasks();
-            console.log(Cookies.get('user'))
             this.user = JSON.parse(Cookies.get('user'))
             
             // 负责人默认值的设置
