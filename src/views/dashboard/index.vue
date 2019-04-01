@@ -221,7 +221,6 @@
                     })
                     
                 })
-                console.log(_this.urlData)
             },
             toggle(menu){
                 this.setExpand(this.menus, menu.url)

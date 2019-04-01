@@ -96,9 +96,7 @@
         },
         methods: {
             previewHandler(params) {
-                console.log(params);
             this.$store.dispatch('changePreview',params)
-            console.log(this.$store.state.previewurl);
                 $('#docPreviewSelector').modal('hide')
                 this.previewUrlArr = String(params).split(',')
                 if (this.previewUrlArr.length === 1) {
