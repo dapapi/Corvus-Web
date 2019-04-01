@@ -194,7 +194,7 @@
                             <div class="caption" style="border:0;">
                                 <h6 class="page-title pb-20" style="border-bottom:1px solid #e3e3e3">审批流程</h6>
                                 <div class="mb-20">
-                                    <ApprovalProgress v-if="canShow" mode='detail'
+                                    <ApprovalProgress mode='detail'
                                                       :formid='list.form_instance_number'
                                                       :formstatus='currentStatus'
                                                       @waitingfor='waitingFor'

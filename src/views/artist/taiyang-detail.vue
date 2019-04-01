@@ -1218,7 +1218,7 @@
             <!--附件预览-->
             <ApprovalGreatModule v-if="canShow" :formData='formDate' :detailpage='isDetail'
                                  :default-value="{value:projectContractDefault,id:$route.params.id}"></ApprovalGreatModule>
-            <DocPreview v-if="canShow" :url="previewUrl" :givenFileName="previewName" :detailpage='isDetail'/>
+            <DocPreview :url='$store.state.previewurl' :givenFileName="previewName" :detailpage='isDetail'/>
         </div>
     </div>
 </template>
@@ -2357,7 +2357,9 @@ export default {
       this.affixId = id;
     },
     previewFile(url, name) {
-      this.previewUrl = url;
+      // console.log(url,name);
+      // :url='$store.state.previewurl'
+      this.$store.state.previewurl = url;
       this.previewName = name;
     },
     // 删除附件
