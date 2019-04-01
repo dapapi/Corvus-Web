@@ -2,10 +2,14 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Home from './views/Home.vue';
 import Cookies from 'js-cookie'
+import store  from './assets/js/cancelRequest'
+import axios from 'axios'
+
 
 Vue.use(Router);
 
-export default new Router({
+
+const VueRouter = new Router({
     mode: 'history',
     base: process.env.BASE_URL,
     routes: [
@@ -532,3 +536,16 @@ export default new Router({
         // },
     ],
 });
+VueRouter.beforeEach((to, from, next) => {
+    if(from.path === '/'){
+        next()
+    }else{
+        const CancelToken = axios.CancelToken
+        store.source.cancel && store.source.cancel()
+        store.source = CancelToken.source()
+        next()
+    }
+    
+})
+
+export default VueRouter

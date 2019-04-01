@@ -251,12 +251,7 @@
             };
         },
         created() {
-            if(this.formstatus === 231){
-                this.getStars();
-            }
-        },
-        mounted() {
-            this.user = JSON.parse(Cookies.get('user'));
+            this.getStars();
         },
         watch: {
             projectFieldsArr(newValue) {

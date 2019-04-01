@@ -25,8 +25,8 @@
 
         <div class="page-content container-fluid">
 
-            <div class="panel col-md-12">
-                <div class="card-block clearfix">
+            <div  class="panel col-md-12">
+                <div  class="card-block clearfix">
                     <Upload @change='getUploadUrl' class="upload-image float-left mr-5"
                             style="width:80px;height:80px;border-radius:50%;position:relative">
                         <div class="puls" :style="{ backgroundImage: 'url(' + uploadUrl + ')' }" v-if="uploadUrl">
@@ -105,7 +105,7 @@
                     </div>
                 </div>
             </div>
-            <div style="display: flex; justify-content: space-between; align-items: flex-start">
+            <div  style="display: flex; justify-content: space-between; align-items: flex-start">
                 <div class="panel" style="width: calc(66% - 15px);float:left;margin-right:30px;">
                     <div class="col-md-12">
                         <ul class="nav nav-tabs nav-tabs-line" role="tablist">
@@ -699,20 +699,20 @@
 
             </div>
 
-            <div class="calendar-toast" v-show="toastShow"
+            <div v-if="canShow" class="calendar-toast" v-show="toastShow"
                  :style="'position: absolute;top:' + toastY + 'px; left: ' + toastX + 'px;'">双击创建日程
             </div>
 
-            <modal :id="'affix'" :title="'删除附件'" @onOK="deleteAffix">
+            <modal v-if="canShow" :id="'affix'" :title="'删除附件'" @onOK="deleteAffix">
                 <div class="text-center m-20">您确认删除该附件吗？</div>
             </modal>
             <!-- 新增任务 -->
-            <AddTask :resourceable_id="artistId" resource_type="2" :resource_title="artistName" resource_name="艺人"
-                     @success="addTask" v-if="canShow"></AddTask>
+            <AddTask v-if="canShow" :resourceable_id="artistId" resource_type="2" :resource_title="artistName" resource_name="艺人"
+                     @success="addTask"></AddTask>
 
             <!--作品库-->
-            <div class="modal fade" id="addWork" aria-hidden="true" aria-labelledby="addLabelForm"
-                 role="dialog" tabindex="-1" data-backdrop="static" v-if="canShow">
+            <div v-if="canShow" class="modal fade" id="addWork" aria-hidden="true" aria-labelledby="addLabelForm"
+                 role="dialog" tabindex="-1" data-backdrop="static">
                 <div class="modal-dialog modal-simple">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -782,8 +782,8 @@
                 </div>
             </div>
             <!--分配经纪人和宣传人-->
-            <div class="modal fade" id="distributionBroker" aria-hidden="true" aria-labelledby="addLabelForm"
-                 role="dialog" tabindex="-1" data-backdrop="static" v-if="canShow">
+            <div v-if="canShow" class="modal fade" id="distributionBroker" aria-hidden="true" aria-labelledby="addLabelForm"
+                 role="dialog" tabindex="-1" data-backdrop="static">
                 <div class="modal-dialog modal-simple" style="max-width: 50rem;">
 
                     <div class="modal-content">
@@ -811,8 +811,8 @@
                 </div>
             </div>
             <!-- 新建/修改 日程 -->
-            <div class="modal fade line-center" id="changeSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
-                 role="dialog" tabindex="-1" data-backdrop="static" v-if="canShow">
+            <div v-if="canShow" class="modal fade line-center" id="changeSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
+                 role="dialog" tabindex="-1" data-backdrop="static">
                 <div class="modal-dialog modal-simple">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -949,8 +949,8 @@
                 </div>
             </div>
             <!-- 关联资源 -->
-            <div class="modal fade" id="addLinkage" aria-hidden="true" aria-labelledby="addLabelForm"
-                 role="dialog" tabindex="-1" data-backdrop="static" v-if="canShow">
+            <div v-if="canShow" class="modal fade" id="addLinkage" aria-hidden="true" aria-labelledby="addLabelForm"
+                 role="dialog" tabindex="-1" data-backdrop="static">
                 <div class="modal-dialog modal-simple">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -1028,8 +1028,8 @@
                 </div>
             </div>
             <!-- 查看日程 -->
-            <div class="modal fade" id="checkSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
-                 role="dialog" tabindex="-1" data-backdrop="static" v-if="canShow">
+            <div v-if="canShow" class="modal fade" id="checkSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
+                 role="dialog" tabindex="-1" data-backdrop="static">
                 <div class="modal-dialog modal-simple">
                     <div class="modal-content" v-if="scheduleData">
                         <div class="modal-header">
@@ -1133,8 +1133,8 @@
                 </div>
             </div>
             <!-- 删除日历/日程 -->
-            <div class="modal fade" id="delModel" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
-                 tabindex="-1" data-backdrop="static" v-if="canShow">
+            <div v-if="canShow" class="modal fade" id="delModel" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
+                 tabindex="-1" data-backdrop="static">
                 <div class="modal-dialog modal-simple">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -1166,8 +1166,8 @@
                 </div>
             </div>
               <!--隐私设置-->
-            <div class="modal fade" id="addPrivacy" aria-hidden="true" aria-labelledby="addLabelForm"
-                role="dialog" tabindex="-1" data-backdrop="static" v-if="canShow">
+            <div v-if="canShow" class="modal fade" id="addPrivacy" aria-hidden="true" aria-labelledby="addLabelForm"
+                role="dialog" tabindex="-1" data-backdrop="static">
                 <div class="modal-dialog modal-simple">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -1216,9 +1216,9 @@
                 </div>
             </div>
             <!--附件预览-->
-            <ApprovalGreatModule :formData='formDate' :detailpage='isDetail'
+            <ApprovalGreatModule v-if="canShow" :formData='formDate' :detailpage='isDetail'
                                  :default-value="{value:projectContractDefault,id:$route.params.id}"></ApprovalGreatModule>
-            <DocPreview :url="previewUrl" :givenFileName="previewName" :detailpage='isDetail'/>
+            <DocPreview :url='$store.state.previewurl' :givenFileName="previewName" :detailpage='isDetail'/>
         </div>
     </div>
 </template>
@@ -1357,7 +1357,7 @@ export default {
       isDetail: true,
       isAddScheduleButtonDisable: false,
       isAddWorkButtonDisable: false,
-      canShow:false
+      canShow : false,
     };
   },
 
@@ -1407,7 +1407,6 @@ export default {
         include: 'publicity,broker,creator,tasks,affixes',
       };
       fetch('get', `/stars/${this.artistId}`, data).then((response) => {
-        
         this.artistInfo = response.data;
         this.isLoading = false;
         setTimeout(() => {
@@ -2365,7 +2364,9 @@ export default {
       this.affixId = id;
     },
     previewFile(url, name) {
-      this.previewUrl = url;
+      // console.log(url,name);
+      // :url='$store.state.previewurl'
+      this.$store.state.previewurl = url;
       this.previewName = name;
     },
     // 删除附件

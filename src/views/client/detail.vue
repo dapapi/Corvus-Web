@@ -96,7 +96,7 @@
 
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: flex-start">
+            <div v-if="canShow" style="display: flex; justify-content: space-between; align-items: flex-start">
                 <div class="panel" style="width: calc(66% - 15px);float:left;margin-right:30px">
 
                     <div class="col-md-12">
@@ -529,7 +529,7 @@
             </div>
         </div>
 
-        <div class="modal fade" id="addContact" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShow" class="modal fade" id="addContact" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -599,7 +599,7 @@
             </div>
         </div>
 
-        <div class="modal fade" id="seeContact" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShow" class="modal fade" id="seeContact" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -662,12 +662,12 @@
             </div>
         </div>
 
-        <AddTask :resourceable_id="clientId" resource_type="4" :resource_title="clientName" resource_name="客户"
+        <AddTask v-if="canShow" :resourceable_id="clientId" resource_type="4" :resource_title="clientName" resource_name="客户"
                  @success="addTask"></AddTask>
 
         <!-- 是否确认删除 -->
-        <flag @confirmFlag="delContact"/>
-        <AddTrail :trailType="trailType" :clientId="clientId" :companyInfo="companyInfo" @ok="addTrailCallBack"/>
+        <flag v-if="canShow" @confirmFlag="delContact"/>
+        <AddTrail v-if="canShow" :trailType="trailType" :clientId="clientId" :companyInfo="companyInfo" @ok="addTrailCallBack"/>
     </div>
 
 </template>
@@ -741,6 +741,7 @@
                 isDisabled: true, // 联系人是否可以编辑
                 clientName: '',
                 isAddButtonDisable: false,
+                canShow:false,
             }
         },
         beforeMount() {
@@ -819,6 +820,7 @@
 
             getClient: function () {
                 fetch('get', '/clients/' + this.clientId, {include: 'principal,creator,tasks'}).then(response => {
+                    this.canShow = true
                     this.clientInfo = response.data;
                     this.clientName = response.data.company;
                     this.clientInfoCopy = JSON.parse(JSON.stringify(response.data))
@@ -1038,10 +1040,10 @@
                 //     toastr.error('当前用户没有编辑客户的权限');
                 //     return;
                 // }
-                if (value === 'true' && this.clientInfo.powers.add_contact) {
+                if (value === true && this.clientInfo.powers.add_contact !== 'true') {
                     toastr.error('当前用户没有权限新增联系人')
                     return
-                }else if(value === 'false' && this.clientInfo.powers.edit_contact){
+                }else if(value === false && this.clientInfo.powers.edit_contact !== 'true'){
                      toastr.error('当前用户没有权限编辑联系人')
                     return
                 }

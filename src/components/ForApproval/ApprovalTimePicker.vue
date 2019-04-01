@@ -38,7 +38,6 @@ export default {
         }
         // for (const i in this.defaultData) {
         //     if (this.defaultData[i].key === this.consdata[0].control_title) {
-        //         console.log(this.defaultData[i]);
         //         this.$nextTick((params) => {
         //             // $(this.$el).selectpicker('val', this.defaultData[i].values.data.value);
         //             this.defaultDate = this.defaultData[i]

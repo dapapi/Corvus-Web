@@ -158,9 +158,9 @@
             </div>
         </div>
 
-        <CustomizeFilter :data="customizeInfo" @change="customize"></CustomizeFilter>
+        <CustomizeFilter v-if="canShow" :data="customizeInfo" @change="customize"></CustomizeFilter>
 
-        <div class="site-action" data-plugin="actionBtn" data-toggle="modal" @click="handleAdd">
+        <div v-if="canShow" class="site-action" data-plugin="actionBtn" data-toggle="modal" @click="handleAdd">
             <button type="button"
                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                 <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
@@ -170,7 +170,7 @@
             </button>
         </div>
 
-        <AddTask></AddTask>
+        <AddTask v-if="canShow"></AddTask>
 
     </div>
 </template>
@@ -215,6 +215,7 @@
                 canLoadMore: false, // 关联资源是否可以加载更多
                 searchDepartment: '', // 搜索部门
                 searchUser: '', // 搜索部门成员
+                canShow:false,
             };
         },
         computed: {
@@ -226,6 +227,7 @@
         mounted() {
             this.getTasks();
             this.user = JSON.parse(Cookies.get('user'))
+            
             // 负责人默认值的设置
             this.$store.commit('changeNewPrincipal', {
                 name: this.user.nickname,
@@ -270,6 +272,7 @@
                     params.type_id = this.taskTypeSearch;
                 }
                 fetch('get', url, params).then((response) => {
+                    this.canShow = true
                     this.tasksInfo = response.data;
                     if (this.my|| this.searchDepartment || this.searchUser) {
                         this.current_page = response.meta.pagination.current_page;
@@ -278,7 +281,7 @@
                     } else {
                         this.current_page = response.current_page;
                         this.total = response.total;
-                        this.total_pages = response.per_page != 0 ? parseInt(response.total / response.per_page) : 0;
+                        this.total_pages = response.per_page != 0 ? Math.ceil(response.total / response.per_page) : 1;
                     }
                     this.isLoading = false;
                 });

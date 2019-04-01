@@ -1,7 +1,7 @@
 import axios from 'axios'
 import qs from 'qs'
 import env from '../js/env'
-
+import store  from '../js/cancelRequest'
 // axios 配置
 axios.defaults.timeout = 300000;
 axios.defaults.headers.common['Accept'] = 'application/vnd.Corvus.v1+json';
@@ -10,9 +10,15 @@ axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Authorization';
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + env.getAccessToken() || '';
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
 axios.defaults.baseURL = env.apiUrl;
-
+const CancelToken = axios.CancelToken
+const source = CancelToken.source()
+store.requestCancel = source.cancel // 保存到全局变量，用于路由切换时调用
+// const http = axios.create({
+//     cancelToken: source.token
+// })
 //POST传参序列化
 axios.interceptors.request.use((config) => {
+    config.cancelToken = store.source.token
     if (config.method === 'post' || config.method === 'put') {
         let flag = true
         for (const key in config.data) {
@@ -28,7 +34,6 @@ axios.interceptors.request.use((config) => {
     return config;
 }, (error) => {
     const {response} = error
-    console.log(response)
     toastr.error(response.data.message);
     return Promise.reject(error);
 });
@@ -45,6 +50,10 @@ axios.interceptors.response.use((res) => {
     
     return res;
 },(error) => {
+    // console.log(String(error =='Cancel'));
+    if (String(error) =='Cancel') {
+        console.log('Request canceled');
+    } else {
     const {response: {status}} = error
     const {response} = error
     if (status === 401) {
@@ -58,12 +67,14 @@ axios.interceptors.response.use((res) => {
             toastr.error(response.data.message);
         }
     } else if (status === 403) {
-        
         toastr.error(response.data.message)
     } else {
         toastr.error(response.data.message);
     }
     return Promise.reject(error);
+    }
+    
+    
 });
 
 export default function fetch(method = 'post', url, params) {
@@ -75,7 +86,11 @@ export default function fetch(method = 'post', url, params) {
                 reject(err);
             })
             .catch((error) => {
-                reject(error)
+                if (String(error =='Cancel')) {
+                    console.log('Request canceled');
+                } else {
+                    reject(error)
+                }
             })
     })
 }

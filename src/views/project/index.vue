@@ -118,12 +118,12 @@
 
         </div>
 
-        <customize-filter :data="customizeInfo" @change="customize" :stararr='starsArr' :cleanup="cleanUp"
+        <customize-filter v-if="canShow" :data="customizeInfo" @change="customize" :stararr='starsArr' :cleanup="cleanUp"
                           @cleanupdone='cleanUp=false'></customize-filter>
 
-        <AddClientType type="project" @change="changeProjectType"></AddClientType>
+        <AddClientType v-if="canShow" type="project" @change="changeProjectType"></AddClientType>
 
-        <BuildProject :project-fields-arr="projectFieldsArr" :project-type="projectType"></BuildProject>
+        <BuildProject v-if="canShow" :project-fields-arr="projectFieldsArr" :project-type="projectType"></BuildProject>
     </div>
 
 </template>
@@ -172,16 +172,17 @@ export default {
                 cleanUp: false,
                 exportParams: {},//导出参数
                 fetchData: {},
-                customizeCondition: {}
+                customizeCondition: {},
+                canShow:false,
             }
         },
 
   mounted() {
-    this.getField();
     this.getClients();
     this.getStars();
     // this.getFilterProjects();
     this.getMyProjects('my_principal');
+    this.getField();
     if (this.userList.length > 0) {
       for (let i = 0; i < this.userList.length; i++) {
         this.allUsers.push({
@@ -225,20 +226,20 @@ export default {
                 this.getProjectStatus = value;
                 this.fetchHandler('post','/projects/filter','filter')
                 // this.getFilterProjects();
-            },
-            filterGo:function(){
-                this.fetchData.keyword = this.projectKeyword
-                this.fetchHandler('post','/projects/filter','filter')
-            },
-            getProjectSearch: function (type, value) {
-                if (type === 'principal_ids') {
-                    this.principal_ids = value.join(',');
-                } else if (type === 'project_type') {
-                    this.projectSearchType = value
-                }
-                // this.getFilterProjects();
-                this.fetchHandler('post','/projects/filter','filter')
-            },
+    },
+    filterGo:function(){
+        this.fetchData.keyword = this.projectKeyword
+        this.fetchHandler('post','/projects/filter','filter')
+    },
+    getProjectSearch: function (type, value) {
+        if (type === 'principal_ids') {
+            this.principal_ids = value.join(',');
+        } else if (type === 'project_type') {
+            this.projectSearchType = value
+        }
+        // this.getFilterProjects();
+        this.fetchHandler('post','/projects/filter','filter')
+    },
 
     getFilterProjects (pageNum = 1) {
                 let data = {
@@ -274,6 +275,7 @@ export default {
     getClients () {
                 let _this = this;
                 fetch('get', '/clients/all').then(function (response) {
+                    this.canShow = true
                     for (let i = 0; i < response.data.length; i++) {
                         _this.companyArr.push({
                             name: response.data[i].company,
@@ -324,6 +326,7 @@ export default {
                     my:this.getProjectStatus
                 }
                 fetch(methods, newUrl || url, fetchData).then((response) => {
+                    this.canShow = true
                     _this.projectsInfo = response.data
                     console.log(_this.projectsInfo)
                     _this.total = response.meta.pagination.total;

@@ -6,7 +6,7 @@
                 <span style="color: #3298dc;" class="pl-20 font-size-20 pointer-content" @click="redirectPublicTrail"><i
                         class="iconfont icon-jiantou_xiayiye font-size-22 pr-5"></i>公海池</span>
             </h1>
-            <div class="page-header-actions">
+            <div class="page-header-actions" v-if="canShow">
                 <ImportAndExport class="float-left" :type="'export'" :moduleName="'trails'" :params="exportParams" :power="'trail'">
                     <a class="iconfont icon-daochu font-size-20 pr-20 pointer-content" aria-hidden="true"
                        title="导出线索"></a>
@@ -91,11 +91,11 @@
         </div>
 
 
-        <customize-filter :data="customizeInfo" :stararr='starsArr' @change="customize"
+        <customize-filter v-if="canShow" :data="customizeInfo" :stararr='starsArr' @change="customize"
         ></customize-filter>
-        <AddClientType @change="changeTrailType"></AddClientType>
+        <AddClientType v-if="canShow" @change="changeTrailType"></AddClientType>
 
-        <div class="modal fade" id="addTrail" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShow" class="modal fade" id="addTrail" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -340,6 +340,7 @@ export default {
                 trailContactWechat: '',
                 trailContactEtc: '',
                 isAddButtonDisable: false,
+                canShow:false,
             }
         },
   created() {
@@ -399,9 +400,7 @@ export default {
       this.email = value;
     },
     getCurrentUser() {
-      fetch('get', '/users/my').then((response) => {
-        this.currentUser = response.data;
-      });
+        this.currentUser = JSON.parse(Cookies.get('user'))
     },
     principalFilter(value) {
       if (value) {
@@ -478,9 +477,9 @@ export default {
       if (type == 'filter') {
         fetchData = this.customizeCondition;
         let keyword, 
-status, 
-principal_ids, 
-pagenumber;
+            status, 
+            principal_ids, 
+            pagenumber;
         if (this.fetchData.keyword) {
           keyword = `&keyword=${  this.fetchData.keyword}`;
         } else {
@@ -499,13 +498,13 @@ pagenumber;
         pagenumber = `&page=${  pageNum}`;
         newUrl = `${url  }?${  this.fetchData.include  }${keyword  }${status  }${principal_ids  }${pagenumber}`;
       }
-      // console.log(this.fetchData)
       this.exportParams = {
         keyword: this.fetchData.keyword,
         status: this.fetchData.status,
         principal_ids: this.fetchData.principal_ids,
       };
       fetch(methods, newUrl || url, fetchData).then((response) => {
+        this.canShow = true
         _this.trailsInfo = response.data;
         _this.total = response.meta.pagination.total;
         _this.current_page = response.meta.pagination.current_page;

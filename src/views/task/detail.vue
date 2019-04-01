@@ -163,7 +163,7 @@
                                     <div class="all-menber clearfix">
                                         <template v-for="(item, index) in questionInfo.reviewanswer.data">
                                             <div style="position: relative; display: inline-block" :key="index">
-                                                <Avatar :imgUrl="item.users.data.icon_url" style="margin: 5px;"/>
+                                                <Avatar :imgUrl="item.users.data.user_url" style="margin: 5px;"/>
                                                 <div :class="hasAnsweredArr.indexOf(item.users.data.id) > -1 ? 'has-answer': 'un-answer'"></div>
                                                 <!-- hasAnsweredArr -->
                                             </div>
@@ -272,7 +272,7 @@
                                                      style="padding-left: 0; margin-top: -9px;">
                                                     <template v-for="(_item, nameIndex) in items.selectrows.data">
                                                         <Avatar v-if="_item.review_question_item_id === item.id"
-                                                                :imgUrl="_item.creator.data.icon_url" :key="nameIndex"
+                                                                :imgUrl="_item.creator.data.user_url" :key="nameIndex"
                                                                 style="margin: 5px;"/>
                                                     </template>
                                                 </div>
@@ -557,10 +557,10 @@
             </div>
         </div>
 
-        <AddTask name="新增子任务" is-child="true" @success="addChildTask" :task-father-id="this.taskId"></AddTask>
+        <AddTask v-if="canShow" name="新增子任务" is-child="true" @success="addChildTask" :task-father-id="this.taskId"></AddTask>
 
-        <flag @confirmFlag="deleteAttachment"/>
-        <Modal id="push-reason" title="推荐原因" @onOK="submitPush">
+        <flag v-if="canShow" @confirmFlag="deleteAttachment"/>
+        <Modal v-if="canShow" id="push-reason" title="推荐原因" @onOK="submitPush">
             <div class="example">
                 <div class="col-md-2 text-right float-left">推荐原因</div>
                 <div class="col-md-10 float-left pl-0">
@@ -569,9 +569,9 @@
                 </div>
             </div>
         </Modal>
-        <customize-field></customize-field>
-        <DocPreview :url="previewUrl" :givenFileName="previewName" detailpage='true'/>
-        <flag :id="'delTask'" @confirmFlag="deleteTask"/>
+        <customize-field v-if="canShow"></customize-field>
+        <DocPreview v-if="canShow" :url="previewUrl" :givenFileName="previewName" detailpage='true'/>
+        <flag v-if="canShow" :id="'delTask'" @confirmFlag="deleteTask"/>
     </div>
 </template>
 
@@ -641,6 +641,7 @@
                 linkIndex: 0, //
                 canLoadMore: false, // 关联资源是否可以加载更多
                 canEdit: false, // 是否可以编辑
+                canShow:false,
             }
         },
 
@@ -695,6 +696,7 @@
                 };
 
                 fetch('get', '/tasks/' + this.taskId, data).then(response => {
+                    this.canShow = true
                     if (response.data.affixes) {
                         for (let i = 0; i < response.data.affixes.data.length; i++) {
                             let size = response.data.affixes.data[i].size;

@@ -3,8 +3,8 @@
         <Loading :is-loading="isLoading"></Loading>
         <div class="page-header page-header-bordered">
             <h1 class="page-title">客户管理
-                <router-link :to="{path:'/supplier/list'}" style="color: #3298dc;" class="pl-20 font-size-20 pointer-content"><i
-                        class="iconfont icon-jiantou_xiayiye font-size-22 pr-5"></i>供应商</router-link>
+                <!-- <router-link :to="{path:'/supplier/list'}" style="color: #3298dc;" class="pl-20 font-size-20 pointer-content"><i
+                        class="iconfont icon-jiantou_xiayiye font-size-22 pr-5"></i>供应商</router-link> -->
             </h1>
             <div class="page-header-actions">
                 <ImportAndExport class="float-left" :type="'export'" :moduleName="'clients'" :power="'client'" :params="exportParams">
@@ -81,12 +81,12 @@
 
         </div>
 
-        <customize-filter :data="customizeInfo" @change="customize" :cleanup="cleanUp"
+        <customize-filter v-if="canShow" :data="customizeInfo" @change="customize" :cleanup="cleanUp"
                           @cleanupdone='cleanUp=false'></customize-filter>
 
-        <AddClientType :hidden="listPower.client?listPower.client.add === 'false':true" @change="showAddModal"/>
+        <AddClientType  v-if="canShow" :hidden="listPower.client?listPower.client.add === 'false':true" @change="showAddModal"/>
 
-        <div class="modal fade" id="addClient" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShow" class="modal fade" id="addClient" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -212,7 +212,7 @@
                 common: common,
                 total: 0,
                 current_page: 0,
-                total_pages: 0,
+                total_pages: 1,
                 customizeInfo: {},
                 clientTypeArr: config.clientTypeArr,
                 clientLevelArr: clientLevelArr,
@@ -246,6 +246,7 @@
                 fetchData: {},
                 customizeCondition: {},
                 isAddButtonDisable: false,
+                canShow:false,
                 // canAdd: false, // 可以新增吗
             }
         },
@@ -300,6 +301,7 @@
                 }
 
                 fetch('get', url, params).then(response => {
+                    this.canShow = true
                     this.clientsInfo = response.data;
                     this.current_page = response.meta.pagination.current_page;
                     this.total = response.meta.pagination.total;
@@ -367,6 +369,7 @@
                 };
 
                 fetch('post', '/clients', data).then(response => {
+                    
                     this.isAddButtonDisable = false;
                     toastr.success('创建成功');
                     $("#addClient").modal("hide");
@@ -403,6 +406,7 @@
                 }
                 
                 fetch(methods, newUrl || url, fetchData).then((response) => {
+                    this.canShow = true
                     _this.clientsInfo = response.data
                     _this.total = response.meta.pagination.total;
                     _this.current_page = response.meta.pagination.current_page;
