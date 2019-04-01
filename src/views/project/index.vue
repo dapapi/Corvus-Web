@@ -275,7 +275,7 @@ export default {
     getClients () {
                 let _this = this;
                 fetch('get', '/clients/all').then(function (response) {
-                    this.canShow = true
+                    _this.canShow = true
                     for (let i = 0; i < response.data.length; i++) {
                         _this.companyArr.push({
                             name: response.data[i].company,
@@ -326,9 +326,8 @@ export default {
                     my:this.getProjectStatus
                 }
                 fetch(methods, newUrl || url, fetchData).then((response) => {
-                    this.canShow = true
+                    _this.canShow = true
                     _this.projectsInfo = response.data
-                    console.log(_this.projectsInfo)
                     _this.total = response.meta.pagination.total;
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total_pages = response.meta.pagination.total_pages;
