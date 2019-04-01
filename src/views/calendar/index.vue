@@ -448,62 +448,53 @@
                                        v-model="scheduleName">
                             </div>
                         </div>
-                        <div class="modal-body">
-                            <div class="example">
-                                <div class="col-md-2 text-right float-left">标题</div>
-                                <div class="col-md-10 float-left pl-0">
-                                    <input type="text" class="form-control" title="" placeholder="请输入标题"
-                                           v-model="scheduleName">
-                                </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left"></div>
+                            <div class="col-md-10 float-left pl-0">
+                                <ul class="color-selector calendar-color-list">
+                                    <li v-for="(color,index) in colorArr" :style="'background-color: ' + color"
+                                        :key="index" @click="changeCalendarColor(color)">
+                                        <i class="md-check" v-if="color === checkColor"></i>
+                                    </li>
+                                </ul>
                             </div>
-                            <div class="example">
-                                <div class="col-md-2 text-right float-left"></div>
-                                <div class="col-md-10 float-left pl-0">
-                                    <ul class="color-selector calendar-color-list">
-                                        <li v-for="(color,index) in colorArr" :style="'background-color: ' + color"
-                                            :key="index" @click="changeCalendarColor(color)">
-                                            <i class="md-check" v-if="color === checkColor"></i>
-                                        </li>
-                                    </ul>
-                                </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">可见范围</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <selectors :options="visibleRangeArr" ref="visibleSelector"
+                                           @change="addCalendarVisible"></selectors>
                             </div>
-                            <div class="example">
-                                <div class="col-md-2 text-right float-left">可见范围</div>
-                                <div class="col-md-10 float-left pl-0">
-                                    <selectors :options="visibleRangeArr" ref="visibleSelector"
-                                               @change="addCalendarVisible"></selectors>
-                                </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">关联艺人</div>
+                            <div class="col-md-10 float-left pl-0" v-if="starsArr.length > 0">
+                                <selectors :options="starsArr" ref="linkageStar"
+                                           @change="addCalendarStar"></selectors>
                             </div>
-                            <div class="example">
-                                <div class="col-md-2 text-right float-left">关联艺人</div>
-                                <div class="col-md-10 float-left pl-0" v-if="starsArr.length > 0">
-                                    <selectors :options="starsArr" ref="linkageStar"
-                                               @change="addCalendarStar"></selectors>
-                                </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">负责人</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <InputSelectors placeholder="请选择负责人" @change="principalChange"></InputSelectors>
                             </div>
-                            <div class="example">
-                                <div class="col-md-2 text-right float-left">负责人</div>
-                                <div class="col-md-10 float-left pl-0">
-                                    <InputSelectors placeholder="请选择负责人" @change="principalChange"></InputSelectors>
-                                </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">参与人</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <AddMember></AddMember>
                             </div>
-                            <div class="example">
-                                <div class="col-md-2 text-right float-left">参与人</div>
-                                <div class="col-md-10 float-left pl-0">
-                                    <AddMember></AddMember>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                                <template v-if="calendarActionType === 'add'">
-                                    <button class="btn btn-primary" type="submit" :disable="isAddCalendarButtonDisable"
-                                            @click="addCalendar">确定
-                                    </button>
-                                </template>
-                                <template v-else>
-                                    <button class="btn btn-primary" type="submit" @click="changeCalendar">确定</button>
-                                </template>
-                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                            <template v-if="calendarActionType === 'add'">
+                                <button class="btn btn-primary" type="submit" :disable="isAddCalendarButtonDisable"
+                                        @click="addCalendar">确定
+                                </button>
+                            </template>
+                            <template v-else>
+                                <button class="btn btn-primary" type="submit" @click="changeCalendar">确定</button>
+                            </template>
                         </div>
                     </div>
                 </div>
