@@ -150,7 +150,7 @@
                     } else {
                         setTimeout(() => {
                             self.$emit('showToast', allDay.pageX, allDay.pageY)
-                        }, 100)
+                        }, 200)
                     }
                 },
                 eventClick: function (event, jsEvent, view) {
