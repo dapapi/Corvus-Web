@@ -318,7 +318,7 @@
             </div>
         </div>
         <!-- 查看日程 -->
-        <div v-if="canShow" class="modal fade" id="checkSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShowA" class="modal fade" id="checkSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content" v-if="getScheduleFinish">
@@ -425,7 +425,7 @@
         </div>
 
         <!-- 添加/修改 日历 -->
-        <div v-if="canShow" class="modal fade line-center" id="addCalendar" aria-hidden="true"
+        <div v-if="canShowB" class="modal fade line-center" id="addCalendar" aria-hidden="true"
              aria-labelledby="addLabelForm" role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -502,7 +502,7 @@
             </div>
 
             <!-- 删除日历/日程 -->
-            <div v-if="canShow" class="modal fade" id="delModel" aria-hidden="true" aria-labelledby="addLabelForm"
+            <div v-if="canShowC" class="modal fade" id="delModel" aria-hidden="true" aria-labelledby="addLabelForm"
                  role="dialog"
                  tabindex="-1" data-backdrop="static">
                 <div class="modal-dialog modal-simple">
@@ -538,7 +538,7 @@
         </div>
 
         <!-- 日历批量添加成员 -->
-        <div v-if="canShow" class="modal fade" id="addMembers" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShowD" class="modal fade" id="addMembers" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog"
              tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple" style="max-width: 50rem;">
@@ -560,7 +560,7 @@
         </div>
 
         <!-- 关联资源 -->
-        <div v-if="canShow" class="modal fade" id="addLinkage" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShowE" class="modal fade" id="addLinkage" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -721,6 +721,11 @@
                 principal: '',
                 isParticipant: false,
                 canShow: false,
+                canShowA: false,
+                canShowB: false,
+                canShowC: false,
+                canShowD: false,
+                canShowE: false,
             }
         },
         mounted() {
@@ -748,7 +753,7 @@
                     this.oldSelectedCalendar = this.selectedCalendar;
                 }
             },
-            canShow(newValue) {
+            canShowE(newValue) {
                 if (newValue) {
                     this.$nextTick(() => {
                         $('#addCalendar').on('hidden.bs.modal', () => {
@@ -871,7 +876,24 @@
                 }
 
                 fetch('get', '/calendars/index', data).then(response => {
-                    this.canShow = true;
+                    setTimeout(() => {
+                        this.canShow = true;
+                        setTimeout(() => {
+                            this.canShowA = true;
+                            setTimeout(() => {
+                                this.canShowB = true;
+                                setTimeout(() => {
+                                    this.canShowC = true;
+                                    setTimeout(() => {
+                                        this.canShowD = true;
+                                        setTimeout(() => {
+                                            this.canShowE = true;
+                                        }, 200);
+                                    }, 200);
+                                }, 200);
+                            }, 200);
+                        }, 200);
+                    }, 200);
                     for (let i = 0; i < response.data.length; i++) {
                         response.data[i].name = response.data[i].title;
                         response.data[i].value = response.data[i].id;
