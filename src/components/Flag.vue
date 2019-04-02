@@ -11,10 +11,10 @@
                     <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
                         <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                     </button>
-                    <h4 class="modal-title">确认{{typeText}}</h4>
+                    <h4 class="modal-title">提示</h4>
                 </div>
                 <div class="modal-body">
-                    <p class="mt-20">此更改不可撤销</p>
+                    <p class="mt-20">确认{{typeText}}</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button"
