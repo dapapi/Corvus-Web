@@ -45,7 +45,7 @@ import fetch from '@/assets/utils/fetch.js'
 import config from '@/assets/js/config'
 
     export default {
-        props: ['data', 'n','stararr','isint'],
+        props: ['data', 'n','stararr','isint','nodepartment'],
         data() {
             return {
                 valueType: 'disable',
@@ -177,6 +177,9 @@ import config from '@/assets/js/config'
 
         methods: {
             getDepartments(){
+                if(this.nodepartment === true){
+                    return
+                }
                 let _this = this
                 fetch('get','departments_lists').then((params) => {
                     _this.departments = params
