@@ -52,7 +52,7 @@ axios.interceptors.response.use((res) => {
 },(error) => {
     // console.log(String(error =='Cancel'));
     if (String(error) =='Cancel') {
-        console.log('Request canceled');
+        // console.log('Request canceled');
     } else {
     const {response: {status}} = error
     const {response} = error
@@ -68,7 +68,9 @@ axios.interceptors.response.use((res) => {
         }
     } else if (status === 403) {
         toastr.error(response.data.message)
-    } else {
+    }else if(String(error).indexOf('timeout') !== -1){
+        toastr.error('请求超时请稍后重试');
+    }else {
         toastr.error(response.data.message);
     }
     return Promise.reject(error);
@@ -87,7 +89,7 @@ export default function fetch(method = 'post', url, params) {
             })
             .catch((error) => {
                 if (String(error =='Cancel')) {
-                    console.log('Request canceled');
+                    // console.log('Request canceled');
                 } else {
                     reject(error)
                 }
