@@ -119,7 +119,7 @@
         </div>
 
         <customize-filter v-if="canShow" :data="customizeInfo" @change="customize" :stararr='starsArr' :cleanup="cleanUp"
-                          @cleanupdone='cleanUp=false' ref='customize' ></customize-filter>
+                          @cleanupdone='cleanUp=false' ref='customize' :nodepartment='true'></customize-filter>
 
         <AddClientType v-if="canShow" type="project" @change="changeProjectType"></AddClientType>
 
@@ -178,7 +178,7 @@ export default {
         },
 
   mounted() {
-    this.getClients();
+    // this.getClients();
     // this.getStars();
     // this.getFilterProjects();
     this.getMyProjects('my_principal');
@@ -279,17 +279,17 @@ export default {
 
     getClients () {
                 let _this = this;
-                fetch('get', '/clients/all').then(function (response) {
-                    _this.canShow = true
-                    for (let i = 0; i < response.data.length; i++) {
-                        _this.companyArr.push({
-                            name: response.data[i].company,
-                            id: response.data[i].id,
-                            grade: response.data[i].grade
-                        })
-                    }
+                // fetch('get', '/clients/all').then(function (response) {
+                //     _this.canShow = true
+                //     for (let i = 0; i < response.data.length; i++) {
+                //         _this.companyArr.push({
+                //             name: response.data[i].company,
+                //             id: response.data[i].id,
+                //             grade: response.data[i].grade
+                //         })
+                //     }
 
-                })
+                // })
             },
 
     redirectDetail (projectId) {
@@ -394,17 +394,17 @@ export default {
                 this.addInfoArr[name] = value
             },
             getStars () {
-                if (this.starsArr.length > 0) {
-                    return
-                }
-                fetch('get', '/starandblogger', {sign_contract_status: 2}).then(response => {
-                    for (let i = 0; i < response.data.length; i++) {
-                        this.starsArr.push({
-                            name: response.data[i].name,
-                            value: response.data[i].flag + ',' + response.data[i].id,
-                        })
-                    }
-                })
+                // if (this.starsArr.length > 0) {
+                //     return
+                // }
+                // fetch('get', '/starandblogger', {sign_contract_status: 2}).then(response => {
+                //     for (let i = 0; i < response.data.length; i++) {
+                //         this.starsArr.push({
+                //             name: response.data[i].name,
+                //             value: response.data[i].flag + ',' + response.data[i].id,
+                //         })
+                //     }
+                // })
             },  
 
   },

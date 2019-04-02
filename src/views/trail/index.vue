@@ -37,7 +37,7 @@
                     <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
                                 data-toggle="modal" data-target="#customizeContent"
-                                data-placement="right" title="">
+                                data-placement="right" title="" @click='getField'>
                             自定义筛选
                         </button>
                     </div>
@@ -91,9 +91,9 @@
         </div>
 
 
-        <customize-filter v-if="canShow" :data="customizeInfo" :stararr='starsArr' @change="customize"
+        <customize-filter v-if="canShow" ref='customize'  :data="customizeInfo" :stararr='starsArr' @change="customize"
         ></customize-filter>
-        <AddClientType v-if="canShow" @change="changeTrailType"></AddClientType>
+        <AddClientType v-if="canShow" @change="changeTrailType" ></AddClientType>
 
         <div v-if="canShow" class="modal fade" id="addTrail" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
@@ -344,7 +344,7 @@ export default {
             }
         },
   created() {
-    this.getField();
+    // this.getField();
     if (this.userList.length > 0) {
       this.memberList = this.userList;
     }
@@ -352,9 +352,9 @@ export default {
   },
   mounted() {
     this.getSales();
-    this.getClients();
+    // this.getClients();
     this.getStars();
-    this.getIndustries();
+    // this.getIndustries();
   },
   computed: {
     ...mapState([
@@ -387,10 +387,21 @@ export default {
             },
   },
   methods: {
+    // getField() {
+    //   const _this = this;
+    //   fetch('get', '/trails/filter_fields').then((params) => {
+    //     _this.customizeInfo = params.data;
+    //   });
+    // },
     getField() {
       const _this = this;
       fetch('get', '/trails/filter_fields').then((params) => {
         _this.customizeInfo = params.data;
+        _this.$refs.customize.refresh()
+        this.$nextTick((params) => {
+            $('.selectpicker').selectpicker('refresh')
+            
+        })
       });
     },
     changeTrailOriginPerson(value) {
@@ -526,7 +537,7 @@ export default {
     //     this.fetchData.status = value
     //     this.fetchHandler('get', '/trails/filter')
     // },
-    getSales (pageNum = 1) {
+            getSales (pageNum = 1) {
                 let _this = this;
                 this.fetchHandler('post', '/trails/filter', 'filter', pageNum)
                 // let data = {
@@ -552,13 +563,14 @@ export default {
                             value: response.data[i].id
                         })
                     }
+                    $('.selectpicker').selectpicker('refresh');
                 })
             },            
             getClients () {
-                let _this = this;
-                fetch('get', '/clients/all').then(function (response) {
-                    _this.companyArr = response.data
-                })
+                // let _this = this;
+                // fetch('get', '/clients/all').then(function (response) {
+                //     _this.companyArr = response.data
+                // })
             },            
             getStars () {
                 if (this.starsArr.length > 0) {
@@ -715,6 +727,7 @@ export default {
                 this.priority = value
             },            
             changeTrailType (value) {
+                this.getIndustries()
                 if(this.$store.state.listPower.trail.add !=='true'){
                     toastr.error('当前用户没有权限新增销售线索')
                     return
