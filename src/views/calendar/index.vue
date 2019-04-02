@@ -341,28 +341,25 @@
                         </div>
                         <div class="example">
                             <div class="">
-                                <div class="col-md-4 float-left px-0">
+                                <div class="col-md-3 float-left px-0">
                                     <div class="">{{ (scheduleData.start_at.split(' ')[0]).split('-')[1] }}月
                                         {{ (scheduleData.start_at.split(' ')[0]).split('-')[2] }}日
                                         {{ scheduleData.start_at|getWeek(scheduleData.start_at) }}
                                     </div>
-                                    <div>
-                                        <span class="big-time">{{ (scheduleData.start_at.split(' ')[1]).slice(0,5) }}</span>
-                                        <span class="small-time">am</span>
-                                    </div>
+                                    <div class="big-time">{{ (scheduleData.start_at.split(' ')[1]).slice(0,5) }}</div>
                                 </div>
-                                <div class="col-md-2 float-left pl-0">
+                                <div class="col-md-2 float-left px-0">
                                     <div class="" style="color: white"> -</div>
                                     <div class="big-time text-center"> -</div>
                                 </div>
-                                <div class="col-md-4 float-left px-0">
+                                <div class="col-md-3 float-left px-0">
                                     <div class="">{{ (scheduleData.end_at.split(' ')[0]).split('-')[1] }}月
                                         {{ (scheduleData.end_at.split(' ')[0]).split('-')[2] }}日
                                         {{ scheduleData.end_at|getWeek(scheduleData.end_at) }}
                                     </div>
-                                    <div>
-                                        <span class="big-time">{{ (scheduleData.end_at.split(' ')[1]).slice(0,5) }}</span>
-                                        <span class="small-time">pm</span>
+                                    <div class="big-time">
+                                        <template v-if="scheduleData.is_allday">24:00</template>
+                                        <template v-else>{{ (scheduleData.end_at.split(' ')[1]).slice(0,5) }}</template>
                                     </div>
                                 </div>
                                 <div class="col-md-2 float-left" v-show="scheduleData.is_allday">
@@ -1602,13 +1599,6 @@
 
     .big-time {
         font-size: 48px;
-        color: #3F51B5;
-        font-weight: bold;
-    }
-
-    .small-time {
-        margin-left: 4px;
-        font-size: 24px;
         color: #3F51B5;
         font-weight: bold;
     }
