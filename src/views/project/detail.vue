@@ -1433,10 +1433,10 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
-                        <h4 class="modal-title">确认删除{{delText}}</h4>
+                        <h4 class="modal-title">提示</h4>
                     </div>
                     <div class="modal-body">
-                        <p class="mt-20">此更改不可撤销</p>
+                        <p class="mt-20">确认删除{{delText}}</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button"
