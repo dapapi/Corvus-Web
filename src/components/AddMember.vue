@@ -1,8 +1,7 @@
 <template>
     <div class="addMember">
         <ul class="addMember-items">
-            <li class="addMember-item" v-for="(member,index) in selectMemberArr" :key="member.id"
-                :style="otherslot?'display:flex':''">
+            <li class="addMember-item" v-for="(member,index) in selectMemberArr" :key="member.id" :style="otherslot?'display:flex':''">
                 <Avatar :imgUrl="member.icon_url" :title='member.name'/>
                 <span class="addMember-remove" @click="removeMember(member.id)" :class="otherslot?'addmember-other':''">
                     <i class="md-minus-circle"></i>

@@ -78,7 +78,7 @@
                             <div class="col-md-3 example float-left">
                                 <button type="button" class="btn btn-default waves-effect waves-classic float-right"
                                         data-toggle="modal" data-target="#customizeContent"
-                                        @click='customizeContentType="stars"'
+                                        @click="dataFilter('stars')"
                                         data-placement="right" title="">
                                     自定义筛选
                                 </button>
@@ -224,7 +224,7 @@
                             <div class="col-md-3 example float-left">
                                 <button type="button" class="btn btn-default waves-effect waves-classic float-right"
                                         data-toggle="modal" data-target="#customizeContent"
-                                        @click='customizeContentType="bloggers"'
+                                        @click="dataFilter('bloggers')"
                                         data-placement="right" title="">
                                     自定义筛选
                                 </button>
@@ -879,7 +879,7 @@
                 isLoading: true,
                 selectAllBlogger: false,
                 listData: {
-                    include: 'broker,creator,contracts',
+                    include: 'contracts',
                     name: '',
                     sign_contract_status: 2,//  签约状态
                     communication_status: '', //沟通状态
@@ -944,14 +944,11 @@
             }           
         },
         created() {
-            this.getStarsField()
-            this.getBloggerField()
+           
             this.getStars();
         },
-        mounted() {
-            this.getArtists();
-            this.getBlogger();
-            this.getBlogType() //获取博主类型
+        mounted() {    
+           
             $('table').asSelectable();
         },
         methods: {
@@ -970,14 +967,24 @@
                 fetch('get', '/stars/filter_fields').then((params) => {
                     this.canShow = true
                     _this.customizeInfoStars = params.data
+                     $('.selectpicker').selectpicker('refresh') 
                 })
+               
             },
             getBloggerField() {
                 let _this = this
                 fetch('get', '/bloggers/filter_fields').then((params) => {
                     this.canShow = true
                     _this.customizeInfoBloggers = params.data
+                     $('.selectpicker').selectpicker('refresh') 
                 })
+            },
+            dataFilter:function(value){
+                this.customizeContentType=value              
+                this.getStarsField()
+                this.getBloggerField()
+                // this.$refs.customize.refresh()
+                
             },
             //获取沟通状态
             getStatus: function (value) {
@@ -1120,7 +1127,7 @@
                     fetchData = this.fetchData,
                     newUrl
                 if(url == '/stars/filter'){
-                     this.fetchData.include = 'include=broker,creator,contracts'
+                     this.fetchData.include = 'include=contracts'
                     if (type == 'filter') {
                         fetchData = this.customizeCondition
                         let keyword, sign_contract_status, communication_status,page
@@ -1182,12 +1189,14 @@
                 fetch(methods, newUrl || url, fetchData).then((response) => { 
                         this.canShow = true
                          if (url == '/stars/filter') {
+                         _this.isLoading = false;
                         _this.artistsInfo = response.data
                         _this.current_page = response.meta.pagination.current_page;
                         _this.total = response.meta.pagination.total;
                         _this.total_pages = response.meta.pagination.total_pages;
                         _this.cleanUp = true
                     } else if (url == '/bloggers/filter') {
+                         _this.isLoading = false;
                         _this.bloggerInfo = response.data;
                         _this.Bcurrent_page = response.meta.pagination.current_page;
                         _this.Btotal = response.meta.pagination.total;
@@ -1433,8 +1442,12 @@
                 let organization_id = JSON.parse(Cookies.get('user')).organization_id
                 if (organization_id == 411) {
                     this.isShow = true
+                    this.fetchHandler('post', '/stars/filter','filter')
+         
                 } else if (organization_id == 412) {
                     this.isShow = false
+                    this.fetchHandler('post', '/bloggers/filter','filter')
+                    this.getBlogType() //获取博主类型
                 }
             },
             tab: function (value) {
@@ -1442,13 +1455,16 @@
                 if (value == 'start') {
                     this.$refs.customize.setValue({conditions:[]})
                     this.customizeCondition = {}
-                    this.getArtists()                  
+                    // this.getArtists()   
+                    this.fetchHandler('post', '/stars/filter','filter')               
                     this.isShow = true
                     this.$refs.customize.reset()
                 } else if (value == 'bloggers') {
                     this.$refs.customize.setValue({conditions:[]})
                     this.customizeCondition  = {}
-                    this.getBlogger()
+                    // this.getBlogger()
+                    this.fetchHandler('post', '/bloggers/filter','filter')
+                    this.getBlogType() //获取博主类型
                     this.isShow = false
                     this.$refs.customize.reset()
                 }

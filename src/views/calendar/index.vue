@@ -726,6 +726,7 @@
                 canShowC: false,
                 canShowD: false,
                 canShowE: false,
+                newCalendarModal: false,
             }
         },
         mounted() {
@@ -1020,6 +1021,9 @@
             },
 
             showToast: function (clientX, clientY) {
+                if (this.newCalendarModal) {
+                    return
+                }
                 this.toastX = clientX;
                 this.toastY = clientY;
                 this.toastShow = true;
@@ -1125,6 +1129,7 @@
 
             showAddScheduleModal: function (date) {
                 $('#changeSchedule').modal('show');
+                this.newCalendarModal = true;
                 this.toastShow = false;
                 this.$refs.scheduleStartDate.setValue(date);
                 this.$refs.scheduleEndDate.setValue(date);
@@ -1334,6 +1339,7 @@
                 }
                 fetch('post', '/schedules', data).then(() => {
                     this.isAddButtonDisable = false;
+                    this.newCalendarModal = false;
                     this.$refs.calendar.refresh();
                     $('#changeSchedule').modal('hide');
                     toastr.success('添加成功')
@@ -1357,6 +1363,7 @@
                 this.eventDesc = '';
                 this.isScheduleAllday = false;
                 this.schedulePrivacy = false;
+                this.newCalendarModal = false;
                 this.scheduleType = 'add';
                 this.linkageSelectedIds = {
                     projects: [],
