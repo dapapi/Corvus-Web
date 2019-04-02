@@ -93,7 +93,7 @@
                             <tbody>
                             <tr v-for="(task, index) in tasksInfo" :key="index" @click="goDetail(task.id)">
                                 <td class="pointer-content">
-                                    {{ task.task_name }}
+                                    {{ task.title }}
                                 </td>
                                 <td>
                                     <template v-if="task.resource_type">

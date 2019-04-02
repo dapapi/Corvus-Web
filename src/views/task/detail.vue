@@ -72,11 +72,11 @@
                             <span>关联资源</span>
                             <span class="pl-2 font-weight-bold">
                                 {{ oldInfo.resource.data.resource.data.title }} -
-                                <template v-if="oldInfo.resource.data.resourceable_type === 'project'">{{ oldInfo.resource.data.resourceable.data.title }}</template>
-                                <template v-if="oldInfo.resource.data.resourceable_type === 'client'">{{ oldInfo.resource.data.resourceable.data.company }}</template>
-                                <template v-if="oldInfo.resource.data.resourceable_type === 'star'">{{ oldInfo.resource.data.resourceable.data.name }}</template>
-                                <template v-if="oldInfo.resource.data.resourceable_type === 'blogger'">{{ oldInfo.resource.data.resourceable.data.nickname }}</template>
-                                <template v-if="oldInfo.resource.data.resourceable_type === 'trail'">{{ oldInfo.resource.data.resourceable.data.title }}</template>
+                                {{ oldInfo.resource.data.resourceable.data.title 
+                                    || oldInfo.resource.data.resourceable.data.company 
+                                    || oldInfo.resource.data.resourceable.data.name 
+                                    || oldInfo.resource.data.resourceable.data.nickname 
+                                }}
                             </span>
                         </div>
                     </div>
@@ -312,15 +312,11 @@
                                                 <span class="font-weight-bold"
                                                       v-if="oldInfo.resource && oldInfo.resource.data && !isEdit">
                                                     {{oldInfo.resource.data.resource.data.title}} -
-                                                    <template
-                                                            v-if="oldInfo.resource.data.resourceable_type === 'project'">{{ oldInfo.resource.data.resourceable.data.title }}</template>
-                                                    <template
-                                                            v-if="oldInfo.resource.data.resourceable_type === 'client'">{{ oldInfo.resource.data.resourceable.data.company }}</template>
-                                                    <template v-if="oldInfo.resource.data.resourceable_type === 'star'">{{ oldInfo.resource.data.resourceable.data.name }}</template>
-                                                    <template
-                                                            v-if="oldInfo.resource.data.resourceable_type === 'blogger'">{{ oldInfo.resource.data.resourceable.data.nickname }}</template>
-                                                    <template
-                                                            v-if="oldInfo.resource.data.resourceable_type === 'trail'">{{ oldInfo.resource.data.resourceable.data.title }}</template>
+                                                    {{ oldInfo.resource.data.resourceable.data.title 
+                                                        || oldInfo.resource.data.resourceable.data.company 
+                                                        || oldInfo.resource.data.resourceable.data.name 
+                                                        || oldInfo.resource.data.resourceable.data.nickname 
+                                                    }}
                                                 </span>
                                                 <template v-if="oldInfo.resource && oldInfo.resource.data && isEdit">
                                                     <normal-linkage-selectors class="ml-0" ref="linkage"
@@ -692,7 +688,7 @@
             getTask: function () {
 
                 let data = {
-                    include: 'creator,principal,pTask,tasks.type,resource.resourceable,resource.resource,affixes,participants',
+                //     include: 'creator,principal,pTask,tasks.type,resource.resourceable,resource.resource,affixes,participants',
                 };
 
                 fetch('get', '/tasks/' + this.taskId, data).then(response => {
