@@ -68,7 +68,9 @@ axios.interceptors.response.use((res) => {
         }
     } else if (status === 403) {
         toastr.error(response.data.message)
-    } else {
+    }else if(String(error).indexOf('timeout') !== -1){
+        toastr.error('请求超时请稍后重试');
+    }else {
         toastr.error(response.data.message);
     }
     return Promise.reject(error);
