@@ -52,7 +52,7 @@ axios.interceptors.response.use((res) => {
 },(error) => {
     // console.log(String(error =='Cancel'));
     if (String(error) =='Cancel') {
-        console.log('Request canceled');
+        // console.log('Request canceled');
     } else {
     const {response: {status}} = error
     const {response} = error
@@ -89,7 +89,7 @@ export default function fetch(method = 'post', url, params) {
             })
             .catch((error) => {
                 if (String(error =='Cancel')) {
-                    console.log('Request canceled');
+                    // console.log('Request canceled');
                 } else {
                     reject(error)
                 }
