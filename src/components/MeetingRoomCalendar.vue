@@ -40,7 +40,8 @@
                     <div v-for="event in material.events" class="example">
                         <div class="col-md-2 float-left pl-0">{{ event.start }} - {{ event.end }}</div>
                         <div class="col-md-8 float-left">{{ event.title }}</div>
-                        <div class="col-md-2 float-right text-right pr-0">{{ event.department }} - {{ event.creator }}</div>
+                        <div class="col-md-2 float-right text-right pr-0">{{ event.department }} - {{ event.creator }}
+                        </div>
                     </div>
                 </template>
             </div>
@@ -84,6 +85,10 @@
                     this.getSchedules();
                 }
             },
+
+            numberDate(newValue) {
+                this.getSchedules(newValue)
+            }
         },
 
         methods: {

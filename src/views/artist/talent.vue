@@ -879,7 +879,7 @@
                 isLoading: true,
                 selectAllBlogger: false,
                 listData: {
-                    include: 'broker,creator,contracts',
+                    include: 'contracts',
                     name: '',
                     sign_contract_status: 2,//  签约状态
                     communication_status: '', //沟通状态
@@ -1127,7 +1127,7 @@
                     fetchData = this.fetchData,
                     newUrl
                 if(url == '/stars/filter'){
-                     this.fetchData.include = 'include=broker,creator,contracts'
+                     this.fetchData.include = 'include=contracts'
                     if (type == 'filter') {
                         fetchData = this.customizeCondition
                         let keyword, sign_contract_status, communication_status,page
