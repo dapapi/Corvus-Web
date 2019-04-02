@@ -653,7 +653,6 @@
             })
             // 请求问卷
             this.getQuestionId()
-
         },
 
         watch: {
@@ -716,7 +715,6 @@
                     params.data = response.data.principal.data;
                     this.$store.dispatch('changePrincipal', params);
                     this.isLoading = false;
-                    this.getLinkData()
                     this.resourceType = this.oldInfo.resource && this.oldInfo.resource.data.resource.data.type // 资源type
                     this.resourceableId = this.oldInfo.resource && this.oldInfo.resource.data.resourceable.data.id // 资源id
                 })
@@ -754,6 +752,7 @@
                     return
                 }
                 this.isEdit = true;
+                this.getLinkData()
                 this.changeInfo = {};
             },
 
@@ -1017,41 +1016,6 @@
                     })
                 }
 
-            },
-            // 关联子资源滚动到底加载更多
-            getMoreChildLinkData() {
-                const url = this.linkCode
-                const index = this.linkIndex
-                if (url && this.canLoadMore) {
-
-                    if (this.linkCurrentPage >= this.linkTotalPage) {
-                        return
-                    }
-                    let data = {
-                        page: this.linkCurrentPage
-                    }
-                    if (url === 'bloggers' || url === 'stars') {
-                        data.sign_contract_status = 2
-                    }
-                    fetch('get', `/${url === 'bloggers' ? url + '/all' : url}`, data).then(res => {
-                        this.linkCurrentPage = this.linkCurrentPage + 1
-                        const temp = this.linkData[index]
-                        // const temp = this.linkData
-                        const tempArr = res.data.map(n => {
-                            return {
-                                name: n.name || n.nickname || n.title || n.company,
-                                id: n.id,
-                                value: n.id,
-                            }
-                        })
-                        temp.child = [...temp.child, ...tempArr]
-                        this.resourceableId = temp.child[0].id
-                        this.$set(this.linkData, index, temp)
-                        this.$nextTick(() => {
-                            this.$refs.linkage.refresh()
-                        })
-                    })
-                }
             },
             // 获取任务类型列表
             getTaskType() {
