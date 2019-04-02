@@ -401,7 +401,7 @@
                         <div class="example" v-if="scheduleData.participants && !noPermission">
                             <div class="col-md-2 px-0 float-left">参与人</div>
                             <div class="col-md-10 pl-0 float-left">
-                                <AddMember type="add" participantsSingle="isParticipant"
+                                <AddMember type="add" :participantsSingle="isParticipant"
                                            @change="changeScheduleParticipants"></AddMember>
                             </div>
                         </div>
@@ -794,7 +794,8 @@
                             if (this.scheduleType !== 'edit') {
                                 this.$store.dispatch('changeParticipantsInfo', {data: []});
                             }
-                            this.getScheduleFinish = false
+                            this.getScheduleFinish = false;
+                            this.isParticipant = false;
                         });
 
                         $('#addMembers').on('hidden.bs.modal', () => {
