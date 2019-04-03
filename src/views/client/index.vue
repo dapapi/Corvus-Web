@@ -61,9 +61,9 @@
                                 <template v-if="client.grade === 1">直客</template>
                                 <template v-if="client.grade === 2">代理公司</template>
                             </td>
-                            <td>{{ client.principal ? client.principal.data.name : '' }}</td>
+                            <td>{{ client.name}}</td>
                             <td>{{ client.created_at ? common.timeProcessing(client.created_at) : '' }}</td>
-                            <td>{{ client.last_follow_up_at ? common.timeProcessing(client.last_follow_up_at) : '' }}
+                            <td>{{ client.up_time ? common.timeProcessing(client.up_time) : '' }}
                             </td>
                         </tr>
                         </tbody>
@@ -282,11 +282,12 @@
             getClients: function (pageNum = 1) {
                 const params = {
                     page: pageNum,
-                    include: 'principal',
+                    // include: 'principal',
                 };
 
-                let url = '/clients'
-
+                // let url = '/clients'
+                let url = '/clients_list'
+                
                 if (this.companyName) {
                     params.keyword = this.companyName
                 }
@@ -303,9 +304,12 @@
                 fetch('get', url, params).then(response => {
                     this.canShow = true
                     this.clientsInfo = response.data;
-                    this.current_page = response.meta.pagination.current_page;
-                    this.total = response.meta.pagination.total;
-                    this.total_pages = response.meta.pagination.total_pages;
+                    // this.current_page = response.meta.pagination.current_page;
+                    // this.total = response.meta.pagination.total;
+                    // this.total_pages = response.meta.pagination.total_pages;
+                    this.current_page = response.current_page;
+                    this.total = response.total;
+                    this.total_pages = response.per_page != 0 ? Math.ceil(response.total / response.per_page) : 1;
                     this.isLoading = false;
                 })
             },
