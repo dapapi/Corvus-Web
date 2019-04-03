@@ -76,7 +76,7 @@
                                                                         @click="getCalendarDetail(calendar.id)"
                                                                         data-target="#addCalendar"
                                                                         data-toggle="modal">编辑</a>
-                                                                        <a class="dropdown-item" data-target="#delModel"
+                                                                        <a class="dropdown-item" data-target="#delModal"
                                                                         data-toggle="modal"
                                                                         @click="deleteToastr('calendar', calendar)">删除</a>
                                                                     </div>
