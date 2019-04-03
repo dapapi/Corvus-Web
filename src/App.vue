@@ -72,13 +72,15 @@
                 this.getModuleRole()
                 this.getListPower()
             }
+            // this.getApprovalNum()
         },
         methods: {
             ...mapActions([
                 'getUserList',
                 'getDepartment',
                 'getModuleRole',
-                'getListPower'
+                'getListPower',
+                'getApprovalNum'
             ])
         }
     };
