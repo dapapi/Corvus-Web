@@ -687,7 +687,7 @@
             getTask: function () {
 
                 let data = {
-                //     include: 'creator,principal,pTask,tasks.type,resource.resourceable,resource.resource,affixes,participants',
+                    include: 'creator,principal,pTask,tasks.type,resource.resourceable,resource.resource,affixes,participants',
                 };
 
                 fetch('get', '/tasks/' + this.taskId, data).then(response => {
@@ -1033,7 +1033,7 @@
                 //   toastr.error('当前用户没有删除任务的权限')
                 //   return
                 // }
-                $('confirmFlag').modal('show')
+                $('#confirmFlag').modal('show')
 
             },
             // 设置默认负责人
