@@ -55,6 +55,10 @@ export default {
                 type[type.length - 1] = 'xlsx';
             } else if (type[type.length - 1] === 'plain') {
                 type[type.length - 1] = 'txt';
+            } else if (type[type.length - 1] === 'application/msword') {
+                type[type.length - 1] = 'doc';
+            } else if (type[type.length - 1] === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+                type[type.length - 1] = 'docx';
             }
             let key = this.guid() + '.' + type[type.length - 1];
             let conf = null;
