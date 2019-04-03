@@ -168,12 +168,7 @@ export default {
         },
         getSales (pageNum = 1) {
                 let _this = this;
-                let data = {
-                    page: pageNum,
-                    include: 'principal,client,expectations',
-                };
-                Object.assign(data, this.fetchData)
-                fetch('get', '/announcements?include=creator&status='+this.status+'&readflag='+this.readFlag).then(function (response) {
+                fetch('get', '/announcements?include=creator&status='+this.status+'&readflag='+this.readFlag+'&page='+pageNum).then(function (response) {
                     _this.broadCastInfo = response.data;
                     _this.total = response.meta.pagination.total;
                     _this.current_page = response.meta.pagination.current_page;

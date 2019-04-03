@@ -64,7 +64,8 @@
                                                                 {{ calendar.title }}
                                                             </div>
                                                             <div class="float-right position-relative"
-                                                                 v-show="calendar.starable_type !== 'star' || (calendar.starable_type === 'star' && calendar.principal_id == userInfo.id)">
+                                                                v-if="calendar.title === '全员公开日历' && calendar.principal.data.name === userInfo.nickname"
+                                                                v-show="calendar.starable_type !== 'star' || (calendar.starable_type === 'star' && calendar.principal_id == userInfo.id)">
                                                                 <i class="iconfont icon-gengduo1" aria-hidden="true"
                                                                    id="taskDropdown"
                                                                    data-toggle="dropdown" aria-expanded="false"></i>
@@ -74,7 +75,7 @@
                                                                        @click="getCalendarDetail(calendar.id)"
                                                                        data-target="#addCalendar"
                                                                        data-toggle="modal">编辑</a>
-                                                                    <a class="dropdown-item" data-target="#delModel"
+                                                                    <a class="dropdown-item" data-target="#delModal"
                                                                        data-toggle="modal"
                                                                        @click="deleteToastr('calendar', calendar)">删除</a>
                                                                 </div>
@@ -318,7 +319,7 @@
             </div>
         </div>
         <!-- 查看日程 -->
-        <div v-if="canShow" class="modal fade" id="checkSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShowA" class="modal fade" id="checkSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content" v-if="getScheduleFinish">
@@ -329,7 +330,7 @@
                                    @click="changeScheduleType('edit')" aria-hidden="true"></i>
                                 <FileUploader is-icon="true" class="float-left" @change="fileUpload"></FileUploader>
                                 <i class="iconfont icon-shanchu1 pr-4 font-size-16 pointer-content" data-toggle="modal"
-                                   data-target="#delModel" aria-hidden="true" @click="deleteToastr('schedule')"></i>
+                                   data-target="#delModal" aria-hidden="true" @click="deleteToastr('schedule')"></i>
                             </span>
                             <i class="iconfont icon-guanbi pointer-content" aria-hidden="true" data-dismiss="modal"></i>
                         </div>
@@ -348,7 +349,7 @@
                                     </div>
                                     <div class="big-time">{{ (scheduleData.start_at.split(' ')[1]).slice(0,5) }}</div>
                                 </div>
-                                <div class="col-md-2 float-left pl-0">
+                                <div class="col-md-2 float-left px-0">
                                     <div class="" style="color: white"> -</div>
                                     <div class="big-time text-center"> -</div>
                                 </div>
@@ -357,7 +358,10 @@
                                         {{ (scheduleData.end_at.split(' ')[0]).split('-')[2] }}日
                                         {{ scheduleData.end_at|getWeek(scheduleData.end_at) }}
                                     </div>
-                                    <div class="big-time">{{ (scheduleData.end_at.split(' ')[1]).slice(0,5) }}</div>
+                                    <div class="big-time">
+                                        <template v-if="scheduleData.is_allday">24:00</template>
+                                        <template v-else>{{ (scheduleData.end_at.split(' ')[1]).slice(0,5) }}</template>
+                                    </div>
                                 </div>
                                 <div class="col-md-2 float-left" v-show="scheduleData.is_allday">
                                     <div class="" style="color: white"> -</div>
@@ -395,7 +399,7 @@
                         <div class="example" v-if="scheduleData.participants && !noPermission">
                             <div class="col-md-2 px-0 float-left">参与人</div>
                             <div class="col-md-10 pl-0 float-left">
-                                <AddMember type="add" participantsSingle="isParticipant"
+                                <AddMember type="add" :participantsSingle="isParticipant"
                                            @change="changeScheduleParticipants"></AddMember>
                             </div>
                         </div>
@@ -425,7 +429,7 @@
         </div>
 
         <!-- 添加/修改 日历 -->
-        <div v-if="canShow" class="modal fade line-center" id="addCalendar" aria-hidden="true"
+        <div v-if="canShowB" class="modal fade line-center" id="addCalendar" aria-hidden="true"
              aria-labelledby="addLabelForm" role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -498,47 +502,45 @@
                         </div>
                     </div>
                 </div>
-
             </div>
+        </div>
 
-            <!-- 删除日历/日程 -->
-            <div v-if="canShow" class="modal fade" id="delModel" aria-hidden="true" aria-labelledby="addLabelForm"
-                 role="dialog"
-                 tabindex="-1" data-backdrop="static">
-                <div class="modal-dialog modal-simple">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" aria-hidden="true" data-dismiss="modal" class="close"><i
-                                    aria-hidden="true" class="iconfont icon-guanbi"></i></button>
-                            <h4 class="modal-title">确认删除</h4>
-                        </div>
-                        <div class="modal-body clearfix">
-                            <div class="example">
-                                <template v-if="delType === 'calendar'">
-                                    <p>确认删除日历 “{{ delCalendarInfo.title }}” </p>
-                                </template>
-                                <template v-if="delType === 'schedule'">
-                                    <p>确认删除日程 “{{ scheduleData.title }}” </p>
-                                </template>
-                            </div>
-
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+        <!-- 删除日历/日程 -->
+        <div v-if="canShowC" class="modal fade line-center" id="delModal" aria-hidden="true"
+            aria-labelledby="addLabelForm" role="dialog" tabindex="-1" data-backdrop="static">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" aria-hidden="true" data-dismiss="modal" class="close"><i
+                                aria-hidden="true" class="iconfont icon-guanbi"></i></button>
+                        <h4 class="modal-title">确认删除</h4>
+                    </div>
+                    <div class="modal-body clearfix">
+                        <div class="example">
                             <template v-if="delType === 'calendar'">
-                                <button class="btn btn-primary" @click="deleteCalendar">确定</button>
+                                <p>确认删除日历 “{{ delCalendarInfo.title }}” </p>
                             </template>
                             <template v-if="delType === 'schedule'">
-                                <button class="btn btn-primary" @click="deleteSchedule">确定</button>
+                                <p>确认删除日程 “{{ scheduleData.title }}” </p>
                             </template>
                         </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <template v-if="delType === 'calendar'">
+                            <button class="btn btn-primary" @click="deleteCalendar">确定</button>
+                        </template>
+                        <template v-if="delType === 'schedule'">
+                            <button class="btn btn-primary" @click="deleteSchedule">确定</button>
+                        </template>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- 日历批量添加成员 -->
-        <div v-if="canShow" class="modal fade" id="addMembers" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShowD" class="modal fade" id="addMembers" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog"
              tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple" style="max-width: 50rem;">
@@ -560,7 +562,7 @@
         </div>
 
         <!-- 关联资源 -->
-        <div v-if="canShow" class="modal fade" id="addLinkage" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShowE" class="modal fade" id="addLinkage" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -721,6 +723,12 @@
                 principal: '',
                 isParticipant: false,
                 canShow: false,
+                canShowA: false,
+                canShowB: false,
+                canShowC: false,
+                canShowD: false,
+                canShowE: false,
+                newCalendarModal: false,
             }
         },
         mounted() {
@@ -748,7 +756,7 @@
                     this.oldSelectedCalendar = this.selectedCalendar;
                 }
             },
-            canShow(newValue) {
+            canShowE(newValue) {
                 if (newValue) {
                     this.$nextTick(() => {
                         $('#addCalendar').on('hidden.bs.modal', () => {
@@ -782,7 +790,8 @@
                             if (this.scheduleType !== 'edit') {
                                 this.$store.dispatch('changeParticipantsInfo', {data: []});
                             }
-                            this.getScheduleFinish = false
+                            this.getScheduleFinish = false;
+                            this.isParticipant = false;
                         });
 
                         $('#addMembers').on('hidden.bs.modal', () => {
@@ -871,7 +880,24 @@
                 }
 
                 fetch('get', '/calendars/index', data).then(response => {
-                    this.canShow = true;
+                    setTimeout(() => {
+                        this.canShow = true;
+                        setTimeout(() => {
+                            this.canShowA = true;
+                            setTimeout(() => {
+                                this.canShowB = true;
+                                setTimeout(() => {
+                                    this.canShowC = true;
+                                    setTimeout(() => {
+                                        this.canShowD = true;
+                                        setTimeout(() => {
+                                            this.canShowE = true;
+                                        }, 200);
+                                    }, 200);
+                                }, 200);
+                            }, 200);
+                        }, 200);
+                    }, 200);
                     for (let i = 0; i < response.data.length; i++) {
                         response.data[i].name = response.data[i].title;
                         response.data[i].value = response.data[i].id;
@@ -998,6 +1024,9 @@
             },
 
             showToast: function (clientX, clientY) {
+                if (this.newCalendarModal) {
+                    return
+                }
                 this.toastX = clientX;
                 this.toastY = clientY;
                 this.toastShow = true;
@@ -1103,6 +1132,7 @@
 
             showAddScheduleModal: function (date) {
                 $('#changeSchedule').modal('show');
+                this.newCalendarModal = true;
                 this.toastShow = false;
                 this.$refs.scheduleStartDate.setValue(date);
                 this.$refs.scheduleEndDate.setValue(date);
@@ -1172,7 +1202,7 @@
 
             deleteSchedule: function () {
                 fetch('delete', '/schedules/' + this.scheduleData.id).then(() => {
-                    $('#delModel').modal('hide');
+                    $('#delModal').modal('hide');
                     toastr.success('删除成功');
                     this.$refs.calendar.refresh()
                 })
@@ -1312,6 +1342,7 @@
                 }
                 fetch('post', '/schedules', data).then(() => {
                     this.isAddButtonDisable = false;
+                    this.newCalendarModal = false;
                     this.$refs.calendar.refresh();
                     $('#changeSchedule').modal('hide');
                     toastr.success('添加成功')
@@ -1335,6 +1366,7 @@
                 this.eventDesc = '';
                 this.isScheduleAllday = false;
                 this.schedulePrivacy = false;
+                this.newCalendarModal = false;
                 this.scheduleType = 'add';
                 this.linkageSelectedIds = {
                     projects: [],
@@ -1476,7 +1508,7 @@
             deleteCalendar: function () {
                 fetch('delete', '/calendars/' + this.delCalendarInfo.id).then(() => {
                     toastr.success('删除成功');
-                    $('#delModel').modal('hide');
+                    $('#delModal').modal('hide');
                     this.getCalendarList();
                     this.$refs.calendar.refresh()
                 })

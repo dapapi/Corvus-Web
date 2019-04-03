@@ -891,7 +891,7 @@
                 isLoading: true,
                 selectAllBlogger: false,
                 listData: {
-                    include: 'broker,creator,contracts',
+                    include: 'contracts',
                     name: '',
                     sign_contract_status: 2,//  签约状态
                     communication_status: '', //沟通状态

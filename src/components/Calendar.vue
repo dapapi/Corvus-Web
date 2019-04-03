@@ -126,6 +126,11 @@
                         self.allScheduleInfo = response.data;
                         let events = [];
                         for (let i = 0; i < response.data.length; i++) {
+                            if (response.data[i].is_allday) {
+                                let end_at = response.data[i].end_at.split(' ')[0].split('-');
+                                end_at[2] = Number(end_at[2]) + 1;
+                                response.data[i].end_at = end_at.join('-') + ' 00:00'
+                            }
                             events.push({
                                 title: response.data[i].title,
                                 start: response.data[i].start_at,
@@ -151,7 +156,7 @@
                     } else {
                         setTimeout(() => {
                             self.$emit('showToast', allDay.pageX, allDay.pageY)
-                        }, 100)
+                        }, 200)
                     }
                 },
                 eventClick: function (event, jsEvent, view) {

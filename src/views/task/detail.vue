@@ -72,11 +72,11 @@
                             <span>关联资源</span>
                             <span class="pl-2 font-weight-bold">
                                 {{ oldInfo.resource.data.resource.data.title }} -
-                                <template v-if="oldInfo.resource.data.resourceable_type === 'project'">{{ oldInfo.resource.data.resourceable.data.title }}</template>
-                                <template v-if="oldInfo.resource.data.resourceable_type === 'client'">{{ oldInfo.resource.data.resourceable.data.company }}</template>
-                                <template v-if="oldInfo.resource.data.resourceable_type === 'star'">{{ oldInfo.resource.data.resourceable.data.name }}</template>
-                                <template v-if="oldInfo.resource.data.resourceable_type === 'blogger'">{{ oldInfo.resource.data.resourceable.data.nickname }}</template>
-                                <template v-if="oldInfo.resource.data.resourceable_type === 'trail'">{{ oldInfo.resource.data.resourceable.data.title }}</template>
+                                {{ oldInfo.resource.data.resourceable.data.title 
+                                    || oldInfo.resource.data.resourceable.data.company 
+                                    || oldInfo.resource.data.resourceable.data.name 
+                                    || oldInfo.resource.data.resourceable.data.nickname 
+                                }}
                             </span>
                         </div>
                     </div>
@@ -163,7 +163,7 @@
                                     <div class="all-menber clearfix">
                                         <template v-for="(item, index) in questionInfo.reviewanswer.data">
                                             <div style="position: relative; display: inline-block" :key="index">
-                                                <Avatar :imgUrl="item.users.data.user_url" style="margin: 5px;"/>
+                                                <Avatar :imgUrl="item.users.data.icon_url" style="margin: 5px;"/>
                                                 <div :class="hasAnsweredArr.indexOf(item.users.data.id) > -1 ? 'has-answer': 'un-answer'"></div>
                                                 <!-- hasAnsweredArr -->
                                             </div>
@@ -272,7 +272,7 @@
                                                      style="padding-left: 0; margin-top: -9px;">
                                                     <template v-for="(_item, nameIndex) in items.selectrows.data">
                                                         <Avatar v-if="_item.review_question_item_id === item.id"
-                                                                :imgUrl="_item.creator.data.user_url" :key="nameIndex"
+                                                                :imgUrl="_item.creator.data.icon_url" :key="nameIndex"
                                                                 style="margin: 5px;"/>
                                                     </template>
                                                 </div>
@@ -312,15 +312,11 @@
                                                 <span class="font-weight-bold"
                                                       v-if="oldInfo.resource && oldInfo.resource.data && !isEdit">
                                                     {{oldInfo.resource.data.resource.data.title}} -
-                                                    <template
-                                                            v-if="oldInfo.resource.data.resourceable_type === 'project'">{{ oldInfo.resource.data.resourceable.data.title }}</template>
-                                                    <template
-                                                            v-if="oldInfo.resource.data.resourceable_type === 'client'">{{ oldInfo.resource.data.resourceable.data.company }}</template>
-                                                    <template v-if="oldInfo.resource.data.resourceable_type === 'star'">{{ oldInfo.resource.data.resourceable.data.name }}</template>
-                                                    <template
-                                                            v-if="oldInfo.resource.data.resourceable_type === 'blogger'">{{ oldInfo.resource.data.resourceable.data.nickname }}</template>
-                                                    <template
-                                                            v-if="oldInfo.resource.data.resourceable_type === 'trail'">{{ oldInfo.resource.data.resourceable.data.title }}</template>
+                                                    {{ oldInfo.resource.data.resourceable.data.title 
+                                                        || oldInfo.resource.data.resourceable.data.company 
+                                                        || oldInfo.resource.data.resourceable.data.name 
+                                                        || oldInfo.resource.data.resourceable.data.nickname 
+                                                    }}
                                                 </span>
                                                 <template v-if="oldInfo.resource && oldInfo.resource.data && isEdit">
                                                     <normal-linkage-selectors class="ml-0" ref="linkage"
@@ -657,7 +653,6 @@
             })
             // 请求问卷
             this.getQuestionId()
-
         },
 
         watch: {
@@ -692,7 +687,7 @@
             getTask: function () {
 
                 let data = {
-                    include: 'creator,principal,pTask,tasks.type,resource.resourceable,resource.resource,affixes,participants',
+                //     include: 'creator,principal,pTask,tasks.type,resource.resourceable,resource.resource,affixes,participants',
                 };
 
                 fetch('get', '/tasks/' + this.taskId, data).then(response => {
@@ -720,7 +715,6 @@
                     params.data = response.data.principal.data;
                     this.$store.dispatch('changePrincipal', params);
                     this.isLoading = false;
-                    this.getLinkData()
                     this.resourceType = this.oldInfo.resource && this.oldInfo.resource.data.resource.data.type // 资源type
                     this.resourceableId = this.oldInfo.resource && this.oldInfo.resource.data.resourceable.data.id // 资源id
                 })
@@ -758,6 +752,7 @@
                     return
                 }
                 this.isEdit = true;
+                this.getLinkData()
                 this.changeInfo = {};
             },
 
@@ -1021,41 +1016,6 @@
                     })
                 }
 
-            },
-            // 关联子资源滚动到底加载更多
-            getMoreChildLinkData() {
-                const url = this.linkCode
-                const index = this.linkIndex
-                if (url && this.canLoadMore) {
-
-                    if (this.linkCurrentPage >= this.linkTotalPage) {
-                        return
-                    }
-                    let data = {
-                        page: this.linkCurrentPage
-                    }
-                    if (url === 'bloggers' || url === 'stars') {
-                        data.sign_contract_status = 2
-                    }
-                    fetch('get', `/${url === 'bloggers' ? url + '/all' : url}`, data).then(res => {
-                        this.linkCurrentPage = this.linkCurrentPage + 1
-                        const temp = this.linkData[index]
-                        // const temp = this.linkData
-                        const tempArr = res.data.map(n => {
-                            return {
-                                name: n.name || n.nickname || n.title || n.company,
-                                id: n.id,
-                                value: n.id,
-                            }
-                        })
-                        temp.child = [...temp.child, ...tempArr]
-                        this.resourceableId = temp.child[0].id
-                        this.$set(this.linkData, index, temp)
-                        this.$nextTick(() => {
-                            this.$refs.linkage.refresh()
-                        })
-                    })
-                }
             },
             // 获取任务类型列表
             getTaskType() {
