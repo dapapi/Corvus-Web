@@ -83,6 +83,9 @@ export default function fetch(method = 'post', url, params) {
     let timeout = setTimeout(() => {
         $('.neterror').modal('show');
     }, 10000);
+    if(url === '/pending_sum'){
+        clearTimeout(timeout)
+    }
     return new Promise((resolve, reject) => {
         axios[method](url, method.toLowerCase() === 'get' ? {params} : params)
             .then(response => {
