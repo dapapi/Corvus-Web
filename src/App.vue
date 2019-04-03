@@ -8,6 +8,7 @@
             <LeftManage/>
         </template>
         <router-view/>
+        <NetError />
     </div>
 </template>
 
@@ -72,13 +73,15 @@
                 this.getModuleRole()
                 this.getListPower()
             }
+            // this.getApprovalNum()
         },
         methods: {
             ...mapActions([
                 'getUserList',
                 'getDepartment',
                 'getModuleRole',
-                'getListPower'
+                'getListPower',
+                'getApprovalNum'
             ])
         }
     };

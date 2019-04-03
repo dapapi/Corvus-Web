@@ -249,7 +249,7 @@ export default {
     getFilterProjects (pageNum = 1) {
                 let data = {
                     page: pageNum,
-                    include: 'principal,trail.expectations'
+                    // include: 'principal,trail.expectations'
                 };
                 if (this.getProjectStatus) {
                     data.my = this.getProjectStatus;
