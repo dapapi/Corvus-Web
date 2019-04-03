@@ -120,8 +120,9 @@
                     } else {
                         data.calendar_ids = self.calendars
                     }
-
+                    
                     fetch('get', url, data).then(response => {
+                        console.log(data)
                         self.allScheduleInfo = response.data;
                         let events = [];
                         for (let i = 0; i < response.data.length; i++) {

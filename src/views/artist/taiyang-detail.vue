@@ -481,15 +481,6 @@
                                                                         @change="(value) => changeArtistBaseInfo(value, 'sign_contract_other')"></ConditionalInput>
                                                 </div>
                                             </div>
-                                            
-                                                <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height"
-                                                     style="height:64px;">
-                                                    <div class="col-md-3 float-left text-right pl-0">地区</div>
-                                                    <div class="col-md-9 float-left font-weight-bold">
-                                                        <EditInput :content="artistInfo.star_location" :is-edit="isEdit"
-                                                                   @change="(value) => changeArtistBaseInfo(value, 'star_location')"></EditInput>
-                                                    </div>
-                                                </div>
                                                 <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                                     <div class="col-md-3 float-left text-right pl-0">潜在风险点</div>
                                                     <div class="col-md-9 float-left font-weight-bold"
@@ -1372,7 +1363,7 @@ export default {
     this.getCalendar();
     // this.draw();
     // this.getArtistsBill();
-    // this.getTaskDate();
+    this.getTaskDate();
     // this.getProjectList();
     
     
