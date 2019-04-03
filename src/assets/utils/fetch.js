@@ -92,12 +92,13 @@ export default function fetch(method = 'post', url, params) {
                 clearTimeout(timeout)
                 resolve(response.data);
             }, err => {
-                // clearTimeout(timeout)
+                clearTimeout(timeout)
                 reject(err);
             })
             .catch((error) => {
+                clearTimeout(timeout)
                 if (String(error =='Cancel')) {
-                    clearTimeout(timeout)
+                    
 
                     // console.log('Request canceled');
                 } else {
