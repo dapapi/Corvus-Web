@@ -74,6 +74,7 @@ import AddRemind from '@/components/AddRemind.vue'
 import ImportAndExport from '@/components/ImportAndExport.vue'
 import VueUeditorWrap from 'vue-ueditor-wrap'
 import DepartmentPicker from '@/components/DepartmentPicker'
+import NetError from '@/components/NetError'
 Vue.config.productionTip = false;
 Vue.component('AddTask', AddTask);
 Vue.component('ApprovalGoModal', ApprovalGoModal);
@@ -145,6 +146,7 @@ Vue.component('DocPreview', DocPreview)
 Vue.component('ToolTips', ToolTips)
 Vue.component('Avatar', Avatar)
 Vue.component('AddTrail', AddTrail)
+Vue.component('NetError', NetError)
 
 Vue.component('TimeChoice', TimeChoice)
 Vue.component('EditTimeChoice', EditTimeChoice)

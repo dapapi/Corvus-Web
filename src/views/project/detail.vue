@@ -716,7 +716,7 @@
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left "
-                                                 v-if="projectInfo.type == 5">
+                                                 v-if="false && projectInfo.type == 5">
                                                 <div class="col-md-3 float-left text-right pl-0">可见范围</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <EditSelector :is-edit="isEdit" :content="projectInfo.privacy"

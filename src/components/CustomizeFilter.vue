@@ -136,10 +136,10 @@
                     if (tempArr.conditions[key] === undefined) {
                         tempArr.conditions.splice(key,1)
                     }else if(tempArr.conditions[key].operator == ''){
-                        toastr.error('筛选条件运算符不能为空')
+                        toastr.error('筛选条件没有填写完整，请填写完成后再试！')
                         return
                     }else if(tempArr.conditions[key].value == ''){
-                        toastr.error('筛选内容不能为空')
+                        toastr.error('筛选条件没有填写完整，请填写完成后再试！')
                         return
                     }
                 }
