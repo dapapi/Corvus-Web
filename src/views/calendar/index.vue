@@ -63,8 +63,28 @@
                                                                  style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
                                                                 {{ calendar.title }}
                                                             </div>
+                                                            <template v-if="calendar.title === '全员公开日历'">
+                                                                <div class="float-right position-relative"
+                                                                    v-if="calendar.principal.data.name === userInfo.nickname"
+                                                                    v-show="calendar.starable_type !== 'star' || (calendar.starable_type === 'star' && calendar.principal_id == userInfo.id)">
+                                                                    <i class="iconfont icon-gengduo1" aria-hidden="true"
+                                                                    id="taskDropdown"
+                                                                    data-toggle="dropdown" aria-expanded="false"></i>
+                                                                    <div class="dropdown-menu"
+                                                                        aria-labelledby="taskDropdown">
+                                                                        <a class="dropdown-item"
+                                                                        @click="getCalendarDetail(calendar.id)"
+                                                                        data-target="#addCalendar"
+                                                                        data-toggle="modal">编辑</a>
+                                                                        <a class="dropdown-item" data-target="#delModel"
+                                                                        data-toggle="modal"
+                                                                        @click="deleteToastr('calendar', calendar)">删除</a>
+                                                                    </div>
+                                                                </div>
+                                                            </template>
                                                             <div class="float-right position-relative"
-                                                                 v-show="calendar.starable_type !== 'star' || (calendar.starable_type === 'star' && calendar.principal_id == userInfo.id)">
+                                                                v-else
+                                                                v-show="calendar.starable_type !== 'star' || (calendar.starable_type === 'star' && calendar.principal_id == userInfo.id)">
                                                                 <i class="iconfont icon-gengduo1" aria-hidden="true"
                                                                    id="taskDropdown"
                                                                    data-toggle="dropdown" aria-expanded="false"></i>
