@@ -65,7 +65,7 @@
                                                             </div>
                                                             <template v-if="calendar.title === '全员公开日历'">
                                                                 <div class="float-right position-relative"
-                                                                    v-if="calendar.principal.data.name === userInfo.nickname"
+                                                                    v-if="calendar.principal && calendar.principal.data.name === userInfo.nickname"
                                                                     v-show="calendar.starable_type !== 'star' || (calendar.starable_type === 'star' && calendar.principal_id == userInfo.id)">
                                                                     <i class="iconfont icon-gengduo1" aria-hidden="true"
                                                                     id="taskDropdown"
