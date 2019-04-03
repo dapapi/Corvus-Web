@@ -132,6 +132,17 @@
                         tempArr.conditions.push(this.sendFilterData.conditions[key])
                     }
                 }
+                for (const key in tempArr.conditions) {
+                    if (tempArr.conditions[key] === undefined) {
+                        tempArr.conditions.splice(key,1)
+                    }else if(tempArr.conditions[key].operator == ''){
+                        toastr.error('筛选条件运算符不能为空')
+                        return
+                    }else if(tempArr.conditions[key].value == ''){
+                        toastr.error('筛选内容不能为空')
+                        return
+                    }
+                }
                 this.$emit('change', tempArr);
                 $('.modal').modal('hide');
             },

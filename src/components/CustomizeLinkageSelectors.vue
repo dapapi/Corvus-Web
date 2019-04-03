@@ -110,6 +110,7 @@ import config from '@/assets/js/config'
                 this.sendData.value = this.normalInput
             },
             fatherData:function(value){
+                console.log(value);
                 if(!value){
                     return
                 }
