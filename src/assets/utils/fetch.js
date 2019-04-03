@@ -82,7 +82,7 @@ axios.interceptors.response.use((res) => {
 export default function fetch(method = 'post', url, params) {
     let timeout = setTimeout(() => {
         $('.neterror').modal('show');
-    }, 5000);
+    }, 10000);
     return new Promise((resolve, reject) => {
         axios[method](url, method.toLowerCase() === 'get' ? {params} : params)
             .then(response => {

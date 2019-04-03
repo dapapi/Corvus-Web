@@ -14,7 +14,7 @@
                     <h4 class="modal-title">提示</h4>
                 </div>
                 <div class="modal-body">
-                    <p class="mt-20">当前网络连接不稳定</p>
+                    <p class="mt-20">连接不稳定，请检查网络设置</p>
                 </div>
                 <div class="modal-footer">
                     <!-- <button type="button"
