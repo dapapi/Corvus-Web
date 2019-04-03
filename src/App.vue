@@ -8,6 +8,7 @@
             <LeftManage/>
         </template>
         <router-view/>
+        <NetError />
     </div>
 </template>
 
