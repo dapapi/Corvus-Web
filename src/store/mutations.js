@@ -92,6 +92,9 @@ export default {
         state.moduleList = data.moduleList
         state.unReadMsg = data.num
     },
+    setApprovalNum(state, data){
+        state.approvalNum = data
+    },
     // 修改个人信息字段
     setUserAvatar(state, data) {
         state.avatar = data

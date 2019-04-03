@@ -111,6 +111,29 @@ export default {
             commit('setModule', data)
         })
     },
+    getApprovalNum({commit}) {
+        console.log(1111);
+            fetch('get',`/pending_sum`).then((res) => {
+                console.log(res);
+                // _this.unreadInfo = params
+                // _this.leftData[0].subMenu[2].num = params.project
+                // _this.leftData[1].subMenu[2].num = params.contract
+                // _this.leftData[2].subMenu[2].num = params.general
+                commit('setApprovalNum', res)
+            })
+        // }
+        // fetch('get', `/getmodules`).then((res) => {
+
+        //     let num = 0
+        //     let data = {}
+        //     for (let i = 0; i < res.data.length; i++) {
+        //         num = num + res.data[i].unread
+        //     }
+        //     data.num = num
+        //     data.moduleList = res.data
+        //     commit('setModule', data)
+        // })
+    },
     getSupplierDetails({commit},params){
         fetch('get', `supplier/${params}`).then((res) =>{
             commit('setSupplierDetails', res.data)

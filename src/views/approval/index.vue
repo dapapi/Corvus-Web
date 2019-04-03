@@ -192,6 +192,9 @@
     },
     methods:{
         getUnread(){
+            // this.leftData[0].subMenu[2].num = this.$store.state.approvalNum.project
+            // this.leftData[1].subMenu[2].num = this.$store.state.approvalNum.contract
+            // this.leftData[2].subMenu[2].num = this.$store.state.approvalNum.general
             let _this = this
             fetch('get','/pending_sum').then((params) => {
                 _this.unreadInfo = params
