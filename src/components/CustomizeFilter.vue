@@ -19,7 +19,7 @@
                     <div v-for="n in conditionLength" class="clearfix" :key="n">
                         <div :id="'selector' + n" v-show="selectorHidden.indexOf('selector' + n) === -1">
                             <div class="float-left col-md-11 p-0">
-                                <customize-linkage-selectors :data="data,n,stararr" @sendcusdata='getCusData'
+                                <customize-linkage-selectors :nodepartment='nodepartment' :data="data,n,stararr" @sendcusdata='getCusData'
                                                           @change="conditionChange"></customize-linkage-selectors>
                             </div>
                             <div class="float-left col-md-1 pb-5">
@@ -51,7 +51,7 @@
 <script>
     export default {
         name: "",
-        props: ['data','stararr','cleanup'],
+        props: ['data','stararr','cleanup','nodepartment'],
         data() {
             return {
                 conditionLength: 1,
@@ -130,6 +130,17 @@
                         continue  
                     }else{
                         tempArr.conditions.push(this.sendFilterData.conditions[key])
+                    }
+                }
+                for (const key in tempArr.conditions) {
+                    if (tempArr.conditions[key] === undefined) {
+                        tempArr.conditions.splice(key,1)
+                    }else if(tempArr.conditions[key].operator == ''){
+                        toastr.error('筛选条件没有填写完整，请填写完成后再试！')
+                        return
+                    }else if(tempArr.conditions[key].value == ''){
+                        toastr.error('筛选条件没有填写完整，请填写完成后再试！')
+                        return
                     }
                 }
                 this.$emit('change', tempArr);

@@ -32,29 +32,28 @@
                     <div class="page-content tab-content nav-tabs-animate bg-white">
                         <div class="pt-10 list">
                             <!--list-->
-                            <div class="message" :class="moduleList.find(item => item.id == moduleType).val"
+                            <div class="message" 
                                  v-for="(item, key) in messageList" :key="key">
                                 <div class="time_line">
                                     <span class="time_con bg-white font-size-18">{{key}} 星期{{week.find(item => item.value == new Date(key).getDay()).name}}</span>
                                 </div>
                                 <ul class="list mt-40 ml-0 pl-0">
-                                    <li class="mb-30 row" v-for="(item2,index2) in item" :key="index2">
-                                        <!-- <router-link class="row" :to="msgLink.find(link => link.value == item2.module).name+'/'+item2.module_data_id"> -->
+                                    <li class="mb-30 row" v-for="(item2,index2) in item" :key="index2" :class="item2.color">
                                         <div class="clearfix col-md-12 module">
                                             <div class="float-left mr-10 pic col-md-1">
                                                 <i class="iconfont  font-size-30 icon-color"
-                                                   :class="iconList[moduleList.find(item => item.id == moduleType).val]"></i>
+                                                   :class="item2.icon"></i>
                                             </div>
                                             <div class="float-left mb-10 col-md-11" style="margin-left:-10px">
-                                                <p class="text-left mb-5"><span class="module_title mr-5 title">{{moduleList.find(item=>item.id ==moduleType).name}}助手</span><i
+                                                <p class="text-left mb-5"><span class="module_title mr-5 title">{{item2.moduleName}}助手</span><i
                                                         class="timesR">{{item2.created_at}}</i></p>
                                                 <p class="desc txt text-left font-size-16">{{item2.title}}</p>
                                             </div>
                                         </div>
                                         <div class="content py-15 pl-40 col-md-8 ml-80"
-                                             @click="msgStatus(item2.id,item2.module,item2.module_data_id)">
+                                             @click="isRead(item2.id,item2.module,item2.module_data_id)">
                                             <span class="is_read" v-show="item2.state == 1"></span>
-                                            <div class="title font-size-16 mb-15">{{item2.message_subheading}}</div>
+                                            <div class="title font-size-16 mb-15">{{item2.subheading}}</div>
                                             <div class="row">
                                                 <div class="col-md-5" v-for="(item3,index3) in item2.body"
                                                      :key="index3">
@@ -63,7 +62,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- </router-link> -->
                                     </li>
                                 </ul>
                             </div>
@@ -79,7 +77,7 @@
                 </div>
             </div>
         </div>
-        <Flag typeText="全部标记为已读" @confirmFlag="msgStatus('','','',moduleType)"/>
+        <Flag typeText="全部标记为已读" @confirmFlag="msgStatus()"/>
         <!-- 查看日程 -->
         <div class="modal fade" id="checkSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
@@ -178,9 +176,7 @@
         </div>
     </div>
 </template>
-
 <script>
-    import Main from './detail.vue';
     import fetch from '@/assets/utils/fetch'
     import config from '@/assets/js/config'
     import env from '@/assets/js/env'
@@ -188,9 +184,6 @@
 
     export default {
         name: 'messagesIndex',
-        components: {
-            Main,
-        },
         computed: {},
         data() {
             return {
@@ -199,7 +192,6 @@
                 pageData: {},              //页面数据
                 readFilter: true,          //阅读状态筛选
                 messageFilter: "全部消息",   //消息过滤器状态
-                //   moduleList:[],//模块list
                 moduleType: '',
                 messageList: {},//消息list
                 iconList: {//每个模块的icon
@@ -241,12 +233,10 @@
                 total: 0,
                 current_page: 1,
                 total_pages: 1,
+                power:'',
+
 
             };
-        },
-        mounted() {
-            //数据初始化
-            this.getModule()
         },
         computed: {
             ...mapState([
@@ -254,22 +244,26 @@
                 'moduleList'
             ])
         },
+        mounted(){
+           if(this.moduleList.length>0){
+               this.renderMsg(1)
+           }
+        },
         watch: {
-            unReadMsg: function () {
-                this.getModule();
-
-            },
-            moduleList: function () {
-                this.renderMsg()
-            },
             scheduleData: function () {
                 this.end_at = this.scheduleData.end_at
                 this.start_at = this.scheduleData.start_at
                 this.endBigTime = (this.end_at.split(' ')[1]).slice(0, 5)
                 this.startBigTime = (this.start_at.split(' ')[1]).slice(0, 5)
             },
-            "$route": "renderMsg"
+            $route:function(){
+                this.renderMsg(1)
+            },
+            moduleList:function(){
+                this.renderMsg(1)
+            }
         },
+        
         methods: {
             ...mapActions([
                 'getModuleList'
@@ -281,9 +275,10 @@
                 } else {
                     this.readFilter = false
                 }
-                this.renderMsg()
+                this.renderMsg(1)
             },
             renderMsg: function (page=1) {
+                
                 if (this.$route.query.moduleType) {
                     this.moduleType = this.$route.query.moduleType
                     fetch('get', `${env.apiUrl}/mobile_get_message?page=${page}&module=${this.moduleType}&state=${this.state}`).then((res) => {
@@ -295,7 +290,10 @@
                         this.messageList = {}
                         for (let i = 0; i < dataList.length; i++) {
 
-                            let iTime = dataList[i].created_at.split(' ')[0] 
+                            let iTime = dataList[i].created_at.split(' ')[0]
+                            dataList[i]['icon'] = this.iconList[this.moduleList.find(item => item.id == this.moduleType).val] //设置每个模块icon
+                            dataList[i]['color'] = this.moduleList.find(item => item.id == this.moduleType).val //设置模块的color
+                            dataList[i]['moduleName'] =this.moduleList.find(item=>item.id ==this.moduleType).name //设置模块的name
                             if (this.messageList.hasOwnProperty(iTime)) {
                                 this.messageList[iTime].push(dataList[i])
                             }else{
@@ -305,74 +303,97 @@
                         }
                     })
                 } else {
+
                     //如果没有moduleType  跳转
                     this.$router.push(`/my/message?moduleType=${this.moduleList[0].id}`)
                 }
 
 
             },
-            getModule: function () {
-                this.getModuleList()
-            },
-            //修改消息状态
-            msgStatus: function (id, module_id, module_data_id, type) {
-                if (this.state == 2) {
-                    this.isAuthority(module_id, module_data_id)
-                } else {
-                    let data = {}
-                    if (type) {
-                        data = {
-                            module: this.moduleType,
-                            all: 'yes'
-                        }
-                    } else {
-                        data = {
-                            message_id: id
-                        }
-                    }
-                    fetch('get', `${env.apiUrl}/changestae`, data).then((res) => {
-                        this.getModule()
-                        if (!type) {
-                            this.isAuthority(module_id, module_data_id)
-                        }
-                    })
+            //判断调用已读，未读函数
+            isRead:function(id, module_id, module_data_id, type){
+                if(this.state ==1){
+                    this.unReadFun(id, module_id, module_data_id, type)
+                }else{
+                    this.readFun(id, module_id, module_data_id, type)
                 }
             },
-            //是否有权限进行跳转
-            isAuthority: function (module_id, module_data_id) {
+            //未读消息跳转判断--权限和状态
+            unReadFun:function(id, module_id, module_data_id, type){
+                //未读消息更改状态参数
+                let sData = {
+                    message_id: id
+                }
+                //权限状态改变参数
+                let aData = {
+                    method: 'get',
+                    uri: `${this.msgLink.find(item => item.value == module_id).url}${module_data_id}`,
+                    id: module_data_id
+                }
+                //两个并行fetch参数
+                let urls = [
+                    {
+                       type:'get',
+                       url:'/changestae',
+                       data:sData
+                    },
+                    {
+                       type:'get',
+                       url:'/console/checkpower',
+                       data:aData
+                    }
+                ]
+                //并行两个异步的fetch请求
+                let _this = this
+                Promise.all(urls.map(item =>
+                    fetch(item.type,item.url,item.data).then(res => JSON.stringify(res))
+                )).then(text =>{
+                    //重新计算未读消息数量
+                    _this.getModuleList()
+                    //判断是否有权限可以进行跳转 --- 214日历模块有权限展示弹框
+                    let power =JSON.parse(text[1]).data.power
+                    if( power=== 'true'){
+                        if (module_id == 214) {
+                            _this.showScheduleModal(module_data_id)
+                        } else if (module_id == 216 || module_id == 213) {
+                            _this.$router.push(`${_this.msgLink.find(item => item.value == module_id).name}/${module_data_id}?mode=approver`)
+                        } else {
+                            _this.$router.push(`${_this.msgLink.find(item => item.value == module_id).name}/${module_data_id}`)
+                        }
+                    }
+                })
+            },
+            //已读消息跳转 -- 判断权限
+            readFun:function(id, module_id, module_data_id, type){
+                let _this = this
                 let data = {
                     method: 'get',
                     uri: `${this.msgLink.find(item => item.value == module_id).url}${module_data_id}`,
                     id: module_data_id
                 }
                 fetch('get', '/console/checkpower', data).then(response => {
-                    //日历模块显示弹框
-
-                    if (response.data.power === 'true') {
+                    if( response.data.power=== 'true'){
                         if (module_id == 214) {
-                            this.showScheduleModal(module_data_id)
+                            _this.showScheduleModal(module_data_id)
                         } else if (module_id == 216 || module_id == 213) {
-
-                            this.$router.push(`${this.msgLink.find(item => item.value == module_id).name}/${module_data_id}?mode=approver`)
+                            _this.$router.push(`${_this.msgLink.find(item => item.value == module_id).name}/${module_data_id}?mode=approver`)
                         } else {
-                            this.$router.push(`${this.msgLink.find(item => item.value == module_id).name}/${module_data_id}`)
+                            _this.$router.push(`${_this.msgLink.find(item => item.value == module_id).name}/${module_data_id}`)
                         }
-                        fetch('get', '/console/checkpower', data).then(response => {
-                            //日历模块显示弹框
-
-                            if (response.data.power === 'true') {
-                                if (module_id == 214) {
-                                    this.showScheduleModal(module_data_id)
-                                } else if (module_id == 216 || module_id == 213) {
-                                    this.$router.push(`${this.msgLink.find(item => item.value == module_id).name}/${module_data_id}?mode=approver`)
-                                } else {
-                                    this.$router.push(`${this.msgLink.find(item => item.value == module_id).name}/${module_data_id}`)
-                                }
-                            }
-
-                        });
                     }
-                })
+                   
+                });
+            },
+            //修改全部未读消息的状态---只改变状态不判断权限
+            msgStatus: function () {
+                let data = {
+                    module: this.moduleType,
+                    all: 'yes'
+                }
+                fetch('get', `/changestae`, data).then((res) => {
+                    this.getModuleList()
+                    
+                }) 
             },
             //获取日历详情
             showScheduleModal: function (scheduleId) {
@@ -387,7 +408,6 @@
 
                     }
                     $('#checkSchedule').modal('show')
-                    // this.scheduleParticipants
                 });
 
             }
@@ -427,7 +447,6 @@
         ,
     };
 </script>
-
 <style lang="scss" scoped>
     .big-time {
         font-size: 48px;

@@ -147,10 +147,15 @@
                 this.noticeArr = JSON.parse(JSON.stringify(this.$store.state.newParticipantsInfo))
             },
             formid: function (value) {
-                this.getApprover(this.formid)
+                this.getApprover(this.formid,'formidchanged')
+                
             },
-            formstatus: function (value) {
-                this.getApprover(this.formid)
+            formstatus: function (value,oldValue) {
+                if(oldValue === undefined){
+                    // console.log('return');
+                    return
+                }
+                this.getApprover(this.formid,'formstatuschanged')
             },
             'trend.ready': function (value) {
                 let _this = this
@@ -184,7 +189,7 @@
             }
         },
         mounted() {
-            this.getApprover(this.formid)
+            this.getApprover(this.formid,'mounted')
         },
         methods: {
             noticeChanger(value) {
@@ -193,7 +198,7 @@
                 }
 
             },
-            getApprover(value) {
+            getApprover(value,info) {
                 if (!this.mode) {
                     if (!value) {
                         return
@@ -219,6 +224,8 @@
                     if (value == undefined) {
                         return
                     }
+                    // debugger
+                    // console.log(info);
                     fetch('get', '/approval_instances/' + value + '/chains').then((params) => {
                         _this.approver = params.data
                         _this.waitingFor = params.data.find(item => item.approval_stage === "doing")
@@ -232,7 +239,6 @@
                             params.data.reverse()
                         }
                         _this.finalShow = true
-
                     })
                 }
             },

@@ -36,14 +36,14 @@
                                         </div>
 
                                         <div v-for="(value, key, index) in normalUsers" :key="index">
-                                            <div class="letter" v-if="value.find(item=>item.name.includes(searchKeyWord))">{{ key }}</div>
+                                            <div class="letter" v-if="value.find(item=>item.name.toLowerCase().includes(searchKeyWord.toLowerCase()))">{{ key }}</div>
                                             <div class="users" v-for="(user, _index) in value"
-                                                 v-show="user.name.indexOf(searchKeyWord) > -1"
+                                                 v-show="user.name.toLowerCase().indexOf(searchKeyWord.toLowerCase()) > -1"
                                                  :class="checkedIndex === (index + '' + _index) ? 'checked' : ''"
                                                  @click="handelMemberClick(index + '' + _index, user)"
                                                  :key='user.name+Math.random()'>
                                                 <a class="avatar" href="javascript:void(0)">
-                                                    <Avatar :imgUrl="user.user_url" style="margin-right: 10px; "/>
+                                                    <Avatar :imgUrl="user.icon_url" style="margin-right: 10px; "/>
                                                 </a>
                                                 <span class="pl-1 user-name">{{ user.name }}</span>
                                             </div>
@@ -77,7 +77,7 @@
                 <div class="col-md-12" style="margin-top: -70px;">
                     <div class="py-25 px-25 clearfix position-relative">
                         <div class="col-md-2 float-left head-img">
-                            <Avatar :imgUrl="personalInfo.user_url"
+                            <Avatar :imgUrl="personalInfo.icon_url"
                                     style="width: 140px; height: 140px; font-size: 50px; font-weight: 400;"/>
                         </div>
                         <div class="col-md-10 float-left position-absolute" style="bottom: 25px;right: 0;">
@@ -143,7 +143,7 @@
                         <div class="page-content tab-content nav-tabs-animate overflowY py-0">
                             <div class="list-wrap" v-for="(item, index) in tasks" :key="index" @click="taskDetail(item.id)">
                                 <div class="flex">
-                                    <Avatar class="small-avatar" :imgUrl="item.principal.data.user_url"/>
+                                    <Avatar class="small-avatar" :imgUrl="item.principal.data.icon_url"/>
                                     {{ item.title }}
                                 </div>
                                 <div class="">{{ item.end_at }}</div>
@@ -161,7 +161,7 @@
                         <div class="page-content tab-content nav-tabs-animate overflowY py-0">
                             <div class="list-wrap" v-for="(item, index) in schedules" :key="index" @click="showScheduleModal(item.id)">
                                 <div class="flex">
-                                    <Avatar class="small-avatar" :imgUrl="item.creator.data.user_url"/>
+                                    <Avatar class="small-avatar" :imgUrl="item.creator.data.icon_url"/>
                                     {{ item.title }}
                                 </div>
                                 <div class="">{{ item.start_at }}</div>

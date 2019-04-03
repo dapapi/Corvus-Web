@@ -527,7 +527,7 @@ export default {
     }
 
     .loader-overlay {
-        margin-left: 300px;
+        margin-left: 340px;
         background-color: rgba(7, 17, 27, 0.2)
     }
 

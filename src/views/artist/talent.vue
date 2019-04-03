@@ -78,7 +78,7 @@
                             <div class="col-md-3 example float-left">
                                 <button type="button" class="btn btn-default waves-effect waves-classic float-right"
                                         data-toggle="modal" data-target="#customizeContent"
-                                        @click='customizeContentType="stars"'
+                                        @click="dataFilter('stars')"
                                         data-placement="right" title="">
                                     自定义筛选
                                 </button>
@@ -148,7 +148,7 @@
                             </tr>
                             <tbody>
 
-                            <tr v-for="artist in artistsInfo" :key="artist.id" class="pointer-content">
+                            <tr v-for="(artist,index) in artistsInfo" :key="index" class="pointer-content">
                                 <td>
                                     <span class="checkbox-custom checkbox-primary">
                                         <input class="selectable-item" type="checkbox" :id="'artist-' + artist.id"
@@ -176,12 +176,18 @@
                                     </template>
                                 </td>
                                 <td @click="redirectArtistDetail(artist.id)"
-                                    v-if="artistsInfo.find(item=>item.sign_contract_status==2)&&artist.contracts">{{
-                                    common.timeProcessing(artist.contracts.data.contract_start_date, 'day') }}
+                                    v-if="artistsInfo.find(item=>item.sign_contract_status==2)&&artist.sign_contract_at">{{
+                                    common.timeProcessing(artist.sign_contract_at, 'day') }}
                                 </td>
                                 <td @click="redirectArtistDetail(artist.id)"
-                                    v-if="artistsInfo.find(item=>item.sign_contract_status==3)&&artist.contracts">{{
-                                    common.timeProcessing(artist.contracts.data.contract_end_date, 'day')}}
+                                    v-if="artistsInfo.find(item=>item.sign_contract_status==3)&&artist.terminate_agreement_at">{{
+                                    common.timeProcessing(artist.terminate_agreement_at, 'day')}}
+                                </td>
+                                 <td @click="redirectBolggerDetail(artist.id)"
+                                    v-if="artistsInfo.find(item=>item.sign_contract_status==2)&&!artist.sign_contract_at">
+                                </td>
+                                 <td @click="redirectBolggerDetail(artist.id)"
+                                    v-if="artistsInfo.find(item=>item.sign_contract_status==3)&&!artist.terminate_agreement_at">
                                 </td>
                                 <td @click="redirectArtistDetail(artist.id)"
                                     v-if="artist.communication_status&&artistsInfo.find(item=>item.sign_contract_status==1)">
@@ -224,7 +230,7 @@
                             <div class="col-md-3 example float-left">
                                 <button type="button" class="btn btn-default waves-effect waves-classic float-right"
                                         data-toggle="modal" data-target="#customizeContent"
-                                        @click='customizeContentType="bloggers"'
+                                        @click="dataFilter('bloggers')"
                                         data-placement="right" title="">
                                     自定义筛选
                                 </button>
@@ -289,14 +295,20 @@
                                 <td @click="redirectBolggerDetail(artist.id)"
                                     v-if="bloggerInfo.find(item=>item.sign_contract_status!==1)||!artist.type">暂无
                                 </td>
-                                <td @click="redirectBolggerDetail(artist.id)" v-if=" artist.type">{{ artist.type.data.name }}</td>
+                                <td @click="redirectBolggerDetail(artist.id)" v-if=" artist.type">{{ artist.type }}</td>
                                 <td @click="redirectBolggerDetail(artist.id)"
-                                    v-if="bloggerInfo.find(item=>item.sign_contract_status==2&&artist.contracts)">{{
-                                    common.timeProcessing(artist.contracts.data.contract_start_date, 'day') }}
+                                    v-if="bloggerInfo.find(item=>item.sign_contract_status==2)&&artist.sign_contract_at">{{
+                                    common.timeProcessing(artist.sign_contract_at, 'day') }}
                                 </td>
                                 <td @click="redirectBolggerDetail(artist.id)"
-                                    v-if="bloggerInfo.find(item=>item.sign_contract_status==3&&artist.contracts)">{{
-                                    common.timeProcessing(artist.contracts.data.contract_end_date, 'day')}}
+                                    v-if="bloggerInfo.find(item=>item.sign_contract_status==3)&&artist.terminate_agreement_at">{{
+                                    common.timeProcessing(artist.terminate_agreement_at, 'day')}}
+                                </td>
+                                 <td @click="redirectBolggerDetail(artist.id)"
+                                    v-if="bloggerInfo.find(item=>item.sign_contract_status==2)&&!artist.sign_contract_at">
+                                </td>
+                                 <td @click="redirectBolggerDetail(artist.id)"
+                                    v-if="bloggerInfo.find(item=>item.sign_contract_status==3&&!artist.terminate_agreement_at)">
                                 </td>
                                 <td @click="redirectBolggerDetail(artist.id)"
                                     v-if="artist.communication_status&&bloggerInfo.find(item=>item.sign_contract_status==1)">
@@ -316,9 +328,9 @@
                                     </template>
                                 </td>
                                 <td @click="redirectBolggerDetail(artist.id)"
-                                    v-if="bloggerInfo.find(item=>item.sign_contract_status==1)">
-                                    <span v-for="(v,index) in artist.publicity.data" :key="index">
-                                        {{v.name}}
+                                    v-if="bloggerInfo.find(item=>item.sign_contract_status==1) &&artist.publicity_user_names">
+                                    <span v-for="(v,index) in artist.publicity_user_names" :key="index">
+                                        {{v}}
                                     </span>
                                 </td>
                                 <td @click="redirectBolggerDetail(artist.id)">{{common.timeProcessing(artist.created_at)}}</td>
@@ -344,7 +356,7 @@
         </div>
 
         <customize-filter v-if="canShow" :data="customizeContentType==='stars'?customizeInfoStars:customizeInfoBloggers"
-                          @change="customize" ref="customize" :isint="true"></customize-filter>
+                          @change="customize" ref='customize' :isint="true"></customize-filter>
 
         <div  class="site-action" data-plugin="actionBtn" data-toggle="modal" @click='rightChecker("博主","addBolgger","blogger")' v-if="!isShow && canShow">
             <button type="button"
@@ -879,7 +891,7 @@
                 isLoading: true,
                 selectAllBlogger: false,
                 listData: {
-                    include: 'broker,creator,contracts',
+                    include: 'contracts',
                     name: '',
                     sign_contract_status: 2,//  签约状态
                     communication_status: '', //沟通状态
@@ -944,14 +956,12 @@
             }           
         },
         created() {
-            this.getStarsField()
-            this.getBloggerField()
+           
             this.getStars();
         },
-        mounted() {
-            this.getArtists();
-            this.getBlogger();
-            this.getBlogType() //获取博主类型
+        mounted() {    
+            this.getStarsField()
+            this.getBloggerField()
             $('table').asSelectable();
         },
         methods: {
@@ -970,20 +980,27 @@
                 fetch('get', '/stars/filter_fields').then((params) => {
                     this.canShow = true
                     _this.customizeInfoStars = params.data
+                     $('.selectpicker').selectpicker('refresh') 
                 })
+               
             },
             getBloggerField() {
                 let _this = this
                 fetch('get', '/bloggers/filter_fields').then((params) => {
                     this.canShow = true
                     _this.customizeInfoBloggers = params.data
+                     $('.selectpicker').selectpicker('refresh') 
                 })
+            },
+            dataFilter:function(value){
+                this.customizeContentType=value            
+                
             },
             //获取沟通状态
             getStatus: function (value) {
                 this.listData.communication_status = value
                 // this.getArtists()
-                this.fetchHandler('post', '/stars/filter','filter')
+                this.fetchHandler('post', '/stars/list','filter')
             },
             //获取签约状态
             getSource: function (value) {
@@ -991,7 +1008,7 @@
                     this.listData.sign_contract_status = value
                 }
                 // this.getArtists()
-                this.fetchHandler('post', '/stars/filter','filter')
+                this.fetchHandler('post', '/stars/list','filter')
             },
             //查询列表
             getArtists: function (page = 1, signStatus) {
@@ -1008,10 +1025,9 @@
                     sign_contract_status: this.listData.sign_contract_status,//  签约状态
                     communication_status: this.listData.communication_status, //沟通状态
                 }
-                fetch('get', '/stars', this.listData).then(function (response) {
+                fetch('post', '/stars/list', this.listData).then(function (response) {
                     if (response.data) {
                         _this.artistsInfo = response.data;
-                        console.log(_this.artistsInfo)
                     }
                     _this.artistsInfo.forEach(item => {
                         if (item.sign_contract_status) {
@@ -1035,12 +1051,14 @@
                 let _this = this;
                 //博主状态
                 if (signStatus) {
-                    this.blogStatus = signStatus
+                    this.blogStatus= signStatus
                 }
                 if(this.blogStatus){
-                    data.status = '&status='+this.blogStatus
+                    this.currentpagestatus = this.blogStatus
+                    
+                    data.sign_contract_status = '&sign_contract_status='+this.currentpagestatus 
                 }else{
-                    data.status = ''
+                    data.sign_contract_status = ''
                 }
                 //沟通状态
                 if (this.blogCommunication) {
@@ -1055,11 +1073,10 @@
                     data.name = ''
                 }
                 data.page = '&page='+page
-                fetch('get', '/bloggers?include=type,creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name +data.page ,this.customizeInfo).then(function (response) {
+                fetch('post', '/bloggers/list?include=type,creator,affixes,publicity,operatelogs,contracts'+data.sign_contract_status +data.communication_status +data.name +data.page ,this.customizeInfo).then(function (response) {
                     
                     if(response.data){
                         _this.bloggerInfo = response.data;
-                        console.log(response.data)
                     }
                     if (response.meta) {
                         _this.Bcurrent_page = response.meta.pagination.current_page;
@@ -1100,26 +1117,26 @@
             },
             getBloggerName(){
                 this.blogName = this.blogName 
-                this.fetchHandler('post', '/bloggers/filter','filter')
+                this.fetchHandler('post', '/bloggers/list','filter')
             },
             //选择博主类型
             typeFilter(value) {
                 this.blogStatus = value
                 // this.getBlogger()
-                this.fetchHandler('post', '/bloggers/filter','filter')
+                this.fetchHandler('post', '/bloggers/list','filter')
             },
             //沟通状态
             CommunicationStatus(value) {
                 this.blogCommunication = value
                 // this.getBlogger()
-                this.fetchHandler('post', '/bloggers/filter','filter')
+                this.fetchHandler('post', '/bloggers/list','filter')
             },
             fetchHandler(methods, url, type) {
                 
                 let _this = this,
                     fetchData = this.fetchData,
                     newUrl
-                if(url == '/stars/filter'){
+                if(url == '/stars/list'){
                      this.fetchData.include = 'include=broker,creator,contracts'
                     if (type == 'filter') {
                         fetchData = this.customizeCondition
@@ -1144,18 +1161,18 @@
                         }
                         newUrl = url + '?' + this.fetchData.include + keyword + sign_contract_status + communication_status+page
                     }    
-                }else if(url == '/bloggers/filter'){
-                    this.fetchData.include = 'include=creator,affixes,publicity,operatelogs,contracts'
+                }else if(url == '/bloggers/list'){
+                    
                     if (type == 'filter') {
                         fetchData = this.customizeCondition
                         let keyword, status, communication_status,page
                         if (this.blogName) {
                             keyword = '&name='+this.blogName
                         } else {
-                            keyword = '&name='
+                            keyword = ''
                         }
                         if (this.blogStatus) {
-                            status = '&status='+this.blogStatus
+                            status = '&sign_contract_status='+this.blogStatus 
                         } else {
                             status = ''
                         }
@@ -1169,9 +1186,8 @@
                         } else {
                             page = ''
                         }
-                        newUrl = url + '?' + this.fetchData.include + keyword + status + communication_status+page
+                        newUrl = url + '?' +  keyword + status + communication_status+page
                 }
-                // console.log(this.fetchData)
                
                 }
                 // this.exportParams = {
@@ -1181,70 +1197,27 @@
                 // }
                 fetch(methods, newUrl || url, fetchData).then((response) => { 
                         this.canShow = true
-                         if (url == '/stars/filter') {
+                         if (url == '/stars/list') {
+                         _this.isLoading = false;
                         _this.artistsInfo = response.data
+                        
                         _this.current_page = response.meta.pagination.current_page;
                         _this.total = response.meta.pagination.total;
                         _this.total_pages = response.meta.pagination.total_pages;
                         _this.cleanUp = true
-                    } else if (url == '/bloggers/filter') {
+                    } else if (url == '/bloggers/list') {
+                         _this.isLoading = false;
                         _this.bloggerInfo = response.data;
                         _this.Bcurrent_page = response.meta.pagination.current_page;
                         _this.Btotal = response.meta.pagination.total;
                         _this.Btotal_pages = response.meta.pagination.total_pages;
                     }
-                    // _this.clientsInfo = response.data
-                    // _this.total = response.meta.pagination.total;
-                    // _this.current_page = response.meta.pagination.current_page;
-                    // _this.total_pages = response.meta.pagination.total_pages;
-                    // _this.isLoading = false;
                 })
             },
             customize: function (value) {
-                // let _this = this
-                // let data = {
-                //     include: 'type,creator,affixes,publicity,operatelogs,contracts',
-
-                // }
-                // if (this.blogStatus) {
-                //     data.status = '&status='+this.blogStatus
-                // }else{
-                //     data.status = ''
-                // }
-                // //沟通状态
-                // if (this.blogCommunication) {
-                //     data.communication_status = '&communication_status='+this.blogCommunication
-                // }else{
-                //     data.communication_status = ''
-                // }
-                // //博主名称
-                // if (this.blogName) {
-                //     data.name = '&name='+this.blogName
-                // }else{
-                //     data.name = ''
-                // }
-                // data.page = '&page='+this.current_page
-                console.log(value)
                 this.customizeCondition = value  
-                this.customizeCondition.sign_contract_status = this.currentpagestatus
-                console.log(this.customizeContentType)
-                this.fetchHandler('post', '/'+this.customizeContentType+'/filter','filter')
-                // fetch('post', this.customizeContentType +'/filter?include=creator,affixes,publicity,operatelogs,contracts'+data.status +data.communication_status +data.name ,value).then(function (params) {
-
-                //     if (_this.customizeContentType == 'stars') {
-                //         _this.artistsInfo = params.data
-                //         _this.current_page = params.meta.pagination.current_page;
-                //         _this.total = params.meta.pagination.total;
-                //         _this.total_pages = params.meta.pagination.total_pages;
-                //         _this.cleanUp = true
-                //     } else if (_this.customizeContentType == 'bloggers') {
-                //         _this.bloggerInfo = params.data;
-                //         _this.Bcurrent_page = params.meta.pagination.current_page;
-                //         _this.Btotal = params.meta.pagination.total;
-                //         _this.Btotal_pages = params.meta.pagination.total_pages;
-                //     }
-                    
-                // })
+                this.fetchHandler('post', '/'+this.customizeContentType+'/list','filter')
+         
             },
             changeArtistStatus: function (value) {
                 this.artistStatus = value
@@ -1433,24 +1406,31 @@
                 let organization_id = JSON.parse(Cookies.get('user')).organization_id
                 if (organization_id == 411) {
                     this.isShow = true
+                     this.getArtists() 
+         
                 } else if (organization_id == 412) {
                     this.isShow = false
+                    this.getBlogger()
+                    this.getBlogType() //获取博主类型
                 }
             },
             tab: function (value) {
                 this.selectedArtistsArr = []
                 if (value == 'start') {
-                    this.$refs.customize.setValue({conditions:[]})
-                    this.customizeCondition = {}
-                    this.getArtists()                  
+                    if(this.customizeCondition.conditions){
+                         this.$refs.customize.reset()
+                     }
                     this.isShow = true
-                    this.$refs.customize.reset()
-                } else if (value == 'bloggers') {
-                    this.$refs.customize.setValue({conditions:[]})
-                    this.customizeCondition  = {}
-                    this.getBlogger()
+                    this.getArtists()                
+                    
+                } else if (value == 'bloggers') { 
+                     if(this.customizeCondition.conditions){
+                         this.$refs.customize.reset()
+                     }
                     this.isShow = false
-                    this.$refs.customize.reset()
+                    this.getBlogger()
+                    this.getBlogType() //获取博主类型
+                    
                 }
                 
             },

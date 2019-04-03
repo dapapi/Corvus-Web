@@ -4,7 +4,7 @@
         <div class="page-header page-header-bordered">
             <h1 class="page-title d-inline">艺人详情</h1>
 
-            <div class="page-header-actions dropdown show task-dropdown float-right">
+            <div class="page-header-actions dropdown show task-dropdown float-right" v-if="canShow">
                 <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" id="taskDropdown"
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
@@ -481,15 +481,6 @@
                                                                         @change="(value) => changeArtistBaseInfo(value, 'sign_contract_other')"></ConditionalInput>
                                                 </div>
                                             </div>
-                                            
-                                                <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height"
-                                                     style="height:64px;">
-                                                    <div class="col-md-3 float-left text-right pl-0">地区</div>
-                                                    <div class="col-md-9 float-left font-weight-bold">
-                                                        <EditInput :content="artistInfo.star_location" :is-edit="isEdit"
-                                                                   @change="(value) => changeArtistBaseInfo(value, 'star_location')"></EditInput>
-                                                    </div>
-                                                </div>
                                                 <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                                     <div class="col-md-3 float-left text-right pl-0">潜在风险点</div>
                                                     <div class="col-md-9 float-left font-weight-bold"
@@ -637,7 +628,7 @@
                                                     </div>
                                                 </div>
 
-                                            
+
 
                                             <h5 class="pl-15 pt-10 clearfix col-md-12 float-left">更新信息</h5>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
@@ -818,7 +809,7 @@
                         <div class="modal-header">
                             <div style="order: 2">
                             <span class="pointer-content hover-content mr-4" data-toggle="modal"
-                                  data-target="#addLinkage">关联</span>
+                                  data-target="#addLinkage" @click="getRelationDate">关联</span>
                                 <i class="iconfont icon-guanbi pointer-content" aria-hidden="true"
                                    data-dismiss="modal"></i>
                             </div>
@@ -1304,7 +1295,7 @@ export default {
       current_page: 1,
       total_pages: 1,
       allTaskList: [], // 获取任务列表
-      threeProjectList: [], // 获取三个项目
+    //   threeProjectList: [], // 获取三个项目
       expense_type: 0,
       incomesum: 0, // 账单 -- 收入总和
       expendituresum: 0, // 账单 -- 支出总和
@@ -1368,14 +1359,14 @@ export default {
     ApprovalGreatModule,
   },
   mounted() {
-    this.getTaskType();
+
     this.getCalendar();
-    this.draw();
-    this.getArtistsBill();
+    // this.draw();
+    // this.getArtistsBill();
     this.getTaskDate();
-    this.getProjectList();
-    this.selectProjectLinkage();
-    this.getResources();
+    // this.getProjectList();
+
+
     this.user = JSON.parse(Cookies.get('user'));
     this.$store.commit('changeNewPrincipal', {
       name: this.user.nickname,
@@ -1397,18 +1388,21 @@ export default {
             toastr.error('当前用户没有权限新增作品');
             return;
         }
-        $('#addWork').modal('show') 
+        $('#addWork').modal('show')
       },
     // 获取艺人信息
     getArtist() {
       this.artistId = this.$route.params.id;
 
       const data = {
-        include: 'publicity,broker,creator,tasks,affixes,trails.project.principal,works,trails.client,relate_project_bills_resource,',
+        include: 'publicity,broker,creator,tasks,affixes',
       };
       fetch('get', `/stars/${this.artistId}`, data).then((response) => {
-        this.canShow = true
         this.artistInfo = response.data;
+        this.isLoading = false;
+        setTimeout(() => {
+            this.canShow = true
+        }, 200);
         console.log(this.artistInfo)
         this.artistName = response.data.name;
         if (response.data.star_risk_point == 'privacy') {
@@ -1438,9 +1432,9 @@ export default {
         }
         this.uploadUrl = this.artistInfo.avatar;
         this.artistTasksInfo = response.data.tasks.data;// 任务数据
-        this.artistWorksInfo = response.data.works.data;// 作品数据
+        // this.artistWorksInfo = response.data.works.data;// 作品数据
         this.affixes = response.data.affixes.data;
-        this.isLoading = false;
+
       });
     },
     getProject(page = 1) {
@@ -1480,7 +1474,7 @@ export default {
                         sendData[key].push(data[key][i].id)
                     }
                 }
-            
+
                 fetch('post', `/stars/${this.$route.params.id}/privacyUser`, sendData).then(function () {
                     toastr.success('隐私设置成功')
                     $('#addPrivacy').modal('hide')
@@ -1492,7 +1486,6 @@ export default {
                 };
                 fetch('get', `/privacyUsers?include=creator`, data).then(response => {
                     let allPrivacyUsers = response.data;
-                    console.log(allPrivacyUsers)
                     this.$store.state.birthdayInfo = [];
                     this.$store.state.star_risk_pointInfo = []
                     this.$store.state.phoneInfo = []
@@ -1501,19 +1494,19 @@ export default {
                     if (allPrivacyUsers) {
                         for (let i = 0; i < allPrivacyUsers.length; i++) {
                             if(allPrivacyUsers[i].field == 'birthday'){
-                                this.$store.state.birthdayInfo.push(allPrivacyUsers[i].creator.data)  
+                                this.$store.state.birthdayInfo.push(allPrivacyUsers[i].creator.data)
                             }
                             if(allPrivacyUsers[i].field == 'star_risk_point'){
-                                this.$store.state.star_risk_pointInfo.push(allPrivacyUsers[i].creator.data)  
+                                this.$store.state.star_risk_pointInfo.push(allPrivacyUsers[i].creator.data)
                             }
                             if(allPrivacyUsers[i].field == 'phone'){
-                                this.$store.state.phoneInfo.push(allPrivacyUsers[i].creator.data)  
+                                this.$store.state.phoneInfo.push(allPrivacyUsers[i].creator.data)
                             }
                             if(allPrivacyUsers[i].field == 'wechat'){
-                                this.$store.state.wechatInfo.push(allPrivacyUsers[i].creator.data)  
+                                this.$store.state.wechatInfo.push(allPrivacyUsers[i].creator.data)
                             }
                             if(allPrivacyUsers[i].field == 'email'){
-                                this.$store.state.emailInfo.push(allPrivacyUsers[i].creator.data)  
+                                this.$store.state.emailInfo.push(allPrivacyUsers[i].creator.data)
                             }
                         }
                     }
@@ -1547,6 +1540,7 @@ export default {
 
     // 获取日历详情
     showScheduleModal(schedule) {
+        this.getResources();
       const data = {
         include: 'calendar,participants,creator,material,affixes,project,task',
       };
@@ -1722,6 +1716,9 @@ export default {
       } else {
         toastr.error('该艺人无对应艺人日历，请先创建艺人日历');
       }
+    },
+    getRelationDate:function(){
+        this.selectProjectLinkage();
     },
     selectProjectLinkage(value) {
       if (!this.allProjectsInfo) {
@@ -1954,6 +1951,7 @@ export default {
     },
     // 获取任务列表
     getTaskList(page = 1) {
+        this.getTaskType();
       fetch('get', `/stars/${this.$route.params.id}/tasks/`, {
         page,
       }).then((response) => {
@@ -1988,12 +1986,12 @@ export default {
       this.selectedDate = value;
       this.$refs.meetingRoom.setDate(value);
     },
-    // 获取三个项目
-    getProjectList() {
-      fetch('get', `/projects/star/${this.$route.params.id}`).then((response) => {
-        this.threeProjectList = response;
-      });
-    },
+    // // 获取三个项目
+    // getProjectList() {
+    //   fetch('get', `/projects/star/${this.$route.params.id}`).then((response) => {
+    //     this.threeProjectList = response;
+    //   });
+    // },
     // 粉丝数据
     draw() {
       const myChart = echarts.init(document.getElementById('myChart'));
@@ -2267,19 +2265,19 @@ export default {
         if (value == 'publicity' && this.artistInfo.powers.edit_publicity !== 'true') {
             toastr.error('当前用户没有权限分配宣传人');
             //  this.$nextTick((params) => {
-            //     $('#distributionBroker').modal('hide')     
+            //     $('#distributionBroker').modal('hide')
             // })
             return;
         }
         if (value == 'broker' && this.artistInfo.powers.edit_broker !== 'true') {
             toastr.error('当前用户没有权限分配经理人');
             // this.$nextTick((params) => {
-            //     $('#distributionBroker').modal('hide')     
+            //     $('#distributionBroker').modal('hide')
             // })
             return;
         }
-        $('#distributionBroker').modal('show')   
-        // $('#distributionBroker').modal('hidden') 
+        $('#distributionBroker').modal('show')
+        // $('#distributionBroker').modal('hidden')
       this.distributionType = value;
       if (this.artistInfo[value].data.length > 0) {
         this.$store.state.participantsInfo = Object.assign([], this.artistInfo[value].data);

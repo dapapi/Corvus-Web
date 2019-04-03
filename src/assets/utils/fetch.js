@@ -52,7 +52,7 @@ axios.interceptors.response.use((res) => {
 },(error) => {
     // console.log(String(error =='Cancel'));
     if (String(error) =='Cancel') {
-        console.log('Request canceled');
+        // console.log('Request canceled');
     } else {
     const {response: {status}} = error
     const {response} = error
@@ -68,7 +68,9 @@ axios.interceptors.response.use((res) => {
         }
     } else if (status === 403) {
         toastr.error(response.data.message)
-    } else {
+    }else if(String(error).indexOf('timeout') !== -1){
+        toastr.error('请求超时请稍后重试');
+    }else {
         toastr.error(response.data.message);
     }
     return Promise.reject(error);
@@ -78,16 +80,27 @@ axios.interceptors.response.use((res) => {
 });
 
 export default function fetch(method = 'post', url, params) {
+    let timeout = setTimeout(() => {
+        $('.neterror').modal('show');
+    }, 10000);
+    if(url === '/pending_sum'){
+        clearTimeout(timeout)
+    }
     return new Promise((resolve, reject) => {
         axios[method](url, method.toLowerCase() === 'get' ? {params} : params)
             .then(response => {
+                clearTimeout(timeout)
                 resolve(response.data);
             }, err => {
+                clearTimeout(timeout)
                 reject(err);
             })
             .catch((error) => {
+                clearTimeout(timeout)
                 if (String(error =='Cancel')) {
-                    console.log('Request canceled');
+                    
+
+                    // console.log('Request canceled');
                 } else {
                     reject(error)
                 }
