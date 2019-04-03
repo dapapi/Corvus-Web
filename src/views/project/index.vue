@@ -234,7 +234,7 @@ export default {
     },
     filterGo:function(){
         this.fetchData.keyword = this.projectKeyword
-        this.fetchHandler('post','/projects/web_filter','filter')
+        this.fetchHandler('post','/projects/filter','filter')
     },
     getProjectSearch: function (type, value) {
         if (type === 'principal_ids') {
@@ -243,7 +243,7 @@ export default {
             this.projectSearchType = value
         }
         // this.getFilterProjects();
-        this.fetchHandler('post','/projects/web_filter','filter')
+        this.fetchHandler('post','/projects/filter','filter')
     },
 
     getFilterProjects (pageNum = 1) {
@@ -342,7 +342,7 @@ export default {
             },
             customize: function (value) {
                 this.customizeCondition = value
-                this.fetchHandler('post','/projects/web_filter','filter')
+                this.fetchHandler('post','/projects/filter','filter')
             },
 
     changeProjectType (value) {
