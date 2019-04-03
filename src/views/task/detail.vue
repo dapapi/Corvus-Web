@@ -827,7 +827,7 @@
                 // 修改任务概况除参与人字段
                 const editTaskInfo = () => {
                     return new Promise((res, rej) => {
-                        fetch('put', '/tasks/' + this.taskId, this.changeInfo).then(() => {
+                        fetch('put', '/tasks/edit/' + this.taskId, this.changeInfo).then(() => {
                             // this.getTask();
                             if (this.changeInfo.principal_id) {
                                 this.taskInfo.principal.data = this.$store.state.principalInfo
