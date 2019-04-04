@@ -1685,7 +1685,7 @@
             },
             getProject() {
                 let data = {
-                    include: 'principal,participants,tasks,creator,fields,trail.expectations.broker,trail.expectations.publicity,trail.client,relate_tasks,relate_projects,type',
+                    include: 'principal,participants,creator,trail.expectations.broker,trail.expectations.publicity,trail.client,relate_tasks,relate_projects,type',
                 };
                 fetch('get', '/projects/' + this.projectId, data).then(response => {
                     this.canShow = true

@@ -176,12 +176,14 @@ export default {
                 canShow:false,
             }
         },
-
+created() {
+    this.getMyProjects('my_principal');
+    
+},
   mounted() {
     // this.getClients();
     // this.getStars();
     // this.getFilterProjects();
-    this.getMyProjects('my_principal');
     // this.getField();
     if (this.userList.length > 0) {
       for (let i = 0; i < this.userList.length; i++) {

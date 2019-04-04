@@ -349,9 +349,10 @@ export default {
       this.memberList = this.userList;
     }
     this.getCurrentUser();
+    this.getSales();
+
   },
   mounted() {
-    this.getSales();
     // this.getClients();
     this.getStars();
     // this.getIndustries();

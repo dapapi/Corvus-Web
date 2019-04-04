@@ -196,8 +196,11 @@
                 'department',
             ])
         },
+        created() {
+             this.getTasks();
+        },
         mounted() {
-            this.getTasks();
+           
             this.user = JSON.parse(Cookies.get('user'))
             
             // 负责人默认值的设置

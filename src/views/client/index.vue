@@ -263,10 +263,11 @@
                 // canAdd: false, // 可以新增吗
             }
         },
-
+        created() {
+            this.getClients();            
+        },
         mounted() {
             this.getField()
-            this.getClients();
             this.user = JSON.parse(Cookies.get('user'))
             // 清除负责人默认值的设置
             this.clearDefaultPrincipal()
