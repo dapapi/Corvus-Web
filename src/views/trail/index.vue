@@ -70,8 +70,8 @@
                             </td>
                             <td class="">{{ trail.fee }}元</td>
                             <td>
-                                <template v-if="trail.principal">
-                                    {{ trail.principal.data.name }}
+                                <template v-if="trail.principal_name">
+                                    {{ trail.principal_name.name }}
                                 </template>
                             </td>
                             <td>
@@ -484,7 +484,11 @@ export default {
       let _this = this,
         fetchData = this.fetchData,
         newUrl;
-      this.fetchData.include = 'include=principal,client,contact,recommendations,expectations';
+    if(methods === 'get'){
+        this.fetchData.include = 'include=client,expectations';
+    }else{
+        this.fetchData.include = 'include=principal,client,contact,recommendations,expectations';
+    }
       if (type == 'filter') {
         fetchData = this.customizeCondition;
         let keyword, 
@@ -539,7 +543,7 @@ export default {
     // },
             getSales (pageNum = 1) {
                 let _this = this;
-                this.fetchHandler('post', '/trails/filter', 'filter', pageNum)
+                this.fetchHandler('get', '/trails', 'filter', pageNum)
                 // let data = {
                 //     page: pageNum,
                 //     include: 'principal,client,expectations',
