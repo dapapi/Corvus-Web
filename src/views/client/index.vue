@@ -285,7 +285,7 @@
                     include: 'principal',
                 };
 
-                let url = '/clients'
+                let url = '/clients/filter'
 
                 if (this.companyName) {
                     params.keyword = this.companyName
@@ -296,11 +296,11 @@
                 if (this.clientPrincipalIdSearch.length > 0) {
                     params.principal_ids = this.clientPrincipalIdSearch
                 }
-                if (this.companyName || this.clientLevelSearch || this.clientPrincipalIdSearch.length > 0) {
-                    url = '/clients/filter'
-                }
+                // if (this.companyName || this.clientLevelSearch || this.clientPrincipalIdSearch.length > 0) {
+                //     url = '/clients/filter'
+                // }
 
-                fetch('get', url, params).then(response => {
+                fetch('post', url, params).then(response => {
                     this.canShow = true
                     this.clientsInfo = response.data;
                     this.current_page = response.meta.pagination.current_page;
@@ -368,8 +368,7 @@
                     desc: this.clientRemark
                 };
 
-                fetch('post', '/clients', data).then(response => {
-                    
+                fetch('post', '/clients', data).then(response => {    
                     this.isAddButtonDisable = false;
                     toastr.success('创建成功');
                     $("#addClient").modal("hide");
