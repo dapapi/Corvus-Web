@@ -231,7 +231,7 @@ created() {
     },
     getMyProjects (value) {
                 this.getProjectStatus = value;
-                this.fetchHandler('post','/projects/filter','filter')
+                this.fetchHandler('post','/projects/web_filter','filter')
                 // this.getFilterProjects();
     },
     filterGo:function(){
