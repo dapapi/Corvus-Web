@@ -355,7 +355,7 @@
 
         </div>
 
-        <customize-filter :data="customizeContentType==='stars'?customizeInfoStars:customizeInfoBloggers"
+        <customize-filter v-if="canShow" :data="customizeContentType==='stars'?customizeInfoStars:customizeInfoBloggers"
                           @change="customize" ref='customize' :isint="true"></customize-filter>
 
         <div  class="site-action" data-plugin="actionBtn" data-toggle="modal" @click='rightChecker("博主","addBolgger","blogger")' v-if="!isShow && canShow">
@@ -487,7 +487,7 @@
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="emptyBolgger">取消
                         </button>
-                        <button class="btn btn-primary" type="submit" @click="addBolgger">确定</button>
+                        <button class="btn btn-primary" type="submit" @click="addBolgger" :disable="isAddButtonDisable">确定</button>
                     </div>
 
                 </div>
@@ -720,7 +720,7 @@
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="cancleData">取消
                         </button>
-                        <button class="btn btn-primary" type="submit" @click="addArtist">确定</button>
+                        <button class="btn btn-primary" type="submit" @click="addArtist" :disable="isAddButtonDisable">确定</button>
                     </div>
 
                 </div>
@@ -947,6 +947,7 @@
                 fetchData:{},
                 customizeCondition: {},
                 canShow:false,
+                isAddButtonDisable: false,
                 // currentStatus:'start'
             }
         },
@@ -978,16 +979,16 @@
             getStarsField() {
                 let _this = this
                 fetch('get', '/stars/filter_fields').then((params) => {
+                    this.canShow = true
                     _this.customizeInfoStars = params.data
                      $('.selectpicker').selectpicker('refresh') 
-                    // this.canShow = true
                 })
                
             },
             getBloggerField() {
                 let _this = this
                 fetch('get', '/bloggers/filter_fields').then((params) => {
-                    // this.canShow = true
+                    this.canShow = true
                     _this.customizeInfoBloggers = params.data
                      $('.selectpicker').selectpicker('refresh') 
                 })
@@ -1042,6 +1043,8 @@
                     _this.isLoading = false;
                     _this.selectAllStars = false;
                     _this.selectedArtistsArr = [];
+                }).catch(function(){
+                    _this.isLoading = false;
                 })
             },
             getBlogger: function (page = 1, signStatus) {
@@ -1086,6 +1089,8 @@
                     _this.isLoading = false;
                     _this.selectAllBlogger = false;
                     _this.selectedArtistsArr = [];
+                }).catch(function(){
+                    _this.isLoading = false;
                 });
             },
             deleteAffix: function (index) {
@@ -1196,6 +1201,7 @@
                 //     principal_ids: this.fetchData.communication_status,
                 // }
                 fetch(methods, newUrl || url, fetchData).then((response) => { 
+                        this.canShow = true
                          if (url == '/stars/list') {
                          _this.isLoading = false;
                         _this.artistsInfo = response.data
@@ -1211,8 +1217,6 @@
                         _this.Btotal = response.meta.pagination.total;
                         _this.Btotal_pages = response.meta.pagination.total_pages;
                     }
-                        _this.canShow = true
-
                 })
             },
             customize: function (value) {
@@ -1299,6 +1303,7 @@
                     toastr.error('请填写签约公司');
                     return false
                 }
+                this.isAddButtonDisable = true;
                 let platform = this.platformType.join(',');
                 let data = {
                     //微博,抖音,小红书
@@ -1317,6 +1322,7 @@
                     avatar: this.uploadUrl
                 };
                 fetch('post', '/bloggers', data).then(function (response) {
+                    _this.isAddButtonDisable = false;
                     toastr.success('创建成功');
                     $('#addBolgger').modal('hide');
                     _this.$router.push({path: 'blogger/' + response.data.id});
@@ -1576,6 +1582,7 @@
                     toastr.error('请上传附件');
                     return false
                 }
+                this.isAddButtonDisable = true;
                 let platform = this.platformType.join(',');
                 let data = {
                     name: this.artistName,//名字
@@ -1608,6 +1615,7 @@
                 }
                 let _this = this;
                 fetch('post', '/stars', data).then(function (response) {
+                    _this.isAddButtonDisable = false;
                     toastr.success('创建成功');
                     $('#addArtist').modal('hide');
                     // _this.$router.push({path: '/artists/' + response.data.id});

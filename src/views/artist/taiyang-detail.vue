@@ -45,9 +45,9 @@
                                 </div>
                                 <div class="font-weight-bold float-left col-md-10 pl-0" v-if="artistInfo.broker"
                                      style="padding-top:1.5px">
-                                    <span v-for="(broker,index) in artistInfo.broker.data" :key="index" class="mr-10">
-                                        <span>{{broker.department.name}}</span>
-                                        <span v-if="broker.department.name">-</span>
+                                    <span v-for="(broker,index) in artistInfo.broker" :key="index" class="mr-10">
+                                        <span>{{broker.department}}</span>
+                                        <span v-if="broker.department">-</span>
                                         <span>{{ broker.name }}</span>
 
                                     </span>
@@ -59,10 +59,10 @@
                                 </div>
                                 <div class="font-weight-bold float-left col-md-10 pl-0" v-if="artistInfo.publicity"
                                      style="padding-top:2px">
-                                    <span v-for="(publicity,index) in artistInfo.publicity.data" :key="index"
+                                    <span v-for="(publicity,index) in artistInfo.publicity" :key="index"
                                           class="mr-10">
-                                        <span>{{publicity.department.name}}</span>
-                                        <span v-if="publicity.company">-</span>
+                                        <span>{{publicity.department}}</span>
+                                        <span v-if="publicity.department">-</span>
                                         <span>{{ publicity.name }}</span>
 
                                     </span>
@@ -80,7 +80,7 @@
                             <div class="col-md-3 float-left">
                                 {{item.title}}
                             </div>
-                            <div class="col-md-2 float-left">{{item.principal.data.name}}</div>
+                            <div class="col-md-2 float-left">{{item.principal_name}}</div>
                             <div class="col-md-4 float-left">{{item.end_at}}</div>
                             <div class="col-md-3 float-left">
                                 <template v-if="item.status === 1"><span style="color:#FF9800">进行中</span></template>
@@ -634,7 +634,7 @@
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
                                                 <div class="col-md-3 float-left text-right pl-0">录入人</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
-                                                    {{ artistInfo.creator.data.name }}
+                                                    {{ artistInfo.creator.name}}
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
@@ -649,7 +649,7 @@
                                                     <template v-if="artistInfo.last_updated_user">
                                                         {{artistInfo.last_updated_user}}
                                                     </template>
-                                                    <template v-else>{{ artistInfo.creator.data.name }}</template>
+                                                    <template v-else>{{ artistInfo.creator.name}}</template>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
@@ -1394,10 +1394,10 @@ export default {
     getArtist() {
       this.artistId = this.$route.params.id;
 
-      const data = {
-        include: 'publicity,broker,creator,tasks,affixes',
-      };
-      fetch('get', `/stars/${this.artistId}`, data).then((response) => {
+    //   const data = {
+    //     include: 'publicity,broker,creator,tasks,affixes',
+    //   };
+      fetch('get', `stars/detail/${this.artistId}`).then((response) => {
         this.artistInfo = response.data;
         this.isLoading = false;
         setTimeout(() => {
@@ -1431,7 +1431,10 @@ export default {
           this.artistInfo.email = response.data.email;
         }
         this.uploadUrl = this.artistInfo.avatar;
-        this.artistTasksInfo = response.data.tasks.data;// 任务数据
+        if(response.data.tasks){
+            this.artistTasksInfo = response.data.tasks;// 任务数据
+        }
+        
         // this.artistWorksInfo = response.data.works.data;// 作品数据
         this.affixes = response.data.affixes.data;
 
@@ -2279,8 +2282,8 @@ export default {
         $('#distributionBroker').modal('show')
         // $('#distributionBroker').modal('hidden')
       this.distributionType = value;
-      if (this.artistInfo[value].data.length > 0) {
-        this.$store.state.participantsInfo = Object.assign([], this.artistInfo[value].data);
+      if (this.artistInfo[value].length > 0) {
+        this.$store.state.participantsInfo = Object.assign([], this.artistInfo[value]);
       }
     },
     // 分配经理人和分配宣传人
@@ -2294,19 +2297,21 @@ export default {
 
 
       const personInfo = this.$store.state.participantsInfo;
-      const oldPersonInfo = this.artistInfo[this.distributionType].data;
+      const oldPersonInfo = this.artistInfo[this.distributionType];
       // todo 删除和新增的数据有问题
-      if (this.artistInfo[this.distributionType].data.length > 0) {
-        for (let i = 0; i < this.artistInfo[this.distributionType].data.length; i++) {
-          if (personInfo.map(item => item.id).indexOf(this.artistInfo[this.distributionType].data[i].id) === -1) {
-            data.del_person_ids.push(this.artistInfo[this.distributionType].data[i].id);
+      if (this.artistInfo[this.distributionType].length > 0) {
+        for (let i = 0; i < this.artistInfo[this.distributionType].length; i++) {
+
+          if (personInfo.map(item => item.id).indexOf(this.artistInfo[this.distributionType][i].id) === -1) {
+           
+            data.del_person_ids.push(this.artistInfo[this.distributionType][i].id);
           }
         }
       }
       for (let i = 0; i < this.$store.state.participantsInfo.length; i++) {
         data.person_ids.push(this.$store.state.participantsInfo[i].id);
       }
-
+  
       if (this.distributionType === 'broker') {
         // data.type = 3
         toast = '分配经理人成功',
