@@ -2045,8 +2045,20 @@ export default {
                 } else {
                     this.artistInfo.sign_contract_other = 0
                 }
+                this.updateStar_xiaohongshu_infos={
+                    url:this.artistInfo.xiaohongshu_url,
+                    avatar:this.artistInfo.xiaohongshu_fans_num
+                }
+                this.updateStar_weibo_infos ={
+                     url:this.artistInfo.weibo_url,
+                    avatar:this.artistInfo.weibo_fans_num
+                }
+                this.updateStar_douyin_infos ={
+                     url:this.artistInfo.douyin_id,
+                    avatar: this.artistInfo.douyin_fans_num
+                }
                 this.changeArtistInfo = {
-                    nickname: this.Namevalue,
+                    nickname: this.artistInfo.nickname,
                     type_id: this.artistInfo.type,
                     communication_status: this.artistInfo.communication_status,
                     intention: this.artistInfo.intention,
@@ -2204,27 +2216,27 @@ export default {
             },
             //微博地址
             changeArtistWeibo_url(value) {
-                this.updateStar_weibo_infos.url = value
+                this.artistInfo.weibo_url = value
             },
             //微博粉丝
             changeArtistWeibo_fans_num(value) {
-                this.updateStar_weibo_infos.avatar = value
+                this.artistInfo.weibo_fans_num = value
             },
             //抖音id
             changeArtistDouyin_id(value) {
-                this.updateStar_douyin_infos.url = value
+                this.artistInfo.douyin_id = value
             },
             //抖音粉丝数
             changeArtistDouyin_fans_num(value) {
-                this.updateStar_douyin_infos.avatar = value
+                this.artistInfo.douyin_fans_num = value
             },
             //小红书地址
             changeArtistXiaohongshu_url(value) {
-                this.updateStar_xiaohongshu_infos.url = value
+                this.artistInfo.xiaohongshu_url = value
             },
             //小红书粉丝数
             changeArtistXiaohongshu_fans_num(value) {
-                this.updateStar_xiaohongshu_infos.avatar = value
+                this.artistInfo.xiaohongshu_fans_num = value
             },
             //备注
             changeArtistDesc (value) {
