@@ -32,7 +32,7 @@
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                         <li class="nav-item" role="presentation" @click="getMyTasks()">
-                            <a class="nav-link active"
+                            <a class="nav-link"
                                data-toggle="tab"
                                href="#forum-task"
                                aria-controls="forum-base"
@@ -40,7 +40,7 @@
                                role="tab">所有任务</a>
                         </li>
                         <li class="nav-item" role="presentation" @click="getMyTasks(3)">
-                            <a class="nav-link"
+                            <a class="nav-link active"
                                data-toggle="tab"
                                href="#forum-task"
                                aria-controls="forum-present"
@@ -96,33 +96,12 @@
                                     {{ task.title }}
                                 </td>
                                 <td>
-                                     <template v-if="my || searchDepartment || searchUser">
-                                        {{task.resource ? task.resource.data.resource.data.title : ''}}
-                                        <template v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.name">
-                                            - {{ task.resource.data.resourceable.data.name }}
-                                        </template>
-                                        <template v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.nickname">
-                                            - {{ task.resource.data.resourceable.data.nickname }}
-                                        </template>
-                                        <template v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.title">
-                                            - {{ task.resource.data.resourceable.data.title }}
-                                        </template>
-                                        <template v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.company">
-                                            - {{ task.resource.data.resourceable.data.company }}
-                                        </template>
-                                    </template>
-                                    <template v-if="task.resource_name">
-                                        {{ task.resource_name.name }} - {{ task.resource_type.title }}
+                                    <template v-if="task.resource_type">
+                                        {{ task.resource_type }} - {{ task.resource_name }}
                                     </template>
                                 </td>
                                 <!-- <td>暂无</td> -->
                                 <td>
-                                    <template v-if="my || searchDepartment || searchUser">
-                                        {{ task.type ? task.type.data ? task.type.data.title : '' : '' }}
-                                    </template>
-                                    <template v-else>
-                                        {{ task.title }}
-                                    </template>
                                     {{ task.type_name }}
                                 </td>
                                 <td>
@@ -132,10 +111,6 @@
                                     <template v-if="task.status === 4"><span style="color:#F44336">延期</span></template>
                                 </td>
                                 <td>
-                                    <template v-if="task.principal && (my || searchDepartment || searchUser)">{{ task.principal.data.name }}</template>
-                                    <template v-else>
-                                        {{ task.name }}
-                                    </template>
                                     {{ task.principal_name }}
                                 </td>
                                 <td>{{ task.end_at }}</td>
@@ -204,7 +179,7 @@
                 user: {}, // 个人信息
                 isLoading: true,
                 priorityArr: config.priorityArr,
-                my: '',//tasks 筛选  3我负责的 2 我参与的 1我创建的 4我分配的
+                my: 3,//tasks 筛选  3我负责的 2 我参与的 1我创建的 4我分配的
                 linkCurrentPage: 2, // 关联资源当前页数
                 linkTotalPage: 1, // 关联资源总页数
                 linkCode: '', // 关联资源父数据的code
@@ -253,11 +228,6 @@
                 }
 
                 let url = '/task/all';
-                if (this.my || this.searchDepartment || this.searchUser) {
-                    params.include = 'principal,pTask,tasks,resource.resourceable,resource.resource,participants'
-                    url = '/tasks'
-                }
-
 
                 if (this.taskNameSearch) {
                     params.keyword = this.taskNameSearch;
@@ -271,15 +241,9 @@
                 fetch('get', url, params).then((response) => {
                     this.canShow = true
                     this.tasksInfo = response.data;
-                      if (this.my|| this.searchDepartment || this.searchUser) {
-                        this.current_page = response.meta.pagination.current_page;
-                        this.total = response.meta.pagination.total;
-                        this.total_pages = response.meta.pagination.total_pages;
-                    } else {
-                        this.current_page = response.current_page;
-                        this.total = response.total;
-                        this.total_pages = response.per_page != 0 ? Math.ceil(response.total / response.per_page) : 1;
-                    }
+                    this.current_page = response.current_page;
+                    this.total = response.total;
+                    this.total_pages = response.per_page != 0 ? Math.ceil(response.total / response.per_page) : 1;
                     this.isLoading = false;
                 });
             },
