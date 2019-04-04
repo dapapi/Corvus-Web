@@ -1968,6 +1968,7 @@ export default {
             item.status = 4;
           }
         });
+       
       });
     },
     getTaskDate() {
@@ -2282,8 +2283,8 @@ export default {
         $('#distributionBroker').modal('show')
         // $('#distributionBroker').modal('hidden')
       this.distributionType = value;
-      if (this.artistInfo[value].data.length > 0) {
-        this.$store.state.participantsInfo = Object.assign([], this.artistInfo[value].data);
+      if (this.artistInfo[value].length > 0) {
+        this.$store.state.participantsInfo = Object.assign([], this.artistInfo[value]);
       }
     },
     // 分配经理人和分配宣传人
@@ -2297,19 +2298,22 @@ export default {
 
 
       const personInfo = this.$store.state.participantsInfo;
-      const oldPersonInfo = this.artistInfo[this.distributionType].data;
+      const oldPersonInfo = this.artistInfo[this.distributionType];
       // todo 删除和新增的数据有问题
-      if (this.artistInfo[this.distributionType].data.length > 0) {
-        for (let i = 0; i < this.artistInfo[this.distributionType].data.length; i++) {
-          if (personInfo.map(item => item.id).indexOf(this.artistInfo[this.distributionType].data[i].id) === -1) {
-            data.del_person_ids.push(this.artistInfo[this.distributionType].data[i].id);
+      if (this.artistInfo[this.distributionType].length > 0) {
+        for (let i = 0; i < this.artistInfo[this.distributionType].length; i++) {
+           
+
+          if (personInfo.map(item => item.id).indexOf(this.artistInfo[this.distributionType][i].id) === -1) {
+           
+            data.del_person_ids.push(this.artistInfo[this.distributionType][i].id);
           }
         }
       }
       for (let i = 0; i < this.$store.state.participantsInfo.length; i++) {
         data.person_ids.push(this.$store.state.participantsInfo[i].id);
       }
-
+  
       if (this.distributionType === 'broker') {
         // data.type = 3
         toast = '分配经理人成功',

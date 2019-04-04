@@ -10,7 +10,7 @@
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end">
                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
-                    @click="distributionPerson('publicity')">分配制作人</a>
+                    @click="distributionPerson('produser')">分配制作人</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
                     <a class="dropdown-item" role="menuitem" @click="contractlist(artistInfo.sign_contract_status)">
                         <template v-if="artistInfo.sign_contract_status == 1">签约</template>
@@ -38,10 +38,10 @@
                                 <div class="float-left pl-0 pr-2 col-md-12 mr-20">
                                     <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>制作人
                                     <span class="font-weight-bold pr-10"
-                                          style="padding-top:1.5px" v-if="artistInfo.publicity">
-                                        <span v-for="(item,index) in artistInfo.publicity.data" :key="index"
+                                          style="padding-top:1.5px" v-if="artistInfo.produser">
+                                        <span v-for="(item,index) in artistInfo.produser" :key="index"
                                               class="pl-10">
-                                            <span>{{item.department.data.name}}</span>
+                                            <span>{{item.department}}</span>
                                             <span v-if="item.department">-</span>
                                             <span>{{item.name}}</span>
                                         </span>
@@ -82,7 +82,7 @@
                         <div class="clearfix example taskshow" v-for="(task,index) in tasksInfo" :key="index"
                              @click="JumpDetails(task.id)">
                             <div class="col-md-3 float-left">{{task.title}}</div>
-                            <div class="col-md-2 float-left">{{task.principal.data.name}}</div>
+                            <div class="col-md-2 float-left">{{task.principal_name}}</div>
                             <div class="col-md-4 float-left">{{task.end_at}}</div>
                             <div class="col-md-3 float-left">
                                 <template v-if="task.status === 1"><span style="color:#FF9800">进行中</span></template>
@@ -468,7 +468,7 @@
                                                 <div class="col-md-4 float-left text-right pl-0">类型</div>
                                                 <div class="col-md-8 float-left font-weight-bold"
                                                      v-if="artistInfo.type">
-                                                    <EditSelector :content="artistInfo.type.data.id"
+                                                    <EditSelector :content="artistInfo.type"
                                                                   :options="artistTypeArr"
                                                                   :is-edit="isEdit"
                                                                   @change="changArtistType"></EditSelector>
@@ -1388,7 +1388,7 @@ export default {
                 fetch('get', '/bloggers/detail/' + this.artistId).then(response => {
                     this.canShow = true
                     this.artistInfo = response.data;
-                    console.log(this.artistInfo )
+                    console.log(this.artistInfo)
                     this.uploadUrl = _this.artistInfo.avatar;
                     this.artistName = response.data.nickname;
                     if (this.artistInfo.intention) {
@@ -1402,7 +1402,7 @@ export default {
                         this.artistInfo.sign_contract_other = 2
                     }
                     if (response.data.tasks.length>0) {
-                        this.tasksInfo = response.data.tasks.data
+                        this.tasksInfo = response.data.tasks
 
                     }
                     //任务数据
@@ -1921,8 +1921,8 @@ export default {
                 }
                 $('#distributionproducer').modal('show')
                 this.distributionType = value;
-                if (this.artistInfo[value].data.length > 0) {
-                    this.$store.state.participantsInfo = Object.assign([], this.artistInfo[value].data)
+                if (this.artistInfo[value].length > 0) {
+                    this.$store.state.participantsInfo = Object.assign([], this.artistInfo[value])
                 }
             },
     abrogate () {
@@ -1937,17 +1937,17 @@ export default {
                 };
                 let personInfo = this.$store.state.participantsInfo;
                 //todo 删除和新增的数据有问题
-                if (this.artistInfo[this.distributionType].data.length > 0) {
-                    for (let i = 0; i < this.artistInfo[this.distributionType].data.length; i++) {
-                        if (personInfo.map(item => item.id).indexOf(this.artistInfo[this.distributionType].data[i].id) === -1) {
-                            data.del_person_ids.push(this.artistInfo[this.distributionType].data[i].id)
+                if (this.artistInfo[this.distributionType].length > 0) {
+                    for (let i = 0; i < this.artistInfo[this.distributionType].length; i++) {
+                        if (personInfo.map(item => item.id).indexOf(this.artistInfo[this.distributionType][i].id) === -1) {
+                            data.del_person_ids.push(this.artistInfo[this.distributionType][i].id)
                         }
                     }
                 }
                 for (let i = 0; i < this.$store.state.participantsInfo.length; i++) {
                     data.person_ids.push(this.$store.state.participantsInfo[i].id)
                 }
-                if (this.distributionType === 'publicity') {
+                if (this.distributionType === 'produser') {
                     toast = '分配制作人成功'
                 }
                 fetch('post', `/bloggers/${this.artistId}/produser`, data).then(() => {
@@ -1995,7 +1995,8 @@ export default {
             },
     // 类型
     changArtistType (value) {
-                this.artistInfo.type.data.id = value
+                console.log(value)
+                this.artistInfo.type = value
             },
     // 沟通状态
     changeArtistCommunication (value) {
@@ -2044,10 +2045,21 @@ export default {
                 } else {
                     this.artistInfo.sign_contract_other = 0
                 }
-               
+                this.updateStar_xiaohongshu_infos={
+                    url:this.artistInfo.xiaohongshu_url,
+                    avatar:this.artistInfo.xiaohongshu_fans_num
+                }
+                this.updateStar_weibo_infos ={
+                     url:this.artistInfo.weibo_url,
+                    avatar:this.artistInfo.weibo_fans_num
+                }
+                this.updateStar_douyin_infos ={
+                     url:this.artistInfo.douyin_id,
+                    avatar: this.artistInfo.douyin_fans_num
+                }
                 this.changeArtistInfo = {
-                    nickname: this.Namevalue,
-                    type_id: this.artistInfo.type.data.id,
+                    nickname: this.artistInfo.nickname,
+                    type_id: this.artistInfo.type,
                     communication_status: this.artistInfo.communication_status,
                     intention: this.artistInfo.intention,
                     sign_contract_other: this.artistInfo.sign_contract_other,
@@ -2199,31 +2211,32 @@ export default {
             },
             //昵称
             changArtistName (value) {
-                this.Namevalue = value
+                
+                this.artistInfo.nickname= value
             },
             //微博地址
             changeArtistWeibo_url(value) {
-                this.updateStar_weibo_infos.url = value
+                this.artistInfo.weibo_url = value
             },
             //微博粉丝
             changeArtistWeibo_fans_num(value) {
-                this.updateStar_weibo_infos.avatar = value
+                this.artistInfo.weibo_fans_num = value
             },
             //抖音id
             changeArtistDouyin_id(value) {
-                this.updateStar_douyin_infos.url = value
+                this.artistInfo.douyin_id = value
             },
             //抖音粉丝数
             changeArtistDouyin_fans_num(value) {
-                this.updateStar_douyin_infos.avatar = value
+                this.artistInfo.douyin_fans_num = value
             },
             //小红书地址
             changeArtistXiaohongshu_url(value) {
-                this.updateStar_xiaohongshu_infos.url = value
+                this.artistInfo.xiaohongshu_url = value
             },
             //小红书粉丝数
             changeArtistXiaohongshu_fans_num(value) {
-                this.updateStar_xiaohongshu_infos.avatar = value
+                this.artistInfo.xiaohongshu_fans_num = value
             },
             //备注
             changeArtistDesc (value) {
