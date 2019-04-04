@@ -196,11 +196,11 @@
                 'department',
             ])
         },
-        created() {
-             this.getTasks();
+        created () {
+            this.getTasks();
         },
         mounted() {
-           
+            // this.getTasks();
             this.user = JSON.parse(Cookies.get('user'))
             
             // 负责人默认值的设置
@@ -242,13 +242,12 @@
                     params.type_id = this.taskTypeSearch;
                 }
                 fetch('get', url, params).then((response) => {
+                    this.isLoading = false;
                     this.tasksInfo = response.data;
                     this.current_page = response.current_page;
                     this.total = response.total;
                     this.total_pages = response.per_page != 0 ? Math.ceil(response.total / response.per_page) : 1;
-                    this.isLoading = false;
                     this.canShow = true
-
                 });
             },
             // 任务我的筛选

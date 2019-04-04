@@ -263,11 +263,14 @@
                 // canAdd: false, // 可以新增吗
             }
         },
-        created() {
-            this.getClients();            
+
+        created () {
+            this.getClients();
         },
+
         mounted() {
             this.getField()
+            // this.getClients();
             this.user = JSON.parse(Cookies.get('user'))
             // 清除负责人默认值的设置
             this.clearDefaultPrincipal()
@@ -311,12 +314,16 @@
                 if (this.clientPrincipalIdSearch.length > 0) {
                     params.principal_ids = this.clientPrincipalIdSearch
                 }
+                let type = 'get'
                 if (this.companyName || this.clientLevelSearch || this.clientPrincipalIdSearch.length > 0) {
                     url = '/clients/filter'
                     params.include = 'principal'
+                    type = 'post'
                 }
 
-                fetch('get', url, params).then(response => {
+                fetch(type, url, params).then(response => {
+                    this.isLoading = false;
+                    this.canShow = true
                     this.clientsInfo = response.data;
                     if (this.companyName || this.clientLevelSearch || this.clientPrincipalIdSearch.length > 0) {
                         this.current_page = response.meta.pagination.current_page;
@@ -327,9 +334,8 @@
                         this.total = response.total;
                         this.total_pages = response.per_page != 0 ? Math.ceil(response.total / response.per_page) : 1;
                     }
+                }).catch(() => {
                     this.isLoading = false;
-                    this.canShow = true
-
                 })
             },
 
