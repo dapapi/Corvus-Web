@@ -331,13 +331,14 @@ export default {
                     my:this.getProjectStatus
                 }
                 fetch(methods, newUrl || url, fetchData).then((response) => {
-                    _this.canShow = true
+                    
                     _this.projectsInfo = response.data
                     _this.total = response.meta.pagination.total;
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total_pages = response.meta.pagination.total_pages;
                     _this.cleanUp = true
                     _this.isLoading = false;
+                    _this.canShow = true
                 })
             },
             customize: function (value) {

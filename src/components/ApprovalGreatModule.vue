@@ -85,7 +85,7 @@ export default {
   created() {
   },
   mounted() {
-      $('.modal-simple').click(function(){
+      $('.modal-simple').on('mouseover',function(){
         document.getElementsByTagName('body')[0].classList.add('modal-open');
       })
     const _this = this;

@@ -978,16 +978,16 @@
             getStarsField() {
                 let _this = this
                 fetch('get', '/stars/filter_fields').then((params) => {
-                    this.canShow = true
                     _this.customizeInfoStars = params.data
                      $('.selectpicker').selectpicker('refresh') 
+                    // this.canShow = true
                 })
                
             },
             getBloggerField() {
                 let _this = this
                 fetch('get', '/bloggers/filter_fields').then((params) => {
-                    this.canShow = true
+                    // this.canShow = true
                     _this.customizeInfoBloggers = params.data
                      $('.selectpicker').selectpicker('refresh') 
                 })
@@ -1196,7 +1196,6 @@
                 //     principal_ids: this.fetchData.communication_status,
                 // }
                 fetch(methods, newUrl || url, fetchData).then((response) => { 
-                        this.canShow = true
                          if (url == '/stars/list') {
                          _this.isLoading = false;
                         _this.artistsInfo = response.data
@@ -1212,6 +1211,8 @@
                         _this.Btotal = response.meta.pagination.total;
                         _this.Btotal_pages = response.meta.pagination.total_pages;
                     }
+                        this.canShow = true
+
                 })
             },
             customize: function (value) {

@@ -254,7 +254,7 @@
             this.getStars();
         },
         mounted(){
-            $('.modal-simple').click(function(){
+            $('.modal-simple').on('mouseover',function(){
                 document.getElementsByTagName('body')[0].classList.add('modal-open');
             })
         },

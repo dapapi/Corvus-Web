@@ -519,12 +519,13 @@ export default {
         principal_ids: this.fetchData.principal_ids,
       };
       fetch(methods, newUrl || url, fetchData).then((response) => {
-        this.canShow = true
         _this.trailsInfo = response.data;
         _this.total = response.meta.pagination.total;
         _this.current_page = response.meta.pagination.current_page;
         _this.total_pages = response.meta.pagination.total_pages;
         _this.isLoading = false;
+        _this.canShow = true
+
       });
     },            
             filterGo() {

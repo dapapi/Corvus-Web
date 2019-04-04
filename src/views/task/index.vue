@@ -239,12 +239,13 @@
                     params.type_id = this.taskTypeSearch;
                 }
                 fetch('get', url, params).then((response) => {
-                    this.canShow = true
                     this.tasksInfo = response.data;
                     this.current_page = response.current_page;
                     this.total = response.total;
                     this.total_pages = response.per_page != 0 ? Math.ceil(response.total / response.per_page) : 1;
                     this.isLoading = false;
+                    this.canShow = true
+
                 });
             },
             // 任务我的筛选
