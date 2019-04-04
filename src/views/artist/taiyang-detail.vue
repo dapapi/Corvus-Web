@@ -481,15 +481,6 @@
                                                                         @change="(value) => changeArtistBaseInfo(value, 'sign_contract_other')"></ConditionalInput>
                                                 </div>
                                             </div>
-                                            
-                                                <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height"
-                                                     style="height:64px;">
-                                                    <div class="col-md-3 float-left text-right pl-0">地区</div>
-                                                    <div class="col-md-9 float-left font-weight-bold">
-                                                        <EditInput :content="artistInfo.star_location" :is-edit="isEdit"
-                                                                   @change="(value) => changeArtistBaseInfo(value, 'star_location')"></EditInput>
-                                                    </div>
-                                                </div>
                                                 <div class="card-text py-10 px-0 clearfix col-md-6 float-left edit-height">
                                                     <div class="col-md-3 float-left text-right pl-0">潜在风险点</div>
                                                     <div class="col-md-9 float-left font-weight-bold"
@@ -637,7 +628,7 @@
                                                     </div>
                                                 </div>
 
-                                            
+
 
                                             <h5 class="pl-15 pt-10 clearfix col-md-12 float-left">更新信息</h5>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left">
@@ -1368,14 +1359,14 @@ export default {
     ApprovalGreatModule,
   },
   mounted() {
-      
+
     this.getCalendar();
     // this.draw();
     // this.getArtistsBill();
     this.getTaskDate();
     // this.getProjectList();
-    
-    
+
+
     this.user = JSON.parse(Cookies.get('user'));
     this.$store.commit('changeNewPrincipal', {
       name: this.user.nickname,
@@ -1397,7 +1388,7 @@ export default {
             toastr.error('当前用户没有权限新增作品');
             return;
         }
-        $('#addWork').modal('show') 
+        $('#addWork').modal('show')
       },
     // 获取艺人信息
     getArtist() {
@@ -1443,7 +1434,7 @@ export default {
         this.artistTasksInfo = response.data.tasks.data;// 任务数据
         // this.artistWorksInfo = response.data.works.data;// 作品数据
         this.affixes = response.data.affixes.data;
-       
+
       });
     },
     getProject(page = 1) {
@@ -1483,7 +1474,7 @@ export default {
                         sendData[key].push(data[key][i].id)
                     }
                 }
-            
+
                 fetch('post', `/stars/${this.$route.params.id}/privacyUser`, sendData).then(function () {
                     toastr.success('隐私设置成功')
                     $('#addPrivacy').modal('hide')
@@ -1503,19 +1494,19 @@ export default {
                     if (allPrivacyUsers) {
                         for (let i = 0; i < allPrivacyUsers.length; i++) {
                             if(allPrivacyUsers[i].field == 'birthday'){
-                                this.$store.state.birthdayInfo.push(allPrivacyUsers[i].creator.data)  
+                                this.$store.state.birthdayInfo.push(allPrivacyUsers[i].creator.data)
                             }
                             if(allPrivacyUsers[i].field == 'star_risk_point'){
-                                this.$store.state.star_risk_pointInfo.push(allPrivacyUsers[i].creator.data)  
+                                this.$store.state.star_risk_pointInfo.push(allPrivacyUsers[i].creator.data)
                             }
                             if(allPrivacyUsers[i].field == 'phone'){
-                                this.$store.state.phoneInfo.push(allPrivacyUsers[i].creator.data)  
+                                this.$store.state.phoneInfo.push(allPrivacyUsers[i].creator.data)
                             }
                             if(allPrivacyUsers[i].field == 'wechat'){
-                                this.$store.state.wechatInfo.push(allPrivacyUsers[i].creator.data)  
+                                this.$store.state.wechatInfo.push(allPrivacyUsers[i].creator.data)
                             }
                             if(allPrivacyUsers[i].field == 'email'){
-                                this.$store.state.emailInfo.push(allPrivacyUsers[i].creator.data)  
+                                this.$store.state.emailInfo.push(allPrivacyUsers[i].creator.data)
                             }
                         }
                     }
@@ -2274,19 +2265,19 @@ export default {
         if (value == 'publicity' && this.artistInfo.powers.edit_publicity !== 'true') {
             toastr.error('当前用户没有权限分配宣传人');
             //  this.$nextTick((params) => {
-            //     $('#distributionBroker').modal('hide')     
+            //     $('#distributionBroker').modal('hide')
             // })
             return;
         }
         if (value == 'broker' && this.artistInfo.powers.edit_broker !== 'true') {
             toastr.error('当前用户没有权限分配经理人');
             // this.$nextTick((params) => {
-            //     $('#distributionBroker').modal('hide')     
+            //     $('#distributionBroker').modal('hide')
             // })
             return;
         }
-        $('#distributionBroker').modal('show')   
-        // $('#distributionBroker').modal('hidden') 
+        $('#distributionBroker').modal('show')
+        // $('#distributionBroker').modal('hidden')
       this.distributionType = value;
       if (this.artistInfo[value].data.length > 0) {
         this.$store.state.participantsInfo = Object.assign([], this.artistInfo[value].data);

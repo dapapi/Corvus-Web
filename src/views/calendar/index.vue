@@ -63,8 +63,28 @@
                                                                  style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
                                                                 {{ calendar.title }}
                                                             </div>
+                                                            <template v-if="calendar.title === '全员公开日历'">
+                                                                <div class="float-right position-relative"
+                                                                    v-if="calendar.principal && calendar.principal.data.name === userInfo.nickname"
+                                                                    v-show="calendar.starable_type !== 'star' || (calendar.starable_type === 'star' && calendar.principal_id == userInfo.id)">
+                                                                    <i class="iconfont icon-gengduo1" aria-hidden="true"
+                                                                    id="taskDropdown"
+                                                                    data-toggle="dropdown" aria-expanded="false"></i>
+                                                                    <div class="dropdown-menu"
+                                                                        aria-labelledby="taskDropdown">
+                                                                        <a class="dropdown-item"
+                                                                        @click="getCalendarDetail(calendar.id)"
+                                                                        data-target="#addCalendar"
+                                                                        data-toggle="modal">编辑</a>
+                                                                        <a class="dropdown-item" data-target="#delModal"
+                                                                        data-toggle="modal"
+                                                                        @click="deleteToastr('calendar', calendar)">删除</a>
+                                                                    </div>
+                                                                </div>
+                                                            </template>
                                                             <div class="float-right position-relative"
-                                                                 v-show="calendar.starable_type !== 'star' || (calendar.starable_type === 'star' && calendar.principal_id == userInfo.id)">
+                                                                v-else
+                                                                v-show="calendar.starable_type !== 'star' || (calendar.starable_type === 'star' && calendar.principal_id == userInfo.id)">
                                                                 <i class="iconfont icon-gengduo1" aria-hidden="true"
                                                                    id="taskDropdown"
                                                                    data-toggle="dropdown" aria-expanded="false"></i>
@@ -74,7 +94,7 @@
                                                                        @click="getCalendarDetail(calendar.id)"
                                                                        data-target="#addCalendar"
                                                                        data-toggle="modal">编辑</a>
-                                                                    <a class="dropdown-item" data-target="#delModel"
+                                                                    <a class="dropdown-item" data-target="#delModal"
                                                                        data-toggle="modal"
                                                                        @click="deleteToastr('calendar', calendar)">删除</a>
                                                                 </div>
@@ -329,7 +349,7 @@
                                    @click="changeScheduleType('edit')" aria-hidden="true"></i>
                                 <FileUploader is-icon="true" class="float-left" @change="fileUpload"></FileUploader>
                                 <i class="iconfont icon-shanchu1 pr-4 font-size-16 pointer-content" data-toggle="modal"
-                                   data-target="#delModel" aria-hidden="true" @click="deleteToastr('schedule')"></i>
+                                   data-target="#delModal" aria-hidden="true" @click="deleteToastr('schedule')"></i>
                             </span>
                             <i class="iconfont icon-guanbi pointer-content" aria-hidden="true" data-dismiss="modal"></i>
                         </div>
@@ -501,40 +521,38 @@
                         </div>
                     </div>
                 </div>
-
             </div>
+        </div>
 
-            <!-- 删除日历/日程 -->
-            <div v-if="canShowC" class="modal fade" id="delModel" aria-hidden="true" aria-labelledby="addLabelForm"
-                 role="dialog"
-                 tabindex="-1" data-backdrop="static">
-                <div class="modal-dialog modal-simple">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" aria-hidden="true" data-dismiss="modal" class="close"><i
-                                    aria-hidden="true" class="iconfont icon-guanbi"></i></button>
-                            <h4 class="modal-title">确认删除</h4>
-                        </div>
-                        <div class="modal-body clearfix">
-                            <div class="example">
-                                <template v-if="delType === 'calendar'">
-                                    <p>确认删除日历 “{{ delCalendarInfo.title }}” </p>
-                                </template>
-                                <template v-if="delType === 'schedule'">
-                                    <p>确认删除日程 “{{ scheduleData.title }}” </p>
-                                </template>
-                            </div>
-
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+        <!-- 删除日历/日程 -->
+        <div v-if="canShowC" class="modal fade line-center" id="delModal" aria-hidden="true"
+            aria-labelledby="addLabelForm" role="dialog" tabindex="-1" data-backdrop="static">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" aria-hidden="true" data-dismiss="modal" class="close"><i
+                                aria-hidden="true" class="iconfont icon-guanbi"></i></button>
+                        <h4 class="modal-title">确认删除</h4>
+                    </div>
+                    <div class="modal-body clearfix">
+                        <div class="example">
                             <template v-if="delType === 'calendar'">
-                                <button class="btn btn-primary" @click="deleteCalendar">确定</button>
+                                <p>确认删除日历 “{{ delCalendarInfo.title }}” </p>
                             </template>
                             <template v-if="delType === 'schedule'">
-                                <button class="btn btn-primary" @click="deleteSchedule">确定</button>
+                                <p>确认删除日程 “{{ scheduleData.title }}” </p>
                             </template>
                         </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                        <template v-if="delType === 'calendar'">
+                            <button class="btn btn-primary" @click="deleteCalendar">确定</button>
+                        </template>
+                        <template v-if="delType === 'schedule'">
+                            <button class="btn btn-primary" @click="deleteSchedule">确定</button>
+                        </template>
                     </div>
                 </div>
             </div>
@@ -1203,7 +1221,7 @@
 
             deleteSchedule: function () {
                 fetch('delete', '/schedules/' + this.scheduleData.id).then(() => {
-                    $('#delModel').modal('hide');
+                    $('#delModal').modal('hide');
                     toastr.success('删除成功');
                     this.$refs.calendar.refresh()
                 })
@@ -1509,7 +1527,7 @@
             deleteCalendar: function () {
                 fetch('delete', '/calendars/' + this.delCalendarInfo.id).then(() => {
                     toastr.success('删除成功');
-                    $('#delModel').modal('hide');
+                    $('#delModal').modal('hide');
                     this.getCalendarList();
                     this.$refs.calendar.refresh()
                 })

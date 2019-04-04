@@ -61,9 +61,22 @@
                                 <template v-if="client.grade === 1">直客</template>
                                 <template v-if="client.grade === 2">代理公司</template>
                             </td>
-                            <td>{{ client.principal ? client.principal.data.name : '' }}</td>
+                            <td>
+                                <template v-if="companyName || clientLevelSearch || clientPrincipalIdSearch.length > 0">
+                                    {{ client.principal ? client.principal.data.name : '' }}
+                                </template>
+                                <template v-else>
+                                    {{ client.name }}
+                                </template>
+                                </td>
                             <td>{{ client.created_at ? common.timeProcessing(client.created_at) : '' }}</td>
-                            <td>{{ client.last_follow_up_at ? common.timeProcessing(client.last_follow_up_at) : '' }}
+                            <td>
+                                <template v-if="companyName || clientLevelSearch || clientPrincipalIdSearch.length > 0">
+                                    {{ client.last_follow_up_at ? common.timeProcessing(client.last_follow_up_at) : '' }}
+                                </template>
+                                <template v-else>
+                                    {{ client.up_time ? common.timeProcessing(client.up_time) : '' }}
+                                </template>
                             </td>
                         </tr>
                         </tbody>
@@ -282,11 +295,12 @@
             getClients: function (pageNum = 1) {
                 const params = {
                     page: pageNum,
-                    include: 'principal',
+                    // include: 'principal',
                 };
 
-                let url = '/clients'
-
+                // let url = '/clients'
+                let url = '/clients_list'
+                
                 if (this.companyName) {
                     params.keyword = this.companyName
                 }
@@ -298,14 +312,21 @@
                 }
                 if (this.companyName || this.clientLevelSearch || this.clientPrincipalIdSearch.length > 0) {
                     url = '/clients/filter'
+                    params.include = 'principal'
                 }
 
                 fetch('get', url, params).then(response => {
                     this.canShow = true
                     this.clientsInfo = response.data;
-                    this.current_page = response.meta.pagination.current_page;
-                    this.total = response.meta.pagination.total;
-                    this.total_pages = response.meta.pagination.total_pages;
+                    if (this.companyName || this.clientLevelSearch || this.clientPrincipalIdSearch.length > 0) {
+                        this.current_page = response.meta.pagination.current_page;
+                        this.total = response.meta.pagination.total;
+                        this.total_pages = response.meta.pagination.total_pages;
+                    } else {
+                        this.current_page = response.current_page;
+                        this.total = response.total;
+                        this.total_pages = response.per_page != 0 ? Math.ceil(response.total / response.per_page) : 1;
+                    }
                     this.isLoading = false;
                 })
             },
