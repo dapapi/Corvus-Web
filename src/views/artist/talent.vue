@@ -355,7 +355,7 @@
 
         </div>
 
-        <customize-filter v-if="canShow" :data="customizeContentType==='stars'?customizeInfoStars:customizeInfoBloggers"
+        <customize-filter :data="customizeContentType==='stars'?customizeInfoStars:customizeInfoBloggers"
                           @change="customize" ref='customize' :isint="true"></customize-filter>
 
         <div  class="site-action" data-plugin="actionBtn" data-toggle="modal" @click='rightChecker("博主","addBolgger","blogger")' v-if="!isShow && canShow">
@@ -1211,7 +1211,7 @@
                         _this.Btotal = response.meta.pagination.total;
                         _this.Btotal_pages = response.meta.pagination.total_pages;
                     }
-                        this.canShow = true
+                        _this.canShow = true
 
                 })
             },
