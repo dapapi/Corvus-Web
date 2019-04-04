@@ -85,6 +85,9 @@ export default {
   created() {
   },
   mounted() {
+      $('.modal-simple').click(function(){
+        document.getElementsByTagName('body')[0].classList.add('modal-open');
+      })
     const _this = this;
     this.refresh();
   },

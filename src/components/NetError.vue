@@ -13,8 +13,8 @@
                     </button>
                     <h4 class="modal-title">掉线了？</h4>
                 </div>
-                <div class="modal-body">
-                    <p class="mt-20 errortext" >连接不稳定，请检查网络设置!</p>
+                <div class="modal-body" style="text-align:center">
+                    <p class="mt-30 errortext" >连接不稳定，请检查设置!</p>
                 </div>
                 <div class="modal-footer">
                     <!-- <button type="button"
@@ -22,7 +22,7 @@
                             data-dismiss="modal">取消
                     </button> -->
                     <button type="button" 
-                            class="btn btn-info waves-effect waves-classic errorbutton"
+                            class="btn btn-primary waves-effect waves-classic errorbutton"
                             data-dismiss="modal" >好的，知道了
                     </button>
                 </div>
@@ -45,10 +45,12 @@
 
 <style>
 .errortext{
-    font-size: 30px;
+    font-size: 20px;
+    color: #666666;
 }
 .errorbutton{
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 400;
+    margin-right: 205px;
 }
 </style>
