@@ -1685,7 +1685,7 @@
             },
             getProject() {
                 let data = {
-                    include: 'participants,trail.expectations.broker,trail.expectations.publicity',
+                    include: 'participants,trail.expectations.broker,trail.expectations.publicity,trail.client',
                 };
                 fetch('get', '/projects/' + this.projectId + '/web', data).then(response => {
                     this.canShow = true
