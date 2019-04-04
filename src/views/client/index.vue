@@ -264,9 +264,13 @@
             }
         },
 
+        created () {
+            this.getClients();
+        },
+
         mounted() {
             this.getField()
-            this.getClients();
+            // this.getClients();
             this.user = JSON.parse(Cookies.get('user'))
             // 清除负责人默认值的设置
             this.clearDefaultPrincipal()
@@ -327,6 +331,8 @@
                         this.total = response.total;
                         this.total_pages = response.per_page != 0 ? Math.ceil(response.total / response.per_page) : 1;
                     }
+                    this.isLoading = false;
+                }).catch(() => {
                     this.isLoading = false;
                 })
             },
