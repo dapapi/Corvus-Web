@@ -1043,6 +1043,8 @@
                     _this.isLoading = false;
                     _this.selectAllStars = false;
                     _this.selectedArtistsArr = [];
+                }).catch(function(){
+                    _this.isLoading = false;
                 })
             },
             getBlogger: function (page = 1, signStatus) {
@@ -1087,6 +1089,8 @@
                     _this.isLoading = false;
                     _this.selectAllBlogger = false;
                     _this.selectedArtistsArr = [];
+                }).catch(function(){
+                    _this.isLoading = false;
                 });
             },
             deleteAffix: function (index) {

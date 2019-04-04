@@ -8,6 +8,7 @@
             <LeftManage/>
         </template>
         <router-view/>
+        <NetError />
     </div>
 </template>
 
@@ -72,13 +73,15 @@
                 this.getModuleRole()
                 this.getListPower()
             }
+            // this.getApprovalNum()
         },
         methods: {
             ...mapActions([
                 'getUserList',
                 'getDepartment',
                 'getModuleRole',
-                'getListPower'
+                'getListPower',
+                'getApprovalNum'
             ])
         }
     };
@@ -114,9 +117,12 @@
     .asSpinner {
         height: 36.02px;
     }
-
+    .site-menubar{
+        z-index:9999999 !important;
+    }
     .site-menubar-body {
         height: 100% !important;
+        
     }
 
     .table td, .table th {
@@ -200,7 +206,7 @@
 
     .site-menu > .site-menu-item > .site-menu-sub {
         left: 80px;
-        z-index:9999999
+        
     }
 
     .modal-header {

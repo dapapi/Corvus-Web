@@ -687,7 +687,7 @@
             getTask: function () {
 
                 let data = {
-                //     include: 'creator,principal,pTask,tasks.type,resource.resourceable,resource.resource,affixes,participants',
+                    include: 'creator,principal,pTask,tasks.type,resource.resourceable,resource.resource,affixes,participants',
                 };
 
                 fetch('get', '/tasks/' + this.taskId, data).then(response => {
@@ -827,7 +827,7 @@
                 // 修改任务概况除参与人字段
                 const editTaskInfo = () => {
                     return new Promise((res, rej) => {
-                        fetch('put', '/tasks/' + this.taskId, this.changeInfo).then(() => {
+                        fetch('put', '/tasks/edit/' + this.taskId, this.changeInfo).then(() => {
                             // this.getTask();
                             if (this.changeInfo.principal_id) {
                                 this.taskInfo.principal.data = this.$store.state.principalInfo
@@ -1033,7 +1033,7 @@
                 //   toastr.error('当前用户没有删除任务的权限')
                 //   return
                 // }
-                $('confirmFlag').modal('show')
+                $('#confirmFlag').modal('show')
 
             },
             // 设置默认负责人

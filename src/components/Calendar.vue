@@ -68,6 +68,7 @@
                 slotLabelFormat: 'H(:mm)a',
                 timeFormat: 'H:mma',
                 firstHour: '0',
+                nextDayThreshold: '00:00:00',
                 buttonText: {
                     today: '今天',
                     month: '月',
@@ -129,8 +130,13 @@
                             if (response.data[i].is_allday) {
                                 let end_at = response.data[i].end_at.split(' ')[0].split('-');
                                 end_at[2] = Number(end_at[2]) + 1;
+                                if (end_at[2] < 10) {
+                                    end_at[2] = '0' + end_at[2]
+                                }
                                 response.data[i].end_at = end_at.join('-') + ' 00:00'
                             }
+                            // console.log(response.data[i].title)
+                            // console.log(response.data[i].end_at)
                             events.push({
                                 title: response.data[i].title,
                                 start: response.data[i].start_at,

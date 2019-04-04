@@ -47,19 +47,20 @@
                                         </span>
                                     </span>
                                 </div>
-
-
                             </div>
                             <div class="col-md-6 float-left pl-0 ml-50" v-show="artistInfo.sign_contract_status == 1">
                                 <div class="float-left pl-0 pr-2 col-md-2">
                                     <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>录入人
                                 </div>
-                                <div class="font-weight-bold float-left" v-for="(entry,index) in artistInfo.creator"
-                                     :key="index" style="padding-top:1.5px">
-                                    <span>{{entry.department.name}}</span>
-                                    <span v-if="entry.company">-</span>
-                                    <span>{{ entry.name }}</span>
-                                </div>
+                               
+                                    <div class="font-weight-bold float-left"   v-if=" artistInfo.creator"
+                                        style="padding-top:1.5px">
+                                        <span>{{artistInfo.creator.department}}</span>
+                                        <span v-if="artistInfo.creator.company">-</span>
+                                        <span>{{artistInfo.creator.name}}</span>
+                                    </div>
+
+                             
                             </div>
                             <div class="col-md-6 float-left pl-0 pt-10" v-show="artistInfo.sign_contract_status == 1">
                                 <div class="float-left pl-0 pr-2 col-md-3">
@@ -605,10 +606,9 @@
                                             <h5 class=" pt-10 clearfix col-md-12 float-left">更新信息</h5>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">录入人</div>
-                                                <div class="col-md-8 float-left font-weight-bold"
-                                                     v-for="(entry,index) in artistInfo.creator" :key="index">
+                                                <div class="col-md-8 float-left font-weight-bold">
                                                     <template v-if="artistInfo.creator">
-                                                        {{entry.name}}
+                                                        {{artistInfo.creator.name}}
                                                     </template>
                                                 </div>
                                             </div>
@@ -624,6 +624,7 @@
                                                     <template v-if="artistInfo.last_updated_user">
                                                         {{artistInfo.last_updated_user}}
                                                     </template>
+                                                    <template v-else>{{ artistInfo.creator.name}}</template>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
@@ -1381,10 +1382,10 @@ export default {
     getArtist () {
                 this.artistId = this.$route.params.id;
                 let _this = this;
-                let data = {
-                    include: 'creator,tasks,affixes,publicity,publicity.department',
-                };
-                fetch('get', '/bloggers/' + this.artistId, data).then(response => {
+                // let data = {
+                //     include: 'creator,tasks,affixes,publicity,publicity.department',
+                // };
+                fetch('get', '/bloggers/detail/' + this.artistId).then(response => {
                     this.canShow = true
                     this.artistInfo = response.data;
                     console.log(this.artistInfo )
@@ -1400,15 +1401,18 @@ export default {
                     } else {
                         this.artistInfo.sign_contract_other = 2
                     }
-                    if (response.data.tasks) {
+                    if (response.data.tasks.length>0) {
                         this.tasksInfo = response.data.tasks.data
 
                     }
                     //任务数据
                     let data = [];
-                    this.artistInfo.platform.split(',').forEach(item => {
+                    if(this.artistInfo.platform){
+                        this.artistInfo.platform.split(',').forEach(item => {
                         data.push(_this.artistSocialPlatform.find(i => i.value == item).name)
                     });
+                    }
+                   
                     this.platformDate = data.join(',');
                     //孵化期时间 
                     if (this.artistInfo.hatch_star_at !== "privacy" && this.artistInfo.hatch_end_at !== "privacy") {
@@ -1979,7 +1983,6 @@ export default {
                 };
                 fetch('get', `/privacyUsers?include=creator`, data).then(response => {
                     let allPrivacyUsers = response.data;
-                    console.log(allPrivacyUsers)
                     this.$store.state.incubationInfo = [];
 
                     if (allPrivacyUsers) {
