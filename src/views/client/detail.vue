@@ -49,7 +49,7 @@
                             <div class="clearfix example " v-for="(task, index) in clientInfoTasksTop"
                                  style="cursor: pointer" :key="index" @click="linkTo('/tasks/' + task.id)">
                                 <div class="col-md-3 float-left px-0 exceeded-display">{{ task.title }}</div>
-                                <div class="col-md-3 float-left px-0">{{ task.principal?task.principal.data.name:'' }}
+                                <div class="col-md-3 float-left px-0">{{ task.name }}
                                 </div>
                                 <div class="col-md-4 float-left px-0">{{ task.end_at }}</div>
                                 <div class="col-md-2 float-left px-0">
@@ -102,6 +102,7 @@
                         <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link active" data-toggle="tab" href="#forum-trail"
+                                @click="getClientTrail"
                                    aria-controls="forum-present"
                                    aria-expanded="false" role="tab">销售线索</a>
                             </li>
@@ -119,6 +120,7 @@
                             <!-- 默认先展示任务的数量 ，所以要先请求数据了 -->
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-toggle="tab" href="#forum-task"
+                                    @click="getClientTask"
                                    aria-controls="forum-present"
                                    aria-expanded="false" role="tab">
                                     <template v-if="clientTasksInfo.length > 0">
@@ -180,7 +182,7 @@
                                      style="width: 100%">
                             </div>
                             <AddClientType @change="changeTrailType" :hidden="listPower.trail?listPower.trail.add === 'false' : true"></AddClientType>
-                            <pagination :current_page="current_page" :method="getClient"
+                            <pagination :current_page="current_page" :method="getClientTrail"
                                         :total_pages="total_pages" :total="total"></pagination>
                         </div>
                         <div class="tab-pane animation-fade" id="forum-project" role="tabpanel">
@@ -767,7 +769,7 @@
                 this.cancleContact()
             });
 
-            this.getClientTask() // 为了默认展示任务数量 先在这里请求
+            // this.getClientTask() // 为了默认展示任务数量 先在这里请求
         },
         computed: {
             ...mapState([
@@ -840,10 +842,11 @@
                 })
             },
 
-            getClientTrail: function () {
+            getClientTrail: function (pageNum = 1) {
                 let data = {
                     type: 'clients',
                     id: this.clientId,
+                    page: pageNum,
                 };
                 fetch('get', '/clients_search', data).then(response => {
                     this.clientTrailsInfo = response.data;
@@ -853,9 +856,10 @@
                 })
             },
 
-            getClientTask: function () {
+            getClientTask: function (pageNum = 1) {
                 let data = {
                     type: 'clients',
+                    page: pageNum,
                     id: this.clientId,
                     include: 'principal'
                 };
@@ -868,8 +872,11 @@
                 })
             },
 
-            getClientProject () {
-                fetch('get', `/clients_projects/${this.clientId}`).then(response => {
+            getClientProject (pageNum = 1) {
+                let data = {
+                    page: pageNum,
+                };
+                fetch('get', `/clients_projects/${this.clientId}`, data).then(response => {
                     this.clientProjectsInfo = response.data;
                     this.total = response.meta.pagination.total;
                     this.current_page = response.meta.pagination.current_page;
@@ -877,8 +884,11 @@
                 })
             },
 
-            getClientContact: function () {
-                fetch('get', '/clients/' + this.clientId + '/contacts').then(response => {
+            getClientContact: function (pageNum = 1) {
+                 let data = {
+                    page: pageNum,
+                };
+                fetch('get', '/clients/' + this.clientId + '/contacts', data).then(response => {
                     this.clientContactsInfo = response.data;
                     this.total = response.meta.pagination.total;
                     this.current_page = response.meta.pagination.current_page;
@@ -886,7 +896,10 @@
                 })
             },
 
-            getClientContract: function () {
+            getClientContract: function (pageNum = 1) {
+                 let data = {
+                    page: pageNum,
+                };
                 fetch('get', '/clients/' + this.clientId + '/contracts').then(response => {
                     this.clientContractsInfo = response.data;
                     this.total = response.meta.pagination.total;
