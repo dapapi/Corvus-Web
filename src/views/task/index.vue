@@ -248,7 +248,9 @@
                     this.total = response.total;
                     this.total_pages = response.per_page != 0 ? Math.ceil(response.total / response.per_page) : 1;
                     this.canShow = true
-                });
+                }).catch(() => {
+                    this.isLoading = false;
+                })
             },
             // 任务我的筛选
             getMyTasks(my) {
