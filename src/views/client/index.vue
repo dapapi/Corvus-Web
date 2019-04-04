@@ -314,12 +314,14 @@
                 if (this.clientPrincipalIdSearch.length > 0) {
                     params.principal_ids = this.clientPrincipalIdSearch
                 }
+                let type = 'get'
                 if (this.companyName || this.clientLevelSearch || this.clientPrincipalIdSearch.length > 0) {
                     url = '/clients/filter'
                     params.include = 'principal'
+                    type = 'post'
                 }
 
-                fetch('post', url, params).then(response => {
+                fetch(type, url, params).then(response => {
                     this.canShow = true
                     this.clientsInfo = response.data;
                     if (this.companyName || this.clientLevelSearch || this.clientPrincipalIdSearch.length > 0) {
