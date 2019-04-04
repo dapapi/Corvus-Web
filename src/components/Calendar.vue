@@ -134,8 +134,8 @@
                                 }
                                 response.data[i].end_at = end_at.join('-') + ' 00:00'
                             }
-                            console.log(response.data[i].title)
-                            console.log(response.data[i].end_at)
+                            // console.log(response.data[i].title)
+                            // console.log(response.data[i].end_at)
                             events.push({
                                 title: response.data[i].title,
                                 start: response.data[i].start_at,
