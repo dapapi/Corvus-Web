@@ -839,6 +839,8 @@
                         company: this.clientInfoCopy.company,
                         grade: this.clientInfoCopy.grade
                     }
+                }).catch(() => {
+                    this.isLoading = false;
                 })
             },
 
