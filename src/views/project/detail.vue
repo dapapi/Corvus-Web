@@ -915,9 +915,9 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <h5 class="pl-15 pt-10">审批流程</h5>
-                                        <div class="segmentation-line float-left"></div>
                                         <div v-if="projectInfo.type != 5">
+                                            <h5 class="pl-15 pt-10">审批流程</h5>
+                                            <div class="segmentation-line float-left"></div>
                                             <ApprovalProgress :formid="projectInfo.form_instance_number"
                                                               :formstatus="projectInfo.approval_text" projcetinfo='true'
                                                               mode="detail"></ApprovalProgress>
