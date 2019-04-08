@@ -25,7 +25,7 @@
                     <h4 class="card-title">{{ oldInfo.title }}
                         <template v-if="!oldInfo.task_p">
                            <span class="font-size-14 pl-10 pointer-content hover-content"
-                                 @click="redirectTaskDetail(oldInfo.pTask?oldInfo.pTask.data.id: '')">
+                                 @click="redirectTaskDetail(oldInfo.task_pid)">
                            <i class="md-chevron-left"></i>回到主任务
                             </span>
                         </template>
