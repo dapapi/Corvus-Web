@@ -57,7 +57,17 @@
                                            NEW
                                         </span> -->
                                     </td>
-                                    <td><span v-if="classifyArr.length>0">{{classifyArr.find(classifyArr => classifyArr.id == item.classify).name}}</span></td>
+                                    <td>
+                                        {{item.classify_name}}
+                                        <!-- <span v-if="classifyArr.length>0">
+                                            <template v-if="classifyArr.includes(item.classify)">
+                                                {{classifyArr.find(classifyArr => classifyArr.id == item.classify).name}}
+                                            </template>
+                                            <template>
+                                                
+                                            </template>
+                                        </span> -->
+                                    </td>
                                     <td>
                                         <span>{{common.timeProcessing(item.created_at)}}</span>
                                     </td>
@@ -94,7 +104,7 @@ export default {
         return{
             common: common,
              broadCastInfo:{},
-             classifyArr:[],
+            //  classifyArr:[],
              memberList:[],
              isLoading:true,
              status:'',
@@ -107,7 +117,7 @@ export default {
           
     },
     created() {
-        this.getClassify()
+        // this.getClassify()
 
         if (this.userList.length > 0) {
             this.memberList = this.userList
@@ -151,12 +161,12 @@ export default {
         }
     },
     methods:{
-        getClassify(){
-            let _this = this
-            fetch('get','/announcements/Classify/').then((params) => {
-                _this.classifyArr = params.data
-            })
-        },
+        // getClassify(){
+        //     let _this = this
+        //     fetch('get','/announcements/Classify/').then((params) => {
+        //         _this.classifyArr = params.data
+        //     })
+        // },
         //初始化数据
         dataInit(params){
         
