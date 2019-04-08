@@ -387,6 +387,7 @@
                 }
 
                 if (this.isChild) {
+                    return
                     fetch('post', '/tasks/' + this.taskFatherId + '/subtask', data).then(response => {
                         toastr.success('添加成功');
                         $('#addTask').modal('hide');
