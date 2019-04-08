@@ -13,8 +13,8 @@
                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
                        @click="distributionPerson('broker')">分配经理人</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
-                       @click="distributionPerson('publicity')">分配宣传人</a>
-                    <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
+                        @click="distributionPerson('publicity')">分配宣传人</a>
+                    <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy" v-if="PrivacyShow">隐私设置</a>
                     <a class="dropdown-item" role="menuitem" @click="contractlist(artistInfo.sign_contract_status)">
                         <template v-if="artistInfo.sign_contract_status == 1">签约</template>
                         <template v-if="artistInfo.sign_contract_status == 2">解约</template>
@@ -1285,6 +1285,7 @@
                         value: 4,
                         name: '其他',
                     },
+            
                 ],
                 distributionType: '',
                 affixes: [], // 附件
@@ -1357,118 +1358,116 @@
                 isDetail: true,
                 isAddScheduleButtonDisable: false,
                 isAddWorkButtonDisable: false,
-                canShow: false,
-            };
-        },
-
-        created() {
-            this.getArtist();
-        },
-        components: {
-            ApprovalGreatModule,
-        },
-
-        mounted() {
-
-            this.getCalendar();
-            // this.draw();
-            // this.getArtistsBill();
-            this.getTaskDate();
-            // this.getProjectList();
-
-
-            this.user = JSON.parse(Cookies.get('user'));
-            this.$store.commit('changeNewPrincipal', {
-                name: this.user.nickname,
-                id: this.user.id,
-            });
-            const _this = this;
-            $('#distributionBroker').on('hidden.bs.modal', () => {
-                _this.$store.commit('changeParticipantsInfo', []);
-            });
-            $('#changeSchedule').on('hidden.bs.modal', () => {
-                _this.initAddScheduleModal();
-            });
-            this.getPrivacy() //获取隐私设置
-        },
-
-        methods: {
-            canAddWork() {
-                if (this.artistInfo.powers.add_work !== 'true') {
-                    toastr.error('当前用户没有权限新增作品');
-                    return;
-                }
-                $('#addWork').modal('show')
+                canShow : false,
+                PrivacyShow:false
+                };
             },
-            // 获取艺人信息
-            getArtist() {
-                this.artistId = this.$route.params.id;
 
-                //   const data = {
-                //     include: 'publicity,broker,creator,tasks,affixes',
-                //   };
-                fetch('get', `stars/detail/${this.artistId}`).then((response) => {
-                    this.artistInfo = response.data;
-                    this.isLoading = false;
-                    setTimeout(() => {
-                        this.canShow = true
-                    }, 200);
-                    console.log(this.artistInfo)
-                    this.artistName = response.data.name;
-                    if (response.data.star_risk_point == 'privacy') {
-                        this.artistInfo.star_risk_point = '**';
-                    } else {
-                        this.artistInfo.star_risk_point = response.data.star_risk_point;
-                    }
-                    if (response.data.birthday == 'privacy') {
-                        this.artistInfo.birthday = '**';
-                    } else {
-                        this.artistInfo.birthday = response.data.birthday;
-                    }
-                    if (response.data.phone == 'privacy') {
-                        this.artistInfo.phone = '**';
-                    } else {
-                        this.artistInfo.phone = response.data.phone;
-                    }
-                    if (response.data.wechat == 'privacy') {
-                        this.artistInfo.wechat = '**';
-                    } else {
-                        this.artistInfo.wechat = response.data.wechat;
-                    }
-                    if (response.data.email == 'privacy') {
-                        this.artistInfo.email = '**';
-                    } else {
-                        this.artistInfo.email = response.data.email;
-                    }
-                    this.uploadUrl = this.artistInfo.avatar;
-                    if (response.data.tasks) {
-                        this.artistTasksInfo = response.data.tasks;// 任务数据
-                    }
+  created() {
+    this.getArtist();
+  },
+  components: {
+    ApprovalGreatModule,
+  },
 
-                    // this.artistWorksInfo = response.data.works.data;// 作品数据
-                    this.affixes = response.data.affixes.data;
+  mounted() {
 
-                });
-            },
-            getProject(page = 1) {
-                fetch('get', `/stars/${this.artistId}/project`, {page}).then((response) => {
-                    this.artistProjectsInfo = response.data;
-                    this.current_page = response.meta.pagination.current_page;
-                    this.total = response.meta.pagination.total;
-                    this.total_pages = response.meta.pagination.total_pages;
-                });
-            },
-            getWoks() {
-                fetch('get', `/stars/${this.artistId}/works`).then((response) => {
-                    this.artistWorksInfo = response.data;
-                    this.current_page = response.meta.pagination.current_page;
-                    this.total = response.meta.pagination.total;
-                    this.total_pages = response.meta.pagination.total_pages;
-                });
-            },
-            //隐私设置
-            setPrivacy: function () {
-                let data = {
+    this.getCalendar();
+    // this.draw();
+    // this.getArtistsBill();
+    this.getTaskDate();
+    // this.getProjectList();
+
+
+    this.user = JSON.parse(Cookies.get('user'));
+    this.$store.commit('changeNewPrincipal', {
+      name: this.user.nickname,
+      id: this.user.id,
+    });
+    const _this = this;
+    $('#distributionBroker').on('hidden.bs.modal', () => {
+      _this.$store.commit('changeParticipantsInfo', []);
+    });
+    $('#changeSchedule').on('hidden.bs.modal', () => {
+      _this.initAddScheduleModal();
+    });
+    this.getPrivacy() //获取隐私设置
+  },
+
+  methods: {
+      canAddWork(){
+        if (this.artistInfo.powers.add_work !== 'true') {
+            toastr.error('当前用户没有权限新增作品');
+            return;
+        }
+        $('#addWork').modal('show')
+      },
+    // 获取艺人信息
+    getArtist() {
+      this.artistId = this.$route.params.id;
+      fetch('get', `stars/detail/${this.artistId}`).then((response) => {
+        this.artistInfo = response.data;
+        this.isLoading = false;
+        setTimeout(() => {
+            this.canShow = true
+        }, 200);
+        this.artistName = response.data.name;
+        if (response.data.star_risk_point == 'privacy') {
+          this.artistInfo.star_risk_point = '**';
+        } else {
+          this.artistInfo.star_risk_point = response.data.star_risk_point;
+        }
+        if (response.data.birthday == 'privacy') {
+          this.artistInfo.birthday = '**';
+        } else {
+          this.artistInfo.birthday = response.data.birthday;
+        }
+        if (response.data.phone == 'privacy') {
+          this.artistInfo.phone = '**';
+        } else {
+          this.artistInfo.phone = response.data.phone;
+        }
+        if (response.data.wechat == 'privacy') {
+          this.artistInfo.wechat = '**';
+        } else {
+          this.artistInfo.wechat = response.data.wechat;
+        }
+        if (response.data.email == 'privacy') {
+          this.artistInfo.email = '**';
+        } else {
+          this.artistInfo.email = response.data.email;
+        }
+        this.uploadUrl = this.artistInfo.avatar;
+        if(response.data.tasks){
+            this.artistTasksInfo = response.data.tasks;// 任务数据
+        }
+        
+        // this.artistWorksInfo = response.data.works.data;// 作品数据
+        this.affixes = response.data.affixes.data;
+        if(this.user.nickname == this.artistInfo.creator.name){
+            this.PrivacyShow = true
+        }
+      });
+    },
+    getProject(page = 1) {
+      fetch('get', `/stars/${this.artistId}/project`, { page }).then((response) => {
+        this.artistProjectsInfo = response.data;
+        this.current_page = response.meta.pagination.current_page;
+        this.total = response.meta.pagination.total;
+        this.total_pages = response.meta.pagination.total_pages;
+      });
+    },
+    getWoks() {
+      fetch('get', `/stars/${this.artistId}/works`).then((response) => {
+        this.artistWorksInfo = response.data;
+        this.current_page = response.meta.pagination.current_page;
+        this.total = response.meta.pagination.total;
+        this.total_pages = response.meta.pagination.total_pages;
+      });
+    },
+    //隐私设置
+    setPrivacy:function(){
+            let data = {
                     birthday: this.$store.state.birthdayInfo, //年龄
                     star_risk_point: this.$store.state.star_risk_pointInfo,//潜在风险点
                     phone: this.$store.state.phoneInfo,//手机号
@@ -1524,7 +1523,9 @@
                         }
                     }
                 })
+               
             },
+
             getCalendar() {
                 this.artistId = this.$route.params.id;
 
