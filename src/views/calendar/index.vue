@@ -67,16 +67,16 @@
                                                                 <div class="float-right position-relative"
                                                                     v-if="calendar.principal && calendar.principal.data.name === userInfo.nickname"
                                                                     v-show="calendar.starable_type !== 'star' || (calendar.starable_type === 'star' && calendar.principal_id == userInfo.id)">
-                                                                    <i class="iconfont icon-gengduo1" aria-hidden="true"
+                                                                    <i class="iconfont icon-gengduo1 pointer-content" aria-hidden="true"
                                                                     id="taskDropdown"
                                                                     data-toggle="dropdown" aria-expanded="false"></i>
                                                                     <div class="dropdown-menu"
                                                                         aria-labelledby="taskDropdown">
-                                                                        <a class="dropdown-item"
+                                                                        <a class="dropdown-item pointer-content"
                                                                         @click="getCalendarDetail(calendar.id)"
                                                                         data-target="#addCalendar"
                                                                         data-toggle="modal">编辑</a>
-                                                                        <a class="dropdown-item" data-target="#delModal"
+                                                                        <a class="dropdown-item pointer-content" data-target="#delModal"
                                                                         data-toggle="modal"
                                                                         @click="deleteToastr('calendar', calendar)">删除</a>
                                                                     </div>
@@ -85,16 +85,16 @@
                                                             <div class="float-right position-relative"
                                                                 v-else
                                                                 v-show="calendar.starable_type !== 'star' || (calendar.starable_type === 'star' && calendar.principal_id == userInfo.id)">
-                                                                <i class="iconfont icon-gengduo1" aria-hidden="true"
-                                                                   id="taskDropdown"
+                                                                <i class="iconfont icon-gengduo1 pointer-content" aria-hidden="true"
+                                                                   id="taskDropdown1"
                                                                    data-toggle="dropdown" aria-expanded="false"></i>
                                                                 <div class="dropdown-menu"
-                                                                     aria-labelledby="taskDropdown">
-                                                                    <a class="dropdown-item"
+                                                                     aria-labelledby="taskDropdown1">
+                                                                    <a class="dropdown-item pointer-content"
                                                                        @click="getCalendarDetail(calendar.id)"
                                                                        data-target="#addCalendar"
                                                                        data-toggle="modal">编辑</a>
-                                                                    <a class="dropdown-item" data-target="#delModal"
+                                                                    <a class="dropdown-item pointer-content" data-target="#delModal"
                                                                        data-toggle="modal"
                                                                        @click="deleteToastr('calendar', calendar)">删除</a>
                                                                 </div>
@@ -475,7 +475,7 @@
                             <div class="col-md-2 text-right float-left"></div>
                             <div class="col-md-10 float-left pl-0">
                                 <ul class="color-selector calendar-color-list">
-                                    <li v-for="(color,index) in colorArr" :style="'background-color: ' + color"
+                                    <li class="pointer-content" v-for="(color,index) in colorArr" :style="'background-color: ' + color"
                                         :key="index" @click="changeCalendarColor(color)">
                                         <i class="md-check" v-if="color === checkColor"></i>
                                     </li>
