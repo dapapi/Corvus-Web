@@ -2088,9 +2088,12 @@
                 if (!this.updatelevel) {
                     delete(this.changeArtistInfo.level)
                 }
-                if (this.artistInfo.hatch_star_at == null || this.artistInfo.hatch_end_at == null) {
+                if(this.artistInfo.hatch_star_at == null || this.artistInfo.hatch_star_at == 'privacy'){
                     delete(this.changeArtistInfo.hatch_star_at)
-                    delete(this.changeArtistInfo.hatch_end_at)
+                   
+                }
+                if(this.artistInfo.hatch_end_at == null|| this.artistInfo.hatch_end_at == 'privacy'){
+                     delete(this.changeArtistInfo.hatch_end_at)
                 }
                 fetch('put', '/bloggers/' + this.artistId, this.changeArtistInfo).then(() => {
                     toastr.success('修改成功');
