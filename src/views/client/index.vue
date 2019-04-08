@@ -61,9 +61,22 @@
                                 <template v-if="client.grade === 1">直客</template>
                                 <template v-if="client.grade === 2">代理公司</template>
                             </td>
-                            <td>{{ client.principal ? client.principal.data.name : '' }}</td>
+                            <td>
+                                <template v-if="companyName || clientLevelSearch || clientPrincipalIdSearch.length > 0">
+                                    {{ client.principal ? client.principal.data.name : '' }}
+                                </template>
+                                <template v-else>
+                                    {{ client.name }}
+                                </template>
+                                </td>
                             <td>{{ client.created_at ? common.timeProcessing(client.created_at) : '' }}</td>
-                            <td>{{ client.last_follow_up_at ? common.timeProcessing(client.last_follow_up_at) : '' }}
+                            <td>
+                                <template v-if="companyName || clientLevelSearch || clientPrincipalIdSearch.length > 0">
+                                    {{ client.last_follow_up_at ? common.timeProcessing(client.last_follow_up_at) : '' }}
+                                </template>
+                                <template v-else>
+                                    {{ client.up_time ? common.timeProcessing(client.up_time) : '' }}
+                                </template>
                             </td>
                         </tr>
                         </tbody>
@@ -81,12 +94,12 @@
 
         </div>
 
-        <customize-filter :data="customizeInfo" @change="customize" :cleanup="cleanUp"
+        <customize-filter v-if="canShow" :data="customizeInfo" @change="customize" :cleanup="cleanUp"
                           @cleanupdone='cleanUp=false'></customize-filter>
 
-        <AddClientType :hidden="listPower.client?listPower.client.add === 'false':true" @change="showAddModal"/>
+        <AddClientType  v-if="canShow" :hidden="listPower.client?listPower.client.add === 'false':true" @change="showAddModal"/>
 
-        <div class="modal fade" id="addClient" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShow" class="modal fade" id="addClient" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -212,7 +225,7 @@
                 common: common,
                 total: 0,
                 current_page: 0,
-                total_pages: 0,
+                total_pages: 1,
                 customizeInfo: {},
                 clientTypeArr: config.clientTypeArr,
                 clientLevelArr: clientLevelArr,
@@ -246,13 +259,18 @@
                 fetchData: {},
                 customizeCondition: {},
                 isAddButtonDisable: false,
+                canShow:false,
                 // canAdd: false, // 可以新增吗
             }
         },
 
+        created () {
+            this.getClients();
+        },
+
         mounted() {
             this.getField()
-            this.getClients();
+            // this.getClients();
             this.user = JSON.parse(Cookies.get('user'))
             // 清除负责人默认值的设置
             this.clearDefaultPrincipal()
@@ -281,11 +299,12 @@
             getClients: function (pageNum = 1) {
                 const params = {
                     page: pageNum,
-                    include: 'principal',
+                    // include: 'principal',
                 };
 
-                let url = '/clients'
-
+                // let url = '/clients'
+                let url = '/clients_list'
+                
                 if (this.companyName) {
                     params.keyword = this.companyName
                 }
@@ -295,15 +314,27 @@
                 if (this.clientPrincipalIdSearch.length > 0) {
                     params.principal_ids = this.clientPrincipalIdSearch
                 }
+                let type = 'get'
                 if (this.companyName || this.clientLevelSearch || this.clientPrincipalIdSearch.length > 0) {
                     url = '/clients/filter'
+                    params.include = 'principal'
+                    type = 'post'
                 }
 
-                fetch('get', url, params).then(response => {
+                fetch(type, url, params).then(response => {
+                    this.isLoading = false;
+                    this.canShow = true
                     this.clientsInfo = response.data;
-                    this.current_page = response.meta.pagination.current_page;
-                    this.total = response.meta.pagination.total;
-                    this.total_pages = response.meta.pagination.total_pages;
+                    if (this.companyName || this.clientLevelSearch || this.clientPrincipalIdSearch.length > 0) {
+                        this.current_page = response.meta.pagination.current_page;
+                        this.total = response.meta.pagination.total;
+                        this.total_pages = response.meta.pagination.total_pages;
+                    } else {
+                        this.current_page = response.current_page;
+                        this.total = response.total;
+                        this.total_pages = response.per_page != 0 ? Math.ceil(response.total / response.per_page) : 1;
+                    }
+                }).catch(() => {
                     this.isLoading = false;
                 })
             },
@@ -366,7 +397,7 @@
                     desc: this.clientRemark
                 };
 
-                fetch('post', '/clients', data).then(response => {
+                fetch('post', '/clients', data).then(response => {    
                     this.isAddButtonDisable = false;
                     toastr.success('创建成功');
                     $("#addClient").modal("hide");
@@ -403,11 +434,14 @@
                 }
                 
                 fetch(methods, newUrl || url, fetchData).then((response) => {
+                    
+
                     _this.clientsInfo = response.data
                     _this.total = response.meta.pagination.total;
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total_pages = response.meta.pagination.total_pages;
                     _this.isLoading = false;
+                    this.canShow = true
                 })
             },
 

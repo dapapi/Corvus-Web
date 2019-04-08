@@ -44,6 +44,8 @@ const state = {
     avatar: '', // 用户头像
     supplierDetails:{},//供应商详情
     listPower:{},//列表里边的导入导出和新增的权限
+    approvalNum:{},
+    previewname:''
 };
 
 export default new Vuex.Store({

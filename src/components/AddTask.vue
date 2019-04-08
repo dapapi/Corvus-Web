@@ -28,7 +28,8 @@
                         <div class="col-md-2 text-right float-left require">任务类型</div>
                         <div class="col-md-10 float-left pl-0">
                             <Selectors :options="taskTypeArr" ref="taskType"
-                                       @change="changeTaskType"></Selectors>
+                                       changeKey="taskType"
+                                       @select="changeTaskType"></Selectors>
                         </div>
                     </div>
                     <div class="example">
@@ -115,7 +116,8 @@
                 taskName: "",
                 resourceType: "", // 资源type
                 user: {}, // 个人信息
-                isAddButtonDisable: false
+                isAddButtonDisable: false,
+                typeName: '',
             }
         },
         watch: {
@@ -287,6 +289,7 @@
                 if (type === 'father') {
                     this.getChildLinkData(value, index);
                     this.resourceType = id
+                    
                 } else if (type === 'child') {
                     this.resourceableId = value
                 }
@@ -312,8 +315,9 @@
                 this.taskLevel = value;
             },
 
-            changeTaskType(value) {
+            changeTaskType(changeKey,value, name) {
                 this.taskType = value;
+                this.taskTypeName = name
             },
             principalChange(value) {
                 this.principal = value;
@@ -361,8 +365,10 @@
 
                 let data = {
                     type: this.taskType,
+                    type_name: this.taskTypeName,
                     title: this.taskName,
                     principal_id: this.$store.state.newPrincipalInfo.id,
+                    principal_name: this.$store.state.newPrincipalInfo.name,
                     participant_ids: participant_ids,
                     priority: this.taskLevel,
                     start_at: this.startTime + " " + this.startMinutes,
@@ -387,7 +393,9 @@
                         this.$emit('success', response)
                     })
                 } else {
-                    fetch('post', '/tasks', data).then(response => {
+                    // fetch('post', '/tasks', data).then(response => {
+                    // 修改新增任务接口
+                    fetch('post', '/tasks/store', data).then(response => {
                         this.isAddButtonDisable = false;
                         toastr.success("创建成功");
                         $("#addTask").modal("hide");
@@ -396,6 +404,8 @@
                         } else {
                             this.$router.push({path: '/tasks/' + response.data.id});
                         }
+                    }).catch(() => {
+                        this.isAddButtonDisable = false;
                     })
                 }
             },

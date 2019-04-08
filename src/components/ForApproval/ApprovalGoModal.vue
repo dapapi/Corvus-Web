@@ -13,9 +13,10 @@
                     <InputSelectors @change='transferTo()'/>
                 </div>
                 <div class="col-md-12 px-50 pb-20">
-                    <div class="example" v-if="mode !== 'archive'">审批留言</div>
+                    <div class="example" v-if="mode !== 'archive' && mode !== 'cancel'">审批留言</div>
+                    <div class="example" v-if="mode === 'cancel'" style="font-size:20px;">确认撤销审批</div>
                     <div class="example" v-if="mode === 'archive'">归档描述</div>
-                    <textarea class="approval-comment form-control" name="" id="" rows="5"
+                    <textarea v-if="mode !== 'cancel'" class="approval-comment form-control" name="" id="" rows="5"
                               v-model="approvalComment"></textarea>
                 </div>
                 <Upload  class="py-20" @change="uploadControl">
@@ -96,9 +97,7 @@
         },
         methods: {
             previewHandler(params) {
-                console.log(params);
             this.$store.dispatch('changePreview',params)
-            console.log(this.$store.state.previewurl);
                 $('#docPreviewSelector').modal('hide')
                 this.previewUrlArr = String(params).split(',')
                 if (this.previewUrlArr.length === 1) {
@@ -131,7 +130,7 @@
                 let _this = this
                 if(this.mode !== 'archive'){
                      fetch('put', '/approval_instances/' + this.id + '/' + this.mode, data).then((params) => {
-                        _this.$emit('approvaldone')
+                        _this.$emit('approvaldone',_this.mode == 'cancel'?'撤销成功':'审批成功')
                     })
                 }else{
                     Object.assign(data, {files: this.fileArr})

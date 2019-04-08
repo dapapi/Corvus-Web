@@ -21,7 +21,7 @@
                     <!-- <hr> -->
                     <div class="icon-control">
                         <a >
-                            <i class="iconfont icon-liulan" @click='previewHandler(item.fileUrl)'></i>
+                            <i class="iconfont icon-liulan" @click='previewHandler(item)'></i>
                         </a>
                         <i class="iconfont icon-shanchu1" @click="imgDelete(item)"></i>
                     </div>
@@ -78,7 +78,8 @@ export default {
   },
   methods: {
     previewHandler(params) {
-      this.$store.dispatch('changePreview', params);
+      this.$store.dispatch('changePreview', params.fileUrl);
+      this.$store.dispatch('changePreviewName', params.fileName);
       $('#docPreviewSelector').modal('hide');
       this.previewUrlArr = String(params).split(',');
       if (this.previewUrlArr.length === 1) {
@@ -96,7 +97,6 @@ export default {
       this.$emit('change', { key: id, value: this.fileInfo, type: related_field });
     },
     uploadFile(e) {
-      console.log(e);
       const file = e.target.files[0];
       const putExtra = null;
       const type = file.type.split('/');
@@ -109,6 +109,15 @@ export default {
       } else if (type[type.length - 1] === 'plain') {
         type[type.length - 1] = 'txt';
       }
+       else if (type[type.length - 1] === 'msword') {
+                type[type.length - 1] = 'doc';
+            }
+            else if (type[type.length - 1] === 'wps-writer') {
+                type[type.length - 1] = 'doc';
+            }
+        else if (type[type.length - 1] === 'vnd.openxmlformats-officedocument.wordprocessingml.document') {
+                type[type.length - 1] = 'docx';
+            }
       const key = `${this.guid()}.${type[type.length - 1]}`;
       const conf = null;
       const fileSize = file.size;

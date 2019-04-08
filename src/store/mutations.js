@@ -52,6 +52,9 @@ export default {
     changePreview(state, data) {
         state.previewurl = data
     },
+    changePreviewName(state, data) {
+        state.previewname = data
+    },
     changeCompany(state, data) {
         state.companyInfo = data
     },
@@ -91,6 +94,9 @@ export default {
     setModule(state, data) {
         state.moduleList = data.moduleList
         state.unReadMsg = data.num
+    },
+    setApprovalNum(state, data){
+        state.approvalNum = data
     },
     // 修改个人信息字段
     setUserAvatar(state, data) {

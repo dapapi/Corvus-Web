@@ -43,14 +43,13 @@
                     </div>
                     <div class="clearfix">
                         <div class="col-md-6 float-left pl-0"
-                             v-if="clientInfo.tasks && clientInfo.tasks.data.length > 0">
+                             v-if="clientInfoTasksTop.length > 0">
                             <div class="col-md-6 pl-0"><i class="iconfont icon-iconset0399 pr-2" aria-hidden="true"></i>任务
                             </div>
-                            <div class="clearfix example " v-for="(task, index) in clientInfo.tasks.data"
-                                 v-if="index < 3"
+                            <div class="clearfix example " v-for="(task, index) in clientInfoTasksTop"
                                  style="cursor: pointer" :key="index" @click="linkTo('/tasks/' + task.id)">
                                 <div class="col-md-3 float-left px-0 exceeded-display">{{ task.title }}</div>
-                                <div class="col-md-3 float-left px-0">{{ task.principal?task.principal.data.name:'' }}
+                                <div class="col-md-3 float-left px-0">{{ task.name }}
                                 </div>
                                 <div class="col-md-4 float-left px-0">{{ task.end_at }}</div>
                                 <div class="col-md-2 float-left px-0">
@@ -65,11 +64,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6 float-left pl-0" v-if="clientProjectsInfo.length > 0">
+                        <div class="col-md-6 float-left pl-0" v-if="clientProjectsInfoTop.length > 0">
                             <div class="col-md-6 p-0"><i class="iconfont icon-ego-box pr-2 " aria-hidden="true"></i>项目
                             </div>
-                            <div class="clearfix example" v-for="(project, index) in clientProjectsInfo"
-                                 v-if="index < 3" :key="index"
+                            <div class="clearfix example" v-for="(project, index) in clientProjectsInfoTop"
+                                 :key="index"
                                  @click="linkTo('/projects/' + project.id)" style="cursor: pointer">
                                 <div class="col-md-3 float-left px-0 exceeded-display">{{project.title}}</div>
                                 <div class="col-md-3 float-left px-0">
@@ -96,13 +95,14 @@
 
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: flex-start">
+            <div v-if="canShow" style="display: flex; justify-content: space-between; align-items: flex-start">
                 <div class="panel" style="width: calc(66% - 15px);float:left;margin-right:30px">
 
                     <div class="col-md-12">
                         <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link active" data-toggle="tab" href="#forum-trail"
+                                @click="getClientTrail"
                                    aria-controls="forum-present"
                                    aria-expanded="false" role="tab">销售线索</a>
                             </li>
@@ -120,6 +120,7 @@
                             <!-- 默认先展示任务的数量 ，所以要先请求数据了 -->
                             <li class="nav-item" role="presentation">
                                 <a class="nav-link" data-toggle="tab" href="#forum-task"
+                                    @click="getClientTask"
                                    aria-controls="forum-present"
                                    aria-expanded="false" role="tab">
                                     <template v-if="clientTasksInfo.length > 0">
@@ -181,7 +182,7 @@
                                      style="width: 100%">
                             </div>
                             <AddClientType @change="changeTrailType" :hidden="listPower.trail?listPower.trail.add === 'false' : true"></AddClientType>
-                            <pagination :current_page="current_page" :method="getClient"
+                            <pagination :current_page="current_page" :method="getClientTrail"
                                         :total_pages="total_pages" :total="total"></pagination>
                         </div>
                         <div class="tab-pane animation-fade" id="forum-project" role="tabpanel">
@@ -529,7 +530,7 @@
             </div>
         </div>
 
-        <div class="modal fade" id="addContact" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShow" class="modal fade" id="addContact" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -599,7 +600,7 @@
             </div>
         </div>
 
-        <div class="modal fade" id="seeContact" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShow" class="modal fade" id="seeContact" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -662,12 +663,12 @@
             </div>
         </div>
 
-        <AddTask :resourceable_id="clientId" resource_type="4" :resource_title="clientName" resource_name="客户"
+        <AddTask v-if="canShow" :resourceable_id="clientId" resource_type="4" :resource_title="clientName" resource_name="客户"
                  @success="addTask"></AddTask>
 
         <!-- 是否确认删除 -->
-        <flag @confirmFlag="delContact"/>
-        <AddTrail :trailType="trailType" :clientId="clientId" :companyInfo="companyInfo" @ok="addTrailCallBack"/>
+        <flag v-if="canShow" @confirmFlag="delContact"/>
+        <AddTrail v-if="canShow" :trailType="trailType" :clientId="clientId" :companyInfo="companyInfo" @ok="addTrailCallBack"/>
     </div>
 
 </template>
@@ -708,13 +709,15 @@
                 isEdit: false,
                 clientInfo: {},
                 clientInfoCopy: {},
-                clientTasksInfo: [],
+                clientTasksInfo: [], // 任务列表
+                clientInfoTasksTop: [], // 任务列表顶部
                 clientTrailsInfo: [],
                 clientContactsInfo: [],
                 contactName: '',
                 contactPhone: '',
                 contactPosition: '',
-                clientProjectsInfo: '',
+                clientProjectsInfo: [], // 项目列表
+                clientProjectsInfoTop: [], // 项目列表顶部
                 taskPrincipalId: '', // 负责人
                 participantIds: [], // 参与人
                 isEditContact: true,
@@ -741,18 +744,19 @@
                 isDisabled: true, // 联系人是否可以编辑
                 clientName: '',
                 isAddButtonDisable: false,
+                canShow:false,
+                clientId: this.$route.params.id,
             }
         },
-        beforeMount() {
-            this.clientId = this.$route.params.id;
+
+        created () {
+            this.getClient();
+            this.getClientTrail();
+            // this.getClientProject();
+            this.getTopProject()
+            this.getTopTask()
         },
         mounted() {
-            let _this = this;
-            setTimeout(function () {
-                _this.getClient();
-                _this.getClientTrail();
-                _this.getClientProject();
-            }, 100);
             this.user = JSON.parse(Cookies.get('user'))
             this.setDefaultPrincipal();
             this.getTaskType();
@@ -765,7 +769,7 @@
                 this.cancleContact()
             });
 
-            this.getClientTask() // 为了默认展示任务数量 先在这里请求
+            // this.getClientTask() // 为了默认展示任务数量 先在这里请求
         },
         computed: {
             ...mapState([
@@ -818,7 +822,8 @@
         methods: {
 
             getClient: function () {
-                fetch('get', '/clients/' + this.clientId, {include: 'principal,creator,tasks'}).then(response => {
+                fetch('get', '/clients/' + this.clientId).then(response => {
+                    this.canShow = true
                     this.clientInfo = response.data;
                     this.clientName = response.data.company;
                     this.clientInfoCopy = JSON.parse(JSON.stringify(response.data))
@@ -834,16 +839,18 @@
                         company: this.clientInfoCopy.company,
                         grade: this.clientInfoCopy.grade
                     }
+                }).catch(() => {
+                    this.isLoading = false;
                 })
             },
 
-            getClientTrail: function () {
+            getClientTrail: function (pageNum = 1) {
                 let data = {
                     type: 'clients',
                     id: this.clientId,
-                    include: 'principal,client'
+                    page: pageNum,
                 };
-                fetch('get', '/trails/search', data).then(response => {
+                fetch('get', '/clients_search', data).then(response => {
                     this.clientTrailsInfo = response.data;
                     this.total = response.meta.pagination.total;
                     this.current_page = response.meta.pagination.current_page;
@@ -851,13 +858,15 @@
                 })
             },
 
-            getClientTask: function () {
+            getClientTask: function (pageNum = 1) {
                 let data = {
                     type: 'clients',
+                    page: pageNum,
                     id: this.clientId,
                     include: 'principal'
                 };
-                fetch('get', '/clients/' + this.clientId + '/tasks', data).then(response => {
+                fetch('get', `/clients_tasks/${this.clientId}`).then(response => {
+                // fetch('get', '/clients/' + this.clientId + '/tasks', data).then(response => {
                     this.clientTasksInfo = response.data;
                     this.total = response.meta.pagination.total;
                     this.current_page = response.meta.pagination.current_page;
@@ -865,11 +874,11 @@
                 })
             },
 
-            getClientProject: function () {
+            getClientProject (pageNum = 1) {
                 let data = {
-                    include: 'principal,trail.expectations,trail.client'
+                    page: pageNum,
                 };
-                fetch('get', `/clients/${this.clientId}/projects`, data).then(response => {
+                fetch('get', `/clients_projects/${this.clientId}`, data).then(response => {
                     this.clientProjectsInfo = response.data;
                     this.total = response.meta.pagination.total;
                     this.current_page = response.meta.pagination.current_page;
@@ -877,8 +886,11 @@
                 })
             },
 
-            getClientContact: function () {
-                fetch('get', '/clients/' + this.clientId + '/contacts').then(response => {
+            getClientContact: function (pageNum = 1) {
+                 let data = {
+                    page: pageNum,
+                };
+                fetch('get', '/clients/' + this.clientId + '/contacts', data).then(response => {
                     this.clientContactsInfo = response.data;
                     this.total = response.meta.pagination.total;
                     this.current_page = response.meta.pagination.current_page;
@@ -886,7 +898,10 @@
                 })
             },
 
-            getClientContract: function () {
+            getClientContract: function (pageNum = 1) {
+                 let data = {
+                    page: pageNum,
+                };
                 fetch('get', '/clients/' + this.clientId + '/contracts').then(response => {
                     this.clientContractsInfo = response.data;
                     this.total = response.meta.pagination.total;
@@ -997,9 +1012,9 @@
             addTask: function () {
                 this.editConfig = {};
                 this.getClientTask();
-                this.getClient();
-                this.getClientTrail();
-                this.getClientProject()
+                // this.getClient();
+                // this.getClientTrail();
+                // this.getClientProject()
             },
 
             changeTaskType: function (value) {
@@ -1163,6 +1178,18 @@
                 }
                 $('#addTask').modal('show')
             },
+            // 获取顶部项目列表
+            getTopProject () {
+                fetch('get', `/clients_projects_norma/${this.clientId}`).then(res => {
+                    this.clientProjectsInfoTop = res
+                })
+            },
+            // 获取顶部任务列表
+            getTopTask () {
+                fetch('get', `/clients_tasks_norma/${this.clientId}`).then(res => {
+                    this.clientInfoTasksTop = res
+                })
+            }
         }
     }
 </script>

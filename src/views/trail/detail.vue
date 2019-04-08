@@ -15,11 +15,9 @@
         </div>
 
         <div class="page-content container-fluid" v-if="trailInfo">
-
             <div class="panel col-md-12">
                 <div class="card-block">
                     <h4 class="card-title">{{ trailInfo.title }}</h4>
-
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left pl-0">
                             <div class="float-left pl-0 pr-2 col-md-3">
@@ -73,13 +71,13 @@
                                 <i class="iconfont icon-yiren pr-2" aria-hidden="true"></i>目标艺人
                             </div>
                             <div class="font-weight-bold float-left" v-if="trailInfo.title">
-                                <span v-if="trailInfo.bloggerexpectations"
-                                      v-for="expectation in trailInfo.bloggerexpectations.data"
+                                <span v-if="trailInfo.expectations"
+                                      v-for="expectation in trailInfo.expectations.data"
                                       :key="expectation.nickname">
                                     {{ expectation.nickname}}
                                 </span>
-                                <span v-if="trailInfo.starexpectations"
-                                      v-for="expectation in trailInfo.starexpectations.data" :key="expectation.name">
+                                <span v-if="trailInfo.expectations"
+                                      v-for="expectation in trailInfo.expectations.data" :key="expectation.name">
                                     {{ expectation.name}}
                                 </span>
                             </div>
@@ -89,13 +87,13 @@
                                 <i class="iconfont icon-tuijian pr-2" aria-hidden="true" style="font-size:17px;"></i>推荐艺人
                             </div>
                             <div class="font-weight-bold float-left" v-if="trailInfo.title">
-                                <span v-if="trailInfo.bloggerrecommendations"
-                                      v-for="recommendation in trailInfo.bloggerrecommendations.data"
+                                <span v-if="trailInfo.recommendations"
+                                      v-for="recommendation in trailInfo.recommendations.data"
                                       :key="recommendation.nickname">
                                     {{ recommendation.nickname }}
                                 </span>
-                                <span v-if="trailInfo.starrecommendations"
-                                      v-for="recommendation in trailInfo.starrecommendations.data"
+                                <span v-if="trailInfo.recommendations"
+                                      v-for="recommendation in trailInfo.recommendations.data"
                                       :key="recommendation.name">
                                     {{ recommendation.name }}
                                 </span>
@@ -128,7 +126,7 @@
 
                 </div>
             </div>
-            <div style="display: flex; justify-content: space-between; align-items: flex-start">
+            <div v-if="canShow" style="display: flex; justify-content: space-between; align-items: flex-start">
                 <div class="panel" style="width: calc(66% - 15px);z-index: 100;float:left;margin-right:30px;">
 
                     <div class="col-md-12">
@@ -481,10 +479,10 @@
             </div>
         </div>
 
-        <addTask :resourceable_id="trailId" resource_type="5" :resource_title="trailName"
+        <addTask v-if="canShow" :resourceable_id="trailId" resource_type="5" :resource_title="trailName"
                  resource_name="销售线索" :lock_status="trailInfo.lock_status" @success="addTask"></addTask>
 
-        <div class="modal fade" id="refuseTrail" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShow" class="modal fade" id="refuseTrail" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -517,7 +515,7 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="recoverTrail" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShow" class="modal fade" id="recoverTrail" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -548,6 +546,8 @@
 import fetch from '../../assets/utils/fetch.js';
 import config from '../../assets/js/config';
 import common from '../../assets/js/common';
+import Cookies from 'js-cookie';
+
 
 export default {
   data() {
@@ -602,6 +602,7 @@ export default {
       lockUser: {},
       startTime: '',
       trailName: '',
+      canShow:false
     };
   },
   created() {
@@ -773,9 +774,11 @@ export default {
     getTrail() {
       this.trailId = this.$route.params.id;
       const data = {
-        include: 'principal,client,lockuser,contact,starexpectations,bloggerexpectations,starrecommendations,bloggerrecommendations,project',
+      //  include: 'client,lockuser,contact,starexpectations,bloggerexpectations,starrecommendations,bloggerrecommendations',
+          include: 'client,lockuser,contact,expectations,recommendations',
       };
-      fetch('get', `/trails/${this.trailId}`, data).then((response) => {
+      fetch('get', `/trailsAll/${this.trailId}`, data).then((response) => {
+        this.canShow = true
         this.lockUser = response.data.lockuser;
         this.trailType = response.data.type;
         this.trailInfo = response.data;
@@ -783,18 +786,18 @@ export default {
         this.oldInfo = JSON.parse(JSON.stringify(response.data));
         this.selectedExpectationsArr = [];
         this.selectedRecommendationsArr = [];
-        for (let i = 0; i < this.trailInfo.starexpectations.data.length; i++) {
-          this.selectedExpectationsArr.push(`${this.trailInfo.starexpectations.data[i].flag}-${this.trailInfo.starexpectations.data[i].id}`);
+        for (let i = 0; i < this.trailInfo.expectations.data.length; i++) {
+          this.selectedExpectationsArr.push(`${this.trailInfo.expectations.data[i].flag}-${this.trailInfo.expectations.data[i].id}`);
         }
-        for (let i = 0; i < this.trailInfo.bloggerexpectations.data.length; i++) {
-          this.selectedExpectationsArr.push(`${this.trailInfo.bloggerexpectations.data[i].flag}-${this.trailInfo.bloggerexpectations.data[i].id}`);
+        // for (let i = 0; i < this.trailInfo.bloggerexpectations.data.length; i++) {
+        //   this.selectedExpectationsArr.push(`${this.trailInfo.bloggerexpectations.data[i].flag}-${this.trailInfo.bloggerexpectations.data[i].id}`);
+        // }
+        for (let i = 0; i < this.trailInfo.recommendations.data.length; i++) {
+          this.selectedRecommendationsArr.push(`${this.trailInfo.recommendations.data[i].flag}-${this.trailInfo.recommendations.data[i].id}`);
         }
-        for (let i = 0; i < this.trailInfo.starrecommendations.data.length; i++) {
-          this.selectedRecommendationsArr.push(`${this.trailInfo.starrecommendations.data[i].flag}-${this.trailInfo.starrecommendations.data[i].id}`);
-        }
-        for (let i = 0; i < this.trailInfo.bloggerrecommendations.data.length; i++) {
-          this.selectedRecommendationsArr.push(`${this.trailInfo.bloggerrecommendations.data[i].flag}-${this.trailInfo.bloggerrecommendations.data[i].id}`);
-        }
+        // for (let i = 0; i < this.trailInfo.bloggerrecommendations.data.length; i++) {
+        //   this.selectedRecommendationsArr.push(`${this.trailInfo.bloggerrecommendations.data[i].flag}-${this.trailInfo.bloggerrecommendations.data[i].id}`);
+        // }
         if (response.data.principal) {
           const params = {
             type: 'change',
@@ -888,7 +891,7 @@ export default {
     },
 
     editBaseInfo() {
-      if (this.trailInfo.powers.edit_trails !== 'true') {
+      if (this.trailInfo.powers.edit_trail !== 'true') {
         toastr.error('当前用户没有编辑销售线索的权限');
         return;
       }
@@ -947,15 +950,12 @@ export default {
       this.changeInfo.lock = Number(value);
     },
     getCurrentUser() {
-      const _this = this;
-      fetch('get', '/users/my').then((response) => {
-        _this.currentUser = response.data;
-        if (!_this.$store.state.newPrincipalInfo.id && _this.currentUser) {
-          _this.principal = _this.currentUser.id;
+        this.currentUser = JSON.parse(Cookies.get('user'))
+        if (!this.$store.state.newPrincipalInfo.id && this.currentUser) {
+          this.principal = this.currentUser.id;
         } else {
-          _this.principal = _this.$store.state.newPrincipalInfo.id;
+          this.principal = this.$store.state.newPrincipalInfo.id;
         }
-      });
     },
     addTask() {
       this.getTrailTask();

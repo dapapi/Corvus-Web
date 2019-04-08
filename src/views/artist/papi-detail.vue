@@ -10,8 +10,8 @@
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end">
                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
-                    @click="distributionPerson('publicity')">分配制作人</a>
-                    <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
+                    @click="distributionPerson('produser')">分配制作人</a>
+                    <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy" v-if="PrivacyShow">隐私设置</a>
                     <a class="dropdown-item" role="menuitem" @click="contractlist(artistInfo.sign_contract_status)">
                         <template v-if="artistInfo.sign_contract_status == 1">签约</template>
                         <template v-if="artistInfo.sign_contract_status == 2">解约</template>
@@ -22,7 +22,7 @@
 
         <div class="page-content container-fluid">
             <div class="panel col-md-12">
-                <div class="card-block clearfix pb-0">
+                <div class="card-block clearfix">
                     <Upload @change='getUploadUrl' class="upload-image float-left mr-5"
                             style="width:80px;height:80px;border-radius:50%;position:relative">
                         <div class="puls" :style="{ backgroundImage: 'url(' + uploadUrl + ')' }" v-if="uploadUrl">
@@ -34,32 +34,33 @@
                     <div class="float-left ml-10 mt-10" style="width:calc(100% - 100px)">
                         <h4 class="card-title">{{artistInfo.nickname}}</h4>
                         <div class=" clearfix example">
-                            <div class="col-md-5 float-left pl-0 mr-15" v-if="artistInfo.publicity">
+                            <div class="col-md-5 float-left pl-0 mr-15">
                                 <div class="float-left pl-0 pr-2 col-md-12 mr-20">
                                     <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>制作人
                                     <span class="font-weight-bold pr-10"
-                                          style="padding-top:1.5px" v-if="artistInfo.publicity">
-                                        <span v-for="(item,index) in artistInfo.publicity.data" :key="index"
+                                          style="padding-top:1.5px" v-if="artistInfo.produser">
+                                        <span v-for="(item,index) in artistInfo.produser" :key="index"
                                               class="pl-10">
-                                            <span>{{item.department.data.name}}</span>
+                                            <span>{{item.department}}</span>
                                             <span v-if="item.department">-</span>
                                             <span>{{item.name}}</span>
                                         </span>
                                     </span>
                                 </div>
-
-
                             </div>
                             <div class="col-md-6 float-left pl-0 ml-50" v-show="artistInfo.sign_contract_status == 1">
                                 <div class="float-left pl-0 pr-2 col-md-2">
                                     <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>录入人
                                 </div>
-                                <div class="font-weight-bold float-left" v-for="(entry,index) in artistInfo.creator"
-                                     :key="index" style="padding-top:1.5px">
-                                    <span>{{entry.department.name}}</span>
-                                    <span v-if="entry.company">-</span>
-                                    <span>{{ entry.name }}</span>
+
+                                <div class="font-weight-bold float-left" v-if=" artistInfo.creator"
+                                     style="padding-top:1.5px">
+                                    <span>{{artistInfo.creator.department}}</span>
+                                    <span v-if="artistInfo.creator.company">-</span>
+                                    <span>{{artistInfo.creator.name}}</span>
                                 </div>
+
+
                             </div>
                             <div class="col-md-6 float-left pl-0 pt-10" v-show="artistInfo.sign_contract_status == 1">
                                 <div class="float-left pl-0 pr-2 col-md-3">
@@ -81,7 +82,7 @@
                         <div class="clearfix example taskshow" v-for="(task,index) in tasksInfo" :key="index"
                              @click="JumpDetails(task.id)">
                             <div class="col-md-3 float-left">{{task.title}}</div>
-                            <div class="col-md-2 float-left">{{task.principal.data.name}}</div>
+                            <div class="col-md-2 float-left">{{task.principal_name}}</div>
                             <div class="col-md-4 float-left">{{task.end_at}}</div>
                             <div class="col-md-3 float-left">
                                 <template v-if="task.status === 1"><span style="color:#FF9800">进行中</span></template>
@@ -203,7 +204,7 @@
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-base"
                                    aria-controls="forum-present"
                                    aria-expanded="false" role="tab"
-                                   :class="artistInfo.sign_contract_status == 2?'':'active'">概况</a>
+                                   :class="artistInfo.sign_contract_status == 2?'':'active'" @click="getType">概况</a>
                             </li>
                         </ul>
                         <div class="tab-content  px-0 nav-tabs-animate bg-white col-md-12">
@@ -453,7 +454,7 @@
                                             <button class="btn btn-primary" @click="changeArtistBaseInfo">确定</button>
                                         </div>
                                     </div>
-                                    <div class="card-block px-0" v-if="artistInfo">
+                                    <div class="card-block px-0" v-if="artistInfo&&canShow">
                                         <h5 class="pl-15">基本资料</h5>
                                         <div class="clearfix">
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
@@ -467,7 +468,7 @@
                                                 <div class="col-md-4 float-left text-right pl-0">类型</div>
                                                 <div class="col-md-8 float-left font-weight-bold"
                                                      v-if="artistInfo.type">
-                                                    <EditSelector :content="artistInfo.type.data.id"
+                                                    <EditSelector :content="artistInfo.type"
                                                                   :options="artistTypeArr"
                                                                   :is-edit="isEdit"
                                                                   @change="changArtistType"></EditSelector>
@@ -591,24 +592,24 @@
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-12 float-left"
-                                                >
+                                            >
                                                 <div class="col-md-2 float-left text-right pl-0">孵化期</div>
-                                                <div class="col-md-10 float-left font-weight-bold" v-if="Incubationperiod!=='**'">
+                                                <div class="col-md-10 float-left font-weight-bold"
+                                                     v-if="Incubationperiod!=='**'">
                                                     <EditGroupDatePicker :content="Incubationperiod" :is-edit="isEdit"
                                                                          @change="changeArtistHatch"></EditGroupDatePicker>
                                                 </div>
                                                 <div class="col-md-9 float-left font-weight-bold"
-                                                                v-if="Incubationperiod =='**'">
-                                                            {{Incubationperiod}}
+                                                     v-if="Incubationperiod =='**'">
+                                                    {{Incubationperiod}}
                                                 </div>
                                             </div>
                                             <h5 class=" pt-10 clearfix col-md-12 float-left">更新信息</h5>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">录入人</div>
-                                                <div class="col-md-8 float-left font-weight-bold"
-                                                     v-for="(entry,index) in artistInfo.creator" :key="index">
+                                                <div class="col-md-8 float-left font-weight-bold">
                                                     <template v-if="artistInfo.creator">
-                                                        {{entry.name}}
+                                                        {{artistInfo.creator.name}}
                                                     </template>
                                                 </div>
                                             </div>
@@ -624,6 +625,7 @@
                                                     <template v-if="artistInfo.last_updated_user">
                                                         {{artistInfo.last_updated_user}}
                                                     </template>
+                                                    <template v-else>{{ artistInfo.creator.name}}</template>
                                                 </div>
                                             </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
@@ -660,14 +662,15 @@
 
         </div>
 
-        <div class="calendar-toast" v-show="toastShow"
+        <div v-if="canShow" class="calendar-toast" v-show="toastShow"
              :style="'position: absolute;top:' + toastY + 'px; left: ' + toastX + 'px;'">双击创建日程
         </div>
 
-        <AddTask :resourceable_id="artistId" resource_type="1" :resource_title="artistName" resource_name="博主"
+        <AddTask v-if="canShow" :resourceable_id="artistId" resource_type="1" :resource_title="artistName"
+                 resource_name="博主"
                  @success="addTask"></AddTask>
 
-        <div class="modal fade" id="addWork" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShow" class="modal fade" id="addWork" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -729,7 +732,7 @@
             </div>
         </div>
         <!--隐私设置-->
-        <div class="modal fade" id="addPrivacy" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShow" class="modal fade" id="addPrivacy" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -755,7 +758,8 @@
             </div>
         </div>
         <!-- 分配制作人-->
-        <div class="modal fade" id="distributionproducer" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShow" class="modal fade" id="distributionproducer" aria-hidden="true"
+             aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple" style="max-width: 50rem;">
 
@@ -780,10 +784,11 @@
                 </div>
             </div>
         </div>
-        <ApprovalGreatModule :formData="formDate"
+        <ApprovalGreatModule v-if="canShow" :formData="formDate"
                              :default-value="{value:projectContractDefault,id:$route.params.id}"></ApprovalGreatModule>
         <!-- 新建/修改 日程 -->
-        <div class="modal fade line-center" id="changeSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShow" class="modal fade line-center" id="changeSchedule" aria-hidden="true"
+             aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -937,7 +942,7 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="addLinkage" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShow" class="modal fade" id="addLinkage" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -1015,7 +1020,7 @@
             </div>
         </div>
         <!-- 查看日程 -->
-        <div class="modal fade" id="checkSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShow" class="modal fade" id="checkSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content" v-if="scheduleData">
@@ -1082,10 +1087,11 @@
                             <div class="col-md-2 px-0 float-left">关联资源</div>
                             <div class="col-md-10 pl-0 float-left">
                                 <div class="pb-5" v-if="scheduleData.project"
-                                     v-for="project in scheduleData.project.data">
+                                     v-for="project in scheduleData.project.data" :key="project.id">
                                     <span>项目 - {{ project.title }}</span>
                                 </div>
-                                <div class="pb-5" v-if="scheduleData.task" v-for="task in scheduleData.task.data">
+                                <div class="pb-5" v-if="scheduleData.task" v-for="task in scheduleData.task.data"
+                                     :key="task.id">
                                     <span>任务 - {{ task.title }}</span>
                                 </div>
                             </div>
@@ -1117,7 +1123,8 @@
             </div>
         </div>
         <!-- 删除日历/日程 -->
-        <div class="modal fade" id="delModel" aria-hidden="true" aria-labelledby="addLabelForm" role="dialog"
+        <div v-if="canShow" class="modal fade" id="delModel" aria-hidden="true" aria-labelledby="addLabelForm"
+             role="dialog"
              tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -1153,15 +1160,15 @@
 </template>
 
 <script>
-import fetch from '../../assets/utils/fetch.js';
-import config from '../../assets/js/config';
-import common from '../../assets/js/common';
-import Cookies from 'js-cookie';
+    import fetch from '../../assets/utils/fetch.js';
+    import config from '../../assets/js/config';
+    import common from '../../assets/js/common';
+    import Cookies from 'js-cookie';
 
-import ApprovalGreatModule from '../../components/ApprovalGreatModule';
+    import ApprovalGreatModule from '../../components/ApprovalGreatModule';
 
-export default {
-  data () {
+    export default {
+        data() {
             return {
                 common: common,
                 artistId: '',
@@ -1279,6 +1286,8 @@ export default {
                 selectorHidden: [],
                 isAddScheduleButtonDisable: false,
                 isAddWorkButtonDisable: false,
+                canShow:false,
+                PrivacyShow:false
             }
         },
         components: {
@@ -1288,7 +1297,6 @@ export default {
             this.getArtist()
         },
         mounted() {
-            this.getTaskDate();
             this.getCalendar();
             this.charts();
             this.getTaskNum();
@@ -1309,7 +1317,7 @@ export default {
                 _this.$refs.workReleaseTime.setValue('');
             })
             this.getTimes()
-            this.getResources();
+
             this.getPrivacy() //获取隐私设置
         },
         methods: {
@@ -1378,13 +1386,14 @@ export default {
                 myChart.setOption(option);
             },
 
-    getArtist () {
+            getArtist() {
                 this.artistId = this.$route.params.id;
                 let _this = this;
-                let data = {
-                    include: 'creator,tasks,affixes,producer,type,publicity,trails.project,trails.client,trails.project.principal,trails.project.relate_project_bills_resource,operatelogs,publicity.department',
-                };
-                fetch('get', '/bloggers/' + this.artistId, data).then(response => {
+                // let data = {
+                //     include: 'creator,tasks,affixes,publicity,publicity.department',
+                // };
+                fetch('get', '/bloggers/detail/' + this.artistId).then(response => {
+                    this.canShow = true
                     this.artistInfo = response.data;
                     this.uploadUrl = _this.artistInfo.avatar;
                     this.artistName = response.data.nickname;
@@ -1398,50 +1407,53 @@ export default {
                     } else {
                         this.artistInfo.sign_contract_other = 2
                     }
-                    if (response.data.tasks) {
-                        this.tasksInfo = response.data.tasks.data
+                    if (response.data.tasks.length > 0) {
+                        this.tasksInfo = response.data.tasks
 
                     }
                     //任务数据
                     let data = [];
-                    this.artistInfo.platform.split(',').forEach(item => {
-                        data.push(_this.artistSocialPlatform.find(i => i.value == item).name)
-                    });
+                    if (this.artistInfo.platform) {
+                        this.artistInfo.platform.split(',').forEach(item => {
+                            data.push(_this.artistSocialPlatform.find(i => i.value == item).name)
+                        });
+                    }
+
                     this.platformDate = data.join(',');
                     //孵化期时间 
                     if (this.artistInfo.hatch_star_at !== "privacy" && this.artistInfo.hatch_end_at !== "privacy") {
-                        if(this.artistInfo.hatch_star_at !== null || this.artistInfo.hatch_end_at !== null){
-                            this.Incubationperiod = this.artistInfo.hatch_star_at + '|' + this.artistInfo.hatch_end_at 
-                        }else{
-                            this.Incubationperiod = ''  
-                        }        
-                    }else{
+                        if (this.artistInfo.hatch_star_at !== null || this.artistInfo.hatch_end_at !== null) {
+                            this.Incubationperiod = this.artistInfo.hatch_star_at + '|' + this.artistInfo.hatch_end_at
+                        } else {
+                            this.Incubationperiod = ''
+                        }
+                    } else {
                         this.Incubationperiod = '**'
+                    }
+                    if(this.user.nickname == this.artistInfo.creator.name){
+                        this.PrivacyShow = true
                     }
                     this.projectContractDefault = {
                         '昵称': response.data.nickname
                     };
                     this.isLoading = false;
+                    setTimeout(() => {
+                        this.canShow = true
+                    }, 200);
                 });
-                //任务状态跑组。试戏
-                fetch('get', '/task_types').then(response => {
 
-                    this.tasksType = response.data;
-                    response.data.forEach(item => {
 
-                        if (item.title == '视频评分') {
-                            this.scoreId = item.id
-                        }
-                    })
-                });
-                fetch('get', '/bloggers/gettype').then(response => {
-                    this.artistTypeArr = response.data
-                });
                 fetch('get', '/bloggers/select?include=users').then(response => {
                     response.data.forEach(item => {
                         _this.principalIds.push(item.users.data.id)
                     })
                 })
+               
+            },
+            getType: function () {
+                fetch('get', '/bloggers/gettype').then(response => {
+                    this.artistTypeArr = response.data
+                });
             },
             getProject(page = 1) {
                 fetch('get', '/bloggers/' + this.artistId + '/project', {
@@ -1465,7 +1477,7 @@ export default {
                 this.selectedDate = value;
                 this.$refs.meetingRoom.setDate(value)
             },
-    getCalendar () {
+            getCalendar() {
                 this.artistId = this.$route.params.id;
 
                 let data = {
@@ -1488,23 +1500,23 @@ export default {
             changeScheduleRemind: function (value) {
                 this.scheduleRemind = value;
             },
-    getAllProjects () {
+            getAllProjects() {
                 fetch('get', '/projects/all').then(response => {
                     this.allProjectsInfo = response.data
                 })
             },
-    getAllTasks () {
+            getAllTasks() {
                 fetch('get', '/tasksAll').then(response => {
                     this.allTasksInfo = response.data
                 })
             },
-    addLinkageResource () {
+            addLinkageResource() {
                 $('#addLinkage').modal('hide');
             },
-    ScheduleBox (value) {
+            ScheduleBox(value) {
                 this.showScheduleModal(value)
             },
-    addSchedule () {
+            addSchedule() {
                 let startTime = '';
                 let endTime = '';
                 if (this.isScheduleAllday) {
@@ -1570,7 +1582,8 @@ export default {
                     this.initAddScheduleModal()
                 })
             },
-    showScheduleModal (schedule) {
+            showScheduleModal(schedule) {
+                this.getResources();
                 let data = {
                     include: 'calendar,participants,creator,material,affixes,project,task',
                 };
@@ -1587,7 +1600,7 @@ export default {
                 });
                 $('#checkSchedule').modal('show')
             },
-    showToast (clientX, clientY) {
+            showToast(clientX, clientY) {
                 this.toastX = clientX - 100;
                 this.toastY = clientY - 25;
                 this.toastShow = true;
@@ -1595,10 +1608,10 @@ export default {
                     this.toastShow = false
                 }, 1000)
             },
-    changeIsAllDay (e) {
+            changeIsAllDay(e) {
                 this.isScheduleAllday = Number(e.target.checked);
             },
-    fileUpload (url, name, size) {
+            fileUpload(url, name, size) {
                 let data = {
                     title: name,
                     url: url,
@@ -1615,37 +1628,39 @@ export default {
                     }
                 })
             },
-    cancelSchedule () {
+            cancelSchedule() {
                 this.scheduleType = 'add'
                 this.initAddScheduleModal()
             },
-    showAddScheduleModal (date) {
+            showAddScheduleModal(data) {
                 if (this.calendarId.length > 0) {
-                    this.$refs.scheduleStartDate.setValue(date);
-                    this.$refs.scheduleEndDate.setValue(date);
-                    this.startTime = date;
-                    this.endTime = date;
+                    this.$refs.scheduleStartDate.setValue(data.start_day);
+                    this.$refs.scheduleEndDate.setValue(data.end_day);
+                    this.$refs.scheduleStartMinute.setValue(data.start_time);
+                    this.$refs.scheduleEndMinute.setValue(data.end_time);
+                    this.startTime = data.start_day;
+                    this.endTime = data.end_day;
                     $('#changeSchedule').modal('show')
                 } else {
                     toastr.error('该艺人无对应艺人日历，请先创建艺人日历')
                 }
             },
-    getResources(type) {
-      let data = {};
-      if (type) {
-        data = {
-          type,
-        };
-      }
-      fetch('get', '/materials/all', data).then((response) => {
-        if (type) {
-          this.meetingRomeList = response.data;
-        } else {
-          this.allMeetingRomeList = response.data;
-        }
-      });
-    },
-    changeSchedule () {
+            getResources(type) {
+                let data = {};
+                if (type) {
+                    data = {
+                        type,
+                    };
+                }
+                fetch('get', '/materials/all', data).then((response) => {
+                    if (type) {
+                        this.meetingRomeList = response.data;
+                    } else {
+                        this.allMeetingRomeList = response.data;
+                    }
+                });
+            },
+            changeSchedule() {
                 let startTime = '';
                 let endTime = '';
                 if (this.isScheduleAllday) {
@@ -1698,7 +1713,7 @@ export default {
                     this.initAddScheduleModal()
                 })
             },
-    changeScheduleParticipants (value) {
+            changeScheduleParticipants(value) {
                 let data = {};
                 if (value) {
                     data.participant_del_ids = [value];
@@ -1722,7 +1737,7 @@ export default {
                     this.scheduleParticipants = JSON.parse(JSON.stringify(this.$store.state.newParticipantsInfo));
                 })
             },
-    changeScheduleType (type) {
+            changeScheduleType(type) {
                 this.scheduleType = type;
                 $('#checkSchedule').modal('hide');
                 setTimeout(function () {
@@ -1764,7 +1779,7 @@ export default {
                     }
                 }
             },
-    deleteToastr (type, calendar = null) {
+            deleteToastr(type, calendar = null) {
                 this.delType = type;
                 if (calendar) {
                     this.delCalendarInfo = calendar
@@ -1773,14 +1788,14 @@ export default {
                     $('#checkSchedule').modal('hide');
                 }
             },
-    deleteSchedule () {
+            deleteSchedule() {
                 fetch('delete', '/schedules/' + this.scheduleData.id).then(() => {
                     $('#delModel').modal('hide');
                     toastr.success('删除成功');
                     this.$refs.calendar.refresh()
                 })
             },
-    initAddScheduleModal () {
+            initAddScheduleModal() {
                 this.showMore = false;
                 this.$store.dispatch('changeParticipantsInfo', {data: []});
                 this.scheduleName = '';
@@ -1811,13 +1826,13 @@ export default {
                 this.$refs.scheduleNotice.setValue('0');
                 this.$refs.scheduleRemind.setValue('0');
             },
-    changeScheduleRepeat (value) {
+            changeScheduleRepeat(value) {
                 this.scheduleRepeat = value;
             },
-    isShowMore () {
+            isShowMore() {
                 this.showMore = !this.showMore
             },
-    changeScheduleMaterial (value) {
+            changeScheduleMaterial(value) {
                 this.scheduleMaterialId = value;
             },
             //账单
@@ -1859,6 +1874,17 @@ export default {
             },
             //任务数据
             getArtistTasks: function (page = 1) {
+                //任务状态跑组。试戏
+                fetch('get', '/task_types').then(response => {
+
+                    this.tasksType = response.data;
+                    response.data.forEach(item => {
+
+                        if (item.title == '视频评分') {
+                            this.scoreId = item.id
+                        }
+                    })
+                });
                 fetch('get', '/bloggers/' + this.artistId + '/tasks', {
                     page: page
                 }).then(response => {
@@ -1868,7 +1894,7 @@ export default {
                     this.total_pages = response.meta.pagination.total_pages;
                 })
             },
-    taskcancel () {
+            taskcancel() {
                 this.$store.state.newParticipantsInfo = []
             },
             getTaskNum: function () {
@@ -1887,35 +1913,35 @@ export default {
                     this.taskNum = `${this.doneTaskNum}/${response.meta.pagination.total}`
                 })
             },
-    editBaseInfo () {
-                 if(this.artistInfo.powers.edit_blogger !=='true'){
+            editBaseInfo() {
+                if (this.artistInfo.powers.edit_blogger !== 'true') {
                     toastr.error('当前用户没有权限编辑博主')
                     return
                 }
                 this.isEdit = true;
                 this.isStatrtEdit = false
             },
-    cancelEdit () {
+            cancelEdit() {
                 this.getArtist()
                 this.isEdit = false;
                 this.isStatrtEdit = true
             },
-    distributionPerson (value) {
-                if(this.artistInfo.powers.edit_produser !=='true'){
+            distributionPerson(value) {
+                if (this.artistInfo.powers.edit_produser !== 'true') {
                     toastr.error('当前用户没有权限分配制作人')
                     return
                 }
                 $('#distributionproducer').modal('show')
                 this.distributionType = value;
-                if (this.artistInfo[value].data.length > 0) {
-                    this.$store.state.participantsInfo = Object.assign([], this.artistInfo[value].data)
+                if (this.artistInfo[value].length > 0) {
+                    this.$store.state.participantsInfo = Object.assign([], this.artistInfo[value])
                 }
             },
-    abrogate () {
+            abrogate() {
                 this.$store.state.participantsInfo = []
             },
-    // 分配制作人
-    addDistributionPerson () {
+            // 分配制作人
+            addDistributionPerson() {
                 let toast
                 let data = {
                     person_ids: [],
@@ -1923,17 +1949,17 @@ export default {
                 };
                 let personInfo = this.$store.state.participantsInfo;
                 //todo 删除和新增的数据有问题
-                if (this.artistInfo[this.distributionType].data.length > 0) {
-                    for (let i = 0; i < this.artistInfo[this.distributionType].data.length; i++) {
-                        if (personInfo.map(item => item.id).indexOf(this.artistInfo[this.distributionType].data[i].id) === -1) {
-                            data.del_person_ids.push(this.artistInfo[this.distributionType].data[i].id)
+                if (this.artistInfo[this.distributionType].length > 0) {
+                    for (let i = 0; i < this.artistInfo[this.distributionType].length; i++) {
+                        if (personInfo.map(item => item.id).indexOf(this.artistInfo[this.distributionType][i].id) === -1) {
+                            data.del_person_ids.push(this.artistInfo[this.distributionType][i].id)
                         }
                     }
                 }
                 for (let i = 0; i < this.$store.state.participantsInfo.length; i++) {
                     data.person_ids.push(this.$store.state.participantsInfo[i].id)
                 }
-                if (this.distributionType === 'publicity') {
+                if (this.distributionType === 'produser') {
                     toast = '分配制作人成功'
                 }
                 fetch('post', `/bloggers/${this.artistId}/produser`, data).then(() => {
@@ -1963,13 +1989,12 @@ export default {
                     $('#addPrivacy').modal('hide')
                 })
             },
-    getPrivacy () {
+            getPrivacy() {
                 let data = {
                     blogger_id: this.$route.params.id
                 };
                 fetch('get', `/privacyUsers?include=creator`, data).then(response => {
                     let allPrivacyUsers = response.data;
-                    console.log(allPrivacyUsers)
                     this.$store.state.incubationInfo = [];
 
                     if (allPrivacyUsers) {
@@ -1980,12 +2005,13 @@ export default {
                     }
                 })
             },
-    // 类型
-    changArtistType (value) {
-                this.artistInfo.type.data.id = value
+            // 类型
+            changArtistType(value) {
+                console.log(value)
+                this.artistInfo.type = value
             },
-    // 沟通状态
-    changeArtistCommunication (value) {
+            // 沟通状态
+            changeArtistCommunication(value) {
                 this.artistInfo.communication_status = value
             },
             //平台id
@@ -2031,10 +2057,21 @@ export default {
                 } else {
                     this.artistInfo.sign_contract_other = 0
                 }
-               
+                this.updateStar_xiaohongshu_infos = {
+                    url: this.artistInfo.xiaohongshu_url,
+                    avatar: this.artistInfo.xiaohongshu_fans_num
+                }
+                this.updateStar_weibo_infos = {
+                    url: this.artistInfo.weibo_url,
+                    avatar: this.artistInfo.weibo_fans_num
+                }
+                this.updateStar_douyin_infos = {
+                    url: this.artistInfo.douyin_id,
+                    avatar: this.artistInfo.douyin_fans_num
+                }
                 this.changeArtistInfo = {
-                    nickname: this.Namevalue,
-                    type_id: this.artistInfo.type.data.id,
+                    nickname: this.artistInfo.nickname,
+                    type_id: this.artistInfo.type,
                     communication_status: this.artistInfo.communication_status,
                     intention: this.artistInfo.intention,
                     sign_contract_other: this.artistInfo.sign_contract_other,
@@ -2055,9 +2092,12 @@ export default {
                 if (!this.updatelevel) {
                     delete(this.changeArtistInfo.level)
                 }
-                if(this.artistInfo.hatch_star_at == null || this.artistInfo.hatch_end_at == null){
+                if(this.artistInfo.hatch_star_at == null || this.artistInfo.hatch_star_at == 'privacy'){
                     delete(this.changeArtistInfo.hatch_star_at)
-                    delete(this.changeArtistInfo.hatch_end_at)
+                   
+                }
+                if(this.artistInfo.hatch_end_at == null|| this.artistInfo.hatch_end_at == 'privacy'){
+                     delete(this.changeArtistInfo.hatch_end_at)
                 }
                 fetch('put', '/bloggers/' + this.artistId, this.changeArtistInfo).then(() => {
                     toastr.success('修改成功');
@@ -2076,7 +2116,7 @@ export default {
                     this.artistInfo.sign_contract_other = 2
                 }
             },
-    changeWorkAd (value) {
+            changeWorkAd(value) {
                 if (value == 1) {
                     this.advertisingType = 1
                 }
@@ -2103,8 +2143,8 @@ export default {
                     this.getTaskDate()
                 })
             },
-    // 孵化期截止时间计算
-    getTimes () {
+            // 孵化期截止时间计算
+            getTimes() {
                 let end_date = '';
                 let end_hour;
                 let end_minute;
@@ -2181,70 +2221,71 @@ export default {
                 this.endMinutes = value
             },
             //视频时间
-            changeWorkReleaseTime (value) {
+            changeWorkReleaseTime(value) {
                 this.workReleaseTime = value
             },
             //昵称
-            changArtistName (value) {
-                this.Namevalue = value
+            changArtistName(value) {
+
+                this.artistInfo.nickname = value
             },
             //微博地址
             changeArtistWeibo_url(value) {
-                this.updateStar_weibo_infos.url = value
+                this.artistInfo.weibo_url = value
             },
             //微博粉丝
             changeArtistWeibo_fans_num(value) {
-                this.updateStar_weibo_infos.avatar = value
+                this.artistInfo.weibo_fans_num = value
             },
             //抖音id
             changeArtistDouyin_id(value) {
-                this.updateStar_douyin_infos.url = value
+                this.artistInfo.douyin_id = value
             },
             //抖音粉丝数
             changeArtistDouyin_fans_num(value) {
-                this.updateStar_douyin_infos.avatar = value
+                this.artistInfo.douyin_fans_num = value
             },
             //小红书地址
             changeArtistXiaohongshu_url(value) {
-                this.updateStar_xiaohongshu_infos.url = value
+                this.artistInfo.xiaohongshu_url = value
             },
             //小红书粉丝数
             changeArtistXiaohongshu_fans_num(value) {
-                this.updateStar_xiaohongshu_infos.avatar = value
+                this.artistInfo.xiaohongshu_fans_num = value
             },
             //备注
-            changeArtistDesc (value) {
+            changeArtistDesc(value) {
                 this.artistInfo.desc = value
             },
             //博主级别
-            changeArtistLevel (value) {
+            changeArtistLevel(value) {
                 this.updatelevel = value
             },
             //孵化期
-            changeArtistHatch (start, end) {
+            changeArtistHatch(start, end) {
                 this.artistInfo.hatch_star_at = start
                 this.artistInfo.hatch_end_at = end
 
             },
             //合作需求
-            changeArtistDemand (value) {
+            changeArtistDemand(value) {
                 this.updatedemand = value
             },
             taskdetail(id) {
-      this.$router.push({ path: `/tasks/${  id}` });
-    },
-    projectdetil(id) {
-      this.$router.push({ path: `/projects/${  id}` });
-    },
-    Jump(value) {
-      const price = value;
-      const str = /[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\.?/;// 网址是否合法检测
-      const regex = /(https?:\/\/)?(\w+\.?)+(\/[a-zA-Z0-9\?%=_\-\+\/]+)?/gi;// http,https有无检测
-      let re = new RegExp(str);
-      if (!re.test(value)) {
-        toastr.error('您的网址不正确');
-      } else {
-        value = value.replace(regex, (match, capture) => {
+                this.$router.push({path: `/tasks/${  id}`});
+            },
+            projectdetil(id) {
+                this.$router.push({path: `/projects/${  id}`});
+            },
+            Jump(value) {
+                const price = value;
+                const str = /[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\.?/;// 网址是否合法检测
+                const regex = /(https?:\/\/)?(\w+\.?)+(\/[a-zA-Z0-9\?%=_\-\+\/]+)?/gi;// http,https有无检测
+                let re = new RegExp(str);
+                if (!re.test(value)) {
+                    toastr.error('您的网址不正确');
+                } else {
+                    value = value.replace(regex, (match, capture) => {
                         if (capture) {
                             window.open(price)
                         }
@@ -2267,10 +2308,10 @@ export default {
                     this.formDate = response.data
                     $('#approval-great-module').modal('show')
                 });
-    },
-  },
-  filters: {
-    getWeek (date) {
+            },
+        },
+        filters: {
+            getWeek(date) {
                 let week = new Date(date).getDay();
                 let value = '';
                 switch (week) {
@@ -2298,8 +2339,8 @@ export default {
                 }
                 return value;
             },
-  },
-};
+        },
+    };
 </script>
 
 <style>
@@ -2417,7 +2458,7 @@ export default {
         border-radius: 50%;
         border: 1px solid #eee;
         background-repeat: no-repeat;
-        background-size: 100%;
+        background-size: 100% 100%;
         -moz-background-size: 100% 100%;
     }
 

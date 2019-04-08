@@ -7,12 +7,11 @@
      -->
     <div>
         <div data-plugin="actionBtn"
-             data-toggle="modal"
-             data-target="#addNewBroadcast"
+            
              class="site-action"
              aria-hidden="true"
              data-backdrop="static"
-             v-if="pageType === '发布'">
+             v-if="pageType === '发布'" @click="openModal">
             <button type="button"
                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                 <i aria-hidden="true"
@@ -26,7 +25,7 @@
              tabindex="-1"
              role="dialog"
              data-backdrop="static"
-             style="display: none">
+             >
             <div class="modal-dialog modal-lg modal-info">
                 <div class="modal-content">
                     <div class="modal-body">
@@ -151,14 +150,15 @@
                 },
                 fileInfo: [],
                 isAddButtonDisable: false,
+                isShow:false,
             }
         },
         created() {
-            this.getClassify()
+            // this.getClassify()
         },
         mounted() {
-            this.noteInit()
-            this.modalInit()
+            // this.noteInit()
+            // this.modalInit()
 
 
         },
@@ -189,6 +189,13 @@
             }
         },
         methods: {
+            openModal(){
+                // this.isShow = true
+                this.getClassify()
+                this.modalInit()
+                this.noteInit()
+                $('#addNewBroadcast').modal('show')
+            },
             clear() {
                 this.msg = ''
                 this.title = ''

@@ -47,7 +47,6 @@ export default {
         selectDate:function(start,end){
             this.start = start
             this.end = end
-            // console.log(this.start,this.end)
             this.$emit('getDate',start,end)
         }
     }
