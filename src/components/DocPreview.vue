@@ -29,7 +29,7 @@
                 </div>
                 <div class="modal-footer">
                     <span>图片文件请使用右键另存为</span>
-                    <a :href="url" download="">
+                    <a :href="url+'?attname='+givenFileName" download="">
                         <button type="button" class="btn btn-success waves-effect waves-light waves-round">
                             <i class="icon md-download" aria-hidden="true"></i>下载附件
                         </button>

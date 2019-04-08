@@ -176,12 +176,14 @@ export default {
                 canShow:false,
             }
         },
-
+created() {
+    this.getMyProjects('my_principal');
+    
+},
   mounted() {
     // this.getClients();
     // this.getStars();
     // this.getFilterProjects();
-    this.getMyProjects('my_principal');
     // this.getField();
     if (this.userList.length > 0) {
       for (let i = 0; i < this.userList.length; i++) {
@@ -229,7 +231,7 @@ export default {
     },
     getMyProjects (value) {
                 this.getProjectStatus = value;
-                this.fetchHandler('post','/projects/filter','filter')
+                this.fetchHandler('post','/projects/web_filter','filter')
                 // this.getFilterProjects();
     },
     filterGo:function(){
@@ -331,13 +333,14 @@ export default {
                     my:this.getProjectStatus
                 }
                 fetch(methods, newUrl || url, fetchData).then((response) => {
-                    _this.canShow = true
+                    
                     _this.projectsInfo = response.data
                     _this.total = response.meta.pagination.total;
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total_pages = response.meta.pagination.total_pages;
                     _this.cleanUp = true
                     _this.isLoading = false;
+                    _this.canShow = true
                 })
             },
             customize: function (value) {

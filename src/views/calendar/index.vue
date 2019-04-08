@@ -63,18 +63,42 @@
                                                                  style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
                                                                 {{ calendar.title }}
                                                             </div>
+                                                            <template v-if="calendar.title === '全员公开日历'">
+                                                                <div class="float-right position-relative"
+                                                                     v-if="calendar.principal && calendar.principal.data.name === userInfo.nickname"
+                                                                     v-show="calendar.starable_type !== 'star' || (calendar.starable_type === 'star' && calendar.principal_id == userInfo.id)">
+                                                                    <i class="iconfont icon-gengduo1 pointer-content"
+                                                                       aria-hidden="true"
+                                                                       id="taskDropdown"
+                                                                       data-toggle="dropdown" aria-expanded="false"></i>
+                                                                    <div class="dropdown-menu"
+                                                                         aria-labelledby="taskDropdown">
+                                                                        <a class="dropdown-item pointer-content"
+                                                                           @click="getCalendarDetail(calendar.id)"
+                                                                           data-target="#addCalendar"
+                                                                           data-toggle="modal">编辑</a>
+                                                                        <a class="dropdown-item pointer-content"
+                                                                           data-target="#delModal"
+                                                                           data-toggle="modal"
+                                                                           @click="deleteToastr('calendar', calendar)">删除</a>
+                                                                    </div>
+                                                                </div>
+                                                            </template>
                                                             <div class="float-right position-relative"
+                                                                 v-else
                                                                  v-show="calendar.starable_type !== 'star' || (calendar.starable_type === 'star' && calendar.principal_id == userInfo.id)">
-                                                                <i class="iconfont icon-gengduo1" aria-hidden="true"
-                                                                   id="taskDropdown"
+                                                                <i class="iconfont icon-gengduo1 pointer-content"
+                                                                   aria-hidden="true"
+                                                                   id="taskDropdown1"
                                                                    data-toggle="dropdown" aria-expanded="false"></i>
                                                                 <div class="dropdown-menu"
-                                                                     aria-labelledby="taskDropdown">
-                                                                    <a class="dropdown-item"
+                                                                     aria-labelledby="taskDropdown1">
+                                                                    <a class="dropdown-item pointer-content"
                                                                        @click="getCalendarDetail(calendar.id)"
                                                                        data-target="#addCalendar"
                                                                        data-toggle="modal">编辑</a>
-                                                                    <a class="dropdown-item" data-target="#delModal"
+                                                                    <a class="dropdown-item pointer-content"
+                                                                       data-target="#delModal"
                                                                        data-toggle="modal"
                                                                        @click="deleteToastr('calendar', calendar)">删除</a>
                                                                 </div>
@@ -177,21 +201,21 @@
                     </div>
                     <div class="modal-body">
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">标题</div>
+                            <div class="col-md-2 text-right float-left require">标题</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" title="" placeholder="请输入标题"
                                        v-model="scheduleName">
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">日历</div>
+                            <div class="col-md-2 text-right float-left require">日历</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors :options="calendarList" ref="calendarSelector"
                                            @change="selectScheduleCalendar"></selectors>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">开始时间</div>
+                            <div class="col-md-2 text-right float-left require">开始时间</div>
                             <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="changeStartTime" ref="scheduleStartDate"></datepicker>
                             </div>
@@ -200,7 +224,7 @@
                             </div>
                         </div>
                         <div class="clearfix">
-                            <div class="col-md-2 text-right float-left line-fixed-height">结束时间</div>
+                            <div class="col-md-2 text-right float-left line-fixed-height require">结束时间</div>
                             <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="changeEndTime" ref="scheduleEndDate"
                                             :startDate="startTime"></datepicker>
@@ -445,7 +469,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">标题</div>
+                            <div class="col-md-2 text-right float-left require">标题</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" title="" placeholder="请输入标题"
                                        v-model="scheduleName">
@@ -455,7 +479,8 @@
                             <div class="col-md-2 text-right float-left"></div>
                             <div class="col-md-10 float-left pl-0">
                                 <ul class="color-selector calendar-color-list">
-                                    <li v-for="(color,index) in colorArr" :style="'background-color: ' + color"
+                                    <li class="pointer-content" v-for="(color,index) in colorArr"
+                                        :style="'background-color: ' + color"
                                         :key="index" @click="changeCalendarColor(color)">
                                         <i class="md-check" v-if="color === checkColor"></i>
                                     </li>
@@ -463,7 +488,7 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">可见范围</div>
+                            <div class="col-md-2 text-right float-left require">可见范围</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors :options="visibleRangeArr" ref="visibleSelector"
                                            @change="addCalendarVisible"></selectors>
@@ -477,7 +502,7 @@
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">负责人</div>
+                            <div class="col-md-2 text-right float-left require">负责人</div>
                             <div class="col-md-10 float-left pl-0">
                                 <InputSelectors placeholder="请选择负责人" @change="principalChange"></InputSelectors>
                             </div>
@@ -506,7 +531,7 @@
 
         <!-- 删除日历/日程 -->
         <div v-if="canShowC" class="modal fade line-center" id="delModal" aria-hidden="true"
-            aria-labelledby="addLabelForm" role="dialog" tabindex="-1" data-backdrop="static">
+             aria-labelledby="addLabelForm" role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -783,9 +808,7 @@
 
                         $('#changeSchedule').on('hidden.bs.modal', () => {
                             this.initAddScheduleModal();
-                        });
-
-                        $('#checkSchedule').on('hide.bs.modal', () => {
+                        }).on('hide.bs.modal', () => {
                             if (this.scheduleType !== 'edit') {
                                 this.$store.dispatch('changeParticipantsInfo', {data: []});
                             }
@@ -1129,20 +1152,22 @@
                 $('#checkSchedule').modal('show')
             },
 
-            showAddScheduleModal: function (date) {
+            showAddScheduleModal: function (data) {
                 $('#changeSchedule').modal('show');
                 this.newCalendarModal = true;
                 this.toastShow = false;
-                this.$refs.scheduleStartDate.setValue(date);
-                this.$refs.scheduleEndDate.setValue(date);
+                this.$refs.scheduleStartDate.setValue(data.start_day);
+                this.$refs.scheduleEndDate.setValue(data.end_day);
+                this.$refs.scheduleStartMinute.setValue(data.start_time);
+                this.$refs.scheduleEndMinute.setValue(data.end_time);
                 this.$store.dispatch('changeParticipantsInfo', {
                     data: [{
                         icon_url: this.userInfo.avatar,
                         id: this.userInfo.id
                     }]
                 });
-                this.startTime = date;
-                this.endTime = date;
+                this.startTime = data.start_day;
+                this.endTime = data.end_day;
             },
 
             deleteToastr: function (type, calendar = null) {
@@ -1283,6 +1308,14 @@
             },
 
             addSchedule: function () {
+                if (!this.scheduleName) {
+                    toastr.error('标题不能为空');
+                    return
+                }
+                if (!this.scheduleCalendar) {
+                    toastr.error('请选择日历');
+                    return
+                }
                 let startTime = '';
                 let endTime = '';
                 if (this.isScheduleAllday) {

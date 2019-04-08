@@ -70,8 +70,8 @@
                             </td>
                             <td class="">{{ trail.fee }}元</td>
                             <td>
-                                <template v-if="trail.principal">
-                                    {{ trail.principal.data.name }}
+                                <template v-if="trail.principal_name">
+                                    {{ trail.principal_name.name }}
                                 </template>
                             </td>
                             <td>
@@ -349,9 +349,10 @@ export default {
       this.memberList = this.userList;
     }
     this.getCurrentUser();
+    this.getSales();
+
   },
   mounted() {
-    this.getSales();
     // this.getClients();
     this.getStars();
     // this.getIndustries();
@@ -484,7 +485,11 @@ export default {
       let _this = this,
         fetchData = this.fetchData,
         newUrl;
-      this.fetchData.include = 'include=principal,client,contact,recommendations,expectations';
+    if(methods === 'get'){
+        this.fetchData.include = 'include=client,expectations';
+    }else{
+        this.fetchData.include = 'include=principal,client,contact,recommendations,expectations';
+    }
       if (type == 'filter') {
         fetchData = this.customizeCondition;
         let keyword, 
@@ -515,12 +520,13 @@ export default {
         principal_ids: this.fetchData.principal_ids,
       };
       fetch(methods, newUrl || url, fetchData).then((response) => {
-        this.canShow = true
         _this.trailsInfo = response.data;
         _this.total = response.meta.pagination.total;
         _this.current_page = response.meta.pagination.current_page;
         _this.total_pages = response.meta.pagination.total_pages;
         _this.isLoading = false;
+        _this.canShow = true
+
       });
     },            
             filterGo() {
@@ -539,7 +545,7 @@ export default {
     // },
             getSales (pageNum = 1) {
                 let _this = this;
-                this.fetchHandler('post', '/trails/filter', 'filter', pageNum)
+                this.fetchHandler('get', '/trails', 'filter', pageNum)
                 // let data = {
                 //     page: pageNum,
                 //     include: 'principal,client,expectations',

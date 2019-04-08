@@ -641,9 +641,13 @@
             }
         },
 
+        created () {
+            this.getTask();
+        },
+
         mounted() {
 
-            this.getTask();
+            // this.getTask();
             $('#addTask').on('show.bs.modal', function () {
                 this.isEdit = false;
             })
@@ -687,11 +691,10 @@
             getTask: function () {
 
                 let data = {
-                    include: 'creator,principal,pTask,tasks.type,resource.resourceable,resource.resource,affixes,participants',
                 };
 
                 fetch('get', '/tasks/' + this.taskId, data).then(response => {
-                    this.canShow = true
+                    this.isLoading = false;
                     if (response.data.affixes) {
                         for (let i = 0; i < response.data.affixes.data.length; i++) {
                             let size = response.data.affixes.data[i].size;
@@ -714,9 +717,11 @@
                     this.$store.dispatch('changeParticipantsInfo', params);
                     params.data = response.data.principal.data;
                     this.$store.dispatch('changePrincipal', params);
-                    this.isLoading = false;
                     this.resourceType = this.oldInfo.resource && this.oldInfo.resource.data.resource.data.type // 资源type
                     this.resourceableId = this.oldInfo.resource && this.oldInfo.resource.data.resourceable.data.id // 资源id
+                    this.canShow = true
+                }).catch(() => {
+                    this.isLoading = false;
                 })
             },
 
@@ -827,7 +832,7 @@
                 // 修改任务概况除参与人字段
                 const editTaskInfo = () => {
                     return new Promise((res, rej) => {
-                        fetch('put', '/tasks/' + this.taskId, this.changeInfo).then(() => {
+                        fetch('put', '/tasks/edit/' + this.taskId, this.changeInfo).then(() => {
                             // this.getTask();
                             if (this.changeInfo.principal_id) {
                                 this.taskInfo.principal.data = this.$store.state.principalInfo
