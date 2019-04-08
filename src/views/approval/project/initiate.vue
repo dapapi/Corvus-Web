@@ -78,7 +78,6 @@
                     type: this.projectType,
                     status: 1,
                 }).then(response => {
-                    this.canShow = true
                     for (let i = 0; i < response.data.length; i++) {
                         if (response.data[i].field_type === 2 || response.data[i].field_type === 6) {
                             response.data[i].contentArr = [];
@@ -90,6 +89,7 @@
                             }
                         }
                     }
+                    this.canShow = true
                     this.projectFieldsArr = response.data;
                     this.$nextTick((params) => {
                         $('#addProject').modal('show')   

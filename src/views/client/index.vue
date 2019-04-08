@@ -21,7 +21,7 @@
             <div class="panel col-md-12 py-5">
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
-                        <input type="text" class="form-control" placeholder="请输入公司名称" v-model="companyName"
+                        <input type="text" class="form-control" placeholder="请输入公司名称"
                                @keyup.enter='filterGo' @blur='filterGo'>
                     </div>
                     <div class="col-md-3 example float-left">
@@ -264,9 +264,13 @@
             }
         },
 
+        created () {
+            this.getClients();
+        },
+
         mounted() {
             this.getField()
-            this.getClients();
+            // this.getClients();
             this.user = JSON.parse(Cookies.get('user'))
             // 清除负责人默认值的设置
             this.clearDefaultPrincipal()
@@ -310,12 +314,15 @@
                 if (this.clientPrincipalIdSearch.length > 0) {
                     params.principal_ids = this.clientPrincipalIdSearch
                 }
+                let type = 'get'
                 if (this.companyName || this.clientLevelSearch || this.clientPrincipalIdSearch.length > 0) {
                     url = '/clients/filter'
                     params.include = 'principal'
+                    type = 'post'
                 }
 
-                fetch('get', url, params).then(response => {
+                fetch(type, url, params).then(response => {
+                    this.isLoading = false;
                     this.canShow = true
                     this.clientsInfo = response.data;
                     if (this.companyName || this.clientLevelSearch || this.clientPrincipalIdSearch.length > 0) {
@@ -327,6 +334,7 @@
                         this.total = response.total;
                         this.total_pages = response.per_page != 0 ? Math.ceil(response.total / response.per_page) : 1;
                     }
+                }).catch(() => {
                     this.isLoading = false;
                 })
             },
@@ -427,12 +435,14 @@
                 }
                 
                 fetch(methods, newUrl || url, fetchData).then((response) => {
-                    this.canShow = true
+                    
+
                     _this.clientsInfo = response.data
                     _this.total = response.meta.pagination.total;
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total_pages = response.meta.pagination.total_pages;
                     _this.isLoading = false;
+                    this.canShow = true
                 })
             },
 
@@ -447,7 +457,9 @@
             changePrincipal: function (value) {
                 this.clientPrincipal = value
             },
-            filterGo() {
+            filterGo(e) {
+                // console.log(e.target.value)
+                this.companyName = e.target.value.trim()
                 this.fetchData.keyword = this.companyName
                 this.exportParams.keyword = this.companyName
                 this.fetchHandler('post', '/clients/filter', 'filter')

@@ -3,29 +3,31 @@
         <div class="fc-toolbar fc-header-toolbar">
             <div class="fc-left">
                 <div class="fc-button-group">
-                    <button type="button" class="fc-month-button fc-button fc-state-default fc-corner-left"
+                    <button type="button"
+                            class="pointer-content fc-month-button fc-button fc-state-default fc-corner-left"
                             @click="displayMeetingRoom('month')">月
                     </button>
-                    <button type="button" class="fc-agendaWeek-button fc-button fc-state-default"
+                    <button type="button" class="pointer-content fc-agendaWeek-button fc-button fc-state-default"
                             @click="displayMeetingRoom('agendaWeek')">周
                     </button>
                     <button type="button"
-                            class="fc-agendaDay-button fc-button fc-state-default fc-corner-right fc-state-active">日
+                            class="pointer-content fc-agendaDay-button fc-button fc-state-default fc-corner-right fc-state-active">
+                        日
                     </button>
 
                 </div>
             </div>
             <div class="fc-right">
                 <div class="fc-button-group">
-                    <button type="button" class="fc-prev-button fc-button fc-state-default fc-corner-left"
+                    <button type="button" class="pointer-content fc-prev-button fc-button fc-state-default fc-corner-left"
                             @click="getBeforeDay"><span
                             class="fc-icon fc-icon-left-single-arrow"></span></button>
-                    <button type="button" class="fc-next-button fc-button fc-state-default fc-corner-right"
+                    <button type="button" class="pointer-content fc-next-button fc-button fc-state-default fc-corner-right"
                             @click="getNextDay"><span
                             class="fc-icon fc-icon-right-single-arrow"></span></button>
                 </div>
                 <button type="button"
-                        class="fc-today-button fc-button fc-state-default fc-corner-left fc-corner-right"
+                        class="pointer-content fc-today-button fc-button fc-state-default fc-corner-left fc-corner-right"
                         :class="currentDate == numberDate? 'fc-state-disabled' : ''"
                         @click="getCurrentDay" :disabled="currentDate == numberDate">今天
                 </button>

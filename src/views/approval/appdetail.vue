@@ -349,7 +349,7 @@ export default {
         $('#approval-great-module').modal('show');
       });
     },
-    approvalDone(params = '审批成功') {
+    approvalDone(params) {
       this.waitingForFlag = true
       this.isCurrentApprover = false
       if (this.list.project_number) {

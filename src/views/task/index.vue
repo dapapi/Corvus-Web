@@ -32,7 +32,7 @@
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                         <li class="nav-item" role="presentation" @click="getMyTasks()">
-                            <a class="nav-link active"
+                            <a class="nav-link"
                                data-toggle="tab"
                                href="#forum-task"
                                aria-controls="forum-base"
@@ -40,7 +40,7 @@
                                role="tab">所有任务</a>
                         </li>
                         <li class="nav-item" role="presentation" @click="getMyTasks(3)">
-                            <a class="nav-link"
+                            <a class="nav-link active"
                                data-toggle="tab"
                                href="#forum-task"
                                aria-controls="forum-present"
@@ -179,7 +179,7 @@
                 user: {}, // 个人信息
                 isLoading: true,
                 priorityArr: config.priorityArr,
-                my: '',//tasks 筛选  3我负责的 2 我参与的 1我创建的 4我分配的
+                my: 3,//tasks 筛选  3我负责的 2 我参与的 1我创建的 4我分配的
                 linkCurrentPage: 2, // 关联资源当前页数
                 linkTotalPage: 1, // 关联资源总页数
                 linkCode: '', // 关联资源父数据的code
@@ -196,8 +196,11 @@
                 'department',
             ])
         },
-        mounted() {
+        created () {
             this.getTasks();
+        },
+        mounted() {
+            // this.getTasks();
             this.user = JSON.parse(Cookies.get('user'))
             
             // 负责人默认值的设置
@@ -239,13 +242,15 @@
                     params.type_id = this.taskTypeSearch;
                 }
                 fetch('get', url, params).then((response) => {
-                    this.canShow = true
+                    this.isLoading = false;
                     this.tasksInfo = response.data;
                     this.current_page = response.current_page;
                     this.total = response.total;
                     this.total_pages = response.per_page != 0 ? Math.ceil(response.total / response.per_page) : 1;
+                    this.canShow = true
+                }).catch(() => {
                     this.isLoading = false;
-                });
+                })
             },
             // 任务我的筛选
             getMyTasks(my) {

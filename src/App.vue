@@ -75,6 +75,14 @@
             }
             // this.getApprovalNum()
         },
+        mounted(){
+          
+               
+        //      $('.modal-dialog').click(function(){
+        //       console.log(1111);
+        //         document.getElementsByTagName('body')[0].classList.add('modal-open');
+        //  }),
+        },
         methods: {
             ...mapActions([
                 'getUserList',

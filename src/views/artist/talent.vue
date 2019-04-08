@@ -487,7 +487,7 @@
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="emptyBolgger">取消
                         </button>
-                        <button class="btn btn-primary" type="submit" @click="addBolgger">确定</button>
+                        <button class="btn btn-primary" type="submit" @click="addBolgger" :disable="isAddButtonDisable">确定</button>
                     </div>
 
                 </div>
@@ -720,7 +720,7 @@
                     <div class="modal-footer">
                         <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal" @click="cancleData">取消
                         </button>
-                        <button class="btn btn-primary" type="submit" @click="addArtist">确定</button>
+                        <button class="btn btn-primary" type="submit" @click="addArtist" :disable="isAddButtonDisable">确定</button>
                     </div>
 
                 </div>
@@ -947,6 +947,7 @@
                 fetchData:{},
                 customizeCondition: {},
                 canShow:false,
+                isAddButtonDisable: false,
                 // currentStatus:'start'
             }
         },
@@ -1042,6 +1043,8 @@
                     _this.isLoading = false;
                     _this.selectAllStars = false;
                     _this.selectedArtistsArr = [];
+                }).catch(function(){
+                    _this.isLoading = false;
                 })
             },
             getBlogger: function (page = 1, signStatus) {
@@ -1086,6 +1089,8 @@
                     _this.isLoading = false;
                     _this.selectAllBlogger = false;
                     _this.selectedArtistsArr = [];
+                }).catch(function(){
+                    _this.isLoading = false;
                 });
             },
             deleteAffix: function (index) {
@@ -1298,6 +1303,7 @@
                     toastr.error('请填写签约公司');
                     return false
                 }
+                this.isAddButtonDisable = true;
                 let platform = this.platformType.join(',');
                 let data = {
                     //微博,抖音,小红书
@@ -1316,6 +1322,7 @@
                     avatar: this.uploadUrl
                 };
                 fetch('post', '/bloggers', data).then(function (response) {
+                    _this.isAddButtonDisable = false;
                     toastr.success('创建成功');
                     $('#addBolgger').modal('hide');
                     _this.$router.push({path: 'blogger/' + response.data.id});
@@ -1575,6 +1582,7 @@
                     toastr.error('请上传附件');
                     return false
                 }
+                this.isAddButtonDisable = true;
                 let platform = this.platformType.join(',');
                 let data = {
                     name: this.artistName,//名字
@@ -1607,6 +1615,7 @@
                 }
                 let _this = this;
                 fetch('post', '/stars', data).then(function (response) {
+                    _this.isAddButtonDisable = false;
                     toastr.success('创建成功');
                     $('#addArtist').modal('hide');
                     // _this.$router.push({path: '/artists/' + response.data.id});

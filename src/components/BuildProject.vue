@@ -253,6 +253,11 @@
         created() {
             this.getStars();
         },
+        mounted(){
+            $('.modal-simple').on('mouseover',function(){
+                document.getElementsByTagName('body')[0].classList.add('modal-open');
+            })
+        },
         watch: {
             projectFieldsArr(newValue) {
                 return this.projectFields = newValue;
