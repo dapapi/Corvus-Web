@@ -108,7 +108,7 @@
                             <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                  style="width: 100%">
                         </div>
-                        <pagination :current_page="current_page" :method="getFilterProjects" :total_pages="total_pages"
+                        <pagination :current_page="current_page" :method="getList" :total_pages="total_pages"
                                     :total="total"></pagination>
                     </div>
                 </div>
@@ -181,10 +181,6 @@ created() {
     
 },
   mounted() {
-    // this.getClients();
-    // this.getStars();
-    // this.getFilterProjects();
-    // this.getField();
     if (this.userList.length > 0) {
       for (let i = 0; i < this.userList.length; i++) {
         this.allUsers.push({
@@ -218,6 +214,50 @@ created() {
   },
 
   methods: {
+    //自定义筛选列表
+    getList(pageNum =1){
+        let _this = this,fetchData 
+        if(this.customizeCondition){
+           fetchData  = this.customizeCondition
+        }else{
+           fetchData ={}
+        }
+        let keyword, type, principal_ids,my
+        if (this.fetchData.keyword) {
+            fetchData.keyword = this.projectKeyword
+        }else{
+            delete fetchData.keyword
+        }
+        if (this.principal_ids.length > 0) {
+            fetchData.principal_ids = this.principal_ids
+        }else{
+            delete fetchData.principal_ids
+        }
+        if (this.projectSearchType) {
+            if (this.projectSearchType == 3) {
+                this.projectSearchType = '3,4'
+            }
+            fetchData.project_type = this.projectSearchType
+           
+        }else{
+            delete fetchData.project_type
+        }
+        if (this.getProjectStatus) {
+            fetchData.my = this.getProjectStatus
+        }else{
+            delete fetchData.my
+        }
+        fetch('post', `/projects/web_filter?page=${pageNum}`, fetchData).then((response) => {     
+            _this.projectsInfo = response.data
+            _this.total = response.meta.pagination.total;
+            _this.current_page = response.meta.pagination.current_page;
+            _this.total_pages = response.meta.pagination.total_pages;
+            _this.cleanUp = true
+            _this.isLoading = false;
+            _this.canShow = true
+        })
+    },
+    //点击自定义筛选
     getField() {
       const _this = this;
       fetch('get', '/projects/filter_fields').then((params) => {
@@ -229,186 +269,88 @@ created() {
         })
       });
     },
+    //所有项目  我负责的 我参与的
     getMyProjects (value) {
-                this.getProjectStatus = value;
-                this.fetchHandler('post','/projects/web_filter','filter')
-                // this.getFilterProjects();
+        // alert(value)
+        this.getProjectStatus = value;
+        this.getList(1)
     },
+    //项目名称的筛选
     filterGo:function(){
         this.fetchData.keyword = this.projectKeyword
-        this.fetchHandler('post','/projects/filter','filter')
+        this.getList(1)
     },
+
+    //项目类型和负责人筛选
     getProjectSearch: function (type, value) {
         if (type === 'principal_ids') {
             this.principal_ids = value.join(',');
         } else if (type === 'project_type') {
             this.projectSearchType = value
+           
         }
-        // this.getFilterProjects();
-        this.fetchHandler('post','/projects/filter','filter')
+        this.getList(1)
     },
 
-    getFilterProjects (pageNum = 1) {
-                let data = {
-                    page: pageNum,
-                    // include: 'principal,trail.expectations'
-                };
-                if (this.getProjectStatus) {
-                    data.my = this.getProjectStatus;
-                }
-                if (this.projectSearchType) {
-                    if (this.projectSearchType == 3) {
-                        this.projectSearchType = '3,4'
-                    }
-                    data.project_type = this.projectSearchType
-                }
-                if (this.projectKeyword) {
-                    data.keyword = this.projectKeyword
-                }
-                if (this.principal_ids.length > 0) {
-                    data.principal_ids = this.principal_ids;
-                }
-                //导出参数
-                this.exportParams = data;
-                fetch('get', '/projects', data).then(response => {
-                    this.projectsInfo = response.data;
-                    this.total = response.meta.pagination.total;
-                    this.current_page = response.meta.pagination.current_page;
-                    this.total_pages = response.meta.pagination.total_pages;
-                    this.isLoading = false;
-                })
-            },
-
-    getClients () {
-                let _this = this;
-                // fetch('get', '/clients/all').then(function (response) {
-                //     _this.canShow = true
-                //     for (let i = 0; i < response.data.length; i++) {
-                //         _this.companyArr.push({
-                //             name: response.data[i].company,
-                //             id: response.data[i].id,
-                //             grade: response.data[i].grade
-                //         })
-                //     }
-
-                // })
-            },
-
+    //跳转详情
     redirectDetail (projectId) {
-                this.$router.push({path: '/projects/' + projectId})
-            },
-            fetchHandler(methods, url, type) {
-                let _this = this,
-                    fetchData = this.fetchData,
-                    newUrl
-                this.fetchData.include = '&include=principal,trail.expectations'
-                this.fetchData.page = 'page=1'
-                if (type == 'filter') {
-                    fetchData = this.customizeCondition
-                    let keyword, type, principal_ids,my
-                    if (this.fetchData.keyword) {
-                        keyword = '&keyword=' + this.projectKeyword
-                    } else {
-                        keyword = ''
-                    }
-                    if (this.principal_ids.length > 0) {
-                        this.customizeCondition.principal_ids = this.principal_ids
-                    }
-                    if (this.projectSearchType) {
-                        type = '&project_type=' + this.projectSearchType
-                    } else {
-                        type = ''
-                    }
-                    if (this.getProjectStatus) {
-                        my = '&my=' + this.getProjectStatus;
-                    }else{
-                        my = ''
-                    }
-                    newUrl = url + '?' + this.fetchData.page  + this.fetchData.include + keyword + type + my
-                }
-                this.exportParams = {
-                    keyword: this.fetchData.keyword,
-                    type: this.projectSearchTypes,
-                    principal_ids: this.principal_ids,
-                    my:this.getProjectStatus
-                }
-                fetch(methods, newUrl || url, fetchData).then((response) => {
-                    
-                    _this.projectsInfo = response.data
-                    _this.total = response.meta.pagination.total;
-                    _this.current_page = response.meta.pagination.current_page;
-                    _this.total_pages = response.meta.pagination.total_pages;
-                    _this.cleanUp = true
-                    _this.isLoading = false;
-                    _this.canShow = true
-                })
-            },
-            customize: function (value) {
-                this.customizeCondition = value
-                this.fetchHandler('post','/projects/filter','filter')
-            },
-
+        this.$router.push({path: '/projects/' + projectId})
+    },
+    //自定义筛选   
+    customize: function (value) {
+        this.customizeCondition = value
+        this.getList(1)
+        
+    },
+    //判断权限
     changeProjectType (value) {
-                if(this.$store.state.listPower.project.add !=='true'){
-                    toastr.error('当前用户没有权限新增项目')
-                    return
-                }
-                let organization_id = JSON.parse(Cookies.get('user')).organization_id
-                if (value == 3) {
-                    if (organization_id == 411) {
-                        value = 3
-                    } else if (organization_id == 412) {
-                        value = 4
-                    }
-                }
-                this.projectType = value;
+        if(this.$store.state.listPower.project.add !=='true'){
+            toastr.error('当前用户没有权限新增项目')
+            return
+        }
+        let organization_id = JSON.parse(Cookies.get('user')).organization_id
+        if (value == 3) {
+            if (organization_id == 411) {
+                value = 3
+            } else if (organization_id == 412) {
+                value = 4
+            }
+        }
+        this.projectType = value;
 
-                this.selectProjectType();
-                $('#addProject').modal('show');
-            },
+        this.selectProjectType();
+        $('#addProject').modal('show');
+    },
 
     selectProjectType () {
-                this.projectFieldsArr = [];
-                if (this.projectType == 5) {
-                    return
-                }
-                let _this = this;
-                fetch('get', '/project_fields', {
-                    type: _this.projectType,
-                    status: 1,
-                }).then(function (response) {
-                    for (let i = 0; i < response.data.length; i++) {
-                        if (response.data[i].field_type === 2 || response.data[i].field_type === 6) {
-                            response.data[i].contentArr = [];
-                            for (let j = 0; j < response.data[i].content.length; j++) {
-                                response.data[i].contentArr.push({
-                                    value: response.data[i].content[j],
-                                    name: response.data[i].content[j]
-                                })
-                            }
-                        }
+        this.projectFieldsArr = [];
+        if (this.projectType == 5) {
+            return
+        }
+        let _this = this;
+        fetch('get', '/project_fields', {
+            type: _this.projectType,
+            status: 1,
+        }).then(function (response) {
+            for (let i = 0; i < response.data.length; i++) {
+                if (response.data[i].field_type === 2 || response.data[i].field_type === 6) {
+                    response.data[i].contentArr = [];
+                    for (let j = 0; j < response.data[i].content.length; j++) {
+                        response.data[i].contentArr.push({
+                            value: response.data[i].content[j],
+                            name: response.data[i].content[j]
+                        })
                     }
-                    _this.projectFieldsArr = response.data
+                }
+            }
+            _this.projectFieldsArr = response.data
 
-                });
-            },
+        });
+    },
 
-            addInfo (value, name) {
-                this.addInfoArr[name] = value
-            },
-            getStars () {
-                // if (this.starsArr.length > 0) {
-                //     return
-                // }
-                // fetch('get', '/starandblogger', {sign_contract_status: 2}).then(response => {
-                //     for (let i = 0; i < response.data.length; i++) {
-                //         this.starsArr.push({
-                //             name: response.data[i].name,
-                //             value: response.data[i].flag + ',' + response.data[i].id,
-                //         })
-                //     }
-                // })
-            },  
+    addInfo (value, name) {
+        this.addInfoArr[name] = value
+    },
 
   },
 };
