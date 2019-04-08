@@ -52,6 +52,9 @@ export default {
     changePreview(state, data) {
         state.previewurl = data
     },
+    changePreviewName(state, data) {
+        state.previewname = data
+    },
     changeCompany(state, data) {
         state.companyInfo = data
     },

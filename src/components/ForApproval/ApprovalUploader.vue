@@ -21,7 +21,7 @@
                     <!-- <hr> -->
                     <div class="icon-control">
                         <a >
-                            <i class="iconfont icon-liulan" @click='previewHandler(item.fileUrl)'></i>
+                            <i class="iconfont icon-liulan" @click='previewHandler(item)'></i>
                         </a>
                         <i class="iconfont icon-shanchu1" @click="imgDelete(item)"></i>
                     </div>
@@ -78,7 +78,8 @@ export default {
   },
   methods: {
     previewHandler(params) {
-      this.$store.dispatch('changePreview', params);
+      this.$store.dispatch('changePreview', params.fileUrl);
+      this.$store.dispatch('changePreviewName', params.fileName);
       $('#docPreviewSelector').modal('hide');
       this.previewUrlArr = String(params).split(',');
       if (this.previewUrlArr.length === 1) {
@@ -109,6 +110,9 @@ export default {
         type[type.length - 1] = 'txt';
       }
        else if (type[type.length - 1] === 'msword') {
+                type[type.length - 1] = 'doc';
+            }
+            else if (type[type.length - 1] === 'wps-writer') {
                 type[type.length - 1] = 'doc';
             }
         else if (type[type.length - 1] === 'vnd.openxmlformats-officedocument.wordprocessingml.document') {

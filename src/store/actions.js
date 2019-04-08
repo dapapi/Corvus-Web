@@ -71,6 +71,9 @@ export default {
     changePreview: function (data, params) {
         data.commit('changePreview', params)
     },
+    changePreviewName: function (data, params) {
+        data.commit('changePreviewName', params)
+    },
     // 获取部门数据
     getDepartment({commit}) {
         fetch('get', '/departments').then(res => {

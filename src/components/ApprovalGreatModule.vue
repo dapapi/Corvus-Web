@@ -34,7 +34,7 @@
                 </div>
             </div>
         </div>
-      <DocPreview :url='$store.state.previewurl' :detailpage='detailpage' />
+      <DocPreview :url='$store.state.previewurl' :given-file-name='$store.state.previewname' :detailpage='detailpage' />
 
 
     </div>
@@ -85,6 +85,9 @@ export default {
   created() {
   },
   mounted() {
+      $('.modal-simple').on('mouseover',function(){
+        document.getElementsByTagName('body')[0].classList.add('modal-open');
+      })
     const _this = this;
     this.refresh();
   },

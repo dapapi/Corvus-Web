@@ -322,6 +322,7 @@
                 }
 
                 fetch(type, url, params).then(response => {
+                    this.isLoading = false;
                     this.canShow = true
                     this.clientsInfo = response.data;
                     if (this.companyName || this.clientLevelSearch || this.clientPrincipalIdSearch.length > 0) {
@@ -333,7 +334,6 @@
                         this.total = response.total;
                         this.total_pages = response.per_page != 0 ? Math.ceil(response.total / response.per_page) : 1;
                     }
-                    this.isLoading = false;
                 }).catch(() => {
                     this.isLoading = false;
                 })
@@ -434,12 +434,14 @@
                 }
                 
                 fetch(methods, newUrl || url, fetchData).then((response) => {
-                    this.canShow = true
+                    
+
                     _this.clientsInfo = response.data
                     _this.total = response.meta.pagination.total;
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total_pages = response.meta.pagination.total_pages;
                     _this.isLoading = false;
+                    this.canShow = true
                 })
             },
 

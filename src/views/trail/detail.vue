@@ -71,13 +71,13 @@
                                 <i class="iconfont icon-yiren pr-2" aria-hidden="true"></i>目标艺人
                             </div>
                             <div class="font-weight-bold float-left" v-if="trailInfo.title">
-                                <span v-if="trailInfo.bloggerexpectations"
-                                      v-for="expectation in trailInfo.bloggerexpectations.data"
+                                <span v-if="trailInfo.expectations"
+                                      v-for="expectation in trailInfo.expectations.data"
                                       :key="expectation.nickname">
                                     {{ expectation.nickname}}
                                 </span>
-                                <span v-if="trailInfo.starexpectations"
-                                      v-for="expectation in trailInfo.starexpectations.data" :key="expectation.name">
+                                <span v-if="trailInfo.expectations"
+                                      v-for="expectation in trailInfo.expectations.data" :key="expectation.name">
                                     {{ expectation.name}}
                                 </span>
                             </div>
@@ -87,13 +87,13 @@
                                 <i class="iconfont icon-tuijian pr-2" aria-hidden="true" style="font-size:17px;"></i>推荐艺人
                             </div>
                             <div class="font-weight-bold float-left" v-if="trailInfo.title">
-                                <span v-if="trailInfo.bloggerrecommendations"
-                                      v-for="recommendation in trailInfo.bloggerrecommendations.data"
+                                <span v-if="trailInfo.recommendations"
+                                      v-for="recommendation in trailInfo.recommendations.data"
                                       :key="recommendation.nickname">
                                     {{ recommendation.nickname }}
                                 </span>
-                                <span v-if="trailInfo.starrecommendations"
-                                      v-for="recommendation in trailInfo.starrecommendations.data"
+                                <span v-if="trailInfo.recommendations"
+                                      v-for="recommendation in trailInfo.recommendations.data"
                                       :key="recommendation.name">
                                     {{ recommendation.name }}
                                 </span>
@@ -774,9 +774,10 @@ export default {
     getTrail() {
       this.trailId = this.$route.params.id;
       const data = {
-        include: 'principal,client,lockuser,contact,starexpectations,bloggerexpectations,starrecommendations,bloggerrecommendations,project',
+      //  include: 'client,lockuser,contact,starexpectations,bloggerexpectations,starrecommendations,bloggerrecommendations',
+          include: 'client,lockuser,contact,expectations,recommendations',
       };
-      fetch('get', `/trails/${this.trailId}`, data).then((response) => {
+      fetch('get', `/trailsAll/${this.trailId}`, data).then((response) => {
         this.canShow = true
         this.lockUser = response.data.lockuser;
         this.trailType = response.data.type;
@@ -785,18 +786,18 @@ export default {
         this.oldInfo = JSON.parse(JSON.stringify(response.data));
         this.selectedExpectationsArr = [];
         this.selectedRecommendationsArr = [];
-        for (let i = 0; i < this.trailInfo.starexpectations.data.length; i++) {
-          this.selectedExpectationsArr.push(`${this.trailInfo.starexpectations.data[i].flag}-${this.trailInfo.starexpectations.data[i].id}`);
+        for (let i = 0; i < this.trailInfo.expectations.data.length; i++) {
+          this.selectedExpectationsArr.push(`${this.trailInfo.expectations.data[i].flag}-${this.trailInfo.expectations.data[i].id}`);
         }
-        for (let i = 0; i < this.trailInfo.bloggerexpectations.data.length; i++) {
-          this.selectedExpectationsArr.push(`${this.trailInfo.bloggerexpectations.data[i].flag}-${this.trailInfo.bloggerexpectations.data[i].id}`);
+        // for (let i = 0; i < this.trailInfo.bloggerexpectations.data.length; i++) {
+        //   this.selectedExpectationsArr.push(`${this.trailInfo.bloggerexpectations.data[i].flag}-${this.trailInfo.bloggerexpectations.data[i].id}`);
+        // }
+        for (let i = 0; i < this.trailInfo.recommendations.data.length; i++) {
+          this.selectedRecommendationsArr.push(`${this.trailInfo.recommendations.data[i].flag}-${this.trailInfo.recommendations.data[i].id}`);
         }
-        for (let i = 0; i < this.trailInfo.starrecommendations.data.length; i++) {
-          this.selectedRecommendationsArr.push(`${this.trailInfo.starrecommendations.data[i].flag}-${this.trailInfo.starrecommendations.data[i].id}`);
-        }
-        for (let i = 0; i < this.trailInfo.bloggerrecommendations.data.length; i++) {
-          this.selectedRecommendationsArr.push(`${this.trailInfo.bloggerrecommendations.data[i].flag}-${this.trailInfo.bloggerrecommendations.data[i].id}`);
-        }
+        // for (let i = 0; i < this.trailInfo.bloggerrecommendations.data.length; i++) {
+        //   this.selectedRecommendationsArr.push(`${this.trailInfo.bloggerrecommendations.data[i].flag}-${this.trailInfo.bloggerrecommendations.data[i].id}`);
+        // }
         if (response.data.principal) {
           const params = {
             type: 'change',

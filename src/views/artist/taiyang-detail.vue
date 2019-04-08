@@ -1358,6 +1358,7 @@ export default {
   components: {
     ApprovalGreatModule,
   },
+
   mounted() {
 
     this.getCalendar();
@@ -2110,7 +2111,21 @@ export default {
 
     // 添加任务
     addTask(response) {
+     
       this.allTaskList.push(response.data);
+     
+        fetch('get', `/stars/${this.$route.params.id}/tasks`).then((response) => {
+        this.allTaskList = response.data;
+        if (this.allTaskList.length > 0) {
+          for (let i = 0; i < this.allTaskList.length; i++) {
+            if (this.allTaskList[i].status == 2) {
+              this.doneTaskNum += 1;
+            }
+          }
+        }
+
+        this.taskNum = `${this.doneTaskNum}/${response.meta.pagination.total}`;
+      }); 
     },
     // 设置默认负责人
     setDefaultPrincipal() {
@@ -2302,7 +2317,6 @@ export default {
       // todo 删除和新增的数据有问题
       if (this.artistInfo[this.distributionType].length > 0) {
         for (let i = 0; i < this.artistInfo[this.distributionType].length; i++) {
-           
 
           if (personInfo.map(item => item.id).indexOf(this.artistInfo[this.distributionType][i].id) === -1) {
            
