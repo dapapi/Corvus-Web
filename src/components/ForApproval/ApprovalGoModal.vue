@@ -130,7 +130,7 @@
                 let _this = this
                 if(this.mode !== 'archive'){
                      fetch('put', '/approval_instances/' + this.id + '/' + this.mode, data).then((params) => {
-                        _this.$emit('approvaldone',_this.mode === 'cancel'?'撤销成功':'')
+                        _this.$emit('approvaldone',_this.mode == 'cancel'?'撤销成功':'审批成功')
                     })
                 }else{
                     Object.assign(data, {files: this.fileArr})
