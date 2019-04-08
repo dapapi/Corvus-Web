@@ -14,7 +14,7 @@
                         @click="distributionPerson('broker')">分配经理人</a>
                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
                         @click="distributionPerson('publicity')">分配宣传人</a>
-                    <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
+                    <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy" v-if="PrivacyShow">隐私设置</a>
                     <a class="dropdown-item" role="menuitem" @click="contractlist(artistInfo.sign_contract_status)">
                         <template v-if="artistInfo.sign_contract_status == 1">签约</template>
                         <template v-if="artistInfo.sign_contract_status == 2">解约</template>
@@ -1349,6 +1349,7 @@ export default {
       isAddScheduleButtonDisable: false,
       isAddWorkButtonDisable: false,
       canShow : false,
+      PrivacyShow:false
     };
   },
 
@@ -1394,17 +1395,12 @@ export default {
     // 获取艺人信息
     getArtist() {
       this.artistId = this.$route.params.id;
-
-    //   const data = {
-    //     include: 'publicity,broker,creator,tasks,affixes',
-    //   };
       fetch('get', `stars/detail/${this.artistId}`).then((response) => {
         this.artistInfo = response.data;
         this.isLoading = false;
         setTimeout(() => {
             this.canShow = true
         }, 200);
-        console.log(this.artistInfo)
         this.artistName = response.data.name;
         if (response.data.star_risk_point == 'privacy') {
           this.artistInfo.star_risk_point = '**';
@@ -1438,7 +1434,9 @@ export default {
         
         // this.artistWorksInfo = response.data.works.data;// 作品数据
         this.affixes = response.data.affixes.data;
-
+        if(this.user.nickname == this.artistInfo.creator.name){
+            this.PrivacyShow = true
+        }
       });
     },
     getProject(page = 1) {
@@ -1515,6 +1513,7 @@ export default {
                         }
                     }
                 })
+               
             },
     getCalendar() {
       this.artistId = this.$route.params.id;

@@ -11,7 +11,7 @@
                      role="menu" x-placement="bottom-end">
                     <a class="dropdown-item" role="menuitem" data-toggle="modal"
                     @click="distributionPerson('produser')">分配制作人</a>
-                    <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy">隐私设置</a>
+                    <a class="dropdown-item" role="menuitem" data-toggle="modal" data-target="#addPrivacy" v-if="PrivacyShow">隐私设置</a>
                     <a class="dropdown-item" role="menuitem" @click="contractlist(artistInfo.sign_contract_status)">
                         <template v-if="artistInfo.sign_contract_status == 1">签约</template>
                         <template v-if="artistInfo.sign_contract_status == 2">解约</template>
@@ -1281,6 +1281,7 @@ export default {
                 isAddScheduleButtonDisable: false,
                 isAddWorkButtonDisable: false,
                 canShow:false,
+                PrivacyShow:false
             }
         },
         components: {
@@ -1388,7 +1389,6 @@ export default {
                 fetch('get', '/bloggers/detail/' + this.artistId).then(response => {
                     this.canShow = true
                     this.artistInfo = response.data;
-                    console.log(this.artistInfo)
                     this.uploadUrl = _this.artistInfo.avatar;
                     this.artistName = response.data.nickname;
                     if (this.artistInfo.intention) {
@@ -1424,6 +1424,9 @@ export default {
                     }else{
                         this.Incubationperiod = '**'
                     }
+                    if(this.user.nickname == this.artistInfo.creator.name){
+                        this.PrivacyShow = true
+                    }
                     this.projectContractDefault = {
                         '昵称': response.data.nickname
                     };
@@ -1439,6 +1442,7 @@ export default {
                         _this.principalIds.push(item.users.data.id)
                     })
                 })
+               
             },
             getType:function(){
                 fetch('get', '/bloggers/gettype').then(response => {
