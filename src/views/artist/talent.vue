@@ -992,6 +992,7 @@
                     _this.customizeInfoBloggers = params.data
                      $('.selectpicker').selectpicker('refresh') 
                 })
+               
             },
             dataFilter:function(value){
                 this.customizeContentType=value            
@@ -1348,6 +1349,7 @@
                 this.platformType = [];
                 this.uploadUrl = ''
             },
+            
             selectArtists: function (value) {
                 if (value === 'all') {
                     this.selectedArtistsArr = [];
