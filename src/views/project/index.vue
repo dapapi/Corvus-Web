@@ -4,8 +4,10 @@
         <div class="page-header page-header-bordered">
             <h1 class="page-title">项目管理</h1>
             <div class="page-header-actions">
-                <ImportAndExport class="float-left" :type="'export'" :moduleName="'projects'" :power="'project'" :params="exportParams">
-                    <i class="iconfont icon-daochu px-5 font-size-20 pr-20 pointer-content" aria-hidden="true" title="导出项目管理"></i>
+                <ImportAndExport class="float-left" :type="'export'" :moduleName="'projects'" :power="'project'"
+                                 :params="exportParams">
+                    <i class="iconfont icon-daochu px-5 font-size-20 pr-20 pointer-content" aria-hidden="true"
+                       title="导出项目管理"></i>
                 </ImportAndExport>
             </div>
         </div>
@@ -118,7 +120,8 @@
 
         </div>
 
-        <customize-filter v-if="canShow" :data="customizeInfo" @change="customize" :stararr='starsArr' :cleanup="cleanUp"
+        <customize-filter v-if="canShow" :data="customizeInfo" @change="customize" :stararr='starsArr'
+                          :cleanup="cleanUp"
                           @cleanupdone='cleanUp=false' ref='customize' :nodepartment='true'></customize-filter>
 
         <AddClientType v-if="canShow" type="project" @change="changeProjectType"></AddClientType>
@@ -129,19 +132,19 @@
 </template>
 
 <script>
-import fetch from '../../assets/utils/fetch.js';
-import config from '../../assets/js/config';
-import common from '../../assets/js/common';
-import { mapState } from 'vuex';
-import Cookies from 'js-cookie';
-import ImportAndExport from '../../components/ImportAndExport.vue';
+    import fetch from '../../assets/utils/fetch.js';
+    import config from '../../assets/js/config';
+    import common from '../../assets/js/common';
+    import {mapState} from 'vuex';
+    import Cookies from 'js-cookie';
+    import ImportAndExport from '../../components/ImportAndExport.vue';
 
-const projectStatusArr = [{ name: '全部', value: '' }, ...config.projectStatusArr];
-const projectTypeArr = [{ name: '全部', value: '' }, ...config.projectTypeArr];
+    const projectStatusArr = [{name: '全部', value: ''}, ...config.projectStatusArr];
+    const projectTypeArr = [{name: '全部', value: ''}, ...config.projectTypeArr];
 
-export default {
+    export default {
 
-  data () {
+        data() {
             return {
                 common: common,
                 total: 0,
@@ -173,7 +176,7 @@ export default {
                 exportParams: {},//导出参数
                 fetchData: {},
                 customizeCondition: {},
-                canShow:false,
+                canShow: false,
             }
         },
 created() {
@@ -190,29 +193,27 @@ created() {
       }
     }
   },
-
   computed: {
-    ...mapState([
-      'userList',
-    ]),
-    _userList() {
-      return this.userList;
+        ...mapState([
+            'userList',
+        ]),
+        _userList() {
+            return this.userList;
+        },
     },
-  },
-  components: {
-    ImportAndExport,
-  },
-  watch: {
-    _userList() {
-      for (let i = 0; i < this.userList.length; i++) {
-        this.allUsers.push({
-          name: this.userList[i].name,
-          value: this.userList[i].id,
-        });
-      }
+    components: {
+        ImportAndExport,
     },
-  },
-
+    watch: {
+        _userList() {
+            for (let i = 0; i < this.userList.length; i++) {
+                this.allUsers.push({
+                    name: this.userList[i].name,
+                    value: this.userList[i].id,
+                });
+            }
+        },
+    },
   methods: {
     //自定义筛选列表
     getList(pageNum =1){
@@ -220,7 +221,7 @@ created() {
         if(this.customizeCondition){
            fetchData  = this.customizeCondition
         }else{
-           fetchData ={}
+           delete fetchData.conditions
         }
         let keyword, type, principal_ids,my
         if (this.fetchData.keyword) {
@@ -298,6 +299,7 @@ created() {
     },
     //自定义筛选   
     customize: function (value) {
+        console.log(value)
         this.customizeCondition = value
         this.getList(1)
         
@@ -352,8 +354,8 @@ created() {
         this.addInfoArr[name] = value
     },
 
-  },
-};
+        },
+    };
 </script>
 
 <style lang="scss" scoped>

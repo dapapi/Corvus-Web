@@ -15,8 +15,9 @@
                             <div class="float-left pl-0 pr-2 col-md-3">
                                 <i class="iconfont icon-kehu pr-2" aria-hidden="true"></i>负责人
                             </div>
-                            <div class="font-weight-bold float-left" v-if="clientInfoCopy.principal">
-                                {{ clientInfoCopy.principal?clientInfoCopy.principal.data.name:'' }}
+                            <div class="font-weight-bold float-left">
+                                <!-- {{ clientInfoCopy.principal?clientInfoCopy.principal.data.name:'' }} -->
+                                {{ clientInfoCopy.name }}
                             </div>
                         </div>
                         <div class="col-md-6 float-left clearfix pl-0">
@@ -404,7 +405,8 @@
                                         <div class="col-md-6 px-0">
                                             <div class="col-md-3 float-left text-right pl-0">录入人</div>
                                             <div class="col-md-9 float-left font-weight-bold">
-                                                {{clientInfo.creator ? clientInfo.creator.data.name : ''}}
+                                                <!-- {{clientInfo.creator ? clientInfo.creator.data.name : ''}} -->
+                                                {{clientInfo.creator_name}}
                                             </div>
                                         </div>
                                         <div class="col-md-6 px-0">
@@ -445,7 +447,7 @@
                                     <th class="cell-300" scope="col">关键决策人</th>
                                     <th class="cell-300" scope="col">微信号</th>
                                     <th class="cell-300" scope="col">职位</th>
-                                    <th class="cell-300" scope="col">负责人</th>
+                                    <!-- <th class="cell-300" scope="col">负责人</th> -->
                                     <th class="cell-300" scope="col">操作</th>
                                 </tr>
                                 <tbody>
@@ -457,7 +459,7 @@
                                     </td>
                                     <td>{{ contact.wechat }}</td>
                                     <td>{{ contact.position }}</td>
-                                    <td>{{ clientInfo.principal?clientInfo.principal.data.name:'' }}</td>
+                                    <!-- <td>{{ clientInfo.principal?clientInfo.principal.data.name:'' }}</td> -->
                                     <td>
 
                                         <span class="pr-10 d-block float-left pointer-content"
