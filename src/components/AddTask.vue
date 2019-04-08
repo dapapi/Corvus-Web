@@ -404,6 +404,8 @@
                         } else {
                             this.$router.push({path: '/tasks/' + response.data.id});
                         }
+                    }).catch(() => {
+                        this.isAddButtonDisable = false;
                     })
                 }
             },

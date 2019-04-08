@@ -1685,9 +1685,9 @@
             },
             getProject() {
                 let data = {
-                    include: 'principal,participants,creator,trail.expectations.broker,trail.expectations.publicity,trail.client,relate_tasks,relate_projects,type',
+                    include: 'participants,trail.expectations.broker,trail.expectations.publicity,trail.client',
                 };
-                fetch('get', '/projects/' + this.projectId, data).then(response => {
+                fetch('get', '/projects/' + this.projectId + '/web', data).then(response => {
                     this.canShow = true
                     this.oldInfo = JSON.parse(JSON.stringify(response));
                     let fieldsArr = response.meta.fields.data;
