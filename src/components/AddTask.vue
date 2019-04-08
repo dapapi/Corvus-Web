@@ -387,15 +387,14 @@
                 }
 
                 if (this.isChild) {
-                    return
-                    fetch('post', '/tasks/' + this.taskFatherId + '/subtask', data).then(response => {
+                    data.task_pid = this.taskFatherId
+                    fetch('post', '/tasks/store', data).then(response => {
                         toastr.success('添加成功');
                         $('#addTask').modal('hide');
                         this.$emit('success', response)
                     })
                 } else {
-                    // fetch('post', '/tasks', data).then(response => {
-                    // 修改新增任务接口
+                    data.task_pid = 0
                     fetch('post', '/tasks/store', data).then(response => {
                         this.isAddButtonDisable = false;
                         toastr.success("创建成功");
