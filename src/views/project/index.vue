@@ -180,7 +180,7 @@
             }
         },
         created() {
-            this.getMyProjects('my_principal');
+            this.getMyProjects(1, 'my_principal');
 
         },
         mounted() {
