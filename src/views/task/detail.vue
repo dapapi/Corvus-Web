@@ -321,7 +321,8 @@
                                                 </span>
                                                 <!-- <template v-if="oldInfo.resource && oldInfo.resource.data && isEdit"> -->
                                                 <template v-else>
-                                                    <LinkResource 
+                                                    <LinkResource
+                                                        class="pl-15" 
                                                         :fatherData="linkFatherData" 
                                                         :childData="linkChildData" 
                                                         :resource="resourceType"
@@ -549,7 +550,17 @@
             </div>
         </div>
 
-        <AddTask v-if="canShow" name="新增子任务" is-child="true" @success="addChildTask" :task-father-id="this.taskId"></AddTask>
+        <AddTask 
+            v-if="canShow" 
+            name="新增子任务" 
+            is-child="true" 
+            :resource_type="oldInfo.resource && oldInfo.resource.data.resource.data.type" 
+            :code="oldInfo.resource && oldInfo.resource.data.resource.data.code" 
+            :resourceable_id="oldInfo.resource && oldInfo.resource.data.resourceable.data.id" 
+            @success="addChildTask" 
+            :task-father-id="this.taskId">
+        </AddTask>
+        <!-- <AddTask v-if="canShow" name="新增子任务" is-child="true" @success="addChildTask" :task-father-id="this.taskId"></AddTask> -->
 
         <flag v-if="canShow" @confirmFlag="deleteAttachment"/>
         <Modal v-if="canShow" id="push-reason" title="推荐原因" @onOK="submitPush">

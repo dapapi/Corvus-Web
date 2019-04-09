@@ -1,5 +1,5 @@
 <template>
-  <div class="row pl-15">
+  <div class="row">
     <div class="float-left col-md-6 pl-0">
       <select id="father" class="selectpicker show-tick form-control"
                 :data-live-search="true">
