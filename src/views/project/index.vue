@@ -234,7 +234,6 @@
             },
             getMyProjects(pageNum = 1, value = null) {
                 this.getProjectStatus = value;
-<<<<<<< HEAD
                 this.fetchHandler('post','/projects/web_filter')
                 // this.getFilterProjects();
     },
@@ -270,30 +269,6 @@
                 }else{
                     data.page = ''
                 }
-=======
-                this.fetchHandler('post', '/projects/web_filter', 'filter', pageNum)
-                // this.getFilterProjects();
-            },
-            filterGo: function () {
-                this.fetchData.keyword = this.projectKeyword
-                this.fetchHandler('post', '/projects/filter', 'filter')
-            },
-            getProjectSearch: function (type, value) {
-                if (type === 'principal_ids') {
-                    this.principal_ids = value.join(',');
-                } else if (type === 'project_type') {
-                    this.projectSearchType = value
-                }
-                // this.getFilterProjects();
-                this.fetchHandler('post', '/projects/filter', 'filter')
-            },
-
-            getFilterProjects(pageNum = 1) {
-                let data = {
-                    page: pageNum,
-                    // include: 'principal,trail.expectations'
-                };
->>>>>>> efc5669b14ddadff1185074b1809652b55f2120c
                 if (this.getProjectStatus) {
                     data.my ='&my='+this.getProjectStatus;
                 }else{
@@ -345,7 +320,6 @@
             redirectDetail(projectId) {
                 this.$router.push({path: '/projects/' + projectId})
             },
-<<<<<<< HEAD
             fetchHandler(methods, url) {
                 let _this = this,
                     fetchData = this.fetchData,
@@ -353,15 +327,6 @@
                 // this.fetchData.include = '&include=principal,trail.expectations'
                 this.fetchData.page = '&page='+this.current_page
                 // if (type == 'filter') {
-=======
-            fetchHandler(methods, url, type, page) {
-                let _this = this,
-                    fetchData = this.fetchData,
-                    newUrl
-                this.fetchData.include = '&include=principal,trail.expectations'
-                this.fetchData.page = 'page=' + page
-                if (type == 'filter') {
->>>>>>> efc5669b14ddadff1185074b1809652b55f2120c
                     fetchData = this.customizeCondition
                     let keyword, type, principal_ids, my
                     if (this.fetchData.keyword) {
@@ -382,25 +347,15 @@
                     } else {
                         my = ''
                     }
-<<<<<<< HEAD
                     newUrl = url + '?' + this.fetchData.page  + keyword + type + my
                 // }
-=======
-                    newUrl = url + '?' + this.fetchData.page + this.fetchData.include + keyword + type + my
-                }
->>>>>>> efc5669b14ddadff1185074b1809652b55f2120c
                 this.exportParams = {
                     keyword: this.fetchData.keyword,
                     type: this.projectSearchTypes,
                     principal_ids: this.principal_ids,
-<<<<<<< HEAD
                     my:this.getProjectStatus
                 }
                 console.log(fetchData)
-=======
-                    my: this.getProjectStatus
-                };
->>>>>>> efc5669b14ddadff1185074b1809652b55f2120c
                 fetch(methods, newUrl || url, fetchData).then((response) => {
 
                     _this.projectsInfo = response.data
@@ -414,11 +369,7 @@
             },
             customize: function (value) {
                 this.customizeCondition = value
-<<<<<<< HEAD
                 this.fetchHandler('post','/projects/web_filter')
-=======
-                this.fetchHandler('post', '/projects/filter', 'filter')
->>>>>>> efc5669b14ddadff1185074b1809652b55f2120c
             },
 
             changeProjectType(value) {
