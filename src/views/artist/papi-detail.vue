@@ -204,7 +204,7 @@
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-base"
                                    aria-controls="forum-present"
                                    aria-expanded="false" role="tab"
-                                   :class="artistInfo.sign_contract_status == 2?'':'active'" @click="getType">概况</a>
+                                   :class="artistInfo.sign_contract_status == 2?'':'active'" >概况</a>
                             </li>
                         </ul>
                         <div class="tab-content  px-0 nav-tabs-animate bg-white col-md-12">
@@ -454,7 +454,7 @@
                                             <button class="btn btn-primary" @click="changeArtistBaseInfo">确定</button>
                                         </div>
                                     </div>
-                                    <div class="card-block px-0" v-if="artistInfo&&canShow">
+                                    <div class="card-block px-0" v-if="artistInfo.nickname">
                                         <h5 class="pl-15">基本资料</h5>
                                         <div class="clearfix">
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
@@ -605,21 +605,21 @@
                                                 </div>
                                             </div>
                                             <h5 class=" pt-10 clearfix col-md-12 float-left">更新信息</h5>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                            <!-- <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">录入人</div>
                                                 <div class="col-md-8 float-left font-weight-bold">
                                                     <template v-if="artistInfo.creator">
                                                         {{artistInfo.creator.name}}
                                                     </template>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">录入时间</div>
                                                 <div class="col-md-8 float-left font-weight-bold">
                                                     {{common.timeProcessing(artistInfo.created_at)}}
                                                 </div>
                                             </div>
-                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                            <!-- <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">最近更新人</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <template v-if="artistInfo.last_updated_user">
@@ -627,7 +627,7 @@
                                                     </template>
                                                     <template v-else>{{ artistInfo.creator.name}}</template>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">最近更新时间</div>
                                                 <div class="col-md-8 float-left font-weight-bold">
@@ -1299,6 +1299,7 @@
         mounted() {
             this.getCalendar();
             this.charts();
+            this.getType()
             this.getTaskNum();
             let _this = this;
             this.user = JSON.parse(Cookies.get('user'));
@@ -1393,8 +1394,16 @@
                 //     include: 'creator,tasks,affixes,publicity,publicity.department',
                 // };
                 fetch('get', '/bloggers/detail/' + this.artistId).then(response => {
-                    this.canShow = true
-                    this.artistInfo = response.data;
+                    if(response.data.length>0){
+                        this.artistInfo = response.data;
+                    }else{ 
+                        toastr.error('您没有查看博主详情的权限')  
+                    }
+                    this.isLoading = false;
+                    setTimeout(() => {
+                        this.canShow = true
+                    }, 200);
+                   
                     this.uploadUrl = _this.artistInfo.avatar;
                     this.artistName = response.data.nickname;
                     if (this.artistInfo.intention) {
@@ -1407,13 +1416,14 @@
                     } else {
                         this.artistInfo.sign_contract_other = 2
                     }
-                    if (response.data.tasks.length > 0) {
+                    if (response.data.task) {
                         this.tasksInfo = response.data.tasks
 
                     }
                     //任务数据
                     let data = [];
                     if (this.artistInfo.platform) {
+                       
                         this.artistInfo.platform.split(',').forEach(item => {
                             data.push(_this.artistSocialPlatform.find(i => i.value == item).name)
                         });
@@ -1430,16 +1440,16 @@
                     } else {
                         this.Incubationperiod = '**'
                     }
-                    if(this.user.nickname == this.artistInfo.creator.name){
-                        this.PrivacyShow = true
+                    if(this.artistInfo.creator){
+                        if(this.user.nickname == this.artistInfo.creator.name){
+                            this.PrivacyShow = true
+                        }
                     }
+                    
                     this.projectContractDefault = {
                         '昵称': response.data.nickname
                     };
-                    this.isLoading = false;
-                    setTimeout(() => {
-                        this.canShow = true
-                    }, 200);
+                   
                 });
 
 
@@ -1452,6 +1462,7 @@
             },
             getType: function () {
                 fetch('get', '/bloggers/gettype').then(response => {
+                    
                     this.artistTypeArr = response.data
                 });
             },
@@ -1984,7 +1995,7 @@
                     }
                 }
                 fetch('put', `/bloggers/${this.$route.params.id}/privacyUser`, sendData).then(function () {
-                    console.log(sendData)
+                   
                     toastr.success('隐私设置成功')
                     $('#addPrivacy').modal('hide')
                 })
@@ -2007,7 +2018,7 @@
             },
             // 类型
             changArtistType(value) {
-                console.log(value)
+              
                 this.artistInfo.type = value
             },
             // 沟通状态

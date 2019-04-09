@@ -1285,7 +1285,7 @@
                         value: 4,
                         name: '其他',
                     },
-            
+  
                 ],
                 distributionType: '',
                 affixes: [], // 附件
@@ -1406,7 +1406,12 @@
     getArtist() {
       this.artistId = this.$route.params.id;
       fetch('get', `stars/detail/${this.artistId}`).then((response) => {
-        this.artistInfo = response.data;
+        if(response.data.length>0){
+            this.artistInfo = response.data;
+        }else{ 
+            toastr.error('您没有查看艺人详情的权限')  
+        }
+       
         this.isLoading = false;
         setTimeout(() => {
             this.canShow = true
@@ -1443,9 +1448,13 @@
         }
         
         // this.artistWorksInfo = response.data.works.data;// 作品数据
-        this.affixes = response.data.affixes.data;
-        if(this.user.nickname == this.artistInfo.creator.name){
-            this.PrivacyShow = true
+        if(response.data.affixes){
+            this.affixes = response.data.affixes.data;
+        }
+        if(this.artistInfo.creator){
+            if(this.user.nickname == this.artistInfo.creator.name){
+                this.PrivacyShow = true
+            }
         }
       });
     },
