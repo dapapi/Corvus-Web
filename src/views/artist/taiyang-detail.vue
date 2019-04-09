@@ -1406,12 +1406,11 @@
     getArtist() {
       this.artistId = this.$route.params.id;
       fetch('get', `stars/detail/${this.artistId}`).then((response) => {
-        if(response.data.length>0){
-            this.artistInfo = response.data;
+        if (JSON.stringify(response.data ) === '[]') {
+            toastr.error('您没有查看艺人详情的权限')   
         }else{ 
-            toastr.error('您没有查看艺人详情的权限')  
+             this.artistInfo = response.data; 
         }
-       
         this.isLoading = false;
         setTimeout(() => {
             this.canShow = true
