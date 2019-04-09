@@ -397,8 +397,7 @@
                     desc: this.clientRemark
                 };
 
-                fetch('post', '/clients', data).then(response => {
-                    
+                fetch('post', '/clients', data).then(response => {    
                     this.isAddButtonDisable = false;
                     toastr.success('创建成功');
                     $("#addClient").modal("hide");
@@ -415,6 +414,7 @@
                     fetchData = this.fetchData,
                     newUrl
                 this.fetchData.include = 'include=principal'
+                this.fetchData.page = '&page='+this.current_page
                 if (type == 'filter') {
                     fetchData = this.customizeCondition
                     let keyword, status, principal_ids
@@ -431,7 +431,7 @@
                     } else {
                         status= ''
                     }
-                    newUrl = url + '?' + this.fetchData.include + keyword + status 
+                    newUrl = url + '?' + this.fetchData.include + keyword + status +this.fetchData.page 
                 }
                 
                 fetch(methods, newUrl || url, fetchData).then((response) => {
