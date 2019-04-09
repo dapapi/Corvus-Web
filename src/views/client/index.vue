@@ -21,7 +21,7 @@
             <div class="panel col-md-12 py-5">
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
-                        <input type="text" class="form-control" placeholder="请输入公司名称" v-model="companyName"
+                        <input type="text" class="form-control" placeholder="请输入公司名称"
                                @keyup.enter='filterGo' @blur='filterGo'>
                     </div>
                     <div class="col-md-3 example float-left">
@@ -456,7 +456,9 @@
             changePrincipal: function (value) {
                 this.clientPrincipal = value
             },
-            filterGo() {
+            filterGo(e) {
+                // console.log(e.target.value)
+                this.companyName = e.target.value.trim()
                 this.fetchData.keyword = this.companyName
                 this.exportParams.keyword = this.companyName
                 this.fetchHandler('post', '/clients/filter', 'filter')

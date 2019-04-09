@@ -25,7 +25,7 @@
                     <h4 class="card-title">{{ oldInfo.title }}
                         <template v-if="!oldInfo.task_p">
                            <span class="font-size-14 pl-10 pointer-content hover-content"
-                                 @click="redirectTaskDetail(oldInfo.pTask?oldInfo.pTask.data.id: '')">
+                                 @click="redirectTaskDetail(oldInfo.task_pid)">
                            <i class="md-chevron-left"></i>回到主任务
                             </span>
                         </template>
@@ -112,7 +112,7 @@
                                    aria-controls="forum-present"
                                    aria-expanded="false" role="tab">附件</a>
                             </li>
-                            <li class="nav-item" role="presentation" @click="tabIndex = 3" v-if="taskInfo.task_p">
+                            <li class="nav-item" role="presentation" @click="tabIndex = 3; getSubTask()" v-if="taskInfo.task_p">
                                 <a class="nav-link" data-toggle="tab" href="#forum-task-subtasks"
                                    aria-controls="forum-present"
                                    aria-expanded="false" role="tab">子任务</a>
@@ -309,23 +309,25 @@
                                         <div class="card-text py-10 px-0 clearfix col-md-8">
                                             <div class="col-md-2 float-left text-right pl-0">关联资源</div>
                                             <div class="col-md-10 float-left font-weight-bold">
-                                                <span class="font-weight-bold"
-                                                      v-if="oldInfo.resource && oldInfo.resource.data && !isEdit">
-                                                    {{oldInfo.resource.data.resource.data.title}} -
-                                                    {{ oldInfo.resource.data.resourceable.data.title 
-                                                        || oldInfo.resource.data.resourceable.data.company 
-                                                        || oldInfo.resource.data.resourceable.data.name 
-                                                        || oldInfo.resource.data.resourceable.data.nickname 
-                                                    }}
+                                                <span class="font-weight-bold" v-if="!isEdit">
+                                                    <template v-if="oldInfo.resource && oldInfo.resource.data">
+                                                        {{oldInfo.resource.data.resource.data.title}} -
+                                                        {{ oldInfo.resource.data.resourceable.data.title 
+                                                            || oldInfo.resource.data.resourceable.data.company 
+                                                            || oldInfo.resource.data.resourceable.data.name 
+                                                            || oldInfo.resource.data.resourceable.data.nickname 
+                                                        }}
+                                                    </template>
                                                 </span>
-                                                <template v-if="oldInfo.resource && oldInfo.resource.data && isEdit">
-                                                    <normal-linkage-selectors class="ml-0" ref="linkage"
-                                                                              v-if="linkData.length>0"
-                                                                              :myData="linkData"
-                                                                              :data="linkData"
-                                                                              :resource="oldInfo.resource ? oldInfo.resource.data.resource.data.code : ''"
-                                                                              :resourceable="oldInfo.resource ? oldInfo.resource.data.resourceable.data.id : ''"
-                                                                              @change="addLinkage"></normal-linkage-selectors>
+                                                <!-- <template v-if="oldInfo.resource && oldInfo.resource.data && isEdit"> -->
+                                                <template v-else>
+                                                    <LinkResource 
+                                                        :fatherData="linkFatherData" 
+                                                        :childData="linkChildData" 
+                                                        :resource="resourceType"
+                                                        :resourceable="resourceableId"
+                                                        @change="setResource" 
+                                                    />
                                                 </template>
                                             </div>
                                         </div>
@@ -378,15 +380,9 @@
                                                     <EditDatepicker class="col-md-6 px-0 float-left"
                                                                     :content="taskInfo.end_at[0]" :is-edit="isEdit"
                                                                     @change="(value) => changeTaskInfo(value, 'end_at')"></EditDatepicker>
-                                                    <!-- <EditTimepicker class="col-md-6 px-0 float-left"
-                                                                    :content="taskInfo.end_at[1]" :is-edit="isEdit"
-                                                                    @change="(value) => changeTaskInfo(value, 'end_minutes')"></EditTimepicker> -->
                                                     <EditTimeChoice class="col-md-6 px-0 float-left"
                                                                     :content="taskInfo.end_at[1]" :is-edit="isEdit"
                                                                     @change="(value) => changeTaskInfo(value, 'end_minutes')"></EditTimeChoice>
-                                                    <!-- <EditTimepicker class="col-md-6 px-0 float-left"
-                                                                :content="taskInfo.end_at[1]" :is-edit="isEdit"
-                                                                @change="(value) => changeTaskInfo(value, 'end_minutes')"></EditTimepicker> -->
                                                 </div>
                                             </div>
                                         </div>
@@ -497,16 +493,16 @@
                                     <th class="cell-300" scope="col">截止日期</th>
                                 </tr>
                                 <tbody>
-                                <tr v-for="task in taskInfo.tasks?taskInfo.tasks.data:[]" :key="task.id"
+                                <tr v-for="task in subTaskList" :key="task.id"
                                     @click="redirectTaskDetail(task.id)">
                                     <td>{{ task.title }}</td>
-                                    <td>{{ task.type.data.title }}</td>
+                                    <td>{{ task.title }}</td>
                                     <td>
                                         <template v-if="task.status === 1">进行中</template>
                                         <template v-if="task.status === 2">已完成</template>
                                         <template v-if="task.status === 3">已停止</template>
                                     </td>
-                                    <td>{{ task.principal?task.principal.data.name:'' }}</td>
+                                    <td>{{ task.principal_name }}</td>
                                     <td>{{ task.end_at }}</td>
                                 </tr>
                                 </tbody>
@@ -638,6 +634,17 @@
                 canLoadMore: false, // 关联资源是否可以加载更多
                 canEdit: false, // 是否可以编辑
                 canShow:false,
+                linkFatherData: [{
+                    name: '暂不关联任何资源',
+                    id: '',
+                    value: '',
+                }], // 关联资源父数据
+                linkChildData: [{
+                    name: '暂不关联任何资源',
+                    id: '',
+                    value: '',
+                }], // 关联资源父数据
+                subTaskList: [],
             }
         },
 
@@ -719,6 +726,7 @@
                     this.$store.dispatch('changePrincipal', params);
                     this.resourceType = this.oldInfo.resource && this.oldInfo.resource.data.resource.data.type // 资源type
                     this.resourceableId = this.oldInfo.resource && this.oldInfo.resource.data.resourceable.data.id // 资源id
+                    this.linkCode = this.oldInfo.resource && this.oldInfo.resource.data.resource.data.code // 资源code
                     this.canShow = true
                 }).catch(() => {
                     this.isLoading = false;
@@ -757,7 +765,8 @@
                     return
                 }
                 this.isEdit = true;
-                this.getLinkData()
+                // this.getLinkData()
+                this.getFatherData(this.linkCode)
                 this.changeInfo = {};
             },
 
@@ -837,6 +846,8 @@
                             if (this.changeInfo.principal_id) {
                                 this.taskInfo.principal.data = this.$store.state.principalInfo
                             }
+                            toastr.success('修改成功')
+                            this.getTask()
                             res(true)
                         }).catch(() => {
                             rej(false)
@@ -878,9 +889,7 @@
                         }
                     })
                 }
-
                 const editAllInfo = async () => {
-
                     let resInfo = true
                     if (JSON.stringify(this.changeInfo) !== "{}") {
                         resInfo = await editTaskInfo()
@@ -890,10 +899,10 @@
                         resParticipant = await editParticipant()
                     }
                     // return resInfo && resParticipant
-                    if (resInfo && resParticipant) {
-                        toastr.success('修改成功')
-                        this.getTask()
-                    }
+                    // if (resInfo && resParticipant) {
+                    //     toastr.success('修改成功')
+                    //     this.getTask()
+                    // }
                 }
                 editAllInfo()
                 this.isEdit = false;
@@ -927,100 +936,73 @@
             },
 
             addChildTask: function () {
-                this.getTask();
-            },
-
-            addLinkage: function (type, value, id, index) {
-                if (type === 'father') {
-                    this.getChildLinkData(value, index)
-                    this.resourceType = id
-                    this.changeInfo.resourceable_id = this.resourceableId
-                    this.changeInfo.resource_type = id
-                    this.changeInfo.code = this.linkCode
-                } else if (type === 'child') {
-                    this.resourceableId = value
-                    this.changeInfo.resourceable_id = value
-                    this.changeInfo.resource_type = this.resourceType
-                    this.changeInfo.code = this.linkCode
-                }
+                // this.getTask();
+                this.getSubTask()
             },
 
             redirectTaskDetail: function (taskId) {
                 this.$router.push({path: '/tasks/' + taskId, force: true})
             },
             // 获取关联父资源数据
-            getLinkData() {
+            getFatherData(code) {
                 fetch('get', '/resources').then(res => {
-                    this.linkData = res.data.map((n, i) => {
+                    this.linkFatherData = res.data.map((n, i) => {
                         return {
                             name: n.title,
-                            id: n.type,
-                            value: n.code,
-                            child: []
+                            id: n.code,
+                            value: n.type
                         }
                     })
-                    this.linkData.unshift({
+                    this.linkFatherData.unshift({
                         name: '暂不关联任何资源',
                         id: '',
                         value: '',
-                        // type: n.type,
-                        child: []
                     })
-                    if (this.linkData[0].child.length === 0) {
-                        this.getChildLinkData('', 0)
-                    }
-                    if (this.oldInfo && this.oldInfo.resource && this.oldInfo.resource.data.resource.data.code) {
-                        this.getChildLinkData(this.oldInfo.resource.data.resource.data.code, 0)
+                    if (code) {
+                        this.getChildData(code)
                     }
                 })
             },
             // 获取关联子资源数据
-            getChildLinkData(url, index) {
+            getChildData(url) {
                 if (url) {
                     let data = {}
                     this.linkCode = url
-                    this.linkIndex = index
-
                     let _url = url.substr(0, url.length - 1) + '/related'
                     if (url === 'bloggers') {
                         _url = url + '/all'
                         data.sign_contract_status = 2
                     }
                     fetch('get', _url, data).then(res => {
-                        const temp = this.linkData[index]
-                        if (res.meta && res.meta.pagination) {
-                            this.canLoadMore = true
-                            this.linkTotalPage = res.meta.pagination.total_pages
-                        } else {
-                            this.canLoadMore = false
-                        }
-                        temp.child = res.data.map(n => {
+                        this.linkChildData = res.data.map(n => {
                             return {
                                 name: n.name || n.nickname || n.title || n.company,
                                 id: n.id,
                                 value: n.id,
                             }
                         })
-                        this.resourceableId = temp.child[0].id
-                        this.$set(this.linkData, index, temp)
-                        this.$nextTick(() => {
-                            this.$refs.linkage.refresh()
-                        })
-                    })
-                } else {
-                    const temp = this.linkData[index]
-                    temp.child = [{
-                        name: '暂不关联任何资源',
-                        id: '',
-                        value: '',
-                    }]
-                    this.resourceableId = temp.child[0].id
-                    this.$set(this.linkData, index, temp)
-                    this.$nextTick(() => {
-                        this.$refs.linkage.refresh()
+                        // 设置默认子资源
+                        this.resourceableId = this.linkChildData[0].id
+                        this.changeInfo.resourceable_id = this.linkChildData[0].id
+                        this.changeInfo.resource_type = this.resourceType
+                        this.changeInfo.code = this.linkCode
                     })
                 }
-
+            },
+            // 设置关联资源
+            setResource (type, value, id) {
+                if (type === 'father') {
+                    this.getChildData(id)
+                    this.resourceType = value
+                    this.changeInfo.resourceable_id = this.resourceableId
+                    this.changeInfo.resource_type = value
+                    this.changeInfo.code = id
+                } else {
+                    this.resourceableId = id
+                    this.changeInfo.resourceable_id = id
+                    this.changeInfo.resource_type = this.resourceType
+                    this.changeInfo.code = this.linkCode
+                }
             },
             // 获取任务类型列表
             getTaskType() {
@@ -1182,6 +1164,13 @@
                     return
                 }
                 $('#addTask').modal('show')
+            },
+            // 获取子任务列表
+            getSubTask () {
+                fetch('get', `/child_tasks/${this.taskId}`).then(res => {
+                    // console.log(res)
+                    this.subTaskList = res.data
+                })
             }
         },
     };

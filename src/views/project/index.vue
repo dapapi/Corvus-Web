@@ -4,8 +4,10 @@
         <div class="page-header page-header-bordered">
             <h1 class="page-title">项目管理</h1>
             <div class="page-header-actions">
-                <ImportAndExport class="float-left" :type="'export'" :moduleName="'projects'" :power="'project'" :params="exportParams">
-                    <i class="iconfont icon-daochu px-5 font-size-20 pr-20 pointer-content" aria-hidden="true" title="导出项目管理"></i>
+                <ImportAndExport class="float-left" :type="'export'" :moduleName="'projects'" :power="'project'"
+                                 :params="exportParams">
+                    <i class="iconfont icon-daochu px-5 font-size-20 pr-20 pointer-content" aria-hidden="true"
+                       title="导出项目管理"></i>
                 </ImportAndExport>
             </div>
         </div>
@@ -37,17 +39,17 @@
 
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                        <li class="nav-item" role="presentation" @click="getMyProjects()">
+                        <li class="nav-item" role="presentation" @click="getMyProjects(1)">
                             <a class="nav-link" data-toggle="tab" href="#forum-project"
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab">所有项目</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getMyProjects('my_principal')">
+                        <li class="nav-item" role="presentation" @click="getMyProjects(1, 'my_principal')">
                             <a class="nav-link active" data-toggle="tab" href="#forum-project"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">我负责的</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getMyProjects('my_participant')">
+                        <li class="nav-item" role="presentation" @click="getMyProjects(1, 'my_participant')">
                             <a class="nav-link" data-toggle="tab" href="#forum-project"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">我参与的</a>
@@ -108,7 +110,7 @@
                             <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                  style="width: 100%">
                         </div>
-                        <pagination :current_page="current_page" :method="getFilterProjects" :total_pages="total_pages"
+                        <pagination :current_page="current_page" :method="getMyProjects" :total_pages="total_pages"
                                     :total="total"></pagination>
                     </div>
                 </div>
@@ -118,7 +120,8 @@
 
         </div>
 
-        <customize-filter v-if="canShow" :data="customizeInfo" @change="customize" :stararr='starsArr' :cleanup="cleanUp"
+        <customize-filter v-if="canShow" :data="customizeInfo" @change="customize" :stararr='starsArr'
+                          :cleanup="cleanUp"
                           @cleanupdone='cleanUp=false' ref='customize' :nodepartment='true'></customize-filter>
 
         <AddClientType v-if="canShow" type="project" @change="changeProjectType"></AddClientType>
@@ -129,19 +132,19 @@
 </template>
 
 <script>
-import fetch from '../../assets/utils/fetch.js';
-import config from '../../assets/js/config';
-import common from '../../assets/js/common';
-import { mapState } from 'vuex';
-import Cookies from 'js-cookie';
-import ImportAndExport from '../../components/ImportAndExport.vue';
+    import fetch from '../../assets/utils/fetch.js';
+    import config from '../../assets/js/config';
+    import common from '../../assets/js/common';
+    import {mapState} from 'vuex';
+    import Cookies from 'js-cookie';
+    import ImportAndExport from '../../components/ImportAndExport.vue';
 
-const projectStatusArr = [{ name: '全部', value: '' }, ...config.projectStatusArr];
-const projectTypeArr = [{ name: '全部', value: '' }, ...config.projectTypeArr];
+    const projectStatusArr = [{name: '全部', value: ''}, ...config.projectStatusArr];
+    const projectTypeArr = [{name: '全部', value: ''}, ...config.projectTypeArr];
 
-export default {
+    export default {
 
-  data () {
+        data() {
             return {
                 common: common,
                 total: 0,
@@ -173,64 +176,65 @@ export default {
                 exportParams: {},//导出参数
                 fetchData: {},
                 customizeCondition: {},
-                canShow:false,
+                canShow: false,
             }
         },
-created() {
-    this.getMyProjects('my_principal');
-    
-},
-  mounted() {
-    // this.getClients();
-    // this.getStars();
-    // this.getFilterProjects();
-    // this.getField();
-    if (this.userList.length > 0) {
-      for (let i = 0; i < this.userList.length; i++) {
-        this.allUsers.push({
-          name: this.userList[i].name,
-          value: this.userList[i].id,
-        });
-      }
-    }
-  },
+        created() {
+            this.getMyProjects(1, 'my_principal');
 
-  computed: {
-    ...mapState([
-      'userList',
-    ]),
-    _userList() {
-      return this.userList;
-    },
-  },
-  components: {
-    ImportAndExport,
-  },
-  watch: {
-    _userList() {
-      for (let i = 0; i < this.userList.length; i++) {
-        this.allUsers.push({
-          name: this.userList[i].name,
-          value: this.userList[i].id,
-        });
-      }
-    },
-  },
+        },
+        mounted() {
+            // this.getClients();
+            // this.getStars();
+            // this.getFilterProjects();
+            // this.getField();
+            if (this.userList.length > 0) {
+                for (let i = 0; i < this.userList.length; i++) {
+                    this.allUsers.push({
+                        name: this.userList[i].name,
+                        value: this.userList[i].id,
+                    });
+                }
+            }
+        },
 
-  methods: {
-    getField() {
-      const _this = this;
-      fetch('get', '/projects/filter_fields').then((params) => {
-        _this.customizeInfo = params.data;
-        _this.$refs.customize.refresh()
-        this.$nextTick((params) => {
-            $('.selectpicker').selectpicker('refresh')
-            
-        })
-      });
-    },
-    getMyProjects (value) {
+        computed: {
+            ...mapState([
+                'userList',
+            ]),
+            _userList() {
+                return this.userList;
+            },
+        },
+        components: {
+            ImportAndExport,
+        },
+        watch: {
+            _userList() {
+                for (let i = 0; i < this.userList.length; i++) {
+                    this.allUsers.push({
+                        name: this.userList[i].name,
+                        value: this.userList[i].id,
+                    });
+                }
+            },
+        },
+
+        methods: {
+            getField() {
+                const _this = this;
+                fetch('get', '/projects/filter_fields').then((params) => {
+                    _this.customizeInfo = params.data;
+                    _this.$refs.customize.refresh()
+                    this.$nextTick((params) => {
+                        $('.selectpicker').selectpicker('refresh')
+
+                    })
+                });
+            },
+            getMyProjects(pageNum = 1, value = null) {
                 this.getProjectStatus = value;
+<<<<<<< HEAD
                 this.fetchHandler('post','/projects/web_filter')
                 // this.getFilterProjects();
     },
@@ -266,6 +270,30 @@ created() {
                 }else{
                     data.page = ''
                 }
+=======
+                this.fetchHandler('post', '/projects/web_filter', 'filter', pageNum)
+                // this.getFilterProjects();
+            },
+            filterGo: function () {
+                this.fetchData.keyword = this.projectKeyword
+                this.fetchHandler('post', '/projects/filter', 'filter')
+            },
+            getProjectSearch: function (type, value) {
+                if (type === 'principal_ids') {
+                    this.principal_ids = value.join(',');
+                } else if (type === 'project_type') {
+                    this.projectSearchType = value
+                }
+                // this.getFilterProjects();
+                this.fetchHandler('post', '/projects/filter', 'filter')
+            },
+
+            getFilterProjects(pageNum = 1) {
+                let data = {
+                    page: pageNum,
+                    // include: 'principal,trail.expectations'
+                };
+>>>>>>> efc5669b14ddadff1185074b1809652b55f2120c
                 if (this.getProjectStatus) {
                     data.my ='&my='+this.getProjectStatus;
                 }else{
@@ -299,7 +327,7 @@ created() {
                 })
             },
 
-    getClients () {
+            getClients() {
                 let _this = this;
                 // fetch('get', '/clients/all').then(function (response) {
                 //     _this.canShow = true
@@ -314,9 +342,10 @@ created() {
                 // })
             },
 
-    redirectDetail (projectId) {
+            redirectDetail(projectId) {
                 this.$router.push({path: '/projects/' + projectId})
             },
+<<<<<<< HEAD
             fetchHandler(methods, url) {
                 let _this = this,
                     fetchData = this.fetchData,
@@ -324,8 +353,17 @@ created() {
                 // this.fetchData.include = '&include=principal,trail.expectations'
                 this.fetchData.page = '&page='+this.current_page
                 // if (type == 'filter') {
+=======
+            fetchHandler(methods, url, type, page) {
+                let _this = this,
+                    fetchData = this.fetchData,
+                    newUrl
+                this.fetchData.include = '&include=principal,trail.expectations'
+                this.fetchData.page = 'page=' + page
+                if (type == 'filter') {
+>>>>>>> efc5669b14ddadff1185074b1809652b55f2120c
                     fetchData = this.customizeCondition
-                    let keyword, type, principal_ids,my
+                    let keyword, type, principal_ids, my
                     if (this.fetchData.keyword) {
                         keyword = '&keyword=' + this.projectKeyword
                     } else {
@@ -341,20 +379,30 @@ created() {
                     }
                     if (this.getProjectStatus) {
                         my = '&my=' + this.getProjectStatus;
-                    }else{
+                    } else {
                         my = ''
                     }
+<<<<<<< HEAD
                     newUrl = url + '?' + this.fetchData.page  + keyword + type + my
                 // }
+=======
+                    newUrl = url + '?' + this.fetchData.page + this.fetchData.include + keyword + type + my
+                }
+>>>>>>> efc5669b14ddadff1185074b1809652b55f2120c
                 this.exportParams = {
                     keyword: this.fetchData.keyword,
                     type: this.projectSearchTypes,
                     principal_ids: this.principal_ids,
+<<<<<<< HEAD
                     my:this.getProjectStatus
                 }
                 console.log(fetchData)
+=======
+                    my: this.getProjectStatus
+                };
+>>>>>>> efc5669b14ddadff1185074b1809652b55f2120c
                 fetch(methods, newUrl || url, fetchData).then((response) => {
-                    
+
                     _this.projectsInfo = response.data
                     _this.total = response.meta.pagination.total;
                     _this.current_page = response.meta.pagination.current_page;
@@ -366,11 +414,15 @@ created() {
             },
             customize: function (value) {
                 this.customizeCondition = value
+<<<<<<< HEAD
                 this.fetchHandler('post','/projects/web_filter')
+=======
+                this.fetchHandler('post', '/projects/filter', 'filter')
+>>>>>>> efc5669b14ddadff1185074b1809652b55f2120c
             },
 
-    changeProjectType (value) {
-                if(this.$store.state.listPower.project.add !=='true'){
+            changeProjectType(value) {
+                if (this.$store.state.listPower.project.add !== 'true') {
                     toastr.error('当前用户没有权限新增项目')
                     return
                 }
@@ -388,7 +440,7 @@ created() {
                 $('#addProject').modal('show');
             },
 
-    selectProjectType () {
+            selectProjectType() {
                 this.projectFieldsArr = [];
                 if (this.projectType == 5) {
                     return
@@ -414,10 +466,10 @@ created() {
                 });
             },
 
-            addInfo (value, name) {
+            addInfo(value, name) {
                 this.addInfoArr[name] = value
             },
-            getStars () {
+            getStars() {
                 // if (this.starsArr.length > 0) {
                 //     return
                 // }
@@ -429,10 +481,10 @@ created() {
                 //         })
                 //     }
                 // })
-            },  
+            },
 
-  },
-};
+        },
+    };
 </script>
 
 <style lang="scss" scoped>
