@@ -1395,7 +1395,7 @@
                 // };
                 fetch('get', '/bloggers/detail/' + this.artistId).then(response => {
                     if (JSON.stringify(response.data) === '[]') {
-                        toastr.error('您没有查看艺人详情的权限')   
+                        toastr.error('您没有查看博主详情的权限')   
                     }else{ 
                         this.artistInfo = response.data; 
                     }
