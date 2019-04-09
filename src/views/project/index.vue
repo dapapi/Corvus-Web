@@ -231,46 +231,66 @@ created() {
     },
     getMyProjects (value) {
                 this.getProjectStatus = value;
-                this.fetchHandler('post','/projects/web_filter','filter')
+                this.fetchHandler('post','/projects/web_filter')
                 // this.getFilterProjects();
     },
     filterGo:function(){
         this.fetchData.keyword = this.projectKeyword
-        this.fetchHandler('post','/projects/filter','filter')
+        // this.fetchHandler('post','/projects/filter','filter')
+        this.fetchHandler('post','/projects/web_filter')
     },
     getProjectSearch: function (type, value) {
         if (type === 'principal_ids') {
             this.principal_ids = value.join(',');
         } else if (type === 'project_type') {
+            if(this.projectSearchType == 3){
+                this.projectSearchType = '3,4'
+            }
             this.projectSearchType = value
         }
         // this.getFilterProjects();
-        this.fetchHandler('post','/projects/filter','filter')
+        // this.fetchHandler('post','/projects/filter','filter')
+        this.fetchHandler('post','/projects/web_filter')
     },
 
     getFilterProjects (pageNum = 1) {
-                let data = {
-                    page: pageNum,
-                    // include: 'principal,trail.expectations'
-                };
+                let data = {}
+                let fetchData
+                let url
+                if(this.customizeCondition){
+                    fetchData = this.customizeCondition
+                }
+                
+                if(pageNum){
+                    data.page = '&page='+pageNum
+                }else{
+                    data.page = ''
+                }
                 if (this.getProjectStatus) {
-                    data.my = this.getProjectStatus;
+                    data.my ='&my='+this.getProjectStatus;
+                }else{
+                    data.my = ''
                 }
                 if (this.projectSearchType) {
                     if (this.projectSearchType == 3) {
                         this.projectSearchType = '3,4'
                     }
-                    data.project_type = this.projectSearchType
+                    data.project_type = '&project_type'+ this.projectSearchType
+                }else{
+                    data.project_type  = '' 
                 }
                 if (this.projectKeyword) {
-                    data.keyword = this.projectKeyword
+                    data.keyword = '&keyword'+this.projectKeyword
+                }else{
+                    data.keyword = ''
                 }
                 if (this.principal_ids.length > 0) {
                     data.principal_ids = this.principal_ids;
                 }
                 //导出参数
                 this.exportParams = data;
-                fetch('get', '/projects', data).then(response => {
+                url = '/projects/web_filter'+'?'+data.page +data.my
+                fetch('post', url, fetchData).then(response => {
                     this.projectsInfo = response.data;
                     this.total = response.meta.pagination.total;
                     this.current_page = response.meta.pagination.current_page;
@@ -297,13 +317,13 @@ created() {
     redirectDetail (projectId) {
                 this.$router.push({path: '/projects/' + projectId})
             },
-            fetchHandler(methods, url, type) {
+            fetchHandler(methods, url) {
                 let _this = this,
                     fetchData = this.fetchData,
                     newUrl
-                this.fetchData.include = '&include=principal,trail.expectations'
-                this.fetchData.page = 'page=1'
-                if (type == 'filter') {
+                // this.fetchData.include = '&include=principal,trail.expectations'
+                this.fetchData.page = '&page='+this.current_page
+                // if (type == 'filter') {
                     fetchData = this.customizeCondition
                     let keyword, type, principal_ids,my
                     if (this.fetchData.keyword) {
@@ -324,14 +344,15 @@ created() {
                     }else{
                         my = ''
                     }
-                    newUrl = url + '?' + this.fetchData.page  + this.fetchData.include + keyword + type + my
-                }
+                    newUrl = url + '?' + this.fetchData.page  + keyword + type + my
+                // }
                 this.exportParams = {
                     keyword: this.fetchData.keyword,
                     type: this.projectSearchTypes,
                     principal_ids: this.principal_ids,
                     my:this.getProjectStatus
                 }
+                console.log(fetchData)
                 fetch(methods, newUrl || url, fetchData).then((response) => {
                     
                     _this.projectsInfo = response.data
@@ -345,7 +366,7 @@ created() {
             },
             customize: function (value) {
                 this.customizeCondition = value
-                this.fetchHandler('post','/projects/filter','filter')
+                this.fetchHandler('post','/projects/web_filter')
             },
 
     changeProjectType (value) {
