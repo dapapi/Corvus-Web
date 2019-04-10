@@ -4,8 +4,10 @@
         <div class="page-header page-header-bordered">
             <h1 class="page-title">项目管理</h1>
             <div class="page-header-actions">
-                <ImportAndExport class="float-left" :type="'export'" :moduleName="'projects'" :params="exportParams">
-                    <a class="iconfont icon-daochu px-5 font-size-20 pr-20 pointer-content" aria-hidden="true" title="导出项目管理"></a>
+                <ImportAndExport class="float-left" :type="'export'" :moduleName="'projects'" :power="'project'"
+                                 :params="exportParams">
+                    <i class="iconfont icon-daochu px-5 font-size-20 pr-20 pointer-content" aria-hidden="true"
+                       title="导出项目管理"></i>
                 </ImportAndExport>
             </div>
         </div>
@@ -28,7 +30,7 @@
                     </div>
                     <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
-                                data-toggle="modal" data-target="#customizeContent"
+                                data-toggle="modal" data-target="#customizeContent" @click='getField'
                                 data-placement="right" title="">
                             自定义筛选
                         </button>
@@ -37,17 +39,17 @@
 
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                        <li class="nav-item" role="presentation" @click="getMyProjects()">
+                        <li class="nav-item" role="presentation" @click="getMyProjects(1)">
                             <a class="nav-link" data-toggle="tab" href="#forum-project"
                                aria-controls="forum-base"
                                aria-expanded="true" role="tab">所有项目</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getMyProjects('my_principal')">
+                        <li class="nav-item" role="presentation" @click="getMyProjects(1, 'my_principal')">
                             <a class="nav-link active" data-toggle="tab" href="#forum-project"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">我负责的</a>
                         </li>
-                        <li class="nav-item" role="presentation" @click="getMyProjects('my_participant')">
+                        <li class="nav-item" role="presentation" @click="getMyProjects(1, 'my_participant')">
                             <a class="nav-link" data-toggle="tab" href="#forum-project"
                                aria-controls="forum-present"
                                aria-expanded="false" role="tab">我参与的</a>
@@ -108,7 +110,7 @@
                             <img src="https://res.papitube.com/corvus/images/content-none.png" alt=""
                                  style="width: 100%">
                         </div>
-                        <pagination :current_page="current_page" :method="getFilterProjects" :total_pages="total_pages"
+                        <pagination :current_page="current_page" :method="getMyProjects" :total_pages="total_pages"
                                     :total="total"></pagination>
                     </div>
                 </div>
@@ -118,30 +120,31 @@
 
         </div>
 
-        <customize-filter :data="customizeInfo" @change="customize" :stararr='starsArr' :cleanup="cleanUp"
-                          @cleanupdone='cleanUp=false'></customize-filter>
+        <customize-filter v-if="canShow" :data="customizeInfo" @change="customize" :stararr='starsArr'
+                          :cleanup="cleanUp"
+                          @cleanupdone='cleanUp=false' ref='customize' :nodepartment='true'></customize-filter>
 
-        <AddClientType type="project" @change="changeProjectType"></AddClientType>
+        <AddClientType v-if="canShow" type="project" @change="changeProjectType"></AddClientType>
 
-        <BuildProject :project-fields-arr="projectFieldsArr" :project-type="projectType"></BuildProject>
+        <BuildProject v-if="canShow" :project-fields-arr="projectFieldsArr" :project-type="projectType"></BuildProject>
     </div>
 
 </template>
 
 <script>
-import fetch from '../../assets/utils/fetch.js';
-import config from '../../assets/js/config';
-import common from '../../assets/js/common';
-import { mapState } from 'vuex';
-import Cookies from 'js-cookie';
-import ImportAndExport from '../../components/ImportAndExport.vue';
+    import fetch from '../../assets/utils/fetch.js';
+    import config from '../../assets/js/config';
+    import common from '../../assets/js/common';
+    import {mapState} from 'vuex';
+    import Cookies from 'js-cookie';
+    import ImportAndExport from '../../components/ImportAndExport.vue';
 
-const projectStatusArr = [{ name: '全部', value: '' }, ...config.projectStatusArr];
-const projectTypeArr = [{ name: '全部', value: '' }, ...config.projectTypeArr];
+    const projectStatusArr = [{name: '全部', value: ''}, ...config.projectStatusArr];
+    const projectTypeArr = [{name: '全部', value: ''}, ...config.projectTypeArr];
 
-export default {
+    export default {
 
-  data () {
+        data() {
             return {
                 common: common,
                 total: 0,
@@ -172,97 +175,125 @@ export default {
                 cleanUp: false,
                 exportParams: {},//导出参数
                 fetchData: {},
-                customizeCondition: {}
+                customizeCondition: {},
+                canShow: false,
+            }
+        },
+        created() {
+            this.getMyProjects(1, 'my_principal');
+
+        },
+        mounted() {
+            // this.getClients();
+            // this.getStars();
+            // this.getFilterProjects();
+            // this.getField();
+            if (this.userList.length > 0) {
+                for (let i = 0; i < this.userList.length; i++) {
+                    this.allUsers.push({
+                        name: this.userList[i].name,
+                        value: this.userList[i].id,
+                    });
+                }
             }
         },
 
-  mounted() {
-    this.getField();
-    this.getClients();
-    this.getStars();
-    // this.getFilterProjects();
-    this.getMyProjects('my_principal');
-    if (this.userList.length > 0) {
-      for (let i = 0; i < this.userList.length; i++) {
-        this.allUsers.push({
-          name: this.userList[i].name,
-          value: this.userList[i].id,
-        });
-      }
-    }
-  },
-
-  computed: {
-    ...mapState([
-      'userList',
-    ]),
-    _userList() {
-      return this.userList;
-    },
-  },
-  components: {
-    ImportAndExport,
-  },
-  watch: {
-    _userList() {
-      for (let i = 0; i < this.userList.length; i++) {
-        this.allUsers.push({
-          name: this.userList[i].name,
-          value: this.userList[i].id,
-        });
-      }
-    },
-  },
-
-  methods: {
-    getField() {
-      const _this = this;
-      fetch('get', '/projects/filter_fields').then((params) => {
-        _this.customizeInfo = params.data;
-      });
-    },
-    getMyProjects (value) {
-                this.getProjectStatus = value;
-                this.fetchHandler('post','/projects/filter','filter')
-                // this.getFilterProjects();
+        computed: {
+            ...mapState([
+                'userList',
+            ]),
+            _userList() {
+                return this.userList;
             },
-            filterGo:function(){
-                this.fetchData.keyword = this.projectKeyword
-                this.fetchHandler('post','/projects/filter','filter')
-            },
-            getProjectSearch: function (type, value) {
-                if (type === 'principal_ids') {
-                    this.principal_ids = value.join(',');
-                } else if (type === 'project_type') {
-                    this.projectSearchType = value
+        },
+        components: {
+            ImportAndExport,
+        },
+        watch: {
+            _userList() {
+                for (let i = 0; i < this.userList.length; i++) {
+                    this.allUsers.push({
+                        name: this.userList[i].name,
+                        value: this.userList[i].id,
+                    });
                 }
-                // this.getFilterProjects();
-                this.fetchHandler('post','/projects/filter','filter')
             },
+        },
+
+        methods: {
+            getField() {
+                const _this = this;
+                fetch('get', '/projects/filter_fields').then((params) => {
+                    _this.customizeInfo = params.data;
+                    _this.$refs.customize.refresh()
+                    this.$nextTick((params) => {
+                        $('.selectpicker').selectpicker('refresh')
+
+                    })
+                });
+            },
+            getMyProjects(pageNum = 1, value = null) {
+                this.getProjectStatus = value;
+                this.fetchHandler('post','/projects/web_filter')
+                // this.getFilterProjects();
+    },
+    filterGo:function(){
+        this.fetchData.keyword = this.projectKeyword
+        // this.fetchHandler('post','/projects/filter','filter')
+        this.fetchHandler('post','/projects/web_filter')
+    },
+    getProjectSearch: function (type, value) {
+        if (type === 'principal_ids') {
+            this.principal_ids = value.join(',');
+        } else if (type === 'project_type') {
+            if(this.projectSearchType == 3){
+                this.projectSearchType = '3,4'
+            }
+            this.projectSearchType = value
+        }
+        // this.getFilterProjects();
+        // this.fetchHandler('post','/projects/filter','filter')
+        this.fetchHandler('post','/projects/web_filter')
+    },
 
     getFilterProjects (pageNum = 1) {
-                let data = {
-                    page: pageNum,
-                    include: 'principal,trail.expectations'
-                };
+                let data = {}
+                let fetchData
+                let url
+                if(this.customizeCondition){
+                    fetchData = this.customizeCondition
+                }
+                
+                if(pageNum){
+                    data.page = '&page='+pageNum
+                }else{
+                    data.page = ''
+                }
                 if (this.getProjectStatus) {
-                    data.my = this.getProjectStatus;
+                    data.my ='&my='+this.getProjectStatus;
+                }else{
+                    data.my = ''
                 }
                 if (this.projectSearchType) {
                     if (this.projectSearchType == 3) {
                         this.projectSearchType = '3,4'
                     }
-                    data.project_type = this.projectSearchType
+                    data.project_type = '&project_type'+ this.projectSearchType
+                }else{
+                    data.project_type  = '' 
                 }
                 if (this.projectKeyword) {
-                    data.keyword = this.projectKeyword
+                    data.keyword = '&keyword'+this.projectKeyword
+                }else{
+                    data.keyword = ''
                 }
                 if (this.principal_ids.length > 0) {
                     data.principal_ids = this.principal_ids;
                 }
                 //导出参数
                 this.exportParams = data;
-                fetch('get', '/projects', data).then(response => {
+                url = '/projects/web_filter'+'?'+data.page +data.my
+                fetch('post', url, fetchData).then(response => {
                     this.projectsInfo = response.data;
                     this.total = response.meta.pagination.total;
                     this.current_page = response.meta.pagination.current_page;
@@ -271,32 +302,33 @@ export default {
                 })
             },
 
-    getClients () {
+            getClients() {
                 let _this = this;
-                fetch('get', '/clients/all').then(function (response) {
-                    for (let i = 0; i < response.data.length; i++) {
-                        _this.companyArr.push({
-                            name: response.data[i].company,
-                            id: response.data[i].id,
-                            grade: response.data[i].grade
-                        })
-                    }
+                // fetch('get', '/clients/all').then(function (response) {
+                //     _this.canShow = true
+                //     for (let i = 0; i < response.data.length; i++) {
+                //         _this.companyArr.push({
+                //             name: response.data[i].company,
+                //             id: response.data[i].id,
+                //             grade: response.data[i].grade
+                //         })
+                //     }
 
-                })
+                // })
             },
 
-    redirectDetail (projectId) {
+            redirectDetail(projectId) {
                 this.$router.push({path: '/projects/' + projectId})
             },
-            fetchHandler(methods, url, type) {
+            fetchHandler(methods, url) {
                 let _this = this,
                     fetchData = this.fetchData,
                     newUrl
-                this.fetchData.include = '&include=principal,trail.expectations'
-                this.fetchData.page = 'page=1'
-                if (type == 'filter') {
+                // this.fetchData.include = '&include=principal,trail.expectations'
+                this.fetchData.page = '&page='+this.current_page
+                // if (type == 'filter') {
                     fetchData = this.customizeCondition
-                    let keyword, type, principal_ids,my
+                    let keyword, type, principal_ids, my
                     if (this.fetchData.keyword) {
                         keyword = '&keyword=' + this.projectKeyword
                     } else {
@@ -312,34 +344,36 @@ export default {
                     }
                     if (this.getProjectStatus) {
                         my = '&my=' + this.getProjectStatus;
-                    }else{
+                    } else {
                         my = ''
                     }
-                    newUrl = url + '?' + this.fetchData.page  + this.fetchData.include + keyword + type + my
-                }
+                    newUrl = url + '?' + this.fetchData.page  + keyword + type + my
+                // }
                 this.exportParams = {
                     keyword: this.fetchData.keyword,
                     type: this.projectSearchTypes,
                     principal_ids: this.principal_ids,
                     my:this.getProjectStatus
                 }
+                console.log(fetchData)
                 fetch(methods, newUrl || url, fetchData).then((response) => {
+
                     _this.projectsInfo = response.data
-                    console.log(_this.projectsInfo)
                     _this.total = response.meta.pagination.total;
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total_pages = response.meta.pagination.total_pages;
                     _this.cleanUp = true
                     _this.isLoading = false;
+                    _this.canShow = true
                 })
             },
             customize: function (value) {
                 this.customizeCondition = value
-                this.fetchHandler('post','/projects/filter','filter')
+                this.fetchHandler('post','/projects/web_filter')
             },
 
-    changeProjectType (value) {
-                if(this.$store.state.power.project.add !=='true'){
+            changeProjectType(value) {
+                if (this.$store.state.listPower.project.add !== 'true') {
                     toastr.error('当前用户没有权限新增项目')
                     return
                 }
@@ -357,7 +391,7 @@ export default {
                 $('#addProject').modal('show');
             },
 
-    selectProjectType () {
+            selectProjectType() {
                 this.projectFieldsArr = [];
                 if (this.projectType == 5) {
                     return
@@ -383,25 +417,25 @@ export default {
                 });
             },
 
-    addInfo (value, name) {
+            addInfo(value, name) {
                 this.addInfoArr[name] = value
             },
-            getStars () {
-                if (this.starsArr.length > 0) {
-                    return
-                }
-                fetch('get', '/starandblogger', {sign_contract_status: 2}).then(response => {
-                    for (let i = 0; i < response.data.length; i++) {
-                        this.starsArr.push({
-                            name: response.data[i].name,
-                            value: response.data[i].flag + ',' + response.data[i].id,
-                        })
-                    }
-                })
-            },  
+            getStars() {
+                // if (this.starsArr.length > 0) {
+                //     return
+                // }
+                // fetch('get', '/starandblogger', {sign_contract_status: 2}).then(response => {
+                //     for (let i = 0; i < response.data.length; i++) {
+                //         this.starsArr.push({
+                //             name: response.data[i].name,
+                //             value: response.data[i].flag + ',' + response.data[i].id,
+                //         })
+                //     }
+                // })
+            },
 
-  },
-};
+        },
+    };
 </script>
 
 <style lang="scss" scoped>

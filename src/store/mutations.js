@@ -19,6 +19,21 @@ export default {
     changeDivisionInfo: function (state, data) {
         state.divisionInfo = data
     },
+    changeBirthdayInfo: function (state, data) {
+        state.birthdayInfo = data
+    },
+    changeStar_risk_pointInfo: function (state, data) {
+        state.star_risk_pointInfo = data
+    },
+    changePhoneInfo: function (state, data) {
+        state.phoneInfo = data
+    },
+    changeWechatInfo : function (state, data) {
+        state.wechatInfo = data
+    },
+    changeEmailInfo: function (state, data) {
+        state.emailInfo = data
+    },
     changeIncubationInfo: function (state, data) {
         state.incubationInfo = data
     },
@@ -36,6 +51,9 @@ export default {
     },
     changePreview(state, data) {
         state.previewurl = data
+    },
+    changePreviewName(state, data) {
+        state.previewname = data
     },
     changeCompany(state, data) {
         state.companyInfo = data
@@ -77,15 +95,17 @@ export default {
         state.moduleList = data.moduleList
         state.unReadMsg = data.num
     },
+    setApprovalNum(state, data){
+        state.approvalNum = data
+    },
     // 修改个人信息字段
     setUserAvatar(state, data) {
         state.avatar = data
     },
-    // 设置权限(新增)
-    setUserPower(state, data) {
-        state.power = data
-    },
     setSupplierDetails(state,data){
         state.supplierDetails = data
+    },
+    setListPower(state,data){
+        state.listPower = data
     }
 }

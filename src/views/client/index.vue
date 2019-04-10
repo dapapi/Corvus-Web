@@ -3,15 +3,15 @@
         <Loading :is-loading="isLoading"></Loading>
         <div class="page-header page-header-bordered">
             <h1 class="page-title">客户管理
-                <router-link :to="{path:'/supplier/list'}" style="color: #3298dc;" class="pl-20 font-size-20 pointer-content"><i
-                        class="iconfont icon-jiantou_xiayiye font-size-22 pr-5"></i>供应商</router-link>
+                <!-- <router-link :to="{path:'/supplier/list'}" style="color: #3298dc;" class="pl-20 font-size-20 pointer-content"><i
+                        class="iconfont icon-jiantou_xiayiye font-size-22 pr-5"></i>供应商</router-link> -->
             </h1>
             <div class="page-header-actions">
-                <ImportAndExport class="float-left" :type="'export'" :moduleName="'clients'" :params="exportParams">
+                <ImportAndExport class="float-left" :type="'export'" :moduleName="'clients'" :power="'client'" :params="exportParams">
                     <i class="iconfont icon-daochu px-5 font-size-20 pr-20 pointer-content" title="导出"
                        aria-hidden="true"></i>
                 </ImportAndExport>
-                <ImportAndExport class="float-left" :type="'import'" :moduleName="'clients'">
+                <ImportAndExport class="float-left" :type="'import'" :moduleName="'clients'" :power="'client'" @reload="getClients">
                     <i class="iconfont icon-daoru font-size-20 pointer-content" title="导入" aria-hidden="true"></i>
                 </ImportAndExport>
             </div>
@@ -21,7 +21,7 @@
             <div class="panel col-md-12 py-5">
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
-                        <input type="text" class="form-control" placeholder="请输入公司名称" v-model="companyName"
+                        <input type="text" class="form-control" placeholder="请输入公司名称"
                                @keyup.enter='filterGo' @blur='filterGo'>
                     </div>
                     <div class="col-md-3 example float-left">
@@ -61,9 +61,22 @@
                                 <template v-if="client.grade === 1">直客</template>
                                 <template v-if="client.grade === 2">代理公司</template>
                             </td>
-                            <td>{{ client.principal ? client.principal.data.name : '' }}</td>
+                            <td>
+                                <template v-if="companyName || clientLevelSearch || clientPrincipalIdSearch.length > 0">
+                                    {{ client.principal ? client.principal.data.name : '' }}
+                                </template>
+                                <template v-else>
+                                    {{ client.name }}
+                                </template>
+                                </td>
                             <td>{{ client.created_at ? common.timeProcessing(client.created_at) : '' }}</td>
-                            <td>{{ client.last_follow_up_at ? common.timeProcessing(client.last_follow_up_at) : '' }}
+                            <td>
+                                <template v-if="companyName || clientLevelSearch || clientPrincipalIdSearch.length > 0">
+                                    {{ client.last_follow_up_at ? common.timeProcessing(client.last_follow_up_at) : '' }}
+                                </template>
+                                <template v-else>
+                                    {{ client.up_time ? common.timeProcessing(client.up_time) : '' }}
+                                </template>
                             </td>
                         </tr>
                         </tbody>
@@ -81,12 +94,12 @@
 
         </div>
 
-        <customize-filter :data="customizeInfo" @change="customize" :cleanup="cleanUp"
+        <customize-filter v-if="canShow" :data="customizeInfo" @change="customize" :cleanup="cleanUp"
                           @cleanupdone='cleanUp=false'></customize-filter>
 
-        <AddClientType :hidden="power.client == 'false'" @change="showAddModal"/>
+        <AddClientType  v-if="canShow" :hidden="listPower.client?listPower.client.add === 'false':true" @change="showAddModal"/>
 
-        <div class="modal fade" id="addClient" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShow" class="modal fade" id="addClient" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -212,7 +225,7 @@
                 common: common,
                 total: 0,
                 current_page: 0,
-                total_pages: 0,
+                total_pages: 1,
                 customizeInfo: {},
                 clientTypeArr: config.clientTypeArr,
                 clientLevelArr: clientLevelArr,
@@ -246,13 +259,18 @@
                 fetchData: {},
                 customizeCondition: {},
                 isAddButtonDisable: false,
+                canShow:false,
                 // canAdd: false, // 可以新增吗
             }
         },
 
+        created () {
+            this.getClients();
+        },
+
         mounted() {
             this.getField()
-            this.getClients();
+            // this.getClients();
             this.user = JSON.parse(Cookies.get('user'))
             // 清除负责人默认值的设置
             this.clearDefaultPrincipal()
@@ -267,14 +285,8 @@
         computed: {
             ...mapState([
                 'userList',
-                'power'
+                'listPower'
             ])
-        },
-
-        watch : {
-            power () {
-                console.log(this.power)
-            }
         },
 
         methods: {
@@ -287,11 +299,12 @@
             getClients: function (pageNum = 1) {
                 const params = {
                     page: pageNum,
-                    include: 'principal',
+                    // include: 'principal',
                 };
 
-                let url = '/clients'
-
+                // let url = '/clients'
+                let url = '/clients_list'
+                
                 if (this.companyName) {
                     params.keyword = this.companyName
                 }
@@ -301,15 +314,27 @@
                 if (this.clientPrincipalIdSearch.length > 0) {
                     params.principal_ids = this.clientPrincipalIdSearch
                 }
+                let type = 'get'
                 if (this.companyName || this.clientLevelSearch || this.clientPrincipalIdSearch.length > 0) {
                     url = '/clients/filter'
+                    params.include = 'principal'
+                    type = 'post'
                 }
 
-                fetch('get', url, params).then(response => {
+                fetch(type, url, params).then(response => {
+                    this.isLoading = false;
+                    this.canShow = true
                     this.clientsInfo = response.data;
-                    this.current_page = response.meta.pagination.current_page;
-                    this.total = response.meta.pagination.total;
-                    this.total_pages = response.meta.pagination.total_pages;
+                    if (this.companyName || this.clientLevelSearch || this.clientPrincipalIdSearch.length > 0) {
+                        this.current_page = response.meta.pagination.current_page;
+                        this.total = response.meta.pagination.total;
+                        this.total_pages = response.meta.pagination.total_pages;
+                    } else {
+                        this.current_page = response.current_page;
+                        this.total = response.total;
+                        this.total_pages = response.per_page != 0 ? Math.ceil(response.total / response.per_page) : 1;
+                    }
+                }).catch(() => {
                     this.isLoading = false;
                 })
             },
@@ -372,7 +397,7 @@
                     desc: this.clientRemark
                 };
 
-                fetch('post', '/clients', data).then(response => {
+                fetch('post', '/clients', data).then(response => {    
                     this.isAddButtonDisable = false;
                     toastr.success('创建成功');
                     $("#addClient").modal("hide");
@@ -389,6 +414,7 @@
                     fetchData = this.fetchData,
                     newUrl
                 this.fetchData.include = 'include=principal'
+                this.fetchData.page = '&page='+this.current_page
                 if (type == 'filter') {
                     fetchData = this.customizeCondition
                     let keyword, status, principal_ids
@@ -405,15 +431,18 @@
                     } else {
                         status= ''
                     }
-                    newUrl = url + '?' + this.fetchData.include + keyword + status 
+                    newUrl = url + '?' + this.fetchData.include + keyword + status +this.fetchData.page 
                 }
                 
                 fetch(methods, newUrl || url, fetchData).then((response) => {
+                    
+
                     _this.clientsInfo = response.data
                     _this.total = response.meta.pagination.total;
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total_pages = response.meta.pagination.total_pages;
                     _this.isLoading = false;
+                    this.canShow = true
                 })
             },
 
@@ -428,7 +457,9 @@
             changePrincipal: function (value) {
                 this.clientPrincipal = value
             },
-            filterGo() {
+            filterGo(e) {
+                // console.log(e.target.value)
+                this.companyName = e.target.value.trim()
                 this.fetchData.keyword = this.companyName
                 this.exportParams.keyword = this.companyName
                 this.fetchHandler('post', '/clients/filter', 'filter')

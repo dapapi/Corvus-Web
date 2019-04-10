@@ -58,7 +58,7 @@
                         </div>
                         <span class="ml-6">{{currentData.creator.data.name}}</span>
                         <span class="">{{currentData.created_at}}</span>
-                        <span v-if="classifyArr[0]" class="ml-20">{{classifyArr.find(classifyArr => classifyArr.id == currentData.classify).name}}</span>
+                        <span class="ml-20">{{currentData.classify_name}}</span>
                     </div>
                     <br>
                     <hr/>
@@ -113,6 +113,8 @@
 <script>
 import { mapState } from 'vuex'
 import fetch from '@/assets/utils/fetch'
+import Cookies from 'js-cookie';
+
 
 export default {
     data(){
@@ -198,10 +200,7 @@ export default {
             history.go(-1)
         },
         whoami(){
-            let _this = this
-            fetch('get','/users/my').then((params) => {
-                _this.my_id = params.data.id
-            })
+            this.my_id = JSON.parse(Cookies.get('user')).id
         },
     }
 }

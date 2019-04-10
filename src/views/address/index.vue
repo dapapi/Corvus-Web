@@ -36,9 +36,9 @@
                                         </div>
 
                                         <div v-for="(value, key, index) in normalUsers" :key="index">
-                                            <div class="letter" v-if="value.find(item=>item.name.includes(searchKeyWord))">{{ key }}</div>
+                                            <div class="letter" v-if="value.find(item=>item.name.toLowerCase().includes(searchKeyWord.toLowerCase()))">{{ key }}</div>
                                             <div class="users" v-for="(user, _index) in value"
-                                                 v-show="user.name.indexOf(searchKeyWord) > -1"
+                                                 v-show="user.name.toLowerCase().indexOf(searchKeyWord.toLowerCase()) > -1"
                                                  :class="checkedIndex === (index + '' + _index) ? 'checked' : ''"
                                                  @click="handelMemberClick(index + '' + _index, user)"
                                                  :key='user.name+Math.random()'>

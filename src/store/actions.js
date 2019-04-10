@@ -24,6 +24,16 @@ export default {
             data.commit('changeDivisionInfo', params.data)
         } else if (params.type === 'incubation') {
             data.commit('changeIncubationInfo', params.data)
+        } else if (params.type === 'birthday') {
+            data.commit('changeBirthdayInfo', params.data)
+        } else if (params.type === 'star_risk_point') {
+            data.commit('changeStar_risk_pointInfo', params.data)
+        } else if (params.type === 'phone') {
+            data.commit('changePhoneInfo', params.data)
+        } else if (params.type === 'wechat') {
+            data.commit('changeWechatInfo', params.data)
+        } else if (params.type === 'email') {
+            data.commit('changeEmailInfo', params.data)
         } else if (params.type === 'bill') {
             data.commit('changeBillInfo', params.data)
         } else {
@@ -60,6 +70,9 @@ export default {
     },
     changePreview: function (data, params) {
         data.commit('changePreview', params)
+    },
+    changePreviewName: function (data, params) {
+        data.commit('changePreviewName', params)
     },
     // 获取部门数据
     getDepartment({commit}) {
@@ -101,9 +114,37 @@ export default {
             commit('setModule', data)
         })
     },
+    getApprovalNum({commit}) {
+        console.log(1111);
+            fetch('get',`/pending_sum`).then((res) => {
+                console.log(res);
+                // _this.unreadInfo = params
+                // _this.leftData[0].subMenu[2].num = params.project
+                // _this.leftData[1].subMenu[2].num = params.contract
+                // _this.leftData[2].subMenu[2].num = params.general
+                commit('setApprovalNum', res)
+            })
+        // }
+        // fetch('get', `/getmodules`).then((res) => {
+
+        //     let num = 0
+        //     let data = {}
+        //     for (let i = 0; i < res.data.length; i++) {
+        //         num = num + res.data[i].unread
+        //     }
+        //     data.num = num
+        //     data.moduleList = res.data
+        //     commit('setModule', data)
+        // })
+    },
     getSupplierDetails({commit},params){
         fetch('get', `supplier/${params}`).then((res) =>{
             commit('setSupplierDetails', res.data)
+        })
+    },
+    getListPower({commit}){
+        fetch('get', `/user/list_power`).then((res) => {
+          commit('setListPower', res.data.power)
         })
     }
 }

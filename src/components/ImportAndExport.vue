@@ -4,16 +4,20 @@
             <slot></slot>
         </span>
         <span v-if="type === 'import'" style="width:100%">
-            <form action="" style="display:inline-block;width:100%;height:34px;" >
+            <form v-if="this.importPower === 'true'" action="" style="display:inline-block;width:100%;height:34px;" >
                 <input type="file" :id="`import_${this.getRandom}`" name="avatar" accept=".xlsx" style="display:none" @change="importFile($event)">
                 <label :for="`import_${this.getRandom}`" style="width:100%">
                 <slot></slot>
                 </label>
             </form>
+            <label v-else @click="unImport" style="width:100%">
+                <slot></slot>
+            </label>
         </span>
     </span>
 </template>
 <script>
+ import {mapState} from 'vuex'
 import axios from 'axios'
 import env from '../assets/js/env'
 //导入和导出调通的模块只有 客户
@@ -33,22 +37,54 @@ export default {
         //导出需要传递的参数
         params:{
             type:Object
+        },
+        //获取导出和导入的权限模块名称
+        power:{
+            type:String,
+            // required:true
         }
     },
-   
+    
     data(){
         return {
           getRandom:Math.round(Math.random() * 1000),
           file:'',
-          header:env.getHeaders()
+          header:env.getHeaders(),
+          importPower:'false',
+          exportPower:'false',
+          route:''
         }
     },
+    computed:{
+        ...mapState([
+            'listPower'
+        ])
+    },
     mounted(){
+        this.route = this.$route.path
+    },
+    watch:{
+        //第一次加载判断是否有权限列表
+        listPower:function(){
+            this.importPower = this.listPower[this.power].import
+            this.exportPower = this.listPower[this.power].export  
+        },
+        //路由跳转重新赋值权限
+        route:function(){
+            if(JSON.stringify(this.listPower)!=='{}'){
+                this.importPower = this.listPower[this.power].import
+                this.exportPower = this.listPower[this.power].export   
+            }
+        }
     },
     methods:{
+        //没有导入权限
+        unImport:function(){
+            toastr.error('您没有导入权限，请确认');
+        },
         //导入
         importFile:function(event){
-            
+            let _this = this
             this.header['Content-Type'] = 'multipart/form-data;boundary = ' + new Date().getTime()
             this.file = event.target.files[0];
             let importUrl = `${env.apiUrl}/${this.moduleName}/import`
@@ -56,19 +92,41 @@ export default {
             formData.append('file', this.file);
             //创建一个干净的axios对象
             var instance = axios.create();
-            this.$emit('importFile')
+            // this.$emit('importFile')
             instance.defaults.headers = this.header
             instance.post(importUrl, formData)
             .then(function (response) {
                toastr.success('导入成功')
-            })
-            .catch(function (error) {
-                console.log(error);
+               _this.$emit('reload')//导入成功刷新数据
+            }).catch(function (error) {
+                const {response: {status}} = error
+                const {response} = error
+                if (status === 401) {
+                    env.getStatusCode()[401]()
+                } else if (status === 422) {
+                    const errors = response.data.errors
+                    const errInfoArr = Object.keys(errors)
+                    if (errInfoArr.length > 0) {
+                        toastr.error(errors[errInfoArr[0]]);
+                    } else {
+                        toastr.error(response.data.message);
+                    }
+                } else if (status === 403) {
+                    
+                    toastr.error(response.data.message)
+                } else {
+                    toastr.error(response.data.message);
+                }
             });
             
         },
         //导出
         exportFile:function(){
+            
+            if(this.exportPower==="false"){
+                toastr.error('您没有导出权限，请确认');
+                return false
+            }
             var xhh = new XMLHttpRequest();
             //导出参数
             let getParams = []

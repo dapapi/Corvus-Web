@@ -662,7 +662,7 @@
                 allTasksInfo: '',
                 allProjectsInfo: '',
                 searchKeyWord: '',
-                isLoading: true,
+                isLoading: false,
             }
         },
         created(){
@@ -672,9 +672,9 @@
         mounted(){
             this.getTask()
             this.getStars()
-            this.getBloggers()
+            // this.getBloggers()
             this.getClients()
-            this.getProjects()
+            // this.getProjects()
             this.getTaskType()
             this.getResources();
             this.getCalendarList()

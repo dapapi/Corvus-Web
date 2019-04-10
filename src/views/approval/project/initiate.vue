@@ -23,11 +23,13 @@
             </div>
         </div>
 
-        <BuildProject :project-type="projectType" :project-fields-arr="projectFieldsArr"></BuildProject>
+        <BuildProject :project-type="projectType" :project-fields-arr="projectFieldsArr" v-if="canShow"></BuildProject>
     </div>
 </template>
 
 <script>
+    import Cookies from 'js-cookie';
+
     import fetch from '../../../assets/utils/fetch.js'
 
     export default {
@@ -55,6 +57,7 @@
                 projectType: '',
                 projectFieldsArr: [],
                 myOrganization:'',
+                canShow:false,
             }
         },
         created(){
@@ -65,14 +68,10 @@
         methods: {
             addProject(value) {
                 this.projectType = value;
-                this.selectProjectType(function () {
-                    $('#addProject').modal('show')
-                });
+                this.selectProjectType();
             },
             whoAmI(){
-                fetch('get','/users/my').then((params) => {
-                    this.myOrganization = params.data.organization_id
-                })
+                this.myOrganization = JSON.parse(Cookies.get('user')).organization_id
             },
             selectProjectType(callback) {
                 fetch('get', '/project_fields', {
@@ -90,8 +89,11 @@
                             }
                         }
                     }
+                    this.canShow = true
                     this.projectFieldsArr = response.data;
-                    callback();
+                    this.$nextTick((params) => {
+                        $('#addProject').modal('show')   
+                    })
                 });
             },
         }

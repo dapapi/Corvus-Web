@@ -25,9 +25,6 @@ export default {
   },
   mounted() {
     const self = this;
-    //    $('#dateInput').focus(function(){
-    //        console.log(123);
-    //    })
     $(this.$el).datepicker({
       format: 'yyyy-mm-dd',
       language: 'zh-CN',
@@ -86,9 +83,7 @@ export default {
     },
     // 输入日期时获取值
     getInputValue(value) {
-      // console.log($('#dateInput').val())
       this.$emit('change', $('#dateInput').val());
-      console.log(value);
     },
     infiniteSelector(params) {
       console.log(params);

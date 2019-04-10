@@ -1,4 +1,5 @@
 <template>
+    <keep-alive>
     <div class="site-menubar" style="height: 100%!important;top: 0;width: 80px" @click="hideBackModel">
         <div class="site-menubar-body">
             <div class="py-10 menu-icon"
@@ -65,7 +66,7 @@
             </div>
         </div>
     </div>
-
+    </keep-alive>
 </template>
 
 <script>
@@ -85,11 +86,13 @@
                         // data: [
                         //     {
                         //         name: '工作台',
-                        //         code: 'my'
+                        //         code: 'my',
+                        //         icon: 'iconfont icon-gongzuotai'
                         //     },
                         //     {
                         //         name: '报表',
-                        //         code: 'reports'
+                        //         code: 'reports',
+                        //         icon: 'iconfont icon-baobiao'
                         //     }
                         // ]
                     },
@@ -97,7 +100,7 @@
                         name: '日历',
                         code: 'calendar',
                         image: 'https://res-crm.papitube.com/image/login-icon/rili.png',
-                        hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-rili.png'
+                        hoverImage: 'https://res-crm.papitube.com/image/login-icon/select-rili.png',
                     },
                     {
                         name: '审批',
@@ -142,86 +145,86 @@
                         data: [
                             {
                                 name: '公告',
-                                code: 'broadcast'
+                                code: 'broadcast',
+                                icon: 'iconfont icon-laba',
                             },
                             {
                                 name: '通讯录',
-                                code: 'address'
+                                code: 'address',
+                                icon: 'iconfont icon-tongxunlu',
                             },
                             // {
                             //     name: '简报',
-                            //     code: 'brief'
+                            //     code: 'brief',
+                            //     icon: 'iconfont icon-wenjian',
                             // },
                             {
                                 name: '仪表盘',
-                                code: 'dashboard'
+                                code: 'dashboard',
+                                icon: 'iconfont icon-panel',
                             }
-                        ]
-                    }
+                        ],
+                    },
                 ],
                 pageRoute: '',
                 visible: false,
                 // avatar: ''
+            };
+        },
+        computed: {
+            ...mapState([
+                'unReadMsg',
+                'canPassBack', // 能否进入后台
+                'avatar',
+            ]),
+        },
+
+        created() {
+            if (Cookies.get('user')) {
+                const avatar = JSON.parse(Cookies.get('user')).avatar;
+                this.setUserAvatar(avatar);
             }
         },
-  computed: {
-    ...mapState([
-      'unReadMsg',
-      'canPassBack', // 能否进入后台
-      'avatar',
-    ]),
-  },
 
-  created() {
-    if (Cookies.get('user')) {
-      const avatar = JSON.parse(Cookies.get('user')).avatar;
-      const power = JSON.parse(Cookies.get('user')).power;
-      this.setUserAvatar(avatar);
-      this.setUserPower(power);
-      console.log(power);
-    }
-  },
+        mounted() {
+            document.body.onclick = () => {
+                this.visible = false;
+            };
+        },
+        watch: {
+            '$route': function (to, from) {
+                this.pageRoute = to.path.split('/')[1];
+            },
 
-  mounted() {
-    document.body.onclick = () => {
-      this.visible = false;
+        },
+        methods: {
+            ...mapMutations([
+                'setUserAvatar',
+            ]),
+            showBackModel() {
+                this.visible = !this.visible;
+            },
+            // 退出登录
+            layout() {
+                this.visible = false;
+                Cookies.remove('user');
+                Cookies.remove('CORVUS-ACCESS-TOKEN');
+                Cookies.remove('selectedCalendar');
+                window.location.href = '/login';
+            },
+            goManagement() {
+                this.visible = false;
+                if (this.canPassBack) {
+                    window.open('/apps');
+                } else {
+                    toastr.error('您没有进入后台的权限！');
+                }
+            },
+            hideBackModel() {
+                this.visible = false;
+            },
+        },
     };
-  },
-  watch: {
-    '$route': function(to, from) {
-      this.pageRoute = to.path.split('/')[1];
-    },
-
-  },
-  methods: {
-    ...mapMutations([
-      'setUserAvatar',
-      'setUserPower',
-    ]),
-    showBackModel() {
-      this.visible = !this.visible;
-    },
-    // 退出登录
-    layout() {
-      this.visible = false;
-      Cookies.remove('user');
-      Cookies.remove('CORVUS-ACCESS-TOKEN');
-      Cookies.remove('selectedCalendar');
-      window.location.href = '/login';
-    },
-    goManagement() {
-      this.visible = false;
-      if (this.canPassBack) {
-        window.open('/apps');
-      } else {
-        toastr.error('您没有进入后台的权限！');
-      }
-    },
-    hideBackModel() {
-      this.visible = false;
-    },
-  },
-};
 </script>
 
 <style scoped>

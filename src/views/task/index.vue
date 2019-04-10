@@ -32,7 +32,7 @@
                 <div class="col-md-12">
                     <ul class="nav nav-tabs nav-tabs-line" role="tablist">
                         <li class="nav-item" role="presentation" @click="getMyTasks()">
-                            <a class="nav-link active"
+                            <a class="nav-link"
                                data-toggle="tab"
                                href="#forum-task"
                                aria-controls="forum-base"
@@ -40,7 +40,7 @@
                                role="tab">所有任务</a>
                         </li>
                         <li class="nav-item" role="presentation" @click="getMyTasks(3)">
-                            <a class="nav-link"
+                            <a class="nav-link active"
                                data-toggle="tab"
                                href="#forum-task"
                                aria-controls="forum-present"
@@ -95,26 +95,14 @@
                                 <td class="pointer-content">
                                     {{ task.title }}
                                 </td>
-                                <td>{{task.resource ? task.resource.data.resource.data.title : ''}}
-                                    <template
-                                            v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.name">
-                                        - {{ task.resource.data.resourceable.data.name }}
-                                    </template>
-                                    <template
-                                            v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.nickname">
-                                        - {{ task.resource.data.resourceable.data.nickname }}
-                                    </template>
-                                    <template
-                                            v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.title">
-                                        - {{ task.resource.data.resourceable.data.title }}
-                                    </template>
-                                    <template
-                                            v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.company">
-                                        - {{ task.resource.data.resourceable.data.company }}
+                                <td>
+                                    <template v-if="task.resource_type">
+                                        {{ task.resource_type }} - {{ task.resource_name }}
                                     </template>
                                 </td>
                                 <!-- <td>暂无</td> -->
-                                <td>{{ task.type ? task.type.data ? task.type.data.title : '' : '' }}
+                                <td>
+                                    {{ task.type_name }}
                                 </td>
                                 <td>
                                     <template v-if="task.status === 1"><span style="color:#FF9800">进行中</span></template>
@@ -123,7 +111,7 @@
                                     <template v-if="task.status === 4"><span style="color:#F44336">延期</span></template>
                                 </td>
                                 <td>
-                                    <template v-if="task.principal">{{ task.principal.data.name }}</template>
+                                    {{ task.principal_name }}
                                 </td>
                                 <td>{{ task.end_at }}</td>
                             </tr>
@@ -142,9 +130,9 @@
             </div>
         </div>
 
-        <CustomizeFilter :data="customizeInfo" @change="customize"></CustomizeFilter>
+        <CustomizeFilter v-if="canShow" :data="customizeInfo" @change="customize"></CustomizeFilter>
 
-        <div class="site-action" data-plugin="actionBtn" data-toggle="modal" @click="handleAdd">
+        <div v-if="canShow" class="site-action" data-plugin="actionBtn" data-toggle="modal" @click="handleAdd">
             <button type="button"
                     class="site-action-toggle btn-raised btn btn-success btn-floating waves-effect waves-classic">
                 <i class="front-icon iconfont icon-tianjia1 animation-scale-up" aria-hidden="true"
@@ -154,7 +142,7 @@
             </button>
         </div>
 
-        <AddTask></AddTask>
+        <AddTask v-if="canShow"></AddTask>
 
     </div>
 </template>
@@ -191,30 +179,35 @@
                 user: {}, // 个人信息
                 isLoading: true,
                 priorityArr: config.priorityArr,
-                my: '',//tasks 筛选  3我负责的 2 我参与的 1我创建的 4我分配的
+                my: 3,//tasks 筛选  3我负责的 2 我参与的 1我创建的 4我分配的
                 linkCurrentPage: 2, // 关联资源当前页数
                 linkTotalPage: 1, // 关联资源总页数
                 linkCode: '', // 关联资源父数据的code
                 linkIndex: 0, //
-                canLoadMore: false, // 关联资源是否可以加载更多
                 searchDepartment: '', // 搜索部门
                 searchUser: '', // 搜索部门成员
+                canShow:false,
             };
         },
         computed: {
             ...mapState([
-                'power',
+                'listPower',
                 'department',
             ])
         },
-        mounted() {
+        created () {
             this.getTasks();
+        },
+        mounted() {
+            // this.getTasks();
             this.user = JSON.parse(Cookies.get('user'))
+            
             // 负责人默认值的设置
             this.$store.commit('changeNewPrincipal', {
                 name: this.user.nickname,
                 id: this.user.id
             })
+            this.getTaskType();
         },
 
         methods: {
@@ -224,9 +217,10 @@
                 const params = {
                     page: pageNum,
                     my: this.my,
-                    include: 'principal,pTask,tasks,resource.resourceable,resource.resource,participants',
+                    // include: 'principal,pTask,tasks,resource.resourceable,resource.resource,participants',
                 };
 
+               
                 if (this.searchDepartment) {
                     params.department = this.searchDepartment
                 }
@@ -235,7 +229,7 @@
                     params.user = this.searchUser
                 }
 
-                const url = '/tasks';
+                let url = '/task/all';
 
                 if (this.taskNameSearch) {
                     params.keyword = this.taskNameSearch;
@@ -247,12 +241,15 @@
                     params.type_id = this.taskTypeSearch;
                 }
                 fetch('get', url, params).then((response) => {
-                    this.tasksInfo = response.data;
-                    this.current_page = response.meta.pagination.current_page;
-                    this.total = response.meta.pagination.total;
-                    this.total_pages = response.meta.pagination.total_pages;
                     this.isLoading = false;
-                });
+                    this.tasksInfo = response.data;
+                    this.current_page = response.current_page;
+                    this.total = response.total;
+                    this.total_pages = response.per_page != 0 ? Math.ceil(response.total / response.per_page) : 1;
+                    this.canShow = true
+                }).catch(() => {
+                    this.isLoading = false;
+                })
             },
             // 任务我的筛选
             getMyTasks(my) {
@@ -280,7 +277,7 @@
             },
 
             handleAdd() {
-                if (this.power.task == 'false') {
+                if (this.listPower.task.add == 'false') {
                     toastr.error('您没有新增任务的权限！')
                     return
                 }
@@ -288,7 +285,6 @@
             },
             // 选择成员或部门
             selectDepartment(data) {
-                console.log(data)
                 if (data.type === 'department') {
                     this.searchUser = ''
                     this.searchDepartment = data.id
@@ -297,7 +293,17 @@
                     this.searchDepartment = ''
                 }
                 this.getTasks()
-            }
+            },
+            // 获取任务类型列表
+            getTaskType() {
+                fetch('get', '/task_types').then(res => {
+                    const data = res.data
+                    this.taskTypeArr = data.map(n => {
+                        return {name: n.title, value: n.id}
+                    })
+                    this.taskTypeArr.unshift({name: '全部', value: ''})
+               })
+            },
         }
     };
 </script>

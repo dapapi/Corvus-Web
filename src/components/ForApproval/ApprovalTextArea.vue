@@ -22,7 +22,6 @@ export default {
                 this.textContent = this.consdata[0].control_value
                 // for (const i in this.defaultData) {
                 //     if (this.defaultData[i].key === this.consdata[0].control_title) {
-                //         console.log(this.defaultData[i].key);
                 //         this.$nextTick((params) => {
                 //             // $(this.$el).selectpicker('val', this.defaultData[i].values.data.value);
                 //             this.textContent = this.defaultData[i].values.data.value

@@ -8,6 +8,7 @@
             <LeftManage/>
         </template>
         <router-view/>
+        <NetError />
     </div>
 </template>
 
@@ -70,13 +71,25 @@
                 this.getUserList()
                 this.getDepartment()
                 this.getModuleRole()
+                this.getListPower()
             }
+            // this.getApprovalNum()
+        },
+        mounted(){
+          
+               
+        //      $('.modal-dialog').click(function(){
+        //       console.log(1111);
+        //         document.getElementsByTagName('body')[0].classList.add('modal-open');
+        //  }),
         },
         methods: {
             ...mapActions([
                 'getUserList',
                 'getDepartment',
-                'getModuleRole'
+                'getModuleRole',
+                'getListPower',
+                'getApprovalNum'
             ])
         }
     };
@@ -112,9 +125,12 @@
     .asSpinner {
         height: 36.02px;
     }
-
+    .site-menubar{
+        z-index:9999999 !important;
+    }
     .site-menubar-body {
         height: 100% !important;
+        
     }
 
     .table td, .table th {
@@ -198,6 +214,7 @@
 
     .site-menu > .site-menu-item > .site-menu-sub {
         left: 80px;
+        
     }
 
     .modal-header {
@@ -294,5 +311,10 @@
     a:hover{
         cursor: pointer;
         text-decoration: none;
+    }
+
+    .fade {
+        opacity: 0;
+        transition: opacity .05s linear!important;
     }
 </style>

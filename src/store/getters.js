@@ -38,5 +38,8 @@ export default {
     },
     getSupplierDetails:function(state){
         return state.supplierDetails
+    },
+    getListPower:function(state){
+        return state.listPower
     }
 }

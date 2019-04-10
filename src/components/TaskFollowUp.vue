@@ -19,7 +19,7 @@
                 </li>
             </ul>
             <div class="tab-content pt-20">
-                <div class="tab-pane follow-task active" id="all-TaskFollowUp" role="tabpanel">
+                <div class="tab-pane follow-task active" id="all-TaskFollowUp" ref="isScroll"  role="tabpanel">
                     <ul class="task-follow">
                         <li v-for="(item, index) in taskData" :key="index">
                             <div class="change-dot bg-green-500"></div>
@@ -51,7 +51,12 @@
                 showButton: false,
                 taskFollowText: '',
                 taskFilter: '3',
-                taskData: []
+                taskData: [],
+                sHeight:0,
+                page:1,
+                maxPage:0,
+                isLoadingMore:false,
+
             }
         },
         created() {
@@ -61,12 +66,33 @@
             if(this.trailId){
                 this.getTrail()
             }
+            
+            this.$refs.isScroll.addEventListener('scroll',()=>{
+                let sHeight = this.$refs.isScroll.scrollHeight, //元素真实高度
+                    cHeight = this.$refs.isScroll.clientHeight, //可视区高度
+                    sTop = this.$refs.isScroll.scrollTop //滚动高度
+                let loadHeight = sHeight - cHeight -sTop;
+                if(loadHeight<=20&&this.maxPage>this.page&&this.isLoadingMore){
+                    this.page ++ //增加页数
+                    this.getTrail()
+                }
+            })
         },
         methods: {
+            
             getTrail() {
+                
                 let _this = this
-                fetch('get', '/' + this.trailType + '/' + this.trailId + '/operate_log?status=' + this.taskFilter).then(function (response) {
-                    _this.taskData = response.data
+                _this.isLoadingMore = false
+                if(_this.page==1){
+                    _this.taskData = []
+                }
+                
+                fetch('get', '/' + this.trailType + '/' + this.trailId + '/operate_log?status=' + this.taskFilter+'&page='+this.page).then(function (response) {
+                    _this.page = response.meta.pagination.current_page
+                    _this.maxPage = response.meta.pagination.total_pages
+                    _this.taskData = _this.taskData.concat(response.data)
+                    _this.isLoadingMore = true //阻止多次加载
                 })
             },
             sendTrail() {
@@ -74,22 +100,26 @@
                     content: this.taskFollowText,
                 }
                 fetch('post', '/' + this.trailType + '/' + this.trailId + '/follow_up', data).then(() => {
+                    this.page = 1
                     this.getTrail()
                 })
             },
             followTask: function (ref) {
                 this.taskFollowText = ref
                 this.sendTrail()
-            }
+            },
+
         },
         watch: {
             trailId:function(value){
                 if(value){
+                    this.page = 1
                     this.getTrail(value)
                 }
             },
             taskFilter: function (val, oldval) {
                 if (val != oldval) {
+                    this.page = 1
                     this.getTrail()
                 }
             }

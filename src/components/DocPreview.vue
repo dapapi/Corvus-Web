@@ -18,9 +18,9 @@
                     <h4 class="modal-title">文件预览{{fileNameHandler}}</h4>{{fileNameHandler}}
                 </div>
                 <div class="modal-body">
-                    <iframe v-if="['doc','docx','xls','xlsx','ppt','pptx'].includes(fileNameHandler)" class=" mt-30" :src='"https://view.officeapps.live.com/op/view.aspx?src="+url' width='100%' height='90%' frameborder='1'>
+                    <iframe v-if="['doc','docx','document','xls','xlsx','ppt','pptx'].includes(fileNameHandler)" class=" mt-30" :src='"https://view.officeapps.live.com/op/view.aspx?src="+url' width='100%' height='90%' frameborder='1'>
 			        </iframe>
-                    <img style="max-width:100%;" v-else-if="['png','gif','bmp','jpg','jpeg'].includes(fileNameHandler)" :src="url">
+                    <img style="max-width:100%;max-height:100%" v-else-if="['png','gif','bmp','jpg','jpeg'].includes(fileNameHandler)" :src="url">
                     <embed v-else-if="fileNameHandler === 'pdf'" :src="url" type="application/pdf" width="100%" height="100%">
                     <!-- <video v-else-if="['mp4','MP4','MOV','mov'].includes(fileNameHandler)" :src="url" controls height='100%' width='100%' type="video/mov"> -->
                         <!-- <source :src="url" type="video/mov"> -->
@@ -29,7 +29,7 @@
                 </div>
                 <div class="modal-footer">
                     <span>图片文件请使用右键另存为</span>
-                    <a :href="url" download="">
+                    <a :href="url+'?attname='+givenFileName" download="">
                         <button type="button" class="btn btn-success waves-effect waves-light waves-round">
                             <i class="icon md-download" aria-hidden="true"></i>下载附件
                         </button>
@@ -61,7 +61,6 @@ export default {
         document.getElementsByTagName('body')[0].classList.add('modal-open');
       });
     } else {
-      // console.log(this.detailpage);
     }
   },
   watch: {

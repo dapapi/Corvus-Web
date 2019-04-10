@@ -12,23 +12,23 @@
                 <div class="modal-body">
                     <div class="example">
                         <div class="col-md-2 text-right float-left">关联资源</div>
-                        <template v-if="this.resource_title">
-                            <div class="col-md-10 float-left pl-0">
-                                {{ this.resource_name }} - {{ this.resource_title }}
-                            </div>
-                        </template>
-                        <template v-else>
                             <div class="col-md-10 float-left">
-                                <NormalLinkageSelectors ref="linkage" v-if="linkData.length > 0" :myData="linkData"
-                                                        :data="linkData" @change="addLinkage"></NormalLinkageSelectors>
+                                <LinkResource 
+                                    :fatherData="linkFatherData" 
+                                    :childData="linkChildData" 
+                                    :resource="resource_type"
+                                    :resourceable="resourceable_id"
+                                    @change="setResource" 
+                                />
                             </div>
-                        </template>
+                        <!-- </template> -->
                     </div>
                     <div class="example">
                         <div class="col-md-2 text-right float-left require">任务类型</div>
                         <div class="col-md-10 float-left pl-0">
                             <Selectors :options="taskTypeArr" ref="taskType"
-                                       @change="changeTaskType"></Selectors>
+                                       changeKey="taskType"
+                                       @select="changeTaskType"></Selectors>
                         </div>
                     </div>
                     <div class="example">
@@ -98,7 +98,8 @@
 
     export default {
         name: "AddTask",
-        props: ["name", "isChild", "taskFatherId", "resourceable_id", "resource_type", "resource_title", "resource_name", "lock_status"],
+        // props: ["name", "isChild", "taskFatherId", "resourceable_id", "resource_type", "resource_title", "resource_name", "lock_status"],
+        props: ["name", "isChild", "taskFatherId", "resourceable_id", "resource_type", "lock_status", 'code'],
         data() {
             return {
                 taskType: "",
@@ -110,12 +111,23 @@
                 taskIntroduce: "",
                 priorityArr: config.priorityArr,
                 taskTypeArr: [],
-                linkData: [],
+                // linkData: [],
                 resourceableId: "", // 资源id
                 taskName: "",
                 resourceType: "", // 资源type
                 user: {}, // 个人信息
-                isAddButtonDisable: false
+                isAddButtonDisable: false,
+                typeName: '',
+                linkFatherData: [{
+                    name: '暂不关联任何资源',
+                    id: '',
+                    value: '',
+                }], // 关联资源父数据
+                linkChildData: [{
+                    name: '暂不关联任何资源',
+                    id: '',
+                    value: '',
+                }], // 关联资源父数据
             }
         },
         watch: {
@@ -125,9 +137,9 @@
         },
         mounted() {
             this.resourceType = this.resource_type;
-            if (!this.resource_name) {
-                this.getLinkData();
-            }
+            // if (!this.resource_name) {
+            //     this.getLinkData();
+            // }
             if (this.resourceable_id) {
                 this.resourceableId = this.resourceable_id
             }
@@ -140,111 +152,9 @@
             $('#addTask').on('hidden.bs.modal', () => {
                 this.closeAddTask()
             })
+            this.getFatherData(this.code)
         },
         methods: {
-            // 获取关联父资源数据
-            getLinkData() {
-                fetch('get', '/resources').then(res => {
-                    this.linkData = res.data.map((n, i) => {
-                        return {
-                            name: n.title,
-                            id: n.type,
-                            value: n.code,
-                            child: []
-                        }
-                    });
-                    this.linkData.unshift({
-                        name: '暂不关联任何资源',
-                        id: '',
-                        value: '',
-                        child: []
-                    });
-                    if (this.linkData[0].child.length === 0) {
-                        this.getChildLinkData('', 0)
-                    }
-                })
-            },
-            // 获取关联子资源数据
-            getChildLinkData(url, index) {
-                if (url) {
-                    let data = {};
-                    this.linkCode = url;
-                    this.linkIndex = index;
-
-                    let _url = url.substr(0, url.length - 1) + '/related';
-                    if (url === 'bloggers') {
-                        _url = url + '/all';
-                        data.sign_contract_status = 2
-                    }
-                    fetch('get', _url, data).then(res => {
-                        const temp = this.linkData[index];
-                        if (res.meta && res.meta.pagination) {
-                            this.canLoadMore = true;
-                            this.linkTotalPage = res.meta.pagination.total_pages
-                        } else {
-                            this.canLoadMore = false
-                        }
-                        temp.child = res.data.map(n => {
-                            return {
-                                name: n.name || n.nickname || n.title || n.company,
-                                id: n.id,
-                                value: n.id,
-                            }
-                        });
-                        this.resourceableId = temp.child[0].id;
-                        this.$set(this.linkData, index, temp);
-                        this.$nextTick(() => {
-                            this.$refs.linkage.refresh()
-                        })
-                    })
-                } else {
-                    const temp = this.linkData[index];
-                    temp.child = [{
-                        name: '暂不关联任何资源',
-                        id: '',
-                        value: '',
-                    }];
-                    this.resourceableId = temp.child[0].id;
-                    this.$set(this.linkData, index, temp);
-                    this.$nextTick(() => {
-                        this.$refs.linkage.refresh()
-                    })
-                }
-            },
-            // 关联子资源滚动到底加载更多
-            getMoreChildLinkData() {
-                const url = this.linkCode;
-                const index = this.linkIndex;
-                if (url && this.canLoadMore) {
-
-                    if (this.linkCurrentPage >= this.linkTotalPage) {
-                        return
-                    }
-                    let data = {
-                        page: this.linkCurrentPage
-                    };
-                    if (url === 'bloggers' || url === 'stars') {
-                        data.sign_contract_status = 2
-                    }
-                    fetch('get', `/${url === 'bloggers' ? url + '/all' : url}`, data).then(res => {
-                        this.linkCurrentPage = this.linkCurrentPage + 1;
-                        const temp = this.linkData[index];
-                        const tempArr = res.data.map(n => {
-                            return {
-                                name: n.name || n.nickname || n.title || n.company,
-                                id: n.id,
-                                value: n.id,
-                            }
-                        });
-                        temp.child = [...temp.child, ...tempArr];
-                        this.resourceableId = temp.child[0].id;
-                        this.$set(this.linkData, index, temp);
-                        this.$nextTick(() => {
-                            this.$refs.linkage.refresh()
-                        })
-                    })
-                }
-            },
             // 获取任务类型列表
             getTaskType() {
                 fetch('get', '/task_types').then(res => {
@@ -266,14 +176,17 @@
                 this.endMinutes = '';
                 this.taskIntroduce = '';
                 this.linkData = [];
-                this.$refs.taskType.setValue('');
-                this.$refs.taskLevel.setValue('');
-                this.$refs.startTime.setValue('');
-                this.$refs.startMinutes.setValue('0');
-                this.$refs.endTime.setValue('');
-                this.$refs.endMinutes.setValue('0');
-                this.getLinkData();
-                this.setDefaultPrincipal();
+                try {
+                    this.$refs.taskType.setValue('');
+                    this.$refs.taskLevel.setValue('');
+                    this.$refs.startTime.setValue('');
+                    this.$refs.startMinutes.setValue('0');
+                    this.$refs.endTime.setValue('');
+                    this.$refs.endMinutes.setValue('0');
+                } catch (e) {
+                }
+                // this.getLinkData();
+                // this.setDefaultPrincipal();
             },
             // 设置默认负责人
             setDefaultPrincipal() {
@@ -283,12 +196,58 @@
                 });
                 this.$store.commit('changeNewParticipantsInfo', [])
             },
-            addLinkage: function (type, value, id, index) {
+            // 获取关联父资源数据
+            getFatherData(code) {
+                fetch('get', '/resources').then(res => {
+                    this.linkFatherData = res.data.map((n, i) => {
+                        return {
+                            name: n.title,
+                            id: n.code,
+                            value: n.type
+                        }
+                    })
+                    this.linkFatherData.unshift({
+                        name: '暂不关联任何资源',
+                        id: '',
+                        value: '',
+                    })
+                    if (code) {
+                        this.getChildData(code, false) // false即取消设置默认
+                    }
+                })
+            },
+            // 获取关联子资源数据
+            getChildData(url, isCancel) {
+                if (url) {
+                    let data = {}
+                    this.linkCode = url
+                    let _url = url.substr(0, url.length - 1) + '/related'
+                    if (url === 'bloggers') {
+                        _url = url + '/all'
+                        data.sign_contract_status = 2
+                    }
+                    fetch('get', _url, data).then(res => {
+                        this.linkChildData = res.data.map(n => {
+                            return {
+                                name: n.name || n.nickname || n.title || n.company,
+                                id: n.id,
+                                value: n.id,
+                            }
+                        })
+                        // 设置默认子资源
+                        if (isCancel) {
+                            this.resourceableId = this.linkChildData[0].id
+                        }
+                    })
+                }
+            },
+            // 设置关联资源
+            setResource (type, value, id) {
                 if (type === 'father') {
-                    this.getChildLinkData(value, index);
-                    this.resourceType = id
-                } else if (type === 'child') {
-                    this.resourceableId = value
+                    this.getChildData(id)
+                    this.resourceType = value
+                } else {
+                    this.resourceableId = id
                 }
             },
 
@@ -312,8 +271,9 @@
                 this.taskLevel = value;
             },
 
-            changeTaskType(value) {
+            changeTaskType(changeKey,value, name) {
                 this.taskType = value;
+                this.taskTypeName = name
             },
             principalChange(value) {
                 this.principal = value;
@@ -361,8 +321,10 @@
 
                 let data = {
                     type: this.taskType,
+                    type_name: this.taskTypeName,
                     title: this.taskName,
                     principal_id: this.$store.state.newPrincipalInfo.id,
+                    principal_name: this.$store.state.newPrincipalInfo.name,
                     participant_ids: participant_ids,
                     priority: this.taskLevel,
                     start_at: this.startTime + " " + this.startMinutes,
@@ -381,13 +343,15 @@
                 }
 
                 if (this.isChild) {
-                    fetch('post', '/tasks/' + this.taskFatherId + '/subtask', data).then(response => {
+                    data.task_pid = this.taskFatherId
+                    fetch('post', '/tasks/store', data).then(response => {
                         toastr.success('添加成功');
                         $('#addTask').modal('hide');
                         this.$emit('success', response)
                     })
                 } else {
-                    fetch('post', '/tasks', data).then(response => {
+                    data.task_pid = 0
+                    fetch('post', '/tasks/store', data).then(response => {
                         this.isAddButtonDisable = false;
                         toastr.success("创建成功");
                         $("#addTask").modal("hide");
@@ -396,6 +360,8 @@
                         } else {
                             this.$router.push({path: '/tasks/' + response.data.id});
                         }
+                    }).catch(() => {
+                        this.isAddButtonDisable = false;
                     })
                 }
             },

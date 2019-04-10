@@ -63,11 +63,11 @@
                                        @change="(value) => addProjectBaseInfo(value, 'priority')"></Selectors>
                         </div>
                     </div>
-                    <div class="col-md-12 example clearfix" v-show="projectType == 5">
+                    <div class="col-md-12 example clearfix" v-show="false && projectType == 5">
                         <div class="col-md-2 text-right float-left px-0 require">可见范围</div>
                         <div class="col-md-10 float-left">
                             <Selectors :options="visibleRangeArr" ref="visibleRange"
-                                       @change="(value) => addProjectBaseInfo(value, 'privacy')"></Selectors>
+                                       @change="(value) => addProjectBaseInfo(0, 'privacy')"></Selectors>
                         </div>
                     </div>
                     <div class="col-md-12 example clearfix">
@@ -251,12 +251,12 @@
             };
         },
         created() {
-            if(this.formstatus === 231){
-                this.getStars();
-            }
+            this.getStars();
         },
-        mounted() {
-            this.user = JSON.parse(Cookies.get('user'));
+        mounted(){
+            $('.modal-simple').on('mouseover',function(){
+                document.getElementsByTagName('body')[0].classList.add('modal-open');
+            })
         },
         watch: {
             projectFieldsArr(newValue) {

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import qs from 'qs'
 import env from '../js/env'
-
+import store  from '../js/cancelRequest'
 // axios 配置
 axios.defaults.timeout = 300000;
 axios.defaults.headers.common['Accept'] = 'application/vnd.Corvus.v1+json';
@@ -10,9 +10,15 @@ axios.defaults.headers.common['Access-Control-Allow-Headers'] = 'Authorization';
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + env.getAccessToken() || '';
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
 axios.defaults.baseURL = env.apiUrl;
-
+const CancelToken = axios.CancelToken
+const source = CancelToken.source()
+store.requestCancel = source.cancel // 保存到全局变量，用于路由切换时调用
+// const http = axios.create({
+//     cancelToken: source.token
+// })
 //POST传参序列化
 axios.interceptors.request.use((config) => {
+    config.cancelToken = store.source.token
     if (config.method === 'post' || config.method === 'put') {
         let flag = true
         for (const key in config.data) {
@@ -35,10 +41,19 @@ axios.interceptors.request.use((config) => {
 //返回状态判断
 axios.interceptors.response.use((res) => {
     if (res.status < 200 && res.status > 300) {
+        
         return Promise.reject(res);
-    }
+    } else if (res.status_code < 200 && res.status_code > 300){
+        
+        return Promise.reject(res);
+    }else{}
+    
     return res;
 },(error) => {
+    // console.log(String(error =='Cancel'));
+    if (String(error) =='Cancel') {
+        // console.log('Request canceled');
+    } else {
     const {response: {status}} = error
     const {response} = error
     if (status === 401) {
@@ -53,22 +68,42 @@ axios.interceptors.response.use((res) => {
         }
     } else if (status === 403) {
         toastr.error(response.data.message)
-    } else {
+    }else if(String(error).indexOf('timeout') !== -1){
+        toastr.error('请求超时请稍后重试');
+    }else {
         toastr.error(response.data.message);
     }
     return Promise.reject(error);
+    }
+    
+    
 });
 
 export default function fetch(method = 'post', url, params) {
+    let timeout = setTimeout(() => {
+        $('.neterror').modal('show');
+    }, 10000);
+    if(url === '/pending_sum'){
+        clearTimeout(timeout)
+    }
     return new Promise((resolve, reject) => {
         axios[method](url, method.toLowerCase() === 'get' ? {params} : params)
             .then(response => {
+                clearTimeout(timeout)
                 resolve(response.data);
             }, err => {
+                clearTimeout(timeout)
                 reject(err);
             })
             .catch((error) => {
-                reject(error)
+                clearTimeout(timeout)
+                if (String(error =='Cancel')) {
+                    
+
+                    // console.log('Request canceled');
+                } else {
+                    reject(error)
+                }
             })
     })
 }

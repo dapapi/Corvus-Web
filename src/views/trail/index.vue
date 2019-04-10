@@ -6,12 +6,12 @@
                 <span style="color: #3298dc;" class="pl-20 font-size-20 pointer-content" @click="redirectPublicTrail"><i
                         class="iconfont icon-jiantou_xiayiye font-size-22 pr-5"></i>公海池</span>
             </h1>
-            <div class="page-header-actions">
-                <ImportAndExport class="float-left" :type="'export'" :moduleName="'trails'" :params="exportParams">
+            <div class="page-header-actions" v-if="canShow">
+                <ImportAndExport class="float-left" :type="'export'" :moduleName="'trails'" :params="exportParams" :power="'trail'">
                     <a class="iconfont icon-daochu font-size-20 pr-20 pointer-content" aria-hidden="true"
                        title="导出线索"></a>
                 </ImportAndExport>
-                <ImportAndExport class="float-left" :type="'import'" :moduleName="'trails'">
+                <ImportAndExport class="float-left" :type="'import'" :moduleName="'trails'" :power="'trail'" @reload="getSales">
                     <a class="iconfont icon-daoru px-5 font-size-20 pointer-content" aria-hidden="true"
                        title="导入线索"></a>
                 </ImportAndExport>
@@ -37,7 +37,7 @@
                     <div class="col-md-3 example float-left">
                         <button type="button" class="btn btn-default waves-effect waves-classic float-right"
                                 data-toggle="modal" data-target="#customizeContent"
-                                data-placement="right" title="">
+                                data-placement="right" title="" @click='getField'>
                             自定义筛选
                         </button>
                     </div>
@@ -70,8 +70,8 @@
                             </td>
                             <td class="">{{ trail.fee }}元</td>
                             <td>
-                                <template v-if="trail.principal">
-                                    {{ trail.principal.data.name }}
+                                <template v-if="trail.principal_name">
+                                    {{ trail.principal_name.name }}
                                 </template>
                             </td>
                             <td>
@@ -91,11 +91,11 @@
         </div>
 
 
-        <customize-filter :data="customizeInfo" :stararr='starsArr' @change="customize"
+        <customize-filter v-if="canShow" ref='customize'  :data="customizeInfo" :stararr='starsArr' @change="customize"
         ></customize-filter>
-        <AddClientType @change="changeTrailType"></AddClientType>
+        <AddClientType v-if="canShow" @change="changeTrailType" ></AddClientType>
 
-        <div class="modal fade" id="addTrail" aria-hidden="true" aria-labelledby="addLabelForm"
+        <div v-if="canShow" class="modal fade" id="addTrail" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -340,20 +340,22 @@ export default {
                 trailContactWechat: '',
                 trailContactEtc: '',
                 isAddButtonDisable: false,
+                canShow:false,
             }
         },
   created() {
-    this.getField();
+    // this.getField();
     if (this.userList.length > 0) {
       this.memberList = this.userList;
     }
     this.getCurrentUser();
+    this.getSales();
+
   },
   mounted() {
-    this.getSales();
-    this.getClients();
+    // this.getClients();
     this.getStars();
-    this.getIndustries();
+    // this.getIndustries();
   },
   computed: {
     ...mapState([
@@ -386,10 +388,21 @@ export default {
             },
   },
   methods: {
+    // getField() {
+    //   const _this = this;
+    //   fetch('get', '/trails/filter_fields').then((params) => {
+    //     _this.customizeInfo = params.data;
+    //   });
+    // },
     getField() {
       const _this = this;
       fetch('get', '/trails/filter_fields').then((params) => {
         _this.customizeInfo = params.data;
+        _this.$refs.customize.refresh()
+        this.$nextTick((params) => {
+            $('.selectpicker').selectpicker('refresh')
+            
+        })
       });
     },
     changeTrailOriginPerson(value) {
@@ -399,9 +412,7 @@ export default {
       this.email = value;
     },
     getCurrentUser() {
-      fetch('get', '/users/my').then((response) => {
-        this.currentUser = response.data;
-      });
+        this.currentUser = JSON.parse(Cookies.get('user'))
     },
     principalFilter(value) {
       if (value) {
@@ -474,13 +485,17 @@ export default {
       let _this = this,
         fetchData = this.fetchData,
         newUrl;
-      this.fetchData.include = 'include=principal,client,contact,recommendations,expectations';
+    if(methods === 'get'){
+        this.fetchData.include = 'include=client,expectations';
+    }else{
+        this.fetchData.include = 'include=principal,client,contact,recommendations,expectations';
+    }
       if (type == 'filter') {
         fetchData = this.customizeCondition;
         let keyword, 
-status, 
-principal_ids, 
-pagenumber;
+            status, 
+            principal_ids, 
+            pagenumber;
         if (this.fetchData.keyword) {
           keyword = `&keyword=${  this.fetchData.keyword}`;
         } else {
@@ -499,7 +514,6 @@ pagenumber;
         pagenumber = `&page=${  pageNum}`;
         newUrl = `${url  }?${  this.fetchData.include  }${keyword  }${status  }${principal_ids  }${pagenumber}`;
       }
-      // console.log(this.fetchData)
       this.exportParams = {
         keyword: this.fetchData.keyword,
         status: this.fetchData.status,
@@ -511,6 +525,8 @@ pagenumber;
         _this.current_page = response.meta.pagination.current_page;
         _this.total_pages = response.meta.pagination.total_pages;
         _this.isLoading = false;
+        _this.canShow = true
+
       });
     },            
             filterGo() {
@@ -527,9 +543,9 @@ pagenumber;
     //     this.fetchData.status = value
     //     this.fetchHandler('get', '/trails/filter')
     // },
-    getSales (pageNum = 1) {
+            getSales (pageNum = 1) {
                 let _this = this;
-                this.fetchHandler('post', '/trails/filter', 'filter', pageNum)
+                this.fetchHandler('get', '/trails', 'filter', pageNum)
                 // let data = {
                 //     page: pageNum,
                 //     include: 'principal,client,expectations',
@@ -553,13 +569,14 @@ pagenumber;
                             value: response.data[i].id
                         })
                     }
+                    $('.selectpicker').selectpicker('refresh');
                 })
             },            
             getClients () {
-                let _this = this;
-                fetch('get', '/clients/all').then(function (response) {
-                    _this.companyArr = response.data
-                })
+                // let _this = this;
+                // fetch('get', '/clients/all').then(function (response) {
+                //     _this.companyArr = response.data
+                // })
             },            
             getStars () {
                 if (this.starsArr.length > 0) {
@@ -716,7 +733,8 @@ pagenumber;
                 this.priority = value
             },            
             changeTrailType (value) {
-                if(this.$store.state.power.trail.add !=='true'){
+                this.getIndustries()
+                if(this.$store.state.listPower.trail.add !=='true'){
                     toastr.error('当前用户没有权限新增销售线索')
                     return
                 }

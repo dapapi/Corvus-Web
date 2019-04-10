@@ -423,7 +423,7 @@ export default {
           avatar: userData.icon_url,
           nickname: userData.name,
           organization_id: userData.organization_id,
-          power: userData.power,
+          // role_user:userData.roleUser
         };
         callback(json, userData.company);
       });

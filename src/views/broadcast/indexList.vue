@@ -57,7 +57,17 @@
                                            NEW
                                         </span> -->
                                     </td>
-                                    <td>{{classifyArr.find(classifyArr => classifyArr.id == item.classify).name}}</td>
+                                    <td>
+                                        {{item.classify_name}}
+                                        <!-- <span v-if="classifyArr.length>0">
+                                            <template v-if="classifyArr.includes(item.classify)">
+                                                {{classifyArr.find(classifyArr => classifyArr.id == item.classify).name}}
+                                            </template>
+                                            <template>
+                                                
+                                            </template>
+                                        </span> -->
+                                    </td>
                                     <td>
                                         <span>{{common.timeProcessing(item.created_at)}}</span>
                                     </td>
@@ -94,7 +104,7 @@ export default {
         return{
             common: common,
              broadCastInfo:{},
-             classifyArr:[],
+            //  classifyArr:[],
              memberList:[],
              isLoading:true,
              status:'',
@@ -102,11 +112,12 @@ export default {
             current_page: 1,
             total_pages: 1,
             readFlag:2,
+            titleHandler:''
         }
           
     },
     created() {
-        this.getClassify()
+        // this.getClassify()
 
         if (this.userList.length > 0) {
             this.memberList = this.userList
@@ -118,9 +129,11 @@ export default {
          if(this.$route.path.split('/').pop() === 'receive'){
                 this.status = 1
                 this.dataInit(2)
+                this.titleHandler = '我接收的'
             }else if(this.$route.path.split('/').pop() === 'send'){
                 this.status = 2
                 this.dataInit(2)
+                this.titleHandler = '我发布的'
             }
     },
     computed: {
@@ -130,50 +143,50 @@ export default {
         _userList () {
             return this.userList
         },
-        titleHandler(){
-            if(this.$route.path.split('/').pop() === 'receive'){
-                this.status = 1
-                this.dataInit()
-                return '我接收的'
-            }else if(this.$route.path.split('/').pop() === 'send'){
-                this.status = 2
-                this.dataInit()
-                return '我发布的'
-            }
-        }
     },
     watch:{
         _userList () {
             this.memberList = this.userList
+        },
+        $route:function(){
+            if(this.$route.path.split('/').pop() === 'receive'){
+                this.status = 1
+                this.dataInit()
+                this.titleHandler = '我接收的'
+            }else if(this.$route.path.split('/').pop() === 'send'){
+                this.status = 2
+                this.dataInit()
+                this.titleHandler = '我发布的'
+            }
         }
     },
     methods:{
-        getClassify(){
-            let _this = this
-            fetch('get','/announcements/Classify/').then((params) => {
-                _this.classifyArr = params.data
-            })
-        },
+        // getClassify(){
+        //     let _this = this
+        //     fetch('get','/announcements/Classify/').then((params) => {
+        //         _this.classifyArr = params.data
+        //     })
+        // },
         //初始化数据
-        dataInit(params = 2){
-            this.readFlag = params
+        dataInit(params){
+        
+            // alert(params)
+            if(params){
+                this.readFlag = params
+            }
             let _this = this
-                fetch('get', '/announcements?include=creator&status='+this.status+'&readflag='+params).then(function (response) {
+                fetch('get', '/announcements?include=creator&status='+this.status+'&readflag='+this.readFlag).then(function (response) {
                     _this.broadCastInfo = response.data
                     _this.total = response.meta.pagination.total;
                     _this.current_page = response.meta.pagination.current_page;
                     _this.total_pages = response.meta.pagination.total_pages;
                     _this.isLoading = false
+                    _this.path=_this.$route.path.split('/').pop()
             })
         },
         getSales (pageNum = 1) {
                 let _this = this;
-                let data = {
-                    page: pageNum,
-                    include: 'principal,client,expectations',
-                };
-                Object.assign(data, this.fetchData)
-                fetch('get', '/announcements?include=creator&status='+this.status+'&readflag='+this.readFlag).then(function (response) {
+                fetch('get', '/announcements?include=creator&status='+this.status+'&readflag='+this.readFlag+'&page='+pageNum).then(function (response) {
                     _this.broadCastInfo = response.data;
                     _this.total = response.meta.pagination.total;
                     _this.current_page = response.meta.pagination.current_page;
