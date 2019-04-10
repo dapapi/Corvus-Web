@@ -735,7 +735,7 @@ export default {
             changeTrailType (value) {
                 this.getIndustries()
                 if(this.$store.state.listPower.trail.add !=='true'){
-                    toastr.error('当前用户没有权限新增销售线索')
+                    toastr.error('您没有新增销售线索的权限')
                     return
                 }
                 let organization_id = JSON.parse(Cookies.get('user')).organization_id

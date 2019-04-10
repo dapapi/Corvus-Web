@@ -189,6 +189,9 @@
         mounted() {
             this.getStars();
             this.getIndustries()
+             $('.modal-simple').on('mouseover',function(){
+        document.getElementsByTagName('body')[0].classList.add('modal-open');
+      })
         },
 
         methods: {

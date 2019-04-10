@@ -23,7 +23,7 @@
                                                           @change="conditionChange"></customize-linkage-selectors>
                             </div>
                             <div class="float-left col-md-1 pb-5">
-                                <i class="iconfont icon-guanbi font-size-18" aria-hidden="true" style="line-height: 36px;"
+                                <i class="iconfont icon-guanbi font-size-18" aria-hidden="true" style="line-height: 36px;cursor:pointer;"
                                    @click="delSelector(n)"></i>
                             </div>
                         </div>

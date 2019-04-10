@@ -136,6 +136,9 @@
             },
         },
         mounted() {
+             $('.modal-simple').on('mouseover',function(){
+        document.getElementsByTagName('body')[0].classList.add('modal-open');
+      })
             this.resourceType = this.resource_type;
             // if (!this.resource_name) {
             //     this.getLinkData();

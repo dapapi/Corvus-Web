@@ -470,7 +470,6 @@
                 });
             },
             addProjectBaseInfo(value, name) {
-                console.log(value,name);
                 switch (name) {
                     case 'principal_id':
                         value = this.$store.state.newPrincipalInfo.id;
