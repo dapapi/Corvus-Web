@@ -84,7 +84,7 @@
                             </div>
                         </figure>
                         <div class="col-md-12 float-left px-20">
-                            <input type="checkbox" v-model="topFlag">
+                            <input type="checkbox" v-model="topFlag"  style="cursor:pointer;">
                             <span class="set-top-flag">&nbsp;&nbsp;置顶</span>
                         </div>
                     </div>

@@ -8,10 +8,13 @@
                 {{option.value}}
             </selectorsOptions>
         </select>
+        
         <select :id="'child' + n" title="" class="col-md-4 pl-0 float-left" v-model="childData">
-            <option value='' disabled selected style='display:none'>请选择</option>
+            <option value='' v-if="item.length !== 1" disabled selected style='display:none'>请选择</option>
+            <option value='' v-if="item.length === 1" selected >{{onlyOneOperator}}</option>
+            
             <selectorsOptions v-for="option in item" v-bind:id="option.id" :val="option.value"
-                              :key="option.id">
+                              :key="option.id" v-if="item.length !== 1">
                 {{option.value}}
             </selectorsOptions>
         </select>
@@ -19,7 +22,7 @@
             <input type="text" class="form-control" disabled v-if="valueType === 'disable'" v-model="disableInput">
             <input type="text" class="form-control" v-if="valueType === 1" v-model="normalInput"
                    :onchange="inputChange">
-            <datepicker v-if="valueType === 3" @change="datePickerChange"></datepicker>
+            <datepicker ref='datepicker' v-if="valueType === 3" @change="datePickerChange"></datepicker>
             <number-spinner v-if="valueType === 2" ref="numberSpinner" :shortInput="true"
                             @change="numberSpinnerChange" :min="0" :max="1000000000" :precision="isint===true?0:2" :value="0"></number-spinner>
             <!-- <input-selectors v-if="valueType === 6" :otherslot="true"></input-selectors> -->
@@ -74,6 +77,19 @@ import config from '@/assets/js/config'
             }
         },
         computed: {
+            onlyOneOperator(){
+                if(this.item[0]){
+                    // this.childData = this.item[0].value
+                    // this.conditionId = this.item[0].value
+                    // this.$refs.selectors.setValue(this.childData)
+                    let currentData = this.item.find(item =>item.value == this.item[0].value)
+                    this.sendData.operator = currentData.code
+                    return this.item[0].value
+                }else{
+                    return '请选择'
+                }
+                
+            },
             ...mapState([
                 'department',
                 'userList'
@@ -90,7 +106,7 @@ import config from '@/assets/js/config'
             keyId:function(value){
                 this.normalInput = ''
                 this.childData = ''
-                this.$refs.selectors.setValue('')
+                this.$refs.datepicker.setValue('')
             },
             valueType:function(value,oldValue){
                 if(oldValue === 2 && value!==2){
@@ -110,7 +126,6 @@ import config from '@/assets/js/config'
                 this.sendData.value = this.normalInput
             },
             fatherData:function(value){
-                console.log(value);
                 if(!value){
                     return
                 }
@@ -121,7 +136,7 @@ import config from '@/assets/js/config'
                 this.sendData.id = currentData.id
             },
             childData:function(value){
-                 if(!value){
+                if(!value){
                     return
                 }
                 let currentData = this.item.find(item =>item.value == this.childData)

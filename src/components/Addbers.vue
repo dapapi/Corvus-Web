@@ -2,7 +2,7 @@
     <div class="addMember">
         <ul class="addMember-items">
             <li class="addMember-item mb-5" v-for="(member,index) in selectMemberArr" :key="index">
-                <Avatar :imgUrl="member.icon_url" style=""/>
+                <Avatar style="cursor:pointer;" :imgUrl="member.icon_url" />
                 <span class="addMember-remove" @click="removeMember(member.id)">
                     <i class="md-minus-circle"></i>
                 </span>

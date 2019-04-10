@@ -66,6 +66,8 @@
             //     _this.$emit('change', {key:id,value:e.currentTarget.value,type:related_field})
             // });
             $('.asSpinner').parent().css('width', '50%')
+            $('.asSpinner').css('cursor', 'pointer')
+            console.log($('.asSpinner'));
             if(this.consdata[0].control_value){
                 this.setValue(this.consdata[0].control_value)
             }
