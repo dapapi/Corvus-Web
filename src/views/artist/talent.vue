@@ -970,7 +970,7 @@
             },
             rightChecker(value, params, type) {
                 if (this.$store.state.listPower[type].add !== 'true') {
-                    toastr.error('当前用户没有权限新增' + value)
+                    toastr.error('您没有新增' + value+'的权限')
                     return
                 }
                 $('#'+params).modal('show')       
