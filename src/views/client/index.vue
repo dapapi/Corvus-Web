@@ -21,7 +21,7 @@
             <div class="panel col-md-12 py-5">
                 <div class="clearfix">
                     <div class="col-md-3 example float-left">
-                        <input type="text" class="form-control" placeholder="请输入公司名称" v-model="companyName"
+                        <input type="text" class="form-control" placeholder="请输入公司名称"
                                @keyup.enter='filterGo' @blur='filterGo'>
                     </div>
                     <div class="col-md-3 example float-left">
@@ -397,8 +397,7 @@
                     desc: this.clientRemark
                 };
 
-                fetch('post', '/clients', data).then(response => {
-                    
+                fetch('post', '/clients', data).then(response => {    
                     this.isAddButtonDisable = false;
                     toastr.success('创建成功');
                     $("#addClient").modal("hide");
@@ -415,6 +414,7 @@
                     fetchData = this.fetchData,
                     newUrl
                 this.fetchData.include = 'include=principal'
+                this.fetchData.page = '&page='+this.current_page
                 if (type == 'filter') {
                     fetchData = this.customizeCondition
                     let keyword, status, principal_ids
@@ -431,7 +431,7 @@
                     } else {
                         status= ''
                     }
-                    newUrl = url + '?' + this.fetchData.include + keyword + status 
+                    newUrl = url + '?' + this.fetchData.include + keyword + status +this.fetchData.page 
                 }
                 
                 fetch(methods, newUrl || url, fetchData).then((response) => {
@@ -457,7 +457,9 @@
             changePrincipal: function (value) {
                 this.clientPrincipal = value
             },
-            filterGo() {
+            filterGo(e) {
+                // console.log(e.target.value)
+                this.companyName = e.target.value.trim()
                 this.fetchData.keyword = this.companyName
                 this.exportParams.keyword = this.companyName
                 this.fetchHandler('post', '/clients/filter', 'filter')

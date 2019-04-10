@@ -3,6 +3,7 @@ import App from './App.vue';
 import router from './router';
 import store from './store/index.js';
 import AddTask from './components/AddTask.vue';
+import LinkResource from './components/LinkResource.vue'
 import AddMember from './components/AddMember.vue';
 import ApprovalGreatModule from './components/ApprovalGreatModule';
 import BuildProject from './components/BuildProject.vue';
@@ -75,6 +76,7 @@ import ImportAndExport from '@/components/ImportAndExport.vue'
 import VueUeditorWrap from 'vue-ueditor-wrap'
 import DepartmentPicker from '@/components/DepartmentPicker'
 import NetError from '@/components/NetError'
+
 Vue.config.productionTip = false;
 Vue.component('AddTask', AddTask);
 Vue.component('ApprovalGoModal', ApprovalGoModal);
@@ -154,12 +156,16 @@ Vue.component('TimeChoice', TimeChoice)
 Vue.component('EditTimeChoice', EditTimeChoice)
 Vue.component('AddRemind', AddRemind)
 Vue.component('ImportAndExport', ImportAndExport)
+Vue.component('LinkResource', LinkResource)
 
 Vue.prototype.globalClick = function (callback) {
     document.getElementById('app').addEventListener('click', (event) => {
         callback(event);
     });
 };
+
+// 设置toast展示时间
+toastr.options.timeOut = 2000
 
 new Vue({
     router,
