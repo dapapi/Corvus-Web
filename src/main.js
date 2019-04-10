@@ -164,6 +164,9 @@ Vue.prototype.globalClick = function (callback) {
     });
 };
 
+// 设置toast展示时间
+toastr.options.timeOut = 2000
+
 new Vue({
     router,
     store,
