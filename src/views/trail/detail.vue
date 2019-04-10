@@ -67,10 +67,10 @@
                     </div>
                     <div class="card-text clearfix example">
                         <div class="col-md-6 float-left pl-0">
-                            <div class="float-left pl-0 pr-2 col-md-3">111
+                            <div class="float-left pl-0 pr-2 col-md-3">
                                 <i class="iconfont icon-yiren pr-2" aria-hidden="true"></i>目标艺人
                             </div>
-                            <div class="font-weight-bold float-left" v-if="trailInfo.title">111
+                            <div class="font-weight-bold float-left" v-if="trailInfo.title">
                                 <span v-if="trailInfo.expectations"
                                       v-for="expectation in trailInfo.expectations.data"
                                       :key="expectation.nickname">

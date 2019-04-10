@@ -252,6 +252,8 @@
             };
         },
         created() {
+            this.getTrail();         
+
             this.getCurrentUser()
 
             this.getStars();
@@ -265,7 +267,7 @@
             projectFieldsArr(newValue) {
                 return this.projectFields = newValue;
             },
-            projectType() {
+            projectType(value) {
                 this.getTrail();
                 this.defaultDataFilter();
             },
