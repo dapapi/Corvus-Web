@@ -236,34 +236,34 @@
                 this.getProjectStatus = value;
                 this.fetchHandler('post','/projects/web_filter')
                 // this.getFilterProjects();
-    },
-    filterGo:function(){
-        this.fetchData.keyword = this.projectKeyword
-        // this.fetchHandler('post','/projects/filter','filter')
-        this.fetchHandler('post','/projects/web_filter')
-    },
-    getProjectSearch: function (type, value) {
-        if (type === 'principal_ids') {
-            this.principal_ids = value.join(',');
-        } else if (type === 'project_type') {
-            if(this.projectSearchType == 3){
-                this.projectSearchType = '3,4'
-            }
-            this.projectSearchType = value
-        }
-        // this.getFilterProjects();
-        // this.fetchHandler('post','/projects/filter','filter')
-        this.fetchHandler('post','/projects/web_filter')
-    },
+            },
+            filterGo:function(){
+                this.fetchData.keyword = this.projectKeyword
+                // this.fetchHandler('post','/projects/filter','filter')
+                this.fetchHandler('post','/projects/web_filter')
+            },
+            getProjectSearch: function (type, value) {
+                if (type === 'principal_ids') {
+                    this.principal_ids = value.join(',');
+                } else if (type === 'project_type') {
+                    if(this.projectSearchType == 3){
+                        this.projectSearchType = '3,4'
+                    }
+                    this.projectSearchType = value
+                }
+                // this.getFilterProjects();
+                // this.fetchHandler('post','/projects/filter','filter')
+                this.fetchHandler('post','/projects/web_filter')
+            },
 
-    getFilterProjects (pageNum = 1) {
+            getFilterProjects (pageNum = 1) {
                 let data = {}
                 let fetchData
                 let url
                 if(this.customizeCondition){
                     fetchData = this.customizeCondition
                 }
-                
+
                 if(pageNum){
                     data.page = '&page='+pageNum
                 }else{
@@ -280,7 +280,7 @@
                     }
                     data.project_type = '&project_type'+ this.projectSearchType
                 }else{
-                    data.project_type  = '' 
+                    data.project_type  = ''
                 }
                 if (this.projectKeyword) {
                     data.keyword = '&keyword'+this.projectKeyword
@@ -327,27 +327,27 @@
                 // this.fetchData.include = '&include=principal,trail.expectations'
                 this.fetchData.page = '&page='+this.current_page
                 // if (type == 'filter') {
-                    fetchData = this.customizeCondition
-                    let keyword, type, principal_ids, my
-                    if (this.fetchData.keyword) {
-                        keyword = '&keyword=' + this.projectKeyword
-                    } else {
-                        keyword = ''
-                    }
-                    if (this.principal_ids.length > 0) {
-                        this.customizeCondition.principal_ids = this.principal_ids
-                    }
-                    if (this.projectSearchType) {
-                        type = '&project_type=' + this.projectSearchType
-                    } else {
-                        type = ''
-                    }
-                    if (this.getProjectStatus) {
-                        my = '&my=' + this.getProjectStatus;
-                    } else {
-                        my = ''
-                    }
-                    newUrl = url + '?' + this.fetchData.page  + keyword + type + my
+                fetchData = this.customizeCondition
+                let keyword, type, principal_ids, my
+                if (this.fetchData.keyword) {
+                    keyword = '&keyword=' + this.projectKeyword
+                } else {
+                    keyword = ''
+                }
+                if (this.principal_ids.length > 0) {
+                    this.customizeCondition.principal_ids = this.principal_ids
+                }
+                if (this.projectSearchType) {
+                    type = '&project_type=' + this.projectSearchType
+                } else {
+                    type = ''
+                }
+                if (this.getProjectStatus) {
+                    my = '&my=' + this.getProjectStatus;
+                } else {
+                    my = ''
+                }
+                newUrl = url + '?' + this.fetchData.page  + keyword + type + my
                 // }
                 this.exportParams = {
                     keyword: this.fetchData.keyword,
