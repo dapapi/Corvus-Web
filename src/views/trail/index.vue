@@ -151,7 +151,7 @@
                             <div class="col-md-10 float-left pl-0">
                                 <input-selectors :placeholder="'请选择负责人'"
                                                  @change="changePrincipal" otherslot=true
-                                                 :propSelectMemberName='$store.state.newPrincipalInfo.name?$store.state.newPrincipalInfo.name:currentUser.name'></input-selectors>
+                                                 :propSelectMemberName='$store.state.newPrincipalInfo.name?$store.state.newPrincipalInfo.name:(currentUser.name || currentUser.nickname)'></input-selectors>
                             </div>
                         </div>
                         <div class="example">

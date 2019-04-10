@@ -1,9 +1,9 @@
 <template>
-    <option :value="val" class="test"><slot></slot></option>
+    <option :value="val" :selected='selected' class="test"><slot></slot></option>
 </template>
 <script>
     export default {
-        props: ['val'],
+        props: ['val','selected'],
         data() {
             return {
                 value: ''

@@ -45,7 +45,8 @@
                     <div class="col-md-12 example clearfix">
                         <div class="col-md-2 text-right float-left px-0 require">项目负责人</div>
                         <div class="col-md-10 float-left">
-                            <InputSelectors
+                            <InputSelectors :propSelectMemberName='$store.state.newPrincipalInfo.name?$store.state.newPrincipalInfo.name:(currentUser.name || currentUser.nickname)'
+                                    :propSelectMemberId='currentUser.id'
                                     @change="(value) => addProjectBaseInfo(value, 'principal_id')"></InputSelectors>
                         </div>
                     </div>
@@ -254,6 +255,7 @@
             this.getStars();
         },
         mounted(){
+            this.getCurrentUser()
             $('.modal-simple').on('mouseover',function(){
                 document.getElementsByTagName('body')[0].classList.add('modal-open');
             })
@@ -280,6 +282,9 @@
             },
         },
         methods: {
+            getCurrentUser() {
+                this.currentUser = JSON.parse(Cookies.get('user'))
+            },
             defaultDataFilter() {
                 if (!this.defaultData) {
                     return;
@@ -450,6 +455,9 @@
                         }
                     }
                 }
+                if(!this.projectBaseInfo.principal_id){
+                    this.projectBaseInfo.principal_id = this.currentUser.id
+                }
                 fetch('post', '/projects', this.projectBaseInfo).then(response => {
                     this.submitDisable = true;
                     $('#addProject').modal('hide');
@@ -491,6 +499,24 @@
                     case 'status':
                         this.projectBaseInfo.trail.status = value;
                         return;
+                    case 'priority':
+                         console.log(value);
+                        switch(value){
+                           
+                            case 'S':
+                                value = 4;
+                                break
+                            case 'A':
+                                value = 3;
+                                break
+                            case 'B':
+                                value = 2;
+                                break
+                            case 'C':
+                                value = 1;
+                                break
+                        }
+                        return
                 }
                 this.projectBaseInfo[name] = value;
             },

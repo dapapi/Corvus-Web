@@ -338,6 +338,7 @@
                     return
                 }
                 if (!this.$store.state.newPrincipalInfo.id) {
+                    console.log(this.$store.state.newPrincipalInfo);
                     toastr.error('请选择负责人！');
                     return
                 }

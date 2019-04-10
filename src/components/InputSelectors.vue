@@ -13,7 +13,7 @@
 </template>
 <script>
     export default {
-        props: ['placeholder', 'type', 'propSelectMemberName', 'otherslot','submit'],
+        props: ['placeholder', 'type', 'propSelectMemberName', 'otherslot','submit','propSelectMemberId'],
         data() {
             return {
                 selectMemberShow: false
@@ -27,6 +27,8 @@
         computed: {
             selectedMemberName: function () {
                 if (this.propSelectMemberName) {
+                    // this.$store.dispatch("changeParticipantsInfo", this.propSelectMemberName);
+                    
                     return this.propSelectMemberName
                 } else {
                     if (this.type === 'change') {

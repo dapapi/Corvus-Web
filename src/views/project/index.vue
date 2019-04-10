@@ -185,6 +185,7 @@ created() {
     // this.getStars();
     // this.getFilterProjects();
     // this.getField();
+    // this.getCurrentUser()
     if (this.userList.length > 0) {
       for (let i = 0; i < this.userList.length; i++) {
         this.allUsers.push({
@@ -218,6 +219,9 @@ created() {
   },
 
   methods: {
+       getCurrentUser() {
+        this.currentUser = JSON.parse(Cookies.get('user'))
+    },
     getField() {
       const _this = this;
       fetch('get', '/projects/filter_fields').then((params) => {
@@ -270,7 +274,7 @@ created() {
                 }
                 //导出参数
                 this.exportParams = data;
-                fetch('get', '/projects', data).then(response => {
+                fetch('post', '/projects', data).then(response => {
                     this.projectsInfo = response.data;
                     this.total = response.meta.pagination.total;
                     this.current_page = response.meta.pagination.current_page;
