@@ -138,11 +138,11 @@
                                 </div>
                                 <div class="col-md-6 my-5 px-0 float-left"
                                      v-for="(item, index) in detailData" :key="index" style='align-item:center'>
-                                    <div class="col-md-4 float-left text-right detail-key mx-0 noselect" v-if="item.values">{{item.key}}
+                                    <div class="col-md-4 float-left text-right detail-key mx-0 noselect" v-if="!item.key.includes('提示：')">{{item.key}}
                                     </div>
 
                                     <div class="col-md-8 float-left detail-value"
-                                         v-if="item.values && !String(item.values.data.value).includes('http') && item.values">{{(item.values
+                                         v-if="item.values && !String(item.values.data.value).includes('http') && !item.key.includes('提示：')">{{(item.values
                                         && item.values.data.value) || ''}}
                                     </div>
                                     <div class="col-md-8 float-left detail-value"
