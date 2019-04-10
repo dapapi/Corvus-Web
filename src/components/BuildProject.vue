@@ -252,10 +252,11 @@
             };
         },
         created() {
+            this.getCurrentUser()
+
             this.getStars();
         },
         mounted(){
-            this.getCurrentUser()
             $('.modal-simple').on('mouseover',function(){
                 document.getElementsByTagName('body')[0].classList.add('modal-open');
             })
@@ -464,11 +465,12 @@
                     $('#selectProjectType').modal('hide');
                     this.$router.push({path: `/projects/${response.data.id}`});
                 }).catch((params) => {
-                    _this.submitDisable = false;
-                    console.log(error);
+                    this.submitDisable = false;
+                    console.log(params);
                 });
             },
             addProjectBaseInfo(value, name) {
+                console.log(value,name);
                 switch (name) {
                     case 'principal_id':
                         value = this.$store.state.newPrincipalInfo.id;
@@ -498,24 +500,6 @@
                         return;
                     case 'status':
                         this.projectBaseInfo.trail.status = value;
-                        return;
-                    case 'priority':
-                         console.log(value);
-                        switch(value){
-                           
-                            case 'S':
-                                value = 4;
-                                break
-                            case 'A':
-                                value = 3;
-                                break
-                            case 'B':
-                                value = 2;
-                                break
-                            case 'C':
-                                value = 1;
-                                break
-                        }
                         return
                 }
                 this.projectBaseInfo[name] = value;
