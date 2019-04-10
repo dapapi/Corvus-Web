@@ -13,13 +13,20 @@
                     <div class="example">
                         <div class="col-md-2 text-right float-left">关联资源</div>
                             <div class="col-md-10 float-left">
-                                <LinkResource 
-                                    :fatherData="linkFatherData" 
-                                    :childData="linkChildData" 
-                                    :resource="resource_type"
-                                    :resourceable="resourceable_id"
-                                    @change="setResource" 
-                                />
+                                <template v-if="this.resource_title">
+                                    <div class="col-md-10 float-left pl-0">
+                                    {{ this.resource_name }} - {{ this.resource_title }}
+                                </div>
+                                </template>
+                                <template v-else>
+                                    <LinkResource 
+                                        :fatherData="linkFatherData" 
+                                        :childData="linkChildData" 
+                                        :resource="resource_type"
+                                        :resourceable="resourceable_id"
+                                        @change="setResource" 
+                                    />
+                                </template>
                             </div>
                         <!-- </template> -->
                     </div>
@@ -98,8 +105,8 @@
 
     export default {
         name: "AddTask",
-        // props: ["name", "isChild", "taskFatherId", "resourceable_id", "resource_type", "resource_title", "resource_name", "lock_status"],
-        props: ["name", "isChild", "taskFatherId", "resourceable_id", "resource_type", "lock_status", 'code'],
+        props: ["name", "isChild", "taskFatherId", "resourceable_id", "resource_type", "resource_title", "resource_name", "lock_status"],
+        // props: ["name", "isChild", "taskFatherId", "resourceable_id", "resource_type", "lock_status", 'code'],
         data() {
             return {
                 taskType: "",
@@ -136,26 +143,29 @@
             },
         },
         mounted() {
-             $('.modal-simple').on('mouseover',function(){
-        document.getElementsByTagName('body')[0].classList.add('modal-open');
-      })
+            $('.modal-simple').on('mouseover',function(){
+                document.getElementsByTagName('body')[0].classList.add('modal-open');
+            })
             this.resourceType = this.resource_type;
-            // if (!this.resource_name) {
-            //     this.getLinkData();
-            // }
+            if (!this.resource_name) {
+                // this.getLinkData();
+                this.getFatherData(this.code)
+            }
             if (this.resourceable_id) {
                 this.resourceableId = this.resourceable_id
             }
             this.getTaskType();
-            this.user = JSON.parse(Cookies.get('user'));
-            this.$store.commit('changeNewPrincipal', {
-                name: this.user.nickname,
-                id: this.user.id
-            });
+            this.$nextTick(() => {
+                this.user = JSON.parse(Cookies.get('user'));
+                this.$store.commit('changeNewPrincipal', {
+                    name: this.user.nickname,
+                    id: this.user.id
+                });
+            })
             $('#addTask').on('hidden.bs.modal', () => {
                 this.closeAddTask()
             })
-            this.getFatherData(this.code)
+            // this.getFatherData(this.code)
         },
         methods: {
             // 获取任务类型列表
