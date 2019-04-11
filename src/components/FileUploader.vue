@@ -1,7 +1,7 @@
 <template>
     <div class="" >
         <div style="display:flex">
-            <label :for="`fileUploader${mulId}`" :class="isIcon ? 'md-attachment-alt pr-4': 'btn btn-default waves-effect waves-light waves-round'">
+            <label style="cursor:pointer" :for="`fileUploader${mulId}`" :class="isIcon ? 'md-attachment-alt pr-4': 'btn btn-default waves-effect waves-light waves-round'">
                 <template v-if="!isIcon">
                     <i class="iconfont icon-fujian"></i>
                     上传附件
