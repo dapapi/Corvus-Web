@@ -464,7 +464,7 @@
                                             <span class="float-right px-10 pointer-content"
                                                   @click="downloadAttachment(attachment.id, attachment.url)">
                                                   <i class="iconfont icon-download"></i> 下载</span>
-                                            <span class="float-right px-10">{{ attachment.size }}</span>
+                                            <span class="float-right px-10" style="width:94px;">{{ attachment.size }}</span>
                                             <a data-toggle="modal" data-target='#docPreview'
                                                @click="previewFile(attachment.url, attachment.title)"
                                                class="iconfont icon-liulan float-right px-10 pointer-content"
@@ -574,7 +574,7 @@
         </Modal>
         <customize-field v-if="canShow"></customize-field>
         <DocPreview v-if="canShow" :url="previewUrl" :givenFileName="previewName" detailpage='true'/>
-        <flag v-if="canShow" :id="'delTask'" @confirmFlag="deleteTask"/>
+        <flag v-if="canShow" typeText='删除此任务吗？' :id="'delTask'" @confirmFlag="deleteTask"/>
     </div>
 </template>
 
