@@ -4,7 +4,7 @@
         <input type="text" id="dateInput" autocomplete="off" class="form-control" title=""
                :placeholder="this.placeholder" :disabled='isDisabled'
                @change="getInputValue">
-        <span class="input-group-addon">
+        <span class="input-group-addon" style='cursor: pointer'>
             <i class="icon md-apps" aria-hidden="true"></i>
         </span>
         </div>

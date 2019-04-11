@@ -9,7 +9,7 @@
             <input type="file" @change="uploadFile" />
         </div>
     </div> -->
-    <div class="upload col-md-12 px-0">
+    <div class="upload col-md-12 px-0"  >
         <div class="col-md-2 text-right" :class="consdata[0].required===1?'require':''">{{consdata[0].control_title}}</div>
         <div class="image-show">
            <figure v-for="(item, index) in fileInfo" :key="index" style="margin-right:0px;width:100px;overfolw:hidden;" class="ml-10">
@@ -32,8 +32,8 @@
         </figure>
             <div>
                 <input type="file" @change="uploadFile" :id="'fileUploader'+consdata[0].id" v-show="false"/>
-                <label :for="'fileUploader'+consdata[0].id" class="pt-10 noselect" style="color:#00bcd4">
-                <template>
+                <label :for="'fileUploader'+consdata[0].id" class="pt-10 noselect" style="color:#00bcd4;cursor:pointer" >
+                <template >
                     上传附件
                 </template>
         </label>

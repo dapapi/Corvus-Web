@@ -48,7 +48,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-md-6 float-left pl-0 ml-50" v-show="artistInfo.sign_contract_status == 1">
+                            <!-- <div class="col-md-6 float-left pl-0 ml-50" v-show="artistInfo.sign_contract_status == 1">
                                 <div class="float-left pl-0 pr-2 col-md-2">
                                     <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>录入人
                                 </div>
@@ -71,7 +71,7 @@
                                         {{common.timeProcessing(artistInfo.created_at)}}
                                     </template>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
 
                     </div>
@@ -605,21 +605,21 @@
                                                 </div>
                                             </div>
                                             <h5 class=" pt-10 clearfix col-md-12 float-left">更新信息</h5>
-                                            <!-- <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">录入人</div>
                                                 <div class="col-md-8 float-left font-weight-bold">
                                                     <template v-if="artistInfo.creator">
                                                         {{artistInfo.creator.name}}
                                                     </template>
                                                 </div>
-                                            </div> -->
+                                            </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">录入时间</div>
                                                 <div class="col-md-8 float-left font-weight-bold">
                                                     {{common.timeProcessing(artistInfo.created_at)}}
                                                 </div>
                                             </div>
-                                            <!-- <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
+                                            <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">最近更新人</div>
                                                 <div class="col-md-9 float-left font-weight-bold">
                                                     <template v-if="artistInfo.last_updated_user">
@@ -627,7 +627,7 @@
                                                     </template>
                                                     <template v-else>{{ artistInfo.creator.name}}</template>
                                                 </div>
-                                            </div> -->
+                                            </div>
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
                                                 <div class="col-md-4 float-left text-right pl-0">最近更新时间</div>
                                                 <div class="col-md-8 float-left font-weight-bold">

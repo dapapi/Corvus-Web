@@ -143,7 +143,9 @@
             },
         },
         mounted() {
-            
+            $('.modal-simple').on('mouseover',function(){
+                document.getElementsByTagName('body')[0].classList.add('modal-open');
+            })
             this.resourceType = this.resource_type;
             if (!this.resource_name) {
                 // this.getLinkData();
@@ -305,6 +307,7 @@
                     return
                 }
                 if (!this.$store.state.newPrincipalInfo.id) {
+                    console.log(this.$store.state.newPrincipalInfo);
                     toastr.error('请选择负责人！');
                     return
                 }
