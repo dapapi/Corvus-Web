@@ -5,7 +5,7 @@
             <h1 class="page-title d-inline">任务</h1>
 
             <div class="page-header-actions dropdown show task-dropdown float-right">
-                <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" id="taskDropdown"
+                <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" style="cursor: pointer" id="taskDropdown"
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end">
