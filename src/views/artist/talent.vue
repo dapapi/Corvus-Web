@@ -958,6 +958,7 @@
         created() {
            
             this.getStars();
+           
         },
         mounted() {    
             this.getStarsField()

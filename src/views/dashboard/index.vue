@@ -13,8 +13,8 @@
                             <h5 class="page-title pl-30 mb-20">仪表盘</h5>
 
                                 <div class="level" :class="`level-${menu.level}`" v-for="(menu,index) in urlData" :key="index">
-                                    <div class="list-group-item selected" v-if="menu.type ==='link'" :class="isSelected == menu.id?'selected':''">
-                                        <router-link class="link" v-bind:to="menu.url"  :class="menu.level>1?'pl-15':''"  @click="toggle(menu)">
+                                    <div class="list-group-item " v-if="menu.type ==='link'" @click="toggle(menu.id)">
+                                        <router-link class="link" v-bind:to="menu.url"  :class="menu.level>1?'pl-15':''"  >
                                         {{menu.name}}
                                         </router-link>     
                                     </div>
@@ -26,7 +26,7 @@
                                         <div class="dropdown-menu dropdown-menu-left" aria-labelledby="org-dropdown"
                                             role="menu" x-placement="bottom-start" style="min-width: 0;">
                                             <a class="dropdown-item" role="menuitem" data-toggle="modal"
-                                            data-target="#Editor">查看</a>
+                                            data-target="#Editor" @click="getDashboardid(menu.id)">查看</a>
                                         </div>
                                     </div>
                                 </div>
@@ -103,14 +103,14 @@
                             <div class="col-md-10 float-left pl-0">
                                 <!-- <Selectors @change="department"
                                             :placeholder="'研发管理部'"></Selectors> -->
-                                研发管理部
+                                {{Department_name}}
                             </div>
                         </div>
                         <div class="example">
                             <div class="col-md-2 text-right float-left">名称</div>
                             <div class="col-md-10 float-left pl-0">
                                  <!-- <input type="text" class="form-control" v-model="dashboardName" :placeholder="'研发管理部仪表盘'"> -->
-                                 研发管理部仪表盘
+                                 {{Dashboardname}}
                             </div>
                         </div>
                         <!-- <div class="example">
@@ -169,75 +169,60 @@
         name: "home",
         data() {
             return {
-                urlData: [
-                    {
-                        id: 1,
-                        name: '',
-                        url: '',
-                        type: 'link',
-                        isSelected: false,
-                        level: 1,
-                    },
-                    
-                ],
+                urlData: [],
                 departmentDate:'',//仪表盘部门值
                 dashboardName:'',//仪表盘名称
                 dashboard_describe:'',//仪表盘描述
-                canRun:true,
+                Dashboardname:'',
+                Department_name:''
             }
         },
         mounted(){
             this.getDashboard()
         },
-        computed:{
-         ...mapState([
-           'isSelected',//从vuex里获取切换之后的选中id
-       ]),
-        mounted(){
-        this.$nextTick(()=>{
-           this.setExpand(this.menus,this.urlRoute)
-        }) 
-        },
-        updated(){
-            if(this.canRun == true){
-                this.setExpand(this.menus,this.urlRoute)
-            }
-        },
-    },
         methods:{
             department:function(value){
                 this.departmentDate = value
             },
             getDashboard:function(){
                 let _this = this
-                fetch('get', '/dashboards').then(function (response) {   
-                    response.data.forEach((item,index)=>{
-                        _this.urlData.forEach(data=>{  
-                            data.id =  index
-                            data.name = item.name
-                            data.url = '/dashboard/' +  item.id
-                        })
-                       
-                    })
-                    
+                fetch('get', '/dashboards').then(function (response) {  
+                    console.log(response.data) 
+                 let data={}
+                 for (let t = 0; t < response.data.length; t++) {
+                    data={
+                        id:`${response.data[t].id}`,
+                        name:`${response.data[t].name}`,
+                        url:'/dashboard/'+ response.data[t].id,
+                        type:'link',
+                        isExpanded:false,
+                        isSelected:false,
+                        level:2,
+                        department_name:response.data[t].department_name
+                    }
+                    _this.urlData.push(data)   
+                }
                 })
             },
-            toggle(menu){
-                this.setExpand(this.menus, menu.url)
+            toggle :function(id){
+                console.log(id)
+                this.$router.push({
+                    path: `/dashboard/${id}`,
+                })
+                
             },
-            setExpand:function(source, url) {
-            let sourceItem = '';
-            for (let i = 0; i < source.length; i++) {
-                sourceItem = JSON.stringify(source[i]); // 把菜单项转为字符串
-                if (sourceItem.indexOf(url) > -1) { // 查找当前 URL 所对应的子菜单属于哪一个祖先菜单
-                        this.canRun = false
-                        this.$store.dispatch('changeIsSelected',source[i].id)
-                        this.$store.state.isExpanded.push(source[i].id)
-                        this.$store.dispatch('changeIsExpanded',this.$store.state.isExpanded)
+            getDashboardid:function(id){
+                this.urlData.forEach(item=>{
+                    if(item.id == id){
+                        this.Dashboardname = item.name
+                        this.Department_name = item.department_name
+                        console.log(item)
                     }
-                }
+                    
+                })
+                
             }
-        
+            
         }
     }
 </script>

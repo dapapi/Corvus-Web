@@ -1,5 +1,6 @@
 <template>
     <div class="page-main" style="background-color:#f3f4f5">
+        <Loading :is-loading="isLoading"></Loading>
         <div class="page-header page-header-bordered mb-0">
             <h1 class="page-title">{{DashboardName}}</h1>
         </div>
@@ -661,6 +662,7 @@
                 allTasksInfo: '',
                 allProjectsInfo: '',
                 searchKeyWord: '',
+                isLoading: false,
             }
         },
         created(){
@@ -670,9 +672,9 @@
         mounted(){
             this.getTask()
             this.getStars()
-            this.getBloggers()
+            // this.getBloggers()
             this.getClients()
-            this.getProjects()
+            // this.getProjects()
             this.getTaskType()
             this.getResources();
             this.getCalendarList()
@@ -692,6 +694,14 @@
                 _this.initAddScheduleModal();
             });
             
+        },
+        watch: {
+        '$route' (to, from) { //监听路由是否变化
+            if(this.$route.params.id){//判断id是否有值
+               
+                this.init()
+            }
+        }
         },
         computed:{
             TaskPercentage:function(){
@@ -722,17 +732,33 @@
         methods:{
              getDashboard:function(){
                 let _this = this
-                fetch('get', '/dashboards').then(function (response) {   
+                fetch('get', '/dashboards').then(function (response) {  
+                    console.log(_this.$route.params.id)
                     _this.DashboardInfo = response.data  
                     for(let i =0;i<response.data.length;i++){
-                        _this.DashboardName = response.data[i].name
+                        if(_this.$route.params.id == response.data[i].id){
+                            _this.DashboardName = response.data[i].name
+                        }
+                        
                     }
                 })
+            },
+            init:function(){
+                if(this.$route.params.id){
+                    this.getDashboard()
+                    this.getTask()
+                    this.getStars()
+                    this.getBloggers()
+                    this.getClients()
+                    this.getProjects()
+                    this.getTaskType()
+                }
             },
             //获取仪表盘任务信息
             getTask:function(){
                 let _this = this
                 this.DashboardId = this.$route.params.id;
+                console.log(this.DashboardId )
                 fetch('get', '/departments/'+this.DashboardId +'/dashboard/tasks').then(function (response) {  
                     _this.DashboardTask = response.data 
                     _this.Tasktotal = response.meta.count.total//总数
@@ -787,6 +813,7 @@
                     _this.Projectcompleted = response.meta.count.completed//完成
                     _this.Projectprogressing = response.meta.count.latest_follow//最近更新
                     _this.Projectsigned = response.meta.count.signed//签署
+                    _this.isLoading = false;
                 })
             },
             addTask:function(){
