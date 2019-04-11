@@ -1223,25 +1223,20 @@
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
                             <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
-                        <h4 class="modal-title">权限提示</h4>
+                        <h4 class="modal-title">提示</h4>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body pt-20 pb-10">
                         <div class="example">
-                            <div class="col-md-12 text-center" style="font-size:20px;color:red">该艺人无对应艺人日历，请先创建艺人日历</div>
+                            <div class="col-md-12 text-center " style="font-size:20px;">该艺人无对应艺人日历，请先创建艺人日历</div>
                         </div>
                        
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body pt-10 pb-20">
                         <div class="example">
-                            <div class="col-md-12 text-center">快捷创建日历=><span class="pointer-content pl-10" @click="changeCalendarActionType('add')">
-                                        <i class="iconfont icon-tianjiarili"></i>
-                                    </span></div>
+                            <div class="col-md-12 text-center pb-10">
+                                <button class="btn btn-primary" type="submit" @click="changeCalendarActionType('add')"><i class="iconfont icon-tianjiarili px-5"></i>快捷创建日历</button>
+                            </div>
                         </div>
-                       
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" type="submit" >确定</button>
                     </div>
                 </div>
             </div>
@@ -1861,7 +1856,6 @@
                     $('#changeSchedule').modal('show');
                 } else {
                     // toastr.error('该艺人无对应艺人日历，请先创建艺人日历');
-                    // permissionPrompt
                     $('#permissionPrompt').modal('show');
                 }
             },

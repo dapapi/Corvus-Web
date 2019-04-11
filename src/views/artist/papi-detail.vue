@@ -1122,6 +1122,109 @@
                 </div>
             </div>
         </div>
+        <div v-if="canShow" class="modal fade" id="permissionPrompt" aria-hidden="true" aria-labelledby="addLabelForm"
+                role="dialog" tabindex="-1" data-backdrop="static">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
+                        </button>
+                        <h4 class="modal-title">提示</h4>
+                    </div>
+                    <div class="modal-body pt-20 pb-10">
+                        <div class="example">
+                            <div class="col-md-12 text-center " style="font-size:20px;">该艺人无对应艺人日历，请先创建艺人日历</div>
+                        </div>
+                       
+                    </div>
+                    <div class="modal-body pt-10 pb-20">
+                        <div class="example">
+                            <div class="col-md-12 text-center">
+                                <button class="btn btn-primary" type="submit" @click="changeCalendarActionType('add')"><i class="iconfont icon-tianjiarili pr-10"></i>快捷创建日历</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <!-- 添加/修改 日历 -->
+        <div v-if="canShow" class="modal fade line-center" id="addCalendar" aria-hidden="true"
+             aria-labelledby="addLabelForm" role="dialog" tabindex="-1" data-backdrop="static">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
+                        </button>
+                        <template v-if="calendarActionType === 'add'">
+                            <h4 class="modal-title">添加日历</h4>
+                        </template>
+                        <template v-else>
+                            <h4 class="modal-title">修改日历</h4>
+                        </template>
+                    </div>
+                    <div class="modal-body">
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left require">标题</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <input type="text" class="form-control" title="" placeholder="请输入标题"
+                                       v-model="scheduleName">
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left"></div>
+                            <div class="col-md-10 float-left pl-0">
+                                <ul class="color-selector calendar-color-list">
+                                    <li class="pointer-content" v-for="(color,index) in colorArr"
+                                        :style="'background-color: ' + color"
+                                        :key="index" @click="changeCalendarColor(color)">
+                                        <i class="md-check" v-if="color === checkColor"></i>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left require">可见范围</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <selectors :options="visibleRangeArr" ref="visibleSelector"
+                                           @change="addCalendarVisible"></selectors>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">关联艺人</div>
+                            <div class="col-md-10 float-left pl-0" v-if="starsArr.length > 0">
+                                 <input type="text" class="form-control" 
+                                       v-model="artistInfo.nickname">
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left require">负责人</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <InputSelectors placeholder="请选择负责人" @change="principalChange"></InputSelectors>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">参与人</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <AddMember></AddMember>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                            <template v-if="calendarActionType === 'add'">
+                                <button class="btn btn-primary" type="submit" :disable="isAddCalendarButtonDisable"
+                                        @click="addCalendar">确定
+                                </button>
+                            </template>
+                            <template v-else>
+                                <button class="btn btn-primary" type="submit" @click="changeCalendar">确定</button>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- 删除日历/日程 -->
         <div v-if="canShow" class="modal fade" id="delModel" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog"
@@ -1287,7 +1390,21 @@
                 isAddScheduleButtonDisable: false,
                 isAddWorkButtonDisable: false,
                 canShow:false,
-                PrivacyShow:false
+                PrivacyShow:false,
+                calendarActionType:'add',
+                visibleRangeArr: config.visibleRangeArr,
+                starsArr: [
+                    {
+                        name: '无',
+                        value: ''
+                    }
+                ],
+                starId: '',
+                starFlag: '',
+                isAddCalendarButtonDisable: false,
+                colorArr: config.colorArr,
+                checkColor: '',
+                calendarList: [],
             }
         },
         components: {
@@ -1298,9 +1415,11 @@
         },
         mounted() {
             this.getCalendar();
-            this.charts();
+            // this.charts();
             this.getType()
             this.getTaskNum();
+            this.getStars()
+            this.getResources();
             let _this = this;
             this.user = JSON.parse(Cookies.get('user'));
             this.$store.commit('changeNewPrincipal', {
@@ -1556,7 +1675,7 @@
                         }
                     }
                 }
-                this.isAddScheduleButtonDisable = true;
+                // this.isAddScheduleButtonDisable = true;
                 let data = {
                     title: this.scheduleName,
                     calendar_id: this.calendarId[0],
@@ -1596,7 +1715,7 @@
                 })
             },
             showScheduleModal(schedule) {
-                this.getResources();
+                
                 let data = {
                     include: 'calendar,participants,creator,material,affixes,project,task',
                 };
@@ -1655,7 +1774,8 @@
                     this.endTime = data.end_day;
                     $('#changeSchedule').modal('show')
                 } else {
-                    toastr.error('该艺人无对应艺人日历，请先创建艺人日历')
+                    // toastr.error('该艺人无对应艺人日历，请先创建艺人日历')
+                    $('#permissionPrompt').modal('show');
                 }
             },
             getResources(type) {
@@ -1836,7 +1956,7 @@
                 this.$refs.scheduleEndMinute.setValue('0');
                 this.$refs.scheduleResource.setValue('');
                 this.$refs.scheduleRepeat.setValue('0');
-                this.$refs.scheduleNotice.setValue('0');
+                // this.$refs.scheduleNotice.setValue('0');
                 this.$refs.scheduleRemind.setValue('0');
             },
             changeScheduleRepeat(value) {
@@ -2322,6 +2442,62 @@
                     this.formDate = response.data
                     $('#approval-great-module').modal('show')
                 });
+            },
+            getStars: function () {
+                fetch('get', '/starandblogger', {sign_contract_status: 2}).then(response => {
+                    for (let i = 0; i < response.data.length; i++) {
+                        if(response.data[i].name == this.artistInfo.nickname){
+                            this.starFlag = response.data[i].flag
+                            this.starId = response.data[i].id
+                        }
+                    }
+                })
+            },
+             changeCalendarActionType: function (value) {
+                this.calendarActionType = value
+                $('#addCalendar').modal('show')
+                $('#permissionPrompt').modal('hide')
+            },
+            changeCalendarColor(value) {
+                this.checkColor = value;
+            },
+             addCalendarVisible: function (value) {
+                this.calendarVisible = value
+            },
+            principalChange(value) {
+                if (value) {
+                    this.principal = value.id;
+                }
+            },
+            addCalendar: function () {
+                this.isAddCalendarButtonDisable = true;
+                let data = {
+                    title: this.scheduleName,
+                    color: this.checkColor,
+                    privacy: this.calendarVisible,
+                    principal_id: this.principal
+                };
+                if (this.starId) {
+                    data.star = {
+                        id: this.starId,
+                        flag: this.starFlag
+                    }
+                }
+                let participants = this.$store.state.newParticipantsInfo;
+                if (participants.length > 0) {
+                    data.participant_ids = [];
+                    for (let i = 0; i < participants.length; i++) {
+                        data.participant_ids.push(participants[i].id)
+                    }
+                }
+                fetch('post', '/calendars', data).then(response => {
+                    this.isAddCalendarButtonDisable = false;
+                    $('#addCalendar').modal('hide');
+                    this.calendarList.push(response.data);
+                    toastr.success('添加成功')
+                    this.initAddScheduleModal();
+                    this.getCalendar()
+                })
             },
         },
         filters: {
