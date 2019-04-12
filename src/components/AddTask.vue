@@ -105,7 +105,7 @@
 
     export default {
         name: "AddTask",
-        props: ["name", "isChild", "taskFatherId", "resourceable_id", "resource_type", "resource_title", "resource_name", "lock_status"],
+        props: ["name", "isChild", "taskFatherId", "resourceable_id", "resource_type", "resource_title", "resource_name", "lock_status", 'code'],
         // props: ["name", "isChild", "taskFatherId", "resourceable_id", "resource_type", "lock_status", 'code'],
         data() {
             return {
@@ -140,9 +140,10 @@
         watch: {
             resourceable_id(newValue) {
                 this.resourceableId = newValue;
-            },
+            }
         },
         mounted() {
+            console.log(this.code)
             $('.modal-simple').on('mouseover',function(){
                 document.getElementsByTagName('body')[0].classList.add('modal-open');
             })
@@ -225,12 +226,12 @@
                         value: '',
                     })
                     if (code) {
-                        this.getChildData(code, false) // false即取消设置默认
+                        this.getChildData(code, true) // false即取消设置默认
                     }
                 })
             },
             // 获取关联子资源数据
-            getChildData(url, isCancel) {
+            getChildData(url, isCancel = false) {
                 if (url) {
                     let data = {}
                     this.linkCode = url
@@ -248,7 +249,7 @@
                             }
                         })
                         // 设置默认子资源
-                        if (isCancel) {
+                        if (!isCancel) {
                             this.resourceableId = this.linkChildData[0].id
                         }
                     })
