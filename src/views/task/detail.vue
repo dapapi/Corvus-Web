@@ -455,7 +455,7 @@
                                     <ul class="file-list">
                                         <li v-for="attachment in taskInfo.affixes?taskInfo.affixes.data:[]">
                                             <i class="iconfont icon-wenjian pr-5" style="color: #3298dc;"></i>
-                                            {{ attachment.title }}
+                                            {{ attachment.title?cutName(attachment.title):'' }}
                                             <span class="float-right pl-10 pointer-content"
                                                   data-plugin="actionBtn" @click="setDelInfo(attachment.id)"
                                                   data-toggle="modal">
@@ -497,7 +497,7 @@
                                 <tr v-for="task in subTaskList" :key="task.id"
                                     @click="redirectTaskDetail(task.id)">
                                     <td>{{ task.title }}</td>
-                                    <td>{{ task.title }}</td>
+                                    <td>{{ task.type_name }}</td>
                                     <td>
                                         <template v-if="task.status === 1">进行中</template>
                                         <template v-if="task.status === 2">已完成</template>
@@ -1182,6 +1182,19 @@
                     // console.log(res)
                     this.subTaskList = res.data
                 })
+            },
+            // 整理附件名字
+            cutName (title) {
+                if (title) {
+                    const typeIndex = title.lastIndexOf('.')
+                    const fileType = title.substr(typeIndex + 1)
+                    const fileName = title.substr(0, typeIndex)
+                    if (fileName.length > 19) {
+                        return fileName.substr(0, 10) + '...' + fileName.substr(fileName.length - 5) + '.' +fileType
+                    } else {
+                        return title
+                    }
+                }
             }
         },
     };
