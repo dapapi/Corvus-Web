@@ -122,6 +122,11 @@ export default {
         this.params.data = user;
         this.$store.dispatch('changePrincipal', this.params);
         this.$emit('change', false);
+      }else if(this.memberType === 'single'){
+        this.$store.dispatch('changePrincipal',{data:{}});
+        this.$store.dispatch('changePrincipal', this.params);
+        this.$emit('change', false);
+
       } else if (this.memberType === 'participant') {
         let participantInfo = '';
         if (this.type === 'change') {
