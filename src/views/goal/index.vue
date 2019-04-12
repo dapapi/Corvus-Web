@@ -3,10 +3,35 @@
         <!-- <Loading :is-loading="isLoading"></Loading> -->
         <div class="page-header page-header-bordered my-1 ">
             <h1 class="page-title">目标管理</h1>
-            <div class="float-right goals-range">2019年Q1季度</div>
-            <div class="float-right goals-add"  data-toggle="modal" 
+            <!-- <div class="float-right goals-range">2019年Q1季度</div> -->
+            <div class="page-header-actions dropdown show task-dropdown float-right" style="z-index:999000">
+                <div class="" aria-hidden="true" style="cursor: pointer" id="taskDropdown"
+                   data-toggle="dropdown" aria-expanded="false">{{periods.data[0].name}}</div>
+                <div class="dropdown-menu dropdown-menu-right task-dropdown-item" style="width:400px"  aria-labelledby="taskDropdown"
+                     role="menu" x-placement="bottom-end">
+                      <table class="table table-hover is-indent " data-plugin="animateList" data-animate="fade">
+                    <tr>
+                        <td class="cell-300">周期名称</td>
+                        <td class="cell-300">开始时间</td>
+                        <td class="cell-300">结束时间</td>
+                    </tr>
+                    <tr v-for="(item, index) in periods.data" :key="index">
+                        <td><input class="" type="radio" /> {{item.name}}</td>
+                        <td>{{item.start_at}}</td>
+                        <td>{{item.end_at}}</td>
+                    </tr>
+                      </table>
+                    <!-- <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(3)" v-show="oldInfo.status == 1">终止</a>
+                    <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(1)" v-show="oldInfo.status != 1">激活</a>
+                    <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(2)" v-show="oldInfo.status == 1">完成</a>
+                    <a class="dropdown-item" role="menuitem" @click="privacyTask(oldInfo.privacy ? 0 : 1)">
+                        {{oldInfo.privacy ? '转公开':'转私密'}}</a> -->
+                    <!-- <a class="dropdown-item" role="menuitem" @click>删除</a> -->
+                </div>
+            </div>
+            <div class="float-right goals-add mr-50"  data-toggle="modal" 
             data-target="#goals-add" >+新建目标</div>
-
+             
         </div>
         <div class="page-header page-header-bordered py-0">
             <ul class="nav nav-tabs nav-tabs-line" role="tablist" style="position: relative;">
@@ -219,10 +244,12 @@
                 isLoading:true,
                 my:'',
                 tabNumber:'',
+                periods:[],
             };
         },
         created() {
             this.getLinkData()
+            this.getPeriods()
         },
         mounted() {
             this.getTasks();
@@ -248,8 +275,14 @@
         },
         methods: {
             tabHandler(params){
-                console.log(params);
+                // console.log(params);
                 this.tabNumber = params
+            },
+            getPeriods(){
+                fetch('get','/periods/all').then((params) => {
+                    console.log(params)
+                    this.periods = params
+                })
             },
             getTasks(pageNum = 1) {
                 let params = {
@@ -513,7 +546,7 @@
         }
     };
 </script>
-<style>
+<style scoped>
 .goals-add{
     position: relative;
     width: 100px;
@@ -578,6 +611,9 @@
 }
 table tbody tr {
     cursor: pointer;
+}
+td{
+    text-align: center;
 }
 </style>
 
