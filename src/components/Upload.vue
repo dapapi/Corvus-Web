@@ -139,6 +139,7 @@ export default {
         top: 0;
         z-index: 10;
         cursor: pointer;
+        font-size: 0;
     }
     &:before {
         width: 100%;

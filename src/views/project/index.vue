@@ -215,6 +215,9 @@ created() {
         },
     },
   methods: {
+       getCurrentUser() {
+        this.currentUser = JSON.parse(Cookies.get('user'))
+    },
     //自定义筛选列表
     getList(pageNum =1){
         let _this = this,fetchData 

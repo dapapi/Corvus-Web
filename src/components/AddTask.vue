@@ -12,17 +12,23 @@
                 <div class="modal-body">
                     <div class="example">
                         <div class="col-md-2 text-right float-left">关联资源</div>
-                        <template v-if="this.resource_title">
-                            <div class="col-md-10 float-left pl-0">
-                                {{ this.resource_name }} - {{ this.resource_title }}
-                            </div>
-                        </template>
-                        <template v-else>
                             <div class="col-md-10 float-left">
-                                <NormalLinkageSelectors ref="linkage" v-if="linkData.length > 0" :myData="linkData"
-                                                        :data="linkData" @change="addLinkage"></NormalLinkageSelectors>
+                                <template v-if="this.resource_title">
+                                    <div class="col-md-10 float-left pl-0">
+                                    {{ this.resource_name }} - {{ this.resource_title }}
+                                </div>
+                                </template>
+                                <template v-else>
+                                    <LinkResource 
+                                        :fatherData="linkFatherData" 
+                                        :childData="linkChildData" 
+                                        :resource="resource_type"
+                                        :resourceable="resourceable_id"
+                                        @change="setResource" 
+                                    />
+                                </template>
                             </div>
-                        </template>
+                        <!-- </template> -->
                     </div>
                     <div class="example">
                         <div class="col-md-2 text-right float-left require">任务类型</div>
@@ -99,7 +105,8 @@
 
     export default {
         name: "AddTask",
-        props: ["name", "isChild", "taskFatherId", "resourceable_id", "resource_type", "resource_title", "resource_name", "lock_status"],
+        props: ["name", "isChild", "taskFatherId", "resourceable_id", "resource_type", "resource_title", "resource_name", "lock_status", 'code'],
+        // props: ["name", "isChild", "taskFatherId", "resourceable_id", "resource_type", "lock_status", 'code'],
         data() {
             return {
                 taskType: "",
@@ -111,142 +118,57 @@
                 taskIntroduce: "",
                 priorityArr: config.priorityArr,
                 taskTypeArr: [],
-                linkData: [],
+                // linkData: [],
                 resourceableId: "", // 资源id
                 taskName: "",
                 resourceType: "", // 资源type
                 user: {}, // 个人信息
                 isAddButtonDisable: false,
                 typeName: '',
+                linkFatherData: [{
+                    name: '暂不关联任何资源',
+                    id: '',
+                    value: '',
+                }], // 关联资源父数据
+                linkChildData: [{
+                    name: '暂不关联任何资源',
+                    id: '',
+                    value: '',
+                }], // 关联资源父数据
             }
         },
         watch: {
             resourceable_id(newValue) {
                 this.resourceableId = newValue;
-            },
+            }
         },
         mounted() {
+            console.log(this.code)
+            $('.modal-simple').on('mouseover',function(){
+                document.getElementsByTagName('body')[0].classList.add('modal-open');
+            })
             this.resourceType = this.resource_type;
             if (!this.resource_name) {
-                this.getLinkData();
+                // this.getLinkData();
+                this.getFatherData(this.code)
             }
             if (this.resourceable_id) {
                 this.resourceableId = this.resourceable_id
             }
             this.getTaskType();
-            this.user = JSON.parse(Cookies.get('user'));
-            this.$store.commit('changeNewPrincipal', {
-                name: this.user.nickname,
-                id: this.user.id
-            });
+            this.$nextTick(() => {
+                this.user = JSON.parse(Cookies.get('user'));
+                this.$store.commit('changeNewPrincipal', {
+                    name: this.user.nickname,
+                    id: this.user.id
+                });
+            })
             $('#addTask').on('hidden.bs.modal', () => {
                 this.closeAddTask()
             })
+            // this.getFatherData(this.code)
         },
         methods: {
-            // 获取关联父资源数据
-            getLinkData() {
-                fetch('get', '/resources').then(res => {
-                    this.linkData = res.data.map((n, i) => {
-                        return {
-                            name: n.title,
-                            id: n.type,
-                            value: n.code,
-                            child: []
-                        }
-                    });
-                    this.linkData.unshift({
-                        name: '暂不关联任何资源',
-                        id: '',
-                        value: '',
-                        child: []
-                    });
-                    if (this.linkData[0].child.length === 0) {
-                        this.getChildLinkData('', 0)
-                    }
-                })
-            },
-            // 获取关联子资源数据
-            getChildLinkData(url, index) {
-                if (url) {
-                    let data = {};
-                    this.linkCode = url;
-                    this.linkIndex = index;
-
-                    let _url = url.substr(0, url.length - 1) + '/related';
-                    if (url === 'bloggers') {
-                        _url = url + '/all';
-                        data.sign_contract_status = 2
-                    }
-                    fetch('get', _url, data).then(res => {
-                        const temp = this.linkData[index];
-                        if (res.meta && res.meta.pagination) {
-                            this.canLoadMore = true;
-                            this.linkTotalPage = res.meta.pagination.total_pages
-                        } else {
-                            this.canLoadMore = false
-                        }
-                        temp.child = res.data.map(n => {
-                            return {
-                                name: n.name || n.nickname || n.title || n.company,
-                                id: n.id,
-                                value: n.id,
-                            }
-                        });
-                        this.resourceableId = temp.child[0].id;
-                        this.$set(this.linkData, index, temp);
-                        this.$nextTick(() => {
-                            this.$refs.linkage.refresh()
-                        })
-                    })
-                } else {
-                    const temp = this.linkData[index];
-                    temp.child = [{
-                        name: '暂不关联任何资源',
-                        id: '',
-                        value: '',
-                    }];
-                    this.resourceableId = temp.child[0].id;
-                    this.$set(this.linkData, index, temp);
-                    this.$nextTick(() => {
-                        this.$refs.linkage.refresh()
-                    })
-                }
-            },
-            // 关联子资源滚动到底加载更多
-            getMoreChildLinkData() {
-                const url = this.linkCode;
-                const index = this.linkIndex;
-                if (url && this.canLoadMore) {
-
-                    if (this.linkCurrentPage >= this.linkTotalPage) {
-                        return
-                    }
-                    let data = {
-                        page: this.linkCurrentPage
-                    };
-                    if (url === 'bloggers' || url === 'stars') {
-                        data.sign_contract_status = 2
-                    }
-                    fetch('get', `/${url === 'bloggers' ? url + '/all' : url}`, data).then(res => {
-                        this.linkCurrentPage = this.linkCurrentPage + 1;
-                        const temp = this.linkData[index];
-                        const tempArr = res.data.map(n => {
-                            return {
-                                name: n.name || n.nickname || n.title || n.company,
-                                id: n.id,
-                                value: n.id,
-                            }
-                        });
-                        temp.child = [...temp.child, ...tempArr];
-                        this.resourceableId = temp.child[0].id;
-                        this.$set(this.linkData, index, temp);
-                        this.$nextTick(() => {
-                            this.$refs.linkage.refresh()
-                        })
-                    })
-                }
-            },
             // 获取任务类型列表
             getTaskType() {
                 fetch('get', '/task_types').then(res => {
@@ -268,14 +190,17 @@
                 this.endMinutes = '';
                 this.taskIntroduce = '';
                 this.linkData = [];
-                this.$refs.taskType.setValue('');
-                this.$refs.taskLevel.setValue('');
-                this.$refs.startTime.setValue('');
-                this.$refs.startMinutes.setValue('0');
-                this.$refs.endTime.setValue('');
-                this.$refs.endMinutes.setValue('0');
-                this.getLinkData();
-                this.setDefaultPrincipal();
+                try {
+                    this.$refs.taskType.setValue('');
+                    this.$refs.taskLevel.setValue('');
+                    this.$refs.startTime.setValue('');
+                    this.$refs.startMinutes.setValue('0');
+                    this.$refs.endTime.setValue('');
+                    this.$refs.endMinutes.setValue('0');
+                } catch (e) {
+                }
+                // this.getLinkData();
+                // this.setDefaultPrincipal();
             },
             // 设置默认负责人
             setDefaultPrincipal() {
@@ -285,13 +210,58 @@
                 });
                 this.$store.commit('changeNewParticipantsInfo', [])
             },
-            addLinkage: function (type, value, id, index) {
+            // 获取关联父资源数据
+            getFatherData(code) {
+                fetch('get', '/resources').then(res => {
+                    this.linkFatherData = res.data.map((n, i) => {
+                        return {
+                            name: n.title,
+                            id: n.code,
+                            value: n.type
+                        }
+                    })
+                    this.linkFatherData.unshift({
+                        name: '暂不关联任何资源',
+                        id: '',
+                        value: '',
+                    })
+                    if (code) {
+                        this.getChildData(code, true) // false即取消设置默认
+                    }
+                })
+            },
+            // 获取关联子资源数据
+            getChildData(url, isCancel = false) {
+                if (url) {
+                    let data = {}
+                    this.linkCode = url
+                    let _url = url.substr(0, url.length - 1) + '/related'
+                    if (url === 'bloggers') {
+                        _url = url + '/all'
+                        data.sign_contract_status = 2
+                    }
+                    fetch('get', _url, data).then(res => {
+                        this.linkChildData = res.data.map(n => {
+                            return {
+                                name: n.name || n.nickname || n.title || n.company,
+                                id: n.id,
+                                value: n.id,
+                            }
+                        })
+                        // 设置默认子资源
+                        if (!isCancel) {
+                            this.resourceableId = this.linkChildData[0].id
+                        }
+                    })
+                }
+            },
+            // 设置关联资源
+            setResource (type, value, id) {
                 if (type === 'father') {
-                    this.getChildLinkData(value, index);
-                    this.resourceType = id
-                    
-                } else if (type === 'child') {
-                    this.resourceableId = value
+                    this.getChildData(id)
+                    this.resourceType = value
+                } else {
+                    this.resourceableId = id
                 }
             },
 
@@ -338,6 +308,7 @@
                     return
                 }
                 if (!this.$store.state.newPrincipalInfo.id) {
+                    console.log(this.$store.state.newPrincipalInfo);
                     toastr.error('请选择负责人！');
                     return
                 }

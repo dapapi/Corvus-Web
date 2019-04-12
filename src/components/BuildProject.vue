@@ -45,7 +45,8 @@
                     <div class="col-md-12 example clearfix">
                         <div class="col-md-2 text-right float-left px-0 require">项目负责人</div>
                         <div class="col-md-10 float-left">
-                            <InputSelectors
+                            <InputSelectors :propSelectMemberName='$store.state.newPrincipalInfo.name?$store.state.newPrincipalInfo.name:(currentUser.name || currentUser.nickname)'
+                                    :propSelectMemberId='currentUser.id'
                                     @change="(value) => addProjectBaseInfo(value, 'principal_id')"></InputSelectors>
                         </div>
                     </div>
@@ -251,6 +252,10 @@
             };
         },
         created() {
+            this.getTrail();         
+
+            this.getCurrentUser()
+
             this.getStars();
         },
         mounted(){
@@ -262,7 +267,7 @@
             projectFieldsArr(newValue) {
                 return this.projectFields = newValue;
             },
-            projectType() {
+            projectType(value) {
                 this.getTrail();
                 this.defaultDataFilter();
             },
@@ -280,6 +285,9 @@
             },
         },
         methods: {
+            getCurrentUser() {
+                this.currentUser = JSON.parse(Cookies.get('user'))
+            },
             defaultDataFilter() {
                 if (!this.defaultData) {
                     return;
@@ -450,14 +458,17 @@
                         }
                     }
                 }
+                if(!this.projectBaseInfo.principal_id){
+                    this.projectBaseInfo.principal_id = this.currentUser.id
+                }
                 fetch('post', '/projects', this.projectBaseInfo).then(response => {
                     this.submitDisable = true;
                     $('#addProject').modal('hide');
                     $('#selectProjectType').modal('hide');
                     this.$router.push({path: `/projects/${response.data.id}`});
                 }).catch((params) => {
-                    _this.submitDisable = false;
-                    console.log(error);
+                    this.submitDisable = false;
+                    console.log(params);
                 });
             },
             addProjectBaseInfo(value, name) {
@@ -490,7 +501,7 @@
                         return;
                     case 'status':
                         this.projectBaseInfo.trail.status = value;
-                        return;
+                        return
                 }
                 this.projectBaseInfo[name] = value;
             },

@@ -62,7 +62,7 @@
                         <div class="col-md-10 float-left pl-0">
                             <input-selectors :placeholder="'请选择负责人'"
                                              @change="changePrincipal" otherslot=true
-                                             :propSelectMemberName='$store.state.otherSlot.data?$store.state.otherSlot.data.name:currentUser.name'></input-selectors>
+                                             :propSelectMemberName='$store.state.otherSlot.data?$store.state.otherSlot.data.name:(currentuser.name || currentuser.nickname)'></input-selectors>
                         </div>
                     </div>
                     <div class="example">
@@ -152,7 +152,7 @@
 
     export default {
         name: "AddTrail",
-        props: ['trailType', 'companyInfo', 'clientId'], // 线索类型,公司信息, 客户id
+        props: ['trailType', 'companyInfo', 'clientId','currentuser'], // 线索类型,公司信息, 客户id
         data() {
             return {
                 trailName: '',
@@ -189,6 +189,9 @@
         mounted() {
             this.getStars();
             this.getIndustries()
+             $('.modal-simple').on('mouseover',function(){
+        document.getElementsByTagName('body')[0].classList.add('modal-open');
+      })
         },
 
         methods: {

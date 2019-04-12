@@ -59,8 +59,8 @@
 <style>
     .addtrail {
         width: calc(100% - 40px) !important;
+        
     }
-
     .short-spinner-input {
         width: 76% !important;
     }
@@ -68,5 +68,8 @@
     .asSpinner {
         width: 100%;
         
+    }
+    .asSpinner-control:hover{
+        cursor: pointer;  
     }
 </style>

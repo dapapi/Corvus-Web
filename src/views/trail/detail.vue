@@ -892,7 +892,7 @@ export default {
 
     editBaseInfo() {
       if (this.trailInfo.powers.edit_trail !== 'true') {
-        toastr.error('当前用户没有编辑销售线索的权限');
+        toastr.error('您没有编辑销售线索的权限');
         return;
       }
       this.isEdit = true;

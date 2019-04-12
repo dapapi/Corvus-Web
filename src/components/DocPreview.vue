@@ -90,7 +90,10 @@ export default {
   },
   methods: {
     closePreview(){
+<<<<<<< HEAD
       this.$store.dispatch('changePreviewName', "");
+=======
+>>>>>>> test
       // $("#docPreview").css("display","none")
       // $(".modal-backdrop").css("display","none")
       // modal-backdrop fade show

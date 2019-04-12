@@ -1,5 +1,5 @@
 <template>
-    <div class="upload col-md-12 pl-0">
+    <div class="upload col-md-12 pl-0"  >
         <div class="col-md-2 text-right pl-0" :class="consdata[0].required===1?'require':''">{{consdata[0].control_title}}</div>
         <div>
         <figure v-for="(item, index) in fileInfo" :key="index" style="margin-right:0px;width:100px;overfolw:hidden;" class="ml-20 float-left">
@@ -21,9 +21,9 @@
             <!-- <p>{{item.fileName.split('.')[0]}}</p> -->
         </figure>
         </div>
-        <div class="image-show float-left">
+        <div class="image-show float-left" >
             <span class="plus-icon">+</span>
-            <input type="file" @change="uploadFile" accept="image/png,image/gif,image/jpeg,image/tiff,application/pdf" />
+            <input type="file" @change="uploadFile" style="cursor:pointer;" accept="image/png,image/gif,image/jpeg,image/tiff,application/pdf" />
          </div>
          <!-- <DocPreview :url="fileUrl" :givenFileName="givenFileName" /> -->
     </div>
