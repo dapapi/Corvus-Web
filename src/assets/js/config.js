@@ -119,6 +119,30 @@ let config = {
                 value: 2
             }
         ],
+        goalRanger:[
+            {
+                name: '个人',
+                value: 1
+            },
+            {
+                name: '部门',
+                value: 2
+            },
+            {
+                name: '公司',
+                value: 3
+            },
+        ],
+        goalSort:[
+            {
+                name: '数字',
+                value: 1
+            },
+            {
+                name: '非数字',
+                value: 2
+            },
+        ],
         customizeInfo: [
             {
                 id: 0,
@@ -245,6 +269,20 @@ let config = {
                 name: '代理公司',
                 value: 2
             }
+        ],
+        Dimensions: [
+            {
+                name: '项目',
+                value: 1
+            },
+            {
+                name: '艺人',
+                value: 2
+            },
+            {
+                name: '客户',
+                value: 3
+            },
         ],
         projectTypeArr: [
             {
@@ -633,6 +671,20 @@ let config = {
                 value: 7,
                 color: '#f44336'
             },
+        ],
+        countSort:[
+            {
+                name: '利润',
+                value: 1
+            },
+            {
+                name: '成本',
+                value: 2
+            },
+            {
+                name: '收入',
+                value: 3
+            }
         ],
         yesOrNoArr: [
             {
