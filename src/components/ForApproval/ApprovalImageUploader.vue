@@ -67,6 +67,7 @@ export default {
   methods: {
     previewHandler(params) {
       this.$store.dispatch('changePreview', params);
+      this.$store.dispatch('changePreviewName', params.fileName);
       $('#docPreviewSelector').modal('hide');
       this.previewUrlArr = String(params).split(',');
       if (this.previewUrlArr.length === 1) {
