@@ -1,7 +1,7 @@
 <template>
     <div class="addMember">
         <ul class="addMember-items">
-            <li class="addMember-item" :style="otherslot?'display:flex':''">
+            <li class="addMember-item" :style="otherslot?'display:flex':''" v-if="selectMemberArr.icon_url">
                 <Avatar :imgUrl="selectMemberArr.icon_url" :title='selectMemberArr.name'/>
                 <span class="addMember-remove" @click="removeMember(selectMemberArr.id)" :class="otherslot?'addmember-other':''">
                     <i class="md-minus-circle"></i>
@@ -35,6 +35,7 @@
         },
         mounted() {
             this.globalClick(this.removeSelect);
+            this.$store.dispatch('changeNewPrincipal','')
         },
 
         computed: {
