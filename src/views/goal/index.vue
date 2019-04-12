@@ -1,6 +1,6 @@
 <template>
     <div class="page-main" style="background-color:#f3f4f5">
-        <Loading :is-loading="isLoading"></Loading>
+        <!-- <Loading :is-loading="isLoading"></Loading> -->
         <div class="page-header page-header-bordered my-1 ">
             <h1 class="page-title">目标管理</h1>
             <div class="float-right goals-range">2019年Q1季度</div>
@@ -13,26 +13,26 @@
                         <li class="nav-item" role="presentation">
                             <a class="nav-link active" data-toggle="tab" href="#forum-artist"
                                aria-controls="forum-base"
-                               aria-expanded="true" role="tab" >我的</a>
+                               aria-expanded="true" role="tab" @click="tabHandler(1)">我的</a>
                         </li>
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" data-toggle="tab" href="#forum-blogger"
                                aria-controls="forum-present" 
-                               aria-expanded="false" role="tab" >部门</a>
+                               aria-expanded="false" role="tab" @click="tabHandler(2)" >部门</a>
                         </li>
                          <li class="nav-item" role="presentation">
                             <a class="nav-link" data-toggle="tab" href="#forum-blogger"
                                aria-controls="forum-present"
-                               aria-expanded="false" role="tab"  >公司</a>
+                               aria-expanded="false" role="tab" @click="tabHandler(3)">公司</a>
                         </li>
                          <li class="nav-item" role="presentation">
                             <a class="nav-link" data-toggle="tab" href="#forum-blogger"
                                aria-controls="forum-present"
-                               aria-expanded="false" role="tab" >全部</a>
+                               aria-expanded="false" role="tab" @click="tabHandler(4)">全部</a>
                         </li>
                     </ul>
         </div>
-        <div class="row mx-20">
+        <div class="row mx-20" v-if="tabNumber !== 4">
             <div class="col-md-5 pl-25 mr-0 pr-0">
                 <div class="panel row float-left  " style="width:100%">
                     <dir class="col-md-4">
@@ -89,13 +89,15 @@
                                placeholder="请输入目标名称">
                     </div>
                     <div class="col-md-3 example float-left">
-                        <Selectors :options="taskTypeArr" @change="changeTaskTypeSearch" placeholder="请筛选部门"></Selectors>
+                         <DropDepartment :data="department" @change='(params)=>changeHandeler(params,"department")'/>
                     </div>
                     <!-- todo 任务类型暂无 -->
                     <div class="col-md-3 example float-left">
                         <Selectors :options="taskStatusArr" @change="changeTaskStatusSearch" placeholder="请选择负责人"></Selectors>
                     </div>
-                    <!--<div class="col-md-3 example float-left">-->
+                    <div class="col-md-3 example float-right pl-40 pt-5 pr-0 mr-0">
+                        <span class="col-md-5" style="color:#3f51b5;font-size:16px;cursor:pointer">进行中</span>
+                        <span class="col-md-5" style="font-size:16px;cursor:pointer">已结束</span>
                         <!--<button type="button"-->
                                 <!--class="btn btn-default waves-effect waves-classic float-right"-->
                                 <!--data-toggle="modal"-->
@@ -103,42 +105,8 @@
                                 <!--data-placement="right"-->
                                 <!--title>自定义筛选-->
                         <!--</button>-->
-                    <!--</div>-->
+                    </div>
                 </div>
-                
-                <!-- <div class="col-md-12">
-                    <ul class="nav nav-tabs nav-tabs-line" role="tablist">
-                        <li class="nav-item" role="presentation" @click="getTasks(1)">
-                            <a class="nav-link active" data-toggle="tab" href="#forum-task"
-                                aria-controls="forum-base"
-                                aria-expanded="true" role="tab">所有任务</a>
-                        </li>
-                        <li class="nav-item" role="presentation" @click="getMyTasks(3)">
-                            <a class="nav-link" data-toggle="tab" href="#forum-task"
-                                aria-controls="forum-present"
-                                aria-expanded="false" role="tab">我负责的</a>
-                        </li>
-                        <li class="nav-item" role="presentation" @click="getMyTasks(2)">
-                            <a class="nav-link" data-toggle="tab" href="#forum-task"
-                                aria-controls="forum-present"
-                                aria-expanded="false" role="tab">我参与的</a>
-                        </li>
-                        <li class="nav-item" role="presentation" @click="getMyTasks(1)">
-                            <a class="nav-link" data-toggle="tab" href="#forum-task"
-                                aria-controls="forum-present"
-                                aria-expanded="false" role="tab">我创建的</a>
-                        </li>
-                        <li class="nav-item" role="presentation" @click="getMyTasks(4)">
-                            <a class="nav-link"
-                               data-toggle="tab"
-                               href="#forum-task"
-                               aria-controls="forum-present"
-                               aria-expanded="false"
-                               role="tab">我分配的</a>
-                        </li>
-                    </ul>
-                </div> -->
-
                 <div class="page-content tab-content nav-tabs-animate bg-white pt-0">
                     <div class="tab-pane animation-fade active" id="forum-task" role="tabpanel">
                         <table class="table table-hover is-indent" data-plugin="animateList" data-animate="fade"
@@ -207,6 +175,7 @@
     </div>
 </template>
 <script>
+    import { mapState, mapActions } from 'vuex'
     import fetch from "../../assets/utils/fetch.js";
     import config from "../../assets/js/config";
     import Cookies from 'js-cookie'
@@ -248,7 +217,8 @@
                 resourceableId: "", // 资源id
                 user: {}, // 个人信息
                 isLoading:true,
-                my:''
+                my:'',
+                tabNumber:'',
             };
         },
         created() {
@@ -268,8 +238,19 @@
                 this.closeAddTask()
             })
         },
-
+        computed:{
+              ...mapState([
+            'department',
+        ]),
+        _department () {
+            return this.department
+        }
+        },
         methods: {
+            tabHandler(params){
+                console.log(params);
+                this.tabNumber = params
+            },
             getTasks(pageNum = 1) {
                 let params = {
                     page: pageNum,
