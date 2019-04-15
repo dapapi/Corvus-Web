@@ -90,7 +90,7 @@
                 this.getList()
             },
             getList:function(){
-                
+                    console.log(this.moduleList)
                     let data={}
                     for (let i = 0; i < this.leftData.length; i++) {
                     if(this.leftData[i].id == 1){

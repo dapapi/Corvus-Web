@@ -72,8 +72,10 @@
                 this.getDepartment()
                 this.getModuleRole()
                 this.getListPower()
+                 this.getDashboard()
             }
             // this.getApprovalNum()
+           
         },
         mounted(){
           
@@ -89,7 +91,8 @@
                 'getDepartment',
                 'getModuleRole',
                 'getListPower',
-                'getApprovalNum'
+                'getApprovalNum',
+                'getDashboard'
             ])
         }
     };
