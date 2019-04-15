@@ -36,12 +36,15 @@
             </div>
             <div class="page-header  page-header-bordered m-20 pl-10">
                 <h6 class="page-title title-status">当前状态
+                  <!-- <div class="spinner-border text-primary"></div> -->
                     <div class="approver"
                          :style="{backgroundImage:'url('+pending.icon_url+')',backgroundColor:String(pending.icon_url).split('|')[0]}">
+                        <CircleLoading class="" v-if="approvalLoading"/>
                         {{String(pending.icon_url).split('|')[1]}}
                     </div>
                     <span v-if="list.form_status=== 231">&nbsp;{{currentStatus.slice(0,1)}}{{pending.name}}{{currentStatus.slice(1)}}</span>
                     <span v-if="list.form_status !== 231">{{pending.name}}{{currentStatus}}</span>
+                    <!-- <i><CircleLoading class="circleloading" v-if="approvalLoading"/></i> -->
                     <i v-if="list.form_status==232 && (info.approval.user_id === currentId || (list.creator && list.creator.data.id === currentId)) && !info.contract_archive  ">
                         <button class="btn btn-success" v-if="info.contract" @click='approvalHandler("archive")'>归档</button>
                         <button class="btn btn-primary" @click='approvalHandler("discard")'>作废</button>
@@ -286,6 +289,7 @@ export default {
       indexDataCommon: [],
       waitingForFlag:true,
       canShow:false,
+      approvalLoading:true,
     };
   },
 
@@ -373,6 +377,7 @@ export default {
         } else {
         this.isCurrentApprover = false;
         }
+        this.approvalLoading = false
     },
     waitingFor(params) {
       if (params && this.waitingForFlag === true) {
@@ -640,6 +645,8 @@ export default {
     .detail-key {
         min-height: 40px;
         /* background: #f5f5f5; */
-
-    }
+        }
+      .circleloading{
+        right: 10%;
+      }
 </style>

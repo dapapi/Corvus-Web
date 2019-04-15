@@ -3,8 +3,11 @@
         <!-- <Loading :is-loading="isLoading"></Loading> -->
         <div class="page-header page-header-bordered my-1 ">
             <h1 class="page-title">目标管理</h1>
+            
             <!-- <div class="float-right goals-range">2019年Q1季度</div> -->
             <div class="page-header-actions dropdown show task-dropdown float-right" style="z-index:999000">
+                <div class="" aria-hidden="true" style="cursor: pointer" id="taskDropdown"
+                   data-toggle="dropdown" v-if="!periods.data" aria-expanded="false"><CircleLoading /></div>
                 <div class="" aria-hidden="true" style="cursor: pointer" id="taskDropdown"
                    data-toggle="dropdown" v-if="periods.data" aria-expanded="false">{{periods.data[0].name}}</div>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" style="width:400px"  aria-labelledby="taskDropdown"
@@ -15,6 +18,7 @@
                         <td class="cell-300">开始时间</td>
                         <td class="cell-300">结束时间</td>
                     </tr>
+                    
                     <tr v-for="(item, index) in periods.data" :key="index">
                         <td><input class="" type="radio" /> {{item.name}}</td>
                         <td>{{item.start_at}}</td>
@@ -140,7 +144,7 @@
                             <tr class="animation-fade " 
                                 style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms; border-bottom:1px solid rgba(7,17,27,0.2);">
                                 <th class="cell-300" scope="col">目标名称</th>
-                                <th class="cell-300" scope="col">父/子</th>
+                                <!-- <th class="cell-300" scope="col">父/子</th> -->
                                 <th class="cell-300" scope="col">负责人</th>
                                 <th class="cell-300" scope="col">进度</th>
                                 <!-- <th class="cell-300" scope="col">负责人</th> -->
@@ -154,7 +158,7 @@
                                     </router-link> -->
                                 </td>
                                 <td>
-                                    父
+                                    皮卡丘
                                     <!-- {{task.resource ? task.resource.data.resource.data.title : ''}}
                                     <template v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.name">
                                         -  {{ task.resource.data.resourceable.data.name }}
@@ -185,7 +189,7 @@
                                 </td> -->
                                 <!-- <td>{{ task.end_at }}</td> -->
                                 <td>今天</td>
-                                <td>123</td>
+                                <!-- <td>123</td> -->
                             </tr>
                             </tbody>
                         </table>
@@ -204,7 +208,7 @@
                 </div>
             </div>
         </div>
-        <addGoals />
+        <addGoals :goalperiod='periods.data' />
     </div>
 </template>
 <script>

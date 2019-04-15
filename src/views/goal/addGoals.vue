@@ -14,63 +14,63 @@
                         <div class="col-md-12 example clearfix">
                             <div class="col-md-2 text-right float-left px-0 require">目标范围</div>
                             <div class="col-md-10 float-left">
-                                <Selectors ref="trails" :options='selectorData.goalRanger' @change='(params)=>changeHandeler(params,"goalRange")'
+                                <Selectors ref="trails" :options='selectorData.goalRanger' @change='(params)=>changeHandeler(params,"range")'
                                         selectable="true"></Selectors>
                             </div>
                         </div>
                          <div class="col-md-12 example clearfix" v-if="goalRange == 2">
                             <div class="col-md-2 text-right float-left px-0 require">选择部门</div>
                             <div class="col-md-10 float-left">
-                                <DropDepartment :data="selectorData.department" @change='(params)=>changeHandeler(params,"department")'/>
+                                <DropDepartment :data="selectorData.department" @change='(params)=>changeHandeler(params,"department_id")'/>
                             </div>
                         </div>
                          <div class="col-md-12 example clearfix">
                             <div class="col-md-2 text-right float-left px-0 require">目标周期</div>
                             <div class="col-md-10 float-left">
-                                <Selectors ref="trails" @change='(params)=>changeHandeler(params,"interval")'
+                                <Selectors ref="trails" :options='goalperiod' @change='(params)=>changeHandeler(params,"period_id")'
                                         selectable="true"></Selectors>
                             </div>
                         </div>
                          <div class="col-md-12 example clearfix">
                             <div class="col-md-2 text-right float-left px-0 require">目标名称</div>
                             <div class="col-md-10 float-left">
-                                <input ref="trails" class="form-control" @change='(params)=>changeHandeler(params.target.value,"goalName")'>
+                                <input ref="trails" class="form-control" @change='(params)=>changeHandeler(params.target.value,"title")'>
                             </div>
                         </div>
                          <div class="col-md-12 example clearfix">
                             <div class="col-md-2 text-right float-left px-0 require">目标类型</div>
                             <div class="col-md-10 float-left">
-                                <Selectors ref="trails" :options='selectorData.goalSort' @change='(params)=>changeHandeler(params,"goalSort")'
+                                <Selectors ref="trails" :options='selectorData.goalSort' @change='(params)=>changeHandeler(params,"type")'
                                         selectable="true"></Selectors>
                             </div>
                         </div>
                          <div class="col-md-12 example clearfix" v-if="goalSort == 1">
                             <div class="col-md-2 text-right float-left px-0 require">金额类型</div>
                             <div class="col-md-4 float-left">
-                                  <Selectors ref="trails" :options='selectorData.countSort' @change='(params)=>changeHandeler(params,"countSort")'
+                                  <Selectors ref="trails" :options='selectorData.countSort' @change='(params)=>changeHandeler(params,"amount_type")'
                                         selectable="true"></Selectors>
                             </div>
                             <div class="col-md-2 text-right float-left px-0 require">目标金额/元</div>
                             <div class="col-md-4 float-left">
-                                <input  class="form-control" @change='(params)=>changeHandeler(params.target.value,"goalCount")'/>
+                                <input  class="form-control" @change='(params)=>changeHandeler(params.target.value,"amount")'/>
                             </div>
                         </div>
                         <div class="col-md-12 example clearfix" v-if="goalSort">
                             <div class="col-md-2 text-right float-left px-0 require">维度</div>
                             <div class="col-md-4 float-left">
-                                  <Selectors ref="trails" :options='selectorData.Dimensions' @change='(params)=>changeHandeler(params,"Dimensions")'
+                                  <Selectors ref="trails" :options='selectorData.Dimensions' @change='(params)=>changeHandeler(params,"position")'
                                         selectable="true"></Selectors>
                             </div>
                             <div class="col-md-2 text-right float-left px-0 require" v-if="Dimensions == 2">艺人级别</div>
                             <div class="col-md-4 float-left" v-if="Dimensions == 2">
-                                  <Selectors ref="trails" :options='selectorData.levelArr' @change='(params)=>changeHandeler(params,"starLevel")'
+                                  <Selectors ref="trails" :options='selectorData.levelArr' @change='(params)=>changeHandeler(params,"talent_level")'
                                         selectable="true"></Selectors>
                             </div>
                         </div>
                         <div class="col-md-12 example clearfix">
                             <div class="col-md-2 text-right float-left px-0 require">目标级别</div>
                             <div class="col-md-10 float-left">
-                                <Selectors ref="trails" :options='selectorData.levelArr' @change='(params)=>changeHandeler(params,"goalLevel")'
+                                <Selectors ref="trails" :options='selectorData.levelArr' @change='(params)=>changeHandeler(params,"aim_level")'
                                         selectable="true"></Selectors>
                             </div>
                         </div>
@@ -78,21 +78,21 @@
                         <div class="col-md-12 example clearfix">
                             <div class="col-md-2 text-right float-left px-0 require">负责人</div>
                             <div class="col-md-10 float-left">
-                                <InputSelectors @change='(params)=>changeHandeler(params,"participant")'
+                                <InputSelectors @change='(params)=>changeHandeler(params,"principal_id")'
                                         ></InputSelectors>
                             </div>
                         </div>
                         <div class="col-md-12 example clearfix">
                             <div class="col-md-2 text-right float-left px-0">目标描述</div>
                             <div class="col-md-10 float-left">
-                                <textarea class="form-control" @change='(params)=>changeHandeler(params.target.value,"targetDescription")'
+                                <textarea class="form-control" @change='(params)=>changeHandeler(params.target.value,"desc")'
                                         ></textarea>
                             </div>
                         </div>
                         <div class="col-md-12 example clearfix">
                             <div class="col-md-2 text-right float-left px-0">父目标</div>
                             <div class="col-md-10 float-left">
-                                <Selectors ref="trails" @change='(params)=>changeHandeler(params,"parentGoal")'
+                                <Selectors ref="trails" @change='(params)=>changeHandeler(params,"parents_ids")'
                                         selectable="true"></Selectors>
                             </div>
                         </div>
@@ -124,6 +124,7 @@ import { mapState, mapActions } from 'vuex'
 import fetch from "../../assets/utils/fetch.js";
 import config from '../../assets/js/config'
 export default {
+    props:['goalperiod'],
     data(){
         return {
             selectorData:{
@@ -151,11 +152,11 @@ export default {
         changeHandeler(params,value){
             if(params){
                 console.log(params,value);
-                if(value==='goalRange'){
+                if(value==='range'){
                     this.goalRange = params
-                }else if(value === 'goalSort'){
+                }else if(value === 'type'){
                     this.goalSort = params
-                }else if(value === 'Dimensions'){
+                }else if(value === 'position'){
                     this.Dimensions = params
                 }
                 this.sendData[value] = params

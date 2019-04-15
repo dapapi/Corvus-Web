@@ -76,7 +76,7 @@ import ImportAndExport from '@/components/ImportAndExport.vue'
 import VueUeditorWrap from 'vue-ueditor-wrap'
 import DepartmentPicker from '@/components/DepartmentPicker'
 import NetError from '@/components/NetError'
-
+import CircleLoading from '@/components/CircleLoading'
 Vue.config.productionTip = false;
 Vue.component('AddTask', AddTask);
 Vue.component('ApprovalGoModal', ApprovalGoModal);
@@ -84,6 +84,7 @@ Vue.component('AppDetail', AppDetail);
 Vue.component('ApprovalGreatModule', ApprovalGreatModule);
 Vue.component('ApprovalProgress', ApprovalProgress);
 Vue.component('VueUeditorWrap', VueUeditorWrap);
+Vue.component('CircleLoading', CircleLoading);
 
 Vue.component('AddMember', AddMember);
 
