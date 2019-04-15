@@ -15,7 +15,7 @@
                 <li class="site-menu-item" v-for="menu in menuData"
                     :class="{'has-sub': menu.data, 'active' : pageRoute === menu.code || ( menu.data && menu.data.find(item => item.code === pageRoute))}">
                     <template v-if="!menu.data">
-                        <router-link :to="'/' + menu.code" class="animsition-link">
+                        <router-link :to="'/' + menu.code" class="animsition-link" >
                             <div>
                                 <span class="base-icon"><img :src="menu.image" alt=""></span>
                                 <span class="hover-icon"><img :src="menu.hoverImage" alt=""></span>
@@ -44,7 +44,7 @@
                         <ul class="site-menu-sub" style="">
                             <li class="site-menu-item" v-for="subMenu in menu.data"
                                 :class="pageRoute === subMenu.code ? 'active': ''">
-                                <router-link :to="'/' + subMenu.code" class="animsition-link">
+                                <router-link :to="'/' + subMenu.code" class="animsition-link" >
                                     <span class="site-menu-title"><i :class="subMenu.icon" class="mr-2"></i>{{ subMenu.name }}</span>
                                 </router-link>
                             </li>
@@ -70,7 +70,7 @@
 </template>
 
 <script>
-    import {mapState, mapGetters, mapMutations} from 'vuex';
+    import {mapState, mapGetters, mapMutations,mapActions} from 'vuex';
     import Cookies from 'js-cookie';
 
     export default {
@@ -177,6 +177,7 @@
                 'canPassBack', // 能否进入后台
                 'avatar',
             ]),
+            
         },
 
         created() {
@@ -223,6 +224,7 @@
             hideBackModel() {
                 this.visible = false;
             },
+           
         },
     };
 </script>
