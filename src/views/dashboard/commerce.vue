@@ -674,12 +674,6 @@
             this.init()
         },
         mounted(){
-            this.getTask()
-            this.getStars()
-            this.getBloggers()
-            this.getClients()
-            this.getProjects()
-            this.getTaskType()
             this.getResources();
             this.getCalendarList()
             this.selectProjectLinkage()
@@ -757,8 +751,12 @@
                     this.getProjects()
                     this.getTaskType()
                 }else{ 
-               this.$router.push(`/dashboard?id=${this.dashboardList[0].id}&name=${this.dashboardList[0].name}`) }   
+                  if(this.dashboardList.length>0){
+                      this.$router.push(`/dashboard?id=${this.dashboardList[0].id}&name=${this.dashboardList[0].name}`) }  
+                } 
             },
+                    
+               
             //获取仪表盘任务信息
             getTask:function(){
                 let _this = this
