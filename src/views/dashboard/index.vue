@@ -13,15 +13,15 @@
                             <h5 class="page-title pl-30 mb-20">仪表盘</h5>
 
                                 <div class="level" :class="`level-${menu.level}`" v-for="(menu,index) in urlData" :key="index">
-                                    <div class="list-group-item " v-if="menu.type ==='link'" @click="toggle(menu.id)">
-                                        <router-link class="link" v-bind:to="menu.url"  :class="menu.level>1?'pl-15':''"  >
+                                    <div class="list-group-item " v-if="menu.type ==='link'" @click="toggle(menu.id,menu.name)" :class="selectId == menu.id?'selected':''"> 
+                                        <router-link class="link"   :class="menu.level>1?'pl-15':''"  :to="{ path:'/dashboard', query: {id: menu.id,name:menu.name} }">
                                         {{menu.name}}
                                         </router-link>     
                                     </div>
                                     <div class="drop-parent" style="position: absolute; right:30px;top:5px;">
                                         <i class="iconfont icon-gengduo1 font-size-20 parent" aria-hidden="true"
                                         data-toggle="dropdown" aria-expanded="false"
-                                        style="cursor: pointer; float: right;line-height: 40px;">
+                                        style="cursor: pointer; float: right;line-height: 40px;" @click="getMembers(menu.id)">
                                         </i>
                                         <div class="dropdown-menu dropdown-menu-left" aria-labelledby="org-dropdown"
                                             role="menu" x-placement="bottom-start" style="min-width: 0;">
@@ -123,7 +123,9 @@
                          <div class="example">
                             <div class="col-md-2 text-right float-left">成员</div>
                             <div class="col-md-10 float-left pl-0">
-                                
+                                <a class="avatar" href="javascript:void(0)" v-for="item in MembersDate" :key="item.id">
+                                    <Avatar :imgUrl="item.icon_url" style="margin-right: 10px; "/>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -163,7 +165,7 @@
 </template>
 
 <script>
-    import {mapState} from 'vuex'
+    import {mapState,mapActions} from 'vuex'
     import fetch from '../../assets/utils/fetch.js'
     export default {
         name: "home",
@@ -174,42 +176,57 @@
                 dashboardName:'',//仪表盘名称
                 dashboard_describe:'',//仪表盘描述
                 Dashboardname:'',
-                Department_name:''
+                Department_name:'',
+                dashboardId:'',
+                MembersDate:''
             }
         },
+        computed:{
+            ...mapState([
+                'dashboardList',
+                'selectId'
+            ]) , 
+          
+        },
+        watch:{
+            dashboardList:function(){
+                this.getList()
+
+            }
+        },
+        created(){
+            this.getList()
+        },
         mounted(){
-            this.getDashboard()
+            this.getid()
         },
         methods:{
+ 
             department:function(value){
                 this.departmentDate = value
             },
-            getDashboard:function(){
-                let _this = this
-                fetch('get', '/dashboards').then(function (response) {  
-                    console.log(response.data) 
-                 let data={}
-                 for (let t = 0; t < response.data.length; t++) {
+            getList:function(){
+                let data={}
+                for (let t = 0; t < this.dashboardList.length; t++) {
                     data={
-                        id:`${response.data[t].id}`,
-                        name:`${response.data[t].name}`,
-                        url:'/dashboard/'+ response.data[t].id,
+                        id:`${this.dashboardList[t].id}`,
+                        name:`${this.dashboardList[t].name}`,
+                        url:'/dashboard/'+ this.dashboardList[t].id,
                         type:'link',
+                        level:2,
                         isExpanded:false,
                         isSelected:false,
-                        level:2,
-                        department_name:response.data[t].department_name
+                        department_name:this.dashboardList[t].department_name,
                     }
-                    _this.urlData.push(data)   
+                    this.urlData.push(data)    
                 }
-                })
             },
-            toggle :function(id){
-                console.log(id)
+            toggle :function(id,name){
                 this.$router.push({
-                    path: `/dashboard/${id}`,
-                })
-                
+            　　　　path: '/dashboard', query:{id:id,name:name}
+
+            　　 });
+                this.getid(id)
             },
             getDashboardid:function(id){
                 this.urlData.forEach(item=>{
@@ -219,10 +236,28 @@
                         console.log(item)
                     }
                     
-                })
+                }) 
+            },
+            getid:function(id){
+                let url = location.search.split('?')[1].split('=')[1].split('&')[0]
+                console.log(url)
+                if(url){
+                   this.$store.dispatch('changeselectId',url) 
+                }
+                this.urlData.forEach(item=>{
+                     if(item.id == id){
+                          this.$store.dispatch('changeselectId',item.id)
+                     }
+                    
+                 })
                 
+            },
+            getMembers:function(id){
+                let _this = this
+                 fetch('get', '/departments/'+id +'/users').then(function (response) { 
+                     _this.MembersDate = response.data 
+                })
             }
-            
         }
     }
 </script>
@@ -248,5 +283,8 @@
     }
     .level{
         position: relative;
+    }
+    .scrollable-container{
+        position: fixed;
     }
 </style>
