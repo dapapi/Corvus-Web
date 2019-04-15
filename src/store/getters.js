@@ -30,8 +30,14 @@ export default {
     getModule:function(state){
         return state.moduleList
     },
+    getDashboard:function(state){
+        return state.dashboardList
+    },
     getIsSelected:function(state){
         return state.isSelected
+    },
+    getselectId:function(state){
+        return state.selectId
     },
     getIsExpanded:function(state){
         return state.isExpanded

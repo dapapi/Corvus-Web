@@ -68,6 +68,10 @@ export default {
   changeIsExpanded (data, params) {
         data.commit('changeIsExpanded', params)
     },
+    changeselectId: function (data, params) {
+
+        data.commit('changeselectId', params)
+    },
     changePreview: function (data, params) {
         data.commit('changePreview', params)
     },
@@ -112,6 +116,13 @@ export default {
             data.num = num
             data.moduleList = res.data
             commit('setModule', data)
+        })
+    },
+    getDashboard({commit}){
+        fetch('get', '/dashboards').then(function (response) {  
+            let data = {}
+            data.dashboardList = response.data
+            commit('setDashboard', data) 
         })
     },
     getApprovalNum({commit}) {

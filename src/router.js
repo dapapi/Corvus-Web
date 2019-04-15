@@ -135,7 +135,7 @@ const VueRouter = new Router({
             name:'dashboard',
             component:() => import('./views/dashboard/index.vue'),
             children:[{
-                path: '/dashboard/:id',
+                path: '/dashboard',
                 component: () => import('./views/dashboard/commerce.vue')
             }]
         },
