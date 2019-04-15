@@ -1,15 +1,16 @@
 <template>
     <div class="page-main" style="background-color:#f3f4f5">
+        <Loading :is-loading="isLoading"></Loading>
         <div class="page-header page-header-bordered mb-0">
             <h1 class="page-title">{{DashboardName}}</h1>
         </div>
         <div class="page-content container-fluid px-20">
                 <div class="tab  my-20 pl-10" style="display:flex">
                         <div class="task mx-20" data-plugin="actionBtn" data-toggle="modal" @click="addTask">创建任务</div>
-                        <div class="target mx-20">创建目标</div>
+                        <div class="target mx-20" @click="addGoal">创建目标</div>
                         <div class="schedule mx-20" data-plugin="actionBtn" data-toggle="modal" @click="addCalendar">创建日程</div>
                 </div>
-                <div class="clearfix  mt-30">
+                <div class="clearfix  mt-30 pl-10">
                     <div class="panel mb-0 ml-0 exhibition-panel" style="background:#fff;height:400px; position: relative;">
                         <div  class="circular m-30">
                                 <span>{{Tasktotal}}</span>
@@ -41,12 +42,12 @@
                     <div class="panel mb-0 ml-0 task-panel" style="background:#fff;height:400px;">
                         <div class="mx-30 py-10 title-wrap" style="border-bottom: 1px solid #eee; position: relative;"> 
                             <h5>任务</h5>
-                            <span style="position: absolute;right:10px;top:15px;">查看更多</span>
+                            <span style="position: absolute;right:10px;top:15px;" @click="tasklist" class="view-more">查看更多</span>
                         </div>
                         <div class="page-content tab-content nav-tabs-animate overflowY py-0" >
                             <div class="list-wrap" v-for="(item,index) in DashboardTask" :key="index">
                                 <div class="flex" @click="taskdetail(item.id)">
-                                    <!-- <Avatar class="small-avatar" :imgUrl="item.id"/> -->
+                                     <Avatar :imgUrl="item.avatar" style="margin-right: 10px; "/>
                                     {{item.name}}
                                 </div>
                                 <div class="">{{item.created_at}}</div>
@@ -91,12 +92,12 @@
                     <div class="panel mb-0 ml-0 task-panel" style="background:#fff;height:400px;">
                         <div class="mx-30 py-10 title-wrap" style="border-bottom: 1px solid #eee; position: relative;"> 
                             <h5>项目</h5>
-                            <span style="position: absolute;right:10px;top:15px;">查看更多</span>
+                            <span style="position: absolute;right:10px;top:15px;" @click="projectlist" class="view-more">查看更多</span>
                         </div>
                         <div class="page-content tab-content nav-tabs-animate overflowY py-0" >
                             <div class="list-wrap" v-for="(item,index) in DashboardProjects" :key="index">
                                 <div class="flex" @click="projectdetail(item.id)">
-                                    <!-- <Avatar class="small-avatar" :imgUrl="item.id"/> -->
+                                    <Avatar :imgUrl="item.avatar" style="margin-right: 10px; "/>
                                     {{item.name}}
                                 </div>
                                 <div class="">{{item.created_at}}</div>
@@ -141,12 +142,12 @@
                     <div class="panel mb-0 ml-0 task-panel" style="background:#fff;height:400px;">
                         <div class="mx-30 py-10 title-wrap" style="border-bottom: 1px solid #eee; position: relative;"> 
                             <h5>客户</h5>
-                            <span style="position: absolute;right:10px;top:15px;">查看更多</span>
+                            <span style="position: absolute;right:10px;top:15px;" @click="clientlist" class="view-more">查看更多</span>
                         </div>
                         <div class="page-content tab-content nav-tabs-animate overflowY py-0" >
                             <div class="list-wrap" v-for="(item,index) in DashboardClients" :key="index">
                                 <div class="flex" @click="clientdetail(item.id)">
-                                    <!-- <Avatar class="small-avatar" :imgUrl="item.id"/> -->
+                                    <Avatar :imgUrl="item.avatar" style="margin-right: 10px; "/>
                                     {{item.name}}
                                 </div>
                                 <div class="">{{item.created_at}}</div>
@@ -191,12 +192,12 @@
                     <div class="panel mb-0 ml-0 task-panel" style="background:#fff;height:400px;">
                         <div class="mx-30 py-10 title-wrap" style="border-bottom: 1px solid #eee; position: relative;"> 
                             <h5>艺人</h5>
-                            <span style="position: absolute;right:10px;top:15px;">查看更多</span>
+                            <span style="position: absolute;right:10px;top:15px;" @click="starlist" class="view-more">查看更多</span>
                         </div>
                         <div class="page-content tab-content nav-tabs-animate overflowY py-0" >
                             <div class="list-wrap" v-for="(item,index) in DashboardStars" :key="index">
                                 <div class="flex" @click="stardetail(item.id)">
-                                    <!-- <Avatar class="small-avatar" :imgUrl="item.id"/> -->
+                                    <Avatar :imgUrl="item.avatar" style="margin-right: 10px; "/>
                                     {{item.name}}
                                 </div>
                                 <div class="">{{item.created_at}}</div>
@@ -241,12 +242,12 @@
                     <div class="panel mb-0 ml-0 task-panel" style="background:#fff;height:400px;">
                         <div class="mx-30 py-10 title-wrap" style="border-bottom: 1px solid #eee; position: relative;"> 
                             <h5>博主</h5>
-                            <span style="position: absolute;right:10px;top:15px;">查看更多</span>
+                            <span style="position: absolute;right:10px;top:15px;" @click="bloggerlist" class="view-more">查看更多</span>
                         </div>
                         <div class="page-content tab-content nav-tabs-animate overflowY py-0" >
                             <div class="list-wrap" v-for="(item,index) in DashboardBloggers" :key="index">
                                 <div class="flex" @click="bloggerdetail(item.id)">
-                                    <!-- <Avatar class="small-avatar" :imgUrl="item.id"/> -->
+                                    <Avatar :imgUrl="item.avatar" style="margin-right: 10px;"/>
                                     {{item.name}}
                                 </div>
                                 <div class="">{{item.created_at}}</div>
@@ -587,11 +588,14 @@
                 </div>
             </div>
         </div>
+        <addGoals />
     </div>
 </template>
 <script>
+    import {mapState} from 'vuex'
     import fetch from '../../assets/utils/fetch.js'
     import config from "../../assets/js/config";
+    import addGoals from "../goal/addGoals"
     export default {
         data(){
             return{
@@ -661,11 +665,13 @@
                 allTasksInfo: '',
                 allProjectsInfo: '',
                 searchKeyWord: '',
+                isLoading: false,
             }
         },
         created(){
-            this.getDashboard()
+            this.getName()
             this.getLinkData()
+            this.init()
         },
         mounted(){
             this.getTask()
@@ -693,6 +699,18 @@
             });
             
         },
+        watch: {
+        '$route' (to, from) { //监听路由是否变化
+            if(this.$route.query.id){//判断id是否有值
+               this.init() 
+              
+            }
+        },
+         dashboardList:function(){
+                this.init() 
+
+            }
+        },
         computed:{
             TaskPercentage:function(){
                 return parseInt(this.Taskcompleted/this.Tasktotal*100)+ '%'
@@ -718,21 +736,33 @@
             BloggerNot:function(){
                 return this.BloggerTotal - this.Bloggerlatest_follow
             },
+            ...mapState([
+                'dashboardList',
+            ]) 
+        },
+        components:{
+            addGoals
         },
         methods:{
-             getDashboard:function(){
-                let _this = this
-                fetch('get', '/dashboards').then(function (response) {   
-                    _this.DashboardInfo = response.data  
-                    for(let i =0;i<response.data.length;i++){
-                        _this.DashboardName = response.data[i].name
-                    }
-                })
+             getName:function(){
+                this.DashboardName = this.$route.query.name
+            },
+            init:function(){
+                if(this.$route.query.id){
+                    this.getName()
+                    this.getTask()
+                    this.getStars()
+                    this.getBloggers()
+                    this.getClients()
+                    this.getProjects()
+                    this.getTaskType()
+                }else{ 
+               this.$router.push(`/dashboard?id=${this.dashboardList[0].id}&name=${this.dashboardList[0].name}`) }   
             },
             //获取仪表盘任务信息
             getTask:function(){
                 let _this = this
-                this.DashboardId = this.$route.params.id;
+                  this.DashboardId = this.$route.query.id;
                 fetch('get', '/departments/'+this.DashboardId +'/dashboard/tasks').then(function (response) {  
                     _this.DashboardTask = response.data 
                     _this.Tasktotal = response.meta.count.total//总数
@@ -744,7 +774,7 @@
             //获取仪表盘艺人信息
             getStars:function(){
                 let _this = this
-                this.DashboardId = this.$route.params.id;
+                  this.DashboardId = this.$route.query.id;
                 fetch('get', '/departments/'+this.DashboardId +'/dashboard/stars').then(function (response) {  
                     _this.DashboardStars = response.data
                     _this.StarTotal= response.meta.count.total//总数
@@ -756,7 +786,7 @@
              //获取仪表盘博主信息
             getBloggers:function(){
                 let _this = this
-                this.DashboardId = this.$route.params.id;
+                  this.DashboardId = this.$route.query.id;
                 fetch('get', '/departments/'+this.DashboardId +'/dashboard/bloggers').then(function (response) {  
                     _this.DashboardBloggers = response.data
                     _this.BloggerTotal= response.meta.count.total//总数
@@ -768,7 +798,7 @@
             //获取仪表盘客户信息
             getClients:function(){
                 let _this = this
-                this.DashboardId = this.$route.params.id;
+                  this.DashboardId = this.$route.query.id;
                 fetch('get', '/departments/'+this.DashboardId +'/dashboard/clients').then(function (response) {  
                     _this.DashboardClients = response.data 
                     _this.ClientTotal= response.meta.count.total//总数
@@ -780,13 +810,14 @@
              //获取仪表盘项目信息
             getProjects:function(){
                 let _this = this
-                this.DashboardId = this.$route.params.id;
+                  this.DashboardId = this.$route.query.id;
                 fetch('get', '/departments/'+this.DashboardId +'/dashboard/projects').then(function (response) {  
                     _this.DashboardProjects = response.data 
                     _this.ProjectTotal = response.meta.count.total//总数
                     _this.Projectcompleted = response.meta.count.completed//完成
                     _this.Projectprogressing = response.meta.count.latest_follow//最近更新
                     _this.Projectsigned = response.meta.count.signed//签署
+                    _this.isLoading = false;
                 })
             },
             addTask:function(){
@@ -795,22 +826,40 @@
             addCalendar:function(){
                 $('#changeSchedule').modal("show")
             },
+            addGoal:function(){
+                $("#goals-add").modal("show"); 
+            },
             //任务跳转详情
             taskdetail:function(taskId){
                 this.$router.push({path: '/tasks/' + taskId})
+            },
+            tasklist:function(){
+                this.$router.push({path: '/tasks'})
             },
              //项目跳转详情
             projectdetail:function(projectId){
                 this.$router.push({path: '/projects/' + projectId})
             },
+            projectlist:function(){
+                this.$router.push({path: '/projects'})
+            },
             clientdetail:function(clientId){
                 this.$router.push({path: '/clients/' + clientId})
+            },
+            clientlist:function(){
+                this.$router.push({path: '/clients'})
             },
             stardetail:function(starId){
                 this.$router.push({path: '/artists/' + starId})
             },
+            starlist:function(){
+                this.$router.push({path: '/talent'})
+            },
             bloggerdetail:function(bloggerId){
                 this.$router.push({path: '/blogger/' + bloggerId})
+            },
+            bloggerlist:function(){
+                this.$router.push({path: '/talent'})
             },
             // 获取任务类型列表
             getTaskType() {
@@ -1205,6 +1254,7 @@
                     this.linkageSelectedIds[type].push(value)
                 }
             },
+          
         }
     }
 </script>
@@ -1269,12 +1319,12 @@
         height: calc(100vh - 114px);
     }
     .exhibition-panel{
-        width: calc(50% - 15px);
+        width: 50%;
         float: left;  
         
     }
     .task-panel {
-        width: calc(50% - 15px);
+        width: 50%;
         float: left;
         border-left: 1px solid #eee;
     }
@@ -1298,6 +1348,9 @@
         margin: 20px 0;
     }
     .list-wrap :hover{
+        cursor: pointer;
+    }
+    .task,.target,.schedule,.view-more{
         cursor: pointer;
     }
 </style>

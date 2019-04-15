@@ -157,11 +157,11 @@
                             //     code: 'brief',
                             //     icon: 'iconfont icon-wenjian',
                             // },
-                            // {
-                            //     name: '仪表盘',
-                            //     code: 'dashboard',
-                            //     icon: 'iconfont icon-panel',
-                            // }
+                            {
+                                name: '仪表盘',
+                                code: 'dashboard',
+                                icon: 'iconfont icon-panel',
+                            }
                         ],
                     },
                 ],

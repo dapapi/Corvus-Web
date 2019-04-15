@@ -72,8 +72,10 @@
                 this.getDepartment()
                 this.getModuleRole()
                 this.getListPower()
+                 this.getDashboard()
             }
             // this.getApprovalNum()
+           
         },
         mounted(){               
         //      $('.modal-dialog').click(function(){
@@ -87,7 +89,8 @@
                 'getDepartment',
                 'getModuleRole',
                 'getListPower',
-                'getApprovalNum'
+                'getApprovalNum',
+                'getDashboard'
             ])
         }
     };
