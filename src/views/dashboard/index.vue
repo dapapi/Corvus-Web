@@ -191,17 +191,27 @@
         watch:{
             dashboardList:function(){
                 this.getList()
-
+                if(this.dashboardList){
+                    this.getid(this.dashboardList[0].id)
+                }
+            
+                
             }
         },
         created(){
             this.getList()
+            this.getDashboard()
+           
         },
-        mounted(){
-            this.getid()
-        },
+        // mounted(){
+
+           
+        // },
         methods:{
- 
+             ...mapActions([
+               
+                'getDashboard'
+            ]),
             department:function(value){
                 this.departmentDate = value
             },
@@ -239,11 +249,12 @@
                 }) 
             },
             getid:function(id){
-                let url = location.search.split('?')[1].split('=')[1].split('&')[0]
-                console.log(url)
-                if(url){
-                   this.$store.dispatch('changeselectId',url) 
-                }
+                
+                // let url = location.search.split('?')[1].split('&')[0].split('=')[1]
+                // console.log(url)
+                // if(url){
+                //    this.$store.dispatch('changeselectId',url) 
+                // }
                 this.urlData.forEach(item=>{
                      if(item.id == id){
                           this.$store.dispatch('changeselectId',item.id)
