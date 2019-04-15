@@ -15,7 +15,7 @@
                 <li class="site-menu-item" v-for="menu in menuData"
                     :class="{'has-sub': menu.data, 'active' : pageRoute === menu.code || ( menu.data && menu.data.find(item => item.code === pageRoute))}">
                     <template v-if="!menu.data">
-                        <router-link :to="'/' + menu.code" class="animsition-link">
+                        <router-link :to="'/' + menu.code" class="animsition-link" @click.native="Dashboard(menu.name)"> 
                             <div>
                                 <span class="base-icon"><img :src="menu.image" alt=""></span>
                                 <span class="hover-icon"><img :src="menu.hoverImage" alt=""></span>
@@ -70,7 +70,7 @@
 </template>
 
 <script>
-    import {mapState, mapGetters, mapMutations} from 'vuex';
+    import {mapState, mapGetters, mapMutations,mapActions} from 'vuex';
     import Cookies from 'js-cookie';
 
     export default {
@@ -184,6 +184,7 @@
                 const avatar = JSON.parse(Cookies.get('user')).avatar;
                 this.setUserAvatar(avatar);
             }
+            
         },
 
         mounted() {
@@ -200,6 +201,10 @@
         methods: {
             ...mapMutations([
                 'setUserAvatar',
+                
+            ]),
+            ...mapActions([
+                'getDashboard'
             ]),
             showBackModel() {
                 this.visible = !this.visible;
@@ -223,6 +228,12 @@
             hideBackModel() {
                 this.visible = false;
             },
+            Dashboard(name){
+               if(name == '仪表盘'){
+                   this.getDashboard()
+               }
+                        
+            }
         },
     };
 </script>
