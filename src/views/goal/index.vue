@@ -151,14 +151,14 @@
                                 <th class="cell-300" scope="col">截止时间</th>
                             </tr>
                             <tbody>
-                            <tr  @click="taskDetail(task.id)">
+                            <tr v-for="(item, index) in goalList" :key="index" @click="goDetail(item.id)">
                                 <td class="pointer-content">
-                                    展示测试
+                                    {{item.title}}
                                     <!-- <router-link :to="{name:'tasks/detail', params: {id: task.id}}">{{ task.title }}
                                     </router-link> -->
                                 </td>
                                 <td>
-                                    皮卡丘
+                                    {{item.principal_name}}
                                     <!-- {{task.resource ? task.resource.data.resource.data.title : ''}}
                                     <template v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.name">
                                         -  {{ task.resource.data.resourceable.data.name }}
@@ -177,7 +177,7 @@
                                 <!-- <td>暂无</td> -->
                                 <!-- <td>{{ task.type ? task.type.data ? task.type.data.title : '' : '' }}</td> -->
                                 <td>
-                                    80%
+                                    {{item.percentage}}
                                     <!-- <template v-if="task.status === 1"><span style="color:#FF9800">进行中</span> </template>
                                     <template v-if="task.status === 2"><span style="color:#4CAF50">已完成</span></template>
                                     <template v-if="task.status === 3"><span style="color:#9E9E9E">已停止</span></template>
@@ -188,7 +188,9 @@
                                     <template v-if="task.principal">{{ task.principal.data.name }}</template>
                                 </td> -->
                                 <!-- <td>{{ task.end_at }}</td> -->
-                                <td>今天</td>
+                                <td>
+                                    {{item.deadline}}
+                                </td>
                                 <!-- <td>123</td> -->
                             </tr>
                             </tbody>
@@ -199,16 +201,14 @@
                         <!-- <template v-if="!taskStatus">
                             <Pagination :current_page="current_page" :method="getTasks" :total_pages="total_pages"
                                         :total="total"></Pagination>
-                        </template>
-                        <template v-else>
-                            <Pagination :current_page="current_page" :method="getOther" :total_pages="total_pages"
-                                        :total="total"></Pagination>
                         </template> -->
+                            <Pagination :current_page="current_page" :method="getProjects" :total_pages="total_pages"
+                                        :total="total"></Pagination>
                     </div>
                 </div>
             </div>
         </div>
-        <addGoals :goalperiod='periods.data' />
+        <addGoals :goalperiod='periods.data' @submitDone='submitDone'/>
     </div>
 </template>
 <script>
@@ -261,13 +261,14 @@
                 totalNumberCurrent:0,
                 finishedNumber:0,
                 sevenDaysNumber:0,
+                goalList:[],
                 averageNumber:0,
             };
         },
         created() {
             // this.getLinkData()
             this.getPeriods()
-
+            this.getGoal()
         },
         mounted() {
             this.$nextTick((params) => {
@@ -306,6 +307,34 @@
         }
         },
         methods: {
+            goDetail(params){
+                 this.$router.push('/my/goal/' + params)
+            },
+            getProjects: function (pageNum = 1, signStatus) {
+                let _this = this
+                let data = {
+                    page: pageNum,
+                    // include: 'principal,trail.expectations',
+                    // status:this.pageType
+                };
+                fetch('get','aims', data).then(response => {
+                    _this.projectsInfo = response.data
+                    _this.total = Number(response.meta.pagination.total);
+                    _this.current_page = Number(response.meta.pagination.current_page);
+                    _this.total_pages = Number(response.meta.pagination.total_pages);
+                })
+            },
+            getGoal(){
+                fetch('get','aims').then((params) => {
+                    this.goalList = params.data
+                    this.total = Number(params.meta.pagination.total);
+                    this.current_page = Number(params.meta.pagination.current_page);
+                    this.total_pages = Number(params.meta.pagination.total_pages);
+                })
+            },
+            submitDone(){
+                $('#goals-add').modal('hide')
+            },
             totalHandler(){
                 // let interTime = 0.1 / this.totalNumber
                 this.totalNumberCurrent += 7
@@ -332,7 +361,6 @@
             },
             getPeriods(){
                 fetch('get','/periods/all').then((params) => {
-                    console.log(params)
                     this.periods = params
                 })
             },

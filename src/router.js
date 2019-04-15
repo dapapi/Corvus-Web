@@ -430,8 +430,13 @@ const VueRouter = new Router({
                 },
                 {
                     path: '/my/goal',
-                    name: 'message',
+                    name: 'goal',
                     component: () => import('./views/goal/index.vue')
+                },
+                {
+                    path: '/my/goal/:id',
+                    name: 'goaldetail',
+                    component: () => import('./views/goal/detail.vue')
                 },
             ]
         }, {

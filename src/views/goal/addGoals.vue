@@ -78,7 +78,7 @@
                         <div class="col-md-12 example clearfix">
                             <div class="col-md-2 text-right float-left px-0 require">负责人</div>
                             <div class="col-md-10 float-left">
-                                <InputSelectors @change='(params)=>changeHandeler(params,"principal_id")'
+                                <InputSelectors @change='(params)=>changeHandeler(params,"principal")'
                                         ></InputSelectors>
                             </div>
                         </div>
@@ -105,8 +105,8 @@
                         </div> -->
                     </div>
                     <div class="modal-footer">
-                         <button type="button" class="btn btn-primary waves-effect waves-light waves-round"
-                                >确定
+                         <button type="button" class="btn btn-primary waves-effect waves-light waves-round" style="overflow:hidden" :disabled='submitLoading' @click='goalSubmit'
+                                >{{submitLoading?'':'确定'}}<CircleLoading style="" v-if="submitLoading"/>
                         </button>
                         <button type="button" class="btn btn-default btn-pure waves-effect waves-light waves-round"
                                 data-dismiss="modal" >取消
@@ -138,7 +138,10 @@ export default {
             goalSort:'',
             goalRange:'',
             Dimensions:'',
+            submitLoading:false,
         }
+    },
+    created(){
     },
     computed:{
          ...mapState([
@@ -149,6 +152,16 @@ export default {
         }
     },
     methods:{
+        goalSubmit(){
+            this.submitLoading = true
+            fetch('post','aims',this.sendData).then((params) => {
+                this.submitLoading = false
+                toastr.success('提交成功')
+                this.$emit('submitDone')
+            }).catch((params) => {
+                this.submitLoading = false                
+            })
+        },
         changeHandeler(params,value){
             if(params){
                 console.log(params,value);
@@ -170,5 +183,10 @@ export default {
 .modal-body .example {
         display: flex;
         align-items: center;
+
     }
+/* button{
+    height: 50px;
+    overflow: hidden;
+} */
 </style>
