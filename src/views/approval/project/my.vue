@@ -78,7 +78,7 @@
 <script>
     import fetch from '@/assets/utils/fetch'
     import common from '@/assets/js/common'
-    import {PROJECT_CONFIG} from '@/views/approval/project/projectConfig'
+    import {PROJECT_CONFIG} from '@/views/approval/projectConfig'
     export default {
         name: "my",
         data() {

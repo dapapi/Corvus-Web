@@ -189,12 +189,20 @@
     },
     created(){
         this.getUnread()
+        this.getUserInfo()
     },
     methods:{
+        getUserInfo(){
+                if(localStorage.getItem('userInfo')){
+                    return
+                }
+                fetch('get','/users/my?include=roleUser').then((result) => {
+                    localStorage.setItem('userInfo',JSON.stringify(result.data))
+                }).catch((err) => {
+                    console.log(err);
+                });
+            },
         getUnread(){
-            // this.leftData[0].subMenu[2].num = this.$store.state.approvalNum.project
-            // this.leftData[1].subMenu[2].num = this.$store.state.approvalNum.contract
-            // this.leftData[2].subMenu[2].num = this.$store.state.approvalNum.general
             let _this = this
             fetch('get','/pending_sum').then((params) => {
                 _this.unreadInfo = params

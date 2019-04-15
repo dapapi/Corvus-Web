@@ -181,22 +181,22 @@ const VueRouter = new Router({
                     path: '/approval/common/only',
                     component: () => import('./views/approval/common/only.vue')
                 },
-                {
-                    path: '/approval/common/general',
-                    component: () => import('./views/approval/general.vue')
-                },
-                {
-                    path: '/approval/common/currency',
-                    component: () => import('./views/approval/currency.vue')
-                },
-                {
-                    path: '/approval/common/cur',
-                    component: () => import('./views/approval/cur.vue')
-                },
-                {
-                    path: '/approval/common/account',
-                    component: () => import('./views/approval/account.vue')
-                },
+                // {
+                //     path: '/approval/common/general',
+                //     component: () => import('./views/approval/general.vue')
+                // },
+                // {
+                //     path: '/approval/common/currency',
+                //     component: () => import('./views/approval/currency.vue')
+                // },
+                // {
+                //     path: '/approval/common/cur',
+                //     component: () => import('./views/approval/cur.vue')
+                // },
+                // {
+                //     path: '/approval/common/account',
+                //     component: () => import('./views/approval/account.vue')
+                // },
                 {
                     path: '/approval/:id',
                     name: 'approval/detail',

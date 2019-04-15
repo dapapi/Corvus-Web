@@ -154,7 +154,7 @@
 import fetch from '@/assets/utils/fetch.js';
 import config from '@/assets/js/config';
 import Cookies from 'js-cookie';
-import { PROJECT_CONFIG } from '@/views/approval/project/projectConfig.js';
+import { PROJECT_CONFIG } from '@/views/approval/projectConfig.js';
 
 export default {
   data() {

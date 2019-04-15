@@ -72,7 +72,6 @@
 <script>
     import {mapState, mapGetters, mapMutations} from 'vuex';
     import Cookies from 'js-cookie';
-
     export default {
         name: "LeftMenu",
         data() {
@@ -210,6 +209,7 @@
                 Cookies.remove('user');
                 Cookies.remove('CORVUS-ACCESS-TOKEN');
                 Cookies.remove('selectedCalendar');
+                localStorage.clear()
                 window.location.href = '/login';
             },
             goManagement() {
