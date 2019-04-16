@@ -85,7 +85,6 @@
 
 <script>
 import { PROJECT_CONFIG } from '@/views/approval/projectConfig';
-
 import fetch from '@/assets/utils/fetch.js';
 import common from '@/assets/js/common';
 

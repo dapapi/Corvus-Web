@@ -115,7 +115,8 @@
                     </div>
                 </div>
             </div>
-        </div>        
+        </div>       
+
     </div>
 </template>
 
@@ -123,8 +124,10 @@
 import { mapState, mapActions } from 'vuex'
 import fetch from "../../assets/utils/fetch.js";
 import config from '../../assets/js/config'
+
 export default {
-    props:['goalperiod'],
+    
+    props:['goalperiod','defaultdata'],
     data(){
         return {
             selectorData:{
@@ -142,6 +145,7 @@ export default {
         }
     },
     created(){
+        this.defaultHandler()
     },
     computed:{
          ...mapState([
@@ -152,6 +156,9 @@ export default {
         }
     },
     methods:{
+        defaultHandler(){
+                
+        },
         goalSubmit(){
             this.submitLoading = true
             fetch('post','aims',this.sendData).then((params) => {

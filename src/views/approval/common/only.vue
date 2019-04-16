@@ -102,7 +102,7 @@ export default {
       total_pages: 1,
       keywords: '',
       projectsInfo: [],
-      contractList: CONTRACT_INDEX_CONFIG.contractIndex,
+      // contractList: CONTRACT_INDEX_CONFIG.contractIndex,
       projectProgress: PROJECT_CONFIG.approvalProgress,
       pageType: 1,
       status: 1,

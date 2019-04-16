@@ -9,22 +9,26 @@
                 <div class="" aria-hidden="true" style="cursor: pointer" id="taskDropdown"
                    data-toggle="dropdown" v-if="!periods.data" aria-expanded="false"><CircleLoading /></div>
                 <div class="" aria-hidden="true" style="cursor: pointer" id="taskDropdown"
-                   data-toggle="dropdown" v-if="periods.data" aria-expanded="false">{{periods.data[0].name}}</div>
-                <div class="dropdown-menu dropdown-menu-right task-dropdown-item" style="width:400px"  aria-labelledby="taskDropdown"
+                   data-toggle="dropdown" v-if="periods.data" aria-expanded="false">{{(periodSelected && periods.data.find(params=>params.id === periodSelected).name )|| periods.data[0].name}}</div>
+                <div class="dropdown-menu dropdown-menu-right task-dropdown-item" style="width:400px;"  aria-labelledby="taskDropdown"
                      role="menu" x-placement="bottom-end">
-                      <table class="table table-hover is-indent " data-plugin="animateList" data-animate="fade">
+                      <table class="table table-hover is-indent " style="height:20px;overflow:auto" data-plugin="animateList" data-animate="fade">
                     <tr>
                         <td class="cell-300">周期名称</td>
                         <td class="cell-300">开始时间</td>
                         <td class="cell-300">结束时间</td>
                     </tr>
-                    
-                    <tr v-for="(item, index) in periods.data" :key="index">
-                        <td><input class="" type="radio" /> {{item.name}}</td>
-                        <td>{{item.start_at}}</td>
-                        <td>{{item.end_at}}</td>
-                    </tr>
                       </table>
+                      <div style="height:180px;overflow:auto" >
+                      <table class="table table-hover is-indent " data-plugin="animateList" data-animate="fade">
+                    
+                    <tr  v-for="(item, index) in periods.data" :key="index">
+                        <td><input style="cursor:pointer" :checked='periodSelected === item.id' @change='(params)=>filterHandler(item.id,"periodSelected")' :id='String("periodSelector")+index' name="periodSelector" class="" type="radio" /><label :for="String('periodSelector')+index"> {{item.name}}</label></td>
+                        <td><label style="cursor:pointer" :for="String('periodSelector')+index">{{item.start_at}}</label></td>
+                        <td><label style="cursor:pointer" :for="String('periodSelector')+index">{{item.end_at}}</label></td>
+                    </tr>
+                    </table>
+                    </div>
                     <!-- <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(3)" v-show="oldInfo.status == 1">终止</a>
                     <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(1)" v-show="oldInfo.status != 1">激活</a>
                     <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(2)" v-show="oldInfo.status == 1">完成</a>
@@ -40,23 +44,23 @@
         <div class="page-header page-header-bordered py-0">
             <ul class="nav nav-tabs nav-tabs-line" role="tablist" style="position: relative;">
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link active" data-toggle="tab" href="#forum-artist"
-                               aria-controls="forum-base"
+                            <a class="nav-link" data-toggle="tab" href="#forum-artist"
+                               aria-controls="forum-base" :class="tabNumber===1?'active':''"
                                aria-expanded="true" role="tab" @click="tabHandler(1)">我的</a>
                         </li>
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" data-toggle="tab" href="#forum-blogger"
-                               aria-controls="forum-present" 
+                               aria-controls="forum-present"  :class="tabNumber===2?'active':''"
                                aria-expanded="false" role="tab" @click="tabHandler(2)" >部门</a>
                         </li>
                          <li class="nav-item" role="presentation">
                             <a class="nav-link" data-toggle="tab" href="#forum-blogger"
-                               aria-controls="forum-present"
+                               aria-controls="forum-present" :class="tabNumber===3?'active':''"
                                aria-expanded="false" role="tab" @click="tabHandler(3)">公司</a>
                         </li>
                          <li class="nav-item" role="presentation">
                             <a class="nav-link" data-toggle="tab" href="#forum-blogger"
-                               aria-controls="forum-present"
+                               aria-controls="forum-present" :class="tabNumber===4?'active':''"
                                aria-expanded="false" role="tab" @click="tabHandler(4)">全部</a>
                         </li>
                     </ul>
@@ -64,8 +68,8 @@
         <div class="row mx-20" v-if="tabNumber !== 4">
             <div class="col-md-5 pl-25 mr-0 pr-0">
                 <div class="panel row float-left  " style="width:100%">
-                    <dir class="col-md-4">
-                        <div class="total-goals-logo" style="color:#00bcd4">{{totalNumberCurrent}}</div>
+                    <dir class="col-md-4" style="justify-content:center;">
+                        <div class="total-goals-logo" style="color:#00bcd4;">{{totalNumberCurrent}}</div>
                         <div class="total-goals-title">目标总数</div>
                     </dir>
                     <div class="col-md-8 py-20">
@@ -109,24 +113,26 @@
         <div class="page-content container-fluid pt-0 mt-0">
             <div class="panel col-md-12 col-lg-12 py-5">
                 <div class="clearfix">
-                    <div class="col-md-3 example float-left">
+                    <div class="col-md-2 example float-left">
                         <input type="text"
                                class="form-control"
-
+                                @change='(params)=>filterHandler(params.target.value,"keyword")'
                                id="inputPlaceholder"
-                               v-model="taskNameSearch"
                                placeholder="请输入目标名称">
                     </div>
-                    <div class="col-md-3 example float-left">
-                         <DropDepartment :data="department" @change='(params)=>changeHandeler(params,"department")'/>
+                    <div class="col-md-2 example float-left">
+                         <DropDepartment :data="department" @change='(params)=>filterHandler(params,"departmentId")'/>
                     </div>
                     <!-- todo 任务类型暂无 -->
-                    <div class="col-md-3 example float-left">
-                        <Selectors placeholder="请选择负责人"></Selectors>
+                    <div class="col-md-2 example float-left">
+                        <Selectors placeholder="请选择负责人" @change='(params)=>filterHandler(params,"principal_id")'></Selectors>
+                    </div>
+                     <div class="col-md-2 example float-left" v-if="tabNumber===4" >
+                        <Selectors :options='goalRanger' placeholder="请选择范围" @change='(params)=>filterHandler(params,"goalRange")'></Selectors>
                     </div>
                     <div class="col-md-3 example float-right pl-40 pt-5 pr-0 mr-0">
-                        <span class="col-md-5" style="color:#3f51b5;font-size:16px;cursor:pointer">进行中</span>
-                        <span class="col-md-5" style="font-size:16px;cursor:pointer">已结束</span>
+                        <span class="col-md-5" :style="tabStatus===0?'color:#3f51b5;font-size:16px;cursor:pointer;':'font-size:16px;cursor:pointer;'" @click="tabStatusHandler(0)">进行中</span>
+                        <span class="col-md-5" :style="tabStatus===1?'color:#3f51b5;font-size:16px;cursor:pointer;':'font-size:16px;cursor:pointer;'" @click="tabStatusHandler(1)">已结束</span>
                         <!--<button type="button"-->
                                 <!--class="btn btn-default waves-effect waves-classic float-right"-->
                                 <!--data-toggle="modal"-->
@@ -255,7 +261,7 @@
                 user: {}, // 个人信息
                 isLoading:true,
                 my:'',
-                tabNumber:1,
+                tabNumber:Number(localStorage.getItem('tabNumber')) || 1 ,
                 periods:[],
                 totalNumber:456,
                 totalNumberCurrent:0,
@@ -263,10 +269,22 @@
                 sevenDaysNumber:0,
                 goalList:[],
                 averageNumber:0,
+                tabStatus:0,
+                goalRanger:config.goalRanger,
+                goalRange:'',
+                departmentId:'',
+                keyword:'',
+                periodSelected:''
             };
         },
         created() {
             // this.getLinkData()
+             this.periodSelected = Number(localStorage.getItem('periodSelected'))
+            // if(localStorage.getItem('tabNumber')){
+            //     this.tabNumber = localStorage.getItem('tabNumber')
+            // }else{
+            //     this.tabNumber = 1
+            // }
             this.getPeriods()
             this.getGoal()
         },
@@ -307,6 +325,17 @@
         }
         },
         methods: {
+            filterHandler(params,type){
+                if(type === 'periodSelected'){
+                    localStorage.setItem('periodSelected',params)
+                }
+                this[type] = params
+                this.getGoal()
+            },
+            tabStatusHandler(params){
+                this.tabStatus = params
+                this.getGoal()
+            },
             goDetail(params){
                  this.$router.push('/my/goal/' + params)
             },
@@ -325,7 +354,16 @@
                 })
             },
             getGoal(){
-                fetch('get','aims').then((params) => {
+                let data = {
+                    tab : this.tabNumber,
+                    status : this.tabStatus,
+                    range : this.goalRange,
+                    department_id:this.departmentId.id,
+                    principal_id:this.principalId,
+                    keyword : this.keyword,
+                    period_id:this.periodSelected
+                }
+                fetch('get','aims',data).then((params) => {
                     this.goalList = params.data
                     this.total = Number(params.meta.pagination.total);
                     this.current_page = Number(params.meta.pagination.current_page);
@@ -357,7 +395,10 @@
 
             },
             tabHandler(params){
+                localStorage.setItem('tabNumber',params)
                 this.tabNumber = params
+                this.getGoal()
+
             },
             getPeriods(){
                 fetch('get','/periods/all').then((params) => {
@@ -588,8 +629,12 @@
     background-image: url('../../assets/img/project_total.png');
     width: 100px;
     height: 100px;
-    background-size: contain;
-    margin:10px 0 0 10px;
+    background-size: 100%;
+    /* margin:10px 0 0 15%;
+     */
+     /* margin-left:5%; */
+     margin:0 auto;
+    margin-top: 10px;
     line-height: 100px;
     text-align: center;
     font-size: 20px;
@@ -599,8 +644,9 @@
 .total-goals-title{
     font-size: 10px;
     text-align: center;
-    margin-left: 5px;
+    /* margin-left: 5px; */
     margin-top: 5px;
+    width:100%;
 }
 .goals-percent-logo{
     background-image:url('../../assets/img/goals_percent.png');

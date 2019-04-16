@@ -80,7 +80,6 @@
 
 <script>
 import { PROJECT_CONFIG } from '@/views/approval/projectConfig';
-
 import fetch from '@/assets/utils/fetch.js';
 import common from '@/assets/js/common';
 export default {
@@ -93,7 +92,7 @@ export default {
       total_pages: 1,
       keywords: '',
       projectsInfo: [],
-      contractList: CONTRACT_INDEX_CONFIG.contractIndex,
+      // contractList: CONTRACT_INDEX_CONFIG.contractIndex,
       projectProgress: PROJECT_CONFIG.approvalProgress,
       pageType: 1,
       status: 1,

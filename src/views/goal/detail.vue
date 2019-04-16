@@ -3,10 +3,34 @@
         <!-- <Loading :is-loading="isLoading"></Loading> -->
         <div class="page-header page-header-bordered">
             <h1 class="page-title d-inline">目标详情</h1>
-
-
+             <i class="iconfont icon-gengduo1 float-right" aria-hidden="true"
+            id="taskDropdown" data-toggle="dropdown" aria-expanded="false" ></i>
+            <div class="dropdown-menu" aria-labelledby="taskDropdown" role="menu" >
+                <a class="dropdown-item" role="menuitem" data-plugin="actionBtn" 
+                    data-toggle="modal" 
+                    data-target="#confirmFlag"
+                    aria-hidden="true"
+                    data-backdrop="static"
+                    >关联项目</a>
+                <a class="dropdown-item" role="menuitem" data-plugin="actionBtn" 
+                    data-toggle="modal" 
+                    data-target="#goals-add"
+                    aria-hidden="true"
+                    data-backdrop="static"
+                    >编辑</a>
+                     <a class="dropdown-item" role="menuitem" data-plugin="actionBtn" 
+                    data-toggle="modal" 
+                    aria-hidden="true" v-if="goalInfo.status !== 1"
+                    data-backdrop="static" @click='finishGoal'
+                    >完成</a>
+                     <a class="dropdown-item" role="menuitem" data-plugin="actionBtn" 
+                    data-toggle="modal" 
+                    aria-hidden="true"
+                    data-backdrop="static"
+                    >删除</a>
+            </div>
         </div>
-
+        
         <div class="page-content container-fluid">
             <div style="display: flex; justify-content: space-between; align-items: flex-start">
                 <div class="panel" style="width: calc(66% - 15px);z-index: 100;float:left;margin-right:30px">
@@ -17,13 +41,14 @@
                     </div>
                     <div class="px-35 col-md-12 row py-0 mx-5">
                         <div class="progress progress-sm col-md-11 px-0">
-                          <div class="progress-bar progress-bar-indicating active" style="width: 40%;" role="progressbar"></div>
+                          <div class="progress-bar progress-bar-indicating active" :style="'width:'+goalInfo.percentage+'%;'" role="progressbar"></div>
                         </div>
-                        <div class="col-md-1" style="color:#00bcd4;font-size:18px;line-height:10px;font-weight:700">40%</div>
+                        <div class="col-md-1" style="color:#00bcd4;font-size:18px;line-height:10px;font-weight:700">{{goalInfo.percentage}}%</div>
                     </div>
                     <div class="col-md-12 mx-40 pb-0">
-                        <button type="button" class="btn btn-block btn-default waves-effect waves-light waves-round col-md-2 px-0" style='font-size:10px'>更新当前进度</button>
-                        <button type="button" class="btn btn-block btn-default waves-effect waves-light waves-round col-md-1 mx-10 my-0 px-0" style='font-size:10px;color:#00bcd4'>更新</button>
+                        <button v-if="!inputProgress" type="button" @click='inputProgress = true' class="btn btn-block btn-default waves-effect waves-light waves-round col-md-2 px-0" style='font-size:10px'>更新当前进度</button>
+                        <input v-if="inputProgress" type="number" oninput="if(value>100)value=100;if(value<0)value=0;" v-model="currentProgress">
+                        <button type="button" class="btn btn-block btn-default waves-effect waves-light waves-round col-md-1 mx-10 my-0 px-0" style='font-size:10px;color:#00bcd4' @click="progressUpdate">更新</button>
                     </div>
                     <div>
                         <div class="row px-20">
@@ -89,7 +114,7 @@
                                         截止时间
                                     </div>
                                     <div class="col-md-8 float-left detail-value">
-                                        1
+                                        {{goalInfo.deadline}}
                                     </div>
                                 </div>
                                 <div class="col-md-6 my-5 px-0 float-left" >
@@ -156,8 +181,8 @@
                             </div>
                             <div class="card-block">
                                 <div class="col-md-12 pl-0">
-                                    <TaskFollowUp :follow-type="'项目'" :trailId="projectId"
-                                                  trailType="projects" ref="projectFollow"></TaskFollowUp>
+                                    <TaskFollowUp :follow-type="'目标'" :trailId="projectId"
+                                                  trailType="aims" ref="projectFollow"></TaskFollowUp>
                                 </div>
                             </div>
                         </div>
@@ -251,6 +276,8 @@
             </div>
         </div>
         <!-- <Flag v-if="canShow" :typeText="changeProjectStatusText" @confirmFlag='changeProjectStatus'/> -->
+        <addGoals :goalperiod='periods.data' @submitDone='submitDone' :defaultdata='goalInfo'/>
+
     </div>
 </template>
 
@@ -258,8 +285,12 @@
     import fetch from '../../assets/utils/fetch.js';
     import config from '../../assets/js/config';
     import Cookies from 'js-cookie';
+import addGoals from "./addGoals"
 
     export default {
+         components:{
+            addGoals
+        },
         data() {
             return {
                 total: 0,
@@ -277,16 +308,20 @@
                     countSort:config.countSort,
                     Dimensions:config.Dimensions,
                 },
+                currentProgress:'',
+                inputProgress:false,
+                periods:[],
             }
         },
         created(){
             this.getGoalDeatail()
+            this.getPeriods()
+
         },
         mounted() {
             this.projectId = this.$route.params.id;
             this.user = JSON.parse(Cookies.get('user'));
         },
-
         watch: {
            
         },
@@ -295,289 +330,137 @@
         },
 
         methods: {
+            
+            finishGoal(){
+                fetch('put',`/aims/${this.$route.params.id}/status`,{status:1}).then((params) => {
+
+                })
+            },
+            submitDone(){
+                $('#goals-add').modal('hide')
+            },
+             getPeriods(){
+                fetch('get','/periods/all').then((params) => {
+                    this.periods = params
+                })
+            },
+            progressUpdate(){
+                if(this.inputProgress==false){
+                    return
+                }
+                this.inputProgress = false
+                fetch('put',`/aims/${this.$route.params.id}`,{percentage:this.currentProgress}).then((params) => {
+                    this.goalInfo = params.data
+                }).catch((params) => {
+                    this.goalInfo = params.data
+                    
+                })
+            },
             getGoalDeatail(){
                 fetch('get',`/aims/${this.$route.params.id}`).then((params) => {
                     this.goalInfo = params.data
                 })
             },
-            canAddBill() {
-                if (this.projectBillMetaInfo.divide && this.projectInfo.powers.edit_bill !== 'true') {
-                    // $('#addPaybackTime').modal('')
-                    toastr.error('当前用户没有编辑结算单权限')
-                    return
-                } else if (!this.projectBillMetaInfo.divide && this.projectInfo.powers.add_bill !== 'true') {
-                    toastr.error('当前用户没有新增结算单权限')
-                    return
-                } else {
-                    $('#addBill').modal('show')
-                }
-            },
-            getProject() {
-                let data = {
-                    include: 'participants,trail.expectations.broker,trail.expectations.publicity,trail.client',
-                };
-                fetch('get', '/projects/' + this.projectId + '/web', data).then(response => {
-                    this.canShow = true
-                    this.oldInfo = JSON.parse(JSON.stringify(response));
-                    let fieldsArr = response.meta.fields.data;
-                    this.metaInfo = response.meta;
-                    this.projectName = response.data.title;
-                    for (let i = 0; i < fieldsArr.length; i++) {
-                        if (fieldsArr[i].field_type === 2 || fieldsArr[i].field_type === 6) {
-                            fieldsArr[i].contentArr = [];
-                            for (let j = 0; j < fieldsArr[i].content.length; j++) {
-                                fieldsArr[i].contentArr.push({
-                                    name: fieldsArr[i].content[j],
-                                    value: fieldsArr[i].content[j],
-                                })
-                            }
-                        }
-                        if (fieldsArr[i].key === '是否与他组合作') {
-                            if (fieldsArr[i].values) {
-                                this.cooperationOther = fieldsArr[i].values.data.value
-                            }
-                            this.cooperationKeyId = fieldsArr[i].id
-                        }
-                    }
-                    response.data.fields = fieldsArr;
-                    this.projectInfo = response.data;
-                    this.projectContractDefault = {
-                        '项目名称': response.data.title
-                    };
-                    let params = {
-                        type: 'change',
-                    };
-                    params.data = response.data.principal.data;
-                    this.$store.dispatch('changePrincipal', params);
-                    if (response.data.participants) {
-                        for (let i = 0; i < response.data.participants.data.length; i++) {
-                            this.flagParticipantsIdArr.push(response.data.participants.data[i].id)
-                        }
-                        params.data = JSON.parse(JSON.stringify(response.data.participants.data));
-                        this.$store.dispatch('changeParticipantsInfo', params);
-                    }
+            // canAddBill() {
+            //     if (this.projectBillMetaInfo.divide && this.projectInfo.powers.edit_bill !== 'true') {
+            //         // $('#addPaybackTime').modal('')
+            //         toastr.error('当前用户没有编辑结算单权限')
+            //         return
+            //     } else if (!this.projectBillMetaInfo.divide && this.projectInfo.powers.add_bill !== 'true') {
+            //         toastr.error('当前用户没有新增结算单权限')
+            //         return
+            //     } else {
+            //         $('#addBill').modal('show')
+            //     }
+            // },
+            // getProjectTasks() {
+            //     fetch('get', '/projects/' + this.projectId + '/tasks').then(response => {
+            //         this.projectTasksInfo = response.data;
+            //         this.total = response.meta.pagination.total;
+            //         this.current_page = response.meta.pagination.current_page;
+            //         this.total_pages = response.meta.pagination.total_pages;
+            //     })
+            // },
 
-                    if (response.data.relate_tasks) {
-                        for (let i = 0; i < response.data.relate_tasks.data.length; i++) {
-                            this.linkageSelectedIds.tasks.push(response.data.relate_tasks.data[i].id)
-                        }
-                    }
-                    if (response.data.relate_projects) {
-                        for (let i = 0; i < response.data.relate_projects.data.length; i++) {
-                            this.linkageSelectedIds.projects.push(response.data.relate_projects.data[i].id)
-                        }
-                    }
-                    if (response.data.trail) {
-                        this.selectedExpectationsArr = [];
-                        for (let i = 0; i < response.data.trail.data.expectations.data.length; i++) {
-                            this.selectedExpectationsArr.push(response.data.trail.data.expectations.data[i].moduleable_type + '-' + response.data.trail.data.expectations.data[i].id)
-                        }
-                    }
+            // getProjectTasking() {
+            //     let data = {
+            //         status: 1,
+            //     };
+            //     fetch('get', '/projects/' + this.projectId + '/tasks', data).then(response => {
+            //         this.projectTaskingInfo = response.data.slice(0, 5)
+            //     })
+            // },
 
-                    if (response.data.approval_status === 231) {
-                        this.projectInfo.approval_text = '待审批'
-                    } else if (response.data.approval_status === 232) {
-                        this.projectInfo.approval_text = '已审批'
-                    }
+            // getProjectBill() {
+            //     fetch('get', '/projects/' + this.projectId + '/bill').then(response => {
+            //         this.projectBillsInfo = response.data;
+            //         this.projectBillMetaInfo = JSON.parse(JSON.stringify(response.meta));
+            //         this.total = response.meta.pagination.total;
+            //         this.current_page = response.meta.pagination.current_page;
+            //         this.total_pages = response.meta.pagination.total_pages;
+            //         this.myDivide = response.meta.my_divide;
+            //         this.billExpenses = response.meta.expenses;
+            //         if (response.meta.divide) {
+            //             this.divideArrInfo = JSON.parse(JSON.stringify(response.meta.divide));
+            //         } else {
+            //             this.divideArrInfo = [];
+            //         }
+            //         for (let i = 0; i < response.meta.datatitle.length; i++) {
+            //             if (!this.divideArrInfo.find(item => item.moduleable_title === response.meta.datatitle[i])) {
+            //                 this.divideArrInfo.push({
+            //                     money: 0,
+            //                     moduleable_title: response.meta.datatitle[i]
+            //                 })
+            //             }
+            //         }
+            //     });
+            // },
 
-                    this.isLoading = false
-                    this.getStars()
-                })
-            },
-            // 隐私设置
-            setPrivacy() {
+            // addProjectBill: function () {
+            //     this.isBillButtonDisable = true;
+            //     let data = {
+            //         expenses: this.billExpenses,
+            //         my_divide: this.myDivide,
+            //         star: this.divideArrInfo,
+            //     };
+            //     fetch('post', '/projects/' + this.projectId + '/store/bill', data).then(() => {
+            //         this.isBillButtonDisable = false;
+            //         this.getProjectBill();
+            //         toastr.success('添加成功');
+            //         $('#addBill').modal('hide');
+            //     })
+            // },
 
-                let data = {
-                    fee: this.$store.state.payInfo, //预计订单收入
-                    projected_expenditure: this.$store.state.divisionInfo,//预计支出
-                    expendituresum: this.$store.state.contractInfo,//实际收入
-                    contractmoney: this.$store.state.collectInfo,//实际支出
-                }
-                let sendData = {
-                    fee: [],
-                    projected_expenditure: [],
-                    expendituresum: [],
-                    contractmoney: [],
-                }
-                for (const key in data) {
-                    for (let i = 0; i < data[key].length; i++) {
-                        sendData[key].push(data[key][i].id)
-                    }
-                }
-                fetch('put', `/projects/${this.$route.params.id}/privacyUser`, sendData).then(() => {
-                    toastr.success('隐私设置成功')
-                    $('#addPrivacy').modal('hide')
-                })
-            },
-            getPrivacy() {
-                let data = {
-                    project_id: this.$route.params.id
-                };
-                fetch('get', `/privacyUsers?include=user`, data).then(response => {
-                    let allPrivacyUsers = response.data;
-                    this.$store.state.divisionInfo = [];
-                    this.$store.state.payInfo = [];
-                    this.$store.state.contractInfo = [];
-                    this.$store.state.collectInfo = [];
-                    if (allPrivacyUsers) {
-                        for (let i = 0; i < allPrivacyUsers.length; i++) {
-                            if (allPrivacyUsers[i].field === 'fee') {
-                                this.$store.state.payInfo.push(allPrivacyUsers[i].user.data)
-                            } else if (allPrivacyUsers[i].field === 'projected_expenditure') {
-                                this.$store.state.divisionInfo.push(allPrivacyUsers[i].user.data)
-                            } else if (allPrivacyUsers[i].field === 'expendituresum') {
-                                this.$store.state.contractInfo.push(allPrivacyUsers[i].user.data)
-                            } else if (allPrivacyUsers[i].field === 'contractmoney') {
-                                this.$store.state.collectInfo.push(allPrivacyUsers[i].user.data)
-                            } else {
-                            }
+            // changeProjectBill() {
+            //     let data = {
+            //         expenses: this.billExpenses,
+            //         my_divide: this.myDivide,
+            //         star: this.divideArrInfo,
+            //     };
+            //     fetch('put', '/projects/' + this.projectId + '/edit/bill', data).then(() => {
+            //         this.getProjectBill();
+            //         toastr.success('修改成功');
+            //         $('#addBill').modal('hide');
+            //     })
+            // },
 
-                        }
-                    }
-
-                })
-            },
-
-            getApprovalsFormData() {
-                let data = {
-                    type: 'projects'
-                };
-                let organization_id = Number(JSON.parse(Cookies.get('user')).organization_id);
-                if (organization_id === 411) {
-                    data.status = 1
-                } else if (organization_id === 412) {
-                    data.status = 2
-                }
-                fetch('get', 'approvals/specific_contract', data).then(response => {
-                    this.formData = response.data;
-                    $('#approval-great-module').modal('show')
-                })
-            },
-
-            cancelPrivacy() {
-                this.$store.state.divisionInfo = [];
-                this.$store.state.payInfo = [];
-                this.$store.state.contractInfo = [];
-                this.$store.state.collectInfo = []
-            },
-
-            getStars() {
-                if (this.starsArr.length > 0) {
-                    return
-                }
-                fetch('get', '/starandblogger', {sign_contract_status: 2}).then(response => {
-                    for (let i = 0; i < response.data.length; i++) {
-                        this.starsArr.push({
-                            name: response.data[i].name,
-                            value: response.data[i].flag + '-' + response.data[i].id,
-                        })
-                    }
-
-                })
-            },
-
-            getClients() {
-                let _this = this;
-                fetch('get', '/clients/all').then(function (response) {
-                    for (let i = 0; i < response.data.length; i++) {
-                        _this.companyArr.push({
-                            name: response.data[i].company,
-                            id: response.data[i].id,
-                            grade: response.data[i].grade
-                        })
-                    }
-
-                })
-            },
-
-            getProjectTasks() {
-                fetch('get', '/projects/' + this.projectId + '/tasks').then(response => {
-                    this.projectTasksInfo = response.data;
-                    this.total = response.meta.pagination.total;
-                    this.current_page = response.meta.pagination.current_page;
-                    this.total_pages = response.meta.pagination.total_pages;
-                })
-            },
-
-            getProjectTasking() {
-                let data = {
-                    status: 1,
-                };
-                fetch('get', '/projects/' + this.projectId + '/tasks', data).then(response => {
-                    this.projectTaskingInfo = response.data.slice(0, 5)
-                })
-            },
-
-            getProjectBill() {
-                fetch('get', '/projects/' + this.projectId + '/bill').then(response => {
-                    this.projectBillsInfo = response.data;
-                    this.projectBillMetaInfo = JSON.parse(JSON.stringify(response.meta));
-                    this.total = response.meta.pagination.total;
-                    this.current_page = response.meta.pagination.current_page;
-                    this.total_pages = response.meta.pagination.total_pages;
-                    this.myDivide = response.meta.my_divide;
-                    this.billExpenses = response.meta.expenses;
-                    if (response.meta.divide) {
-                        this.divideArrInfo = JSON.parse(JSON.stringify(response.meta.divide));
-                    } else {
-                        this.divideArrInfo = [];
-                    }
-                    for (let i = 0; i < response.meta.datatitle.length; i++) {
-                        if (!this.divideArrInfo.find(item => item.moduleable_title === response.meta.datatitle[i])) {
-                            this.divideArrInfo.push({
-                                money: 0,
-                                moduleable_title: response.meta.datatitle[i]
-                            })
-                        }
-                    }
-                });
-            },
-
-            addProjectBill: function () {
-                this.isBillButtonDisable = true;
-                let data = {
-                    expenses: this.billExpenses,
-                    my_divide: this.myDivide,
-                    star: this.divideArrInfo,
-                };
-                fetch('post', '/projects/' + this.projectId + '/store/bill', data).then(() => {
-                    this.isBillButtonDisable = false;
-                    this.getProjectBill();
-                    toastr.success('添加成功');
-                    $('#addBill').modal('hide');
-                })
-            },
-
-            changeProjectBill() {
-                let data = {
-                    expenses: this.billExpenses,
-                    my_divide: this.myDivide,
-                    star: this.divideArrInfo,
-                };
-                fetch('put', '/projects/' + this.projectId + '/edit/bill', data).then(() => {
-                    this.getProjectBill();
-                    toastr.success('修改成功');
-                    $('#addBill').modal('hide');
-                })
-            },
-
-            cancelChangeBill() {
-                this.myDivide = this.projectBillMetaInfo.my_divide;
-                this.billExpenses = this.projectBillMetaInfo.expenses;
-                if (this.projectBillMetaInfo.divide) {
-                    this.divideArrInfo = JSON.parse(JSON.stringify(this.projectBillMetaInfo.divide));
-                } else {
-                    this.divideArrInfo = [];
-                }
-                for (let i = 0; i < this.projectBillMetaInfo.datatitle.length; i++) {
-                    if (!this.divideArrInfo.find(item => item.moduleable_title === this.projectBillMetaInfo.datatitle[i])) {
-                        this.divideArrInfo.push({
-                            money: 0,
-                            moduleable_title: this.projectBillMetaInfo.datatitle[i]
-                        })
-                    }
-                }
-            },
+            // cancelChangeBill() {
+            //     this.myDivide = this.projectBillMetaInfo.my_divide;
+            //     this.billExpenses = this.projectBillMetaInfo.expenses;
+            //     if (this.projectBillMetaInfo.divide) {
+            //         this.divideArrInfo = JSON.parse(JSON.stringify(this.projectBillMetaInfo.divide));
+            //     } else {
+            //         this.divideArrInfo = [];
+            //     }
+            //     for (let i = 0; i < this.projectBillMetaInfo.datatitle.length; i++) {
+            //         if (!this.divideArrInfo.find(item => item.moduleable_title === this.projectBillMetaInfo.datatitle[i])) {
+            //             this.divideArrInfo.push({
+            //                 money: 0,
+            //                 moduleable_title: this.projectBillMetaInfo.datatitle[i]
+            //             })
+            //         }
+            //     }
+            // },
 
             getProjectContract(callback) {
                 fetch('get', '/approvals_contract/projectList', {project_id: this.projectId}).then(response => {
