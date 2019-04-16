@@ -193,7 +193,7 @@ created() {
       }
     }
   },
-  computed: {
+   computed: {
         ...mapState([
             'userList',
         ]),
@@ -214,7 +214,7 @@ created() {
             }
         },
     },
-  methods: {
+    methods: {
     //自定义筛选列表
     getList(pageNum =1){
         let _this = this,fetchData 
@@ -248,6 +248,13 @@ created() {
         }else{
             delete fetchData.my
         }
+        //导入导出参数
+        this.exportParams = fetchData
+        if(fetchData.conditions){
+           delete this.exportParams.conditions
+        }
+        // console.log(this.exportParams)
+
         fetch('post', `/projects/web_filter?page=${pageNum}`, fetchData).then((response) => {     
             _this.projectsInfo = response.data
             _this.total = response.meta.pagination.total;
@@ -299,7 +306,7 @@ created() {
     },
     //自定义筛选   
     customize: function (value) {
-        console.log(value)
+        // console.log(value)
         this.customizeCondition = value
         this.getList(1)
         
@@ -354,8 +361,8 @@ created() {
         this.addInfoArr[name] = value
     },
 
-        },
-    };
+    },
+};
 </script>
 
 <style lang="scss" scoped>
