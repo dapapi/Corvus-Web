@@ -5,6 +5,7 @@ import store from './store/index.js';
 import AddTask from './components/AddTask.vue';
 import LinkResource from './components/LinkResource.vue'
 import AddMember from './components/AddMember.vue';
+import InputSelectorsFashion from './components/InputSelectorsFashion.vue';
 import ApprovalGreatModule from './components/ApprovalGreatModule';
 import BuildProject from './components/BuildProject.vue';
 import Calendar from './components/Calendar.vue';

@@ -25,10 +25,10 @@
                     <!-- <video v-else-if="['mp4','MP4','MOV','mov'].includes(fileNameHandler)" :src="url" controls height='100%' width='100%' type="video/mov"> -->
                         <!-- <source :src="url" type="video/mov"> -->
                     <!-- </video> -->
-                    <div v-else>不支持此文件格式预览</div>
+                    <div v-else style="color:white;font-size:40px;width:100%;text-align:center;">不支持此文件格式预览</div>
                 <!-- </div> -->
                     <div class="modal-footer">
-                        <span>图片文件请使用右键另存为</span>
+                        <span style="color:white">图片文件请使用右键另存为</span>
                         <a :href="urlHandler" download="">
                             <button type="button" class="btn btn-success waves-effect waves-light waves-round">
                                 <i class="icon md-download" aria-hidden="true"></i>下载附件
@@ -90,6 +90,7 @@ export default {
   },
   methods: {
     closePreview(){
+      this.$store.dispatch('changePreviewName', "");
       // $("#docPreview").css("display","none")
       // $(".modal-backdrop").css("display","none")
       // modal-backdrop fade show
