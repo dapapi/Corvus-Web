@@ -36,12 +36,15 @@
             </div>
             <div class="page-header  page-header-bordered m-20 pl-10">
                 <h6 class="page-title title-status">当前状态
+                  <!-- <div class="spinner-border text-primary"></div> -->
                     <div class="approver"
                          :style="{backgroundImage:'url('+pending.icon_url+')',backgroundColor:String(pending.icon_url).split('|')[0]}">
+                        <CircleLoading class="" v-if="approvalLoading"/>
                         {{String(pending.icon_url).split('|')[1]}}
                     </div>
                     <span v-if="list.form_status=== 231">&nbsp;{{currentStatus.slice(0,1)}}{{pending.name}}{{currentStatus.slice(1)}}</span>
                     <span v-if="list.form_status !== 231">{{pending.name}}{{currentStatus}}</span>
+                    <!-- <i><CircleLoading class="circleloading" v-if="approvalLoading"/></i> -->
                     <i v-if="list.form_status==232 && (info.approval.user_id === currentId || (list.creator && list.creator.data.id === currentId)) && !info.contract_archive  ">
                         <button class="btn btn-success" v-if="info.contract" @click='approvalHandler("archive")'>归档</button>
                         <button class="btn btn-primary" @click='approvalHandler("discard")'>作废</button>
@@ -80,8 +83,8 @@
             <div  class="page-content container-fluid" v-if="info" style="height: 100%;">
                 <div class="panel col-md-12 col-lg-12 pb-10">
                     <div class="caption">
-                        <h6 class="page-title mx-15">{{list.title}}</h6>
-                        <span class="mx-15">编号：{{list.form_instance_number}}</span>
+                        <h6 class="page-title mx-15">申请人信息</h6>
+                        <span class="mx-15">审批编号：{{list.form_instance_number}}</span>
                     </div>
 
                     <div class="col-md-10">
@@ -248,7 +251,7 @@
 </template>
 <script>
 import fetch from '@/assets/utils/fetch';
-import { PROJECT_CONFIG } from '@/views/approval/project/projectConfig';
+import { PROJECT_CONFIG } from '@/views/approval/projectConfig';
 import ApprovalGreatModule from '@/components/ApprovalGreatModule';
 import ApprovalProgress from '@/components/ForApproval/ApprovalProgress';
 import common from '../../assets/js/common';
@@ -286,6 +289,7 @@ export default {
       indexDataCommon: [],
       waitingForFlag:true,
       canShow:false,
+      approvalLoading:true,
     };
   },
 
@@ -362,30 +366,18 @@ export default {
       this.$emit('unreadupdate');
     },
     getCurrentApprover() {
-      const _this = this;
-      this.roleUser = [];
-      fetch('get', '/users/my?include=roleUser').then((params) => {
-        _this.currentId = params.data.id;
-        for (const key in params.data.roleUser.data) {
-          _this.roleUser.push(params.data.roleUser.data[key].role_id);
+        this.roleUser = [];
+        let params = JSON.parse(localStorage.getItem('userInfo'))
+        this.currentId = params.id;
+        for (const key in params.roleUser.data) {
+          this.roleUser.push(params.roleUser.data[key].role_id);
         }
-        // _this.roleUser = params.data.roleUser.data[0].role_id
-        if (_this.currentId === _this.pending.id || _this.roleUser.includes(_this.pending.id)) {
-          _this.isCurrentApprover = true;
+        if (this.currentId === this.pending.id || this.roleUser.includes(this.pending.id)) {
+        this.isCurrentApprover = true;
         } else {
-          _this.isCurrentApprover = false;
+        this.isCurrentApprover = false;
         }
-      });
-      //  this.roleUser = [];
-      // this.currentId = JSON.parse(Cookies.get('user')).id
-      // for (const key in JSON.parse(Cookies.get('user')).role_user.data) {
-      //     this.roleUser.push(JSON.parse(Cookies.get('user')).role_user.data[key].role_id);
-      // }
-      //   if (this.currentId === this.pending.id || this.roleUser.includes(this.pending.id)) {
-      //     this.isCurrentApprover = true;
-      //   } else {
-      //     this.isCurrentApprover = false;
-      //   }
+        this.approvalLoading = false
     },
     waitingFor(params) {
       if (params && this.waitingForFlag === true) {
@@ -653,6 +645,8 @@ export default {
     .detail-key {
         min-height: 40px;
         /* background: #f5f5f5; */
-
-    }
+        }
+      .circleloading{
+        right: 10%;
+      }
 </style>

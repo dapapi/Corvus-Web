@@ -51,6 +51,8 @@
                                                 <div v-show="showAllCalendar"
                                                      style="max-height: 350px;overflow-y: auto;">
                                                     <ul style="padding-bottom: 30px;">
+                                                    <CircleLoading style="margin-left:40%" v-if="calendarList.length===0"/>
+
                                                         <li v-for="(calendar,index) in calendarList" :key="index"
                                                             class="clearfix">
                                                             <div class="calendar-checkbox float-left pointer-content"
