@@ -4,7 +4,7 @@
         <div class="page-header page-header-bordered">
             <h1 class="page-title d-inline">博主详情</h1>
 
-            <div class="page-header-actions dropdown show task-dropdown float-right">
+            <div class="page-header-actions dropdown show task-dropdown float-right" v-if="artistInfo.nickname">
                 <i class="iconfont icon-gengduo1 font-size-24" aria-hidden="true" id="taskDropdown"
                    data-toggle="dropdown" aria-expanded="false"></i>
                 <div class="dropdown-menu dropdown-menu-right task-dropdown-item" aria-labelledby="taskDropdown"
@@ -48,7 +48,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-md-6 float-left pl-0 ml-50" v-show="artistInfo.sign_contract_status == 1">
+                            <!-- <div class="col-md-6 float-left pl-0 ml-50" v-show="artistInfo.sign_contract_status == 1">
                                 <div class="float-left pl-0 pr-2 col-md-2">
                                     <i class="iconfont icon-yonghu pr-2" aria-hidden="true"></i>录入人
                                 </div>
@@ -71,7 +71,7 @@
                                         {{common.timeProcessing(artistInfo.created_at)}}
                                     </template>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
 
                     </div>
@@ -204,7 +204,7 @@
                                 <a class="nav-link" data-toggle="tab" href="#forum-artist-base"
                                    aria-controls="forum-present"
                                    aria-expanded="false" role="tab"
-                                   :class="artistInfo.sign_contract_status == 2?'':'active'" @click="getType">概况</a>
+                                   :class="artistInfo.sign_contract_status == 2?'':'active'" >概况</a>
                             </li>
                         </ul>
                         <div class="tab-content  px-0 nav-tabs-animate bg-white col-md-12">
@@ -445,16 +445,16 @@
                                         <div class="float-right pointer-content" v-show="isStatrtEdit"
                                              style="position:absolute;top:10px;right:30px;">
                                             <i class="iconfont icon-bianji2" aria-hidden="true"
-                                               @click="editBaseInfo"></i>
+                                               @click="editBaseInfo" v-if="artistInfo.nickname"></i>
                                         </div>
                                         <div class="float-right mr-40" v-show="isEdit"
-                                             style="position:absolute;top:5px;right:0px;">
+                                             style="position:absolute;top:5px;right:0px;" >
                                             <button class="btn btn-sm btn-white btn-pure" @click="cancelEdit">取消
                                             </button>
                                             <button class="btn btn-primary" @click="changeArtistBaseInfo">确定</button>
                                         </div>
                                     </div>
-                                    <div class="card-block px-0" v-if="artistInfo&&canShow">
+                                    <div class="card-block px-0" v-if="artistInfo.nickname">
                                         <h5 class="pl-15">基本资料</h5>
                                         <div class="clearfix">
                                             <div class="card-text py-10 px-0 clearfix col-md-6 float-left ">
@@ -1122,6 +1122,109 @@
                 </div>
             </div>
         </div>
+        <div v-if="canShow" class="modal fade" id="permissionPrompt" aria-hidden="true" aria-labelledby="addLabelForm"
+                role="dialog" tabindex="-1" data-backdrop="static">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
+                        </button>
+                        <h4 class="modal-title">提示</h4>
+                    </div>
+                    <div class="modal-body pt-20 pb-10">
+                        <div class="example">
+                            <div class="col-md-12 text-center " style="font-size:20px;">该艺人无对应艺人日历，请先创建艺人日历</div>
+                        </div>
+                       
+                    </div>
+                    <div class="modal-body pt-10 pb-20">
+                        <div class="example">
+                            <div class="col-md-12 text-center">
+                                <button class="btn btn-primary" type="submit" @click="changeCalendarActionType('add')"><i class="iconfont icon-tianjiarili pr-10"></i>快捷创建日历</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <!-- 添加/修改 日历 -->
+        <div v-if="canShow" class="modal fade line-center" id="addCalendar" aria-hidden="true"
+             aria-labelledby="addLabelForm" role="dialog" tabindex="-1" data-backdrop="static">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
+                            <i class="iconfont icon-guanbi" aria-hidden="true"></i>
+                        </button>
+                        <template v-if="calendarActionType === 'add'">
+                            <h4 class="modal-title">添加日历</h4>
+                        </template>
+                        <template v-else>
+                            <h4 class="modal-title">修改日历</h4>
+                        </template>
+                    </div>
+                    <div class="modal-body">
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left require">标题</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <input type="text" class="form-control" title="" placeholder="请输入标题"
+                                       v-model="scheduleName">
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left"></div>
+                            <div class="col-md-10 float-left pl-0">
+                                <ul class="color-selector calendar-color-list">
+                                    <li class="pointer-content" v-for="(color,index) in colorArr"
+                                        :style="'background-color: ' + color"
+                                        :key="index" @click="changeCalendarColor(color)">
+                                        <i class="md-check" v-if="color === checkColor"></i>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left require">可见范围</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <selectors :options="visibleRangeArr" ref="visibleSelector"
+                                           @change="addCalendarVisible"></selectors>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">关联艺人</div>
+                            <div class="col-md-10 float-left pl-0" v-if="starsArr.length > 0">
+                                 <input type="text" class="form-control" 
+                                       v-model="artistInfo.nickname">
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left require">负责人</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <InputSelectors placeholder="请选择负责人" @change="principalChange"></InputSelectors>
+                            </div>
+                        </div>
+                        <div class="example">
+                            <div class="col-md-2 text-right float-left">参与人</div>
+                            <div class="col-md-10 float-left pl-0">
+                                <AddMember></AddMember>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-white btn-pure" data-dismiss="modal">取消</button>
+                            <template v-if="calendarActionType === 'add'">
+                                <button class="btn btn-primary" type="submit" :disable="isAddCalendarButtonDisable"
+                                        @click="addCalendar">确定
+                                </button>
+                            </template>
+                            <template v-else>
+                                <button class="btn btn-primary" type="submit" @click="changeCalendar">确定</button>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- 删除日历/日程 -->
         <div v-if="canShow" class="modal fade" id="delModel" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog"
@@ -1287,7 +1390,21 @@
                 isAddScheduleButtonDisable: false,
                 isAddWorkButtonDisable: false,
                 canShow:false,
-                PrivacyShow:false
+                PrivacyShow:false,
+                calendarActionType:'add',
+                visibleRangeArr: config.visibleRangeArr,
+                starsArr: [
+                    {
+                        name: '无',
+                        value: ''
+                    }
+                ],
+                starId: '',
+                starFlag: '',
+                isAddCalendarButtonDisable: false,
+                colorArr: config.colorArr,
+                checkColor: '',
+                calendarList: [],
             }
         },
         components: {
@@ -1298,8 +1415,11 @@
         },
         mounted() {
             this.getCalendar();
-            this.charts();
+            // this.charts();
+            this.getType()
             this.getTaskNum();
+            this.getStars()
+            this.getResources();
             let _this = this;
             this.user = JSON.parse(Cookies.get('user'));
             this.$store.commit('changeNewPrincipal', {
@@ -1319,6 +1439,7 @@
             this.getTimes()
 
             this.getPrivacy() //获取隐私设置
+            
         },
         methods: {
             charts: function () {
@@ -1393,8 +1514,16 @@
                 //     include: 'creator,tasks,affixes,publicity,publicity.department',
                 // };
                 fetch('get', '/bloggers/detail/' + this.artistId).then(response => {
-                    this.canShow = true
-                    this.artistInfo = response.data;
+                    if (JSON.stringify(response.data) === '[]') {
+                        toastr.error('您没有查看博主详情的权限')   
+                    }else{ 
+                        this.artistInfo = response.data; 
+                    }
+                    this.isLoading = false;
+                    setTimeout(() => {
+                        this.canShow = true
+                    }, 200);
+                   
                     this.uploadUrl = _this.artistInfo.avatar;
                     this.artistName = response.data.nickname;
                     if (this.artistInfo.intention) {
@@ -1407,13 +1536,14 @@
                     } else {
                         this.artistInfo.sign_contract_other = 2
                     }
-                    if (response.data.tasks.length > 0) {
+                    if (response.data.task) {
                         this.tasksInfo = response.data.tasks
 
                     }
                     //任务数据
                     let data = [];
                     if (this.artistInfo.platform) {
+                       
                         this.artistInfo.platform.split(',').forEach(item => {
                             data.push(_this.artistSocialPlatform.find(i => i.value == item).name)
                         });
@@ -1430,16 +1560,16 @@
                     } else {
                         this.Incubationperiod = '**'
                     }
-                    if(this.user.nickname == this.artistInfo.creator.name){
-                        this.PrivacyShow = true
+                    if(this.artistInfo.creator){
+                        if(this.user.nickname == this.artistInfo.creator.name){
+                            this.PrivacyShow = true
+                        }
                     }
+                    
                     this.projectContractDefault = {
                         '昵称': response.data.nickname
                     };
-                    this.isLoading = false;
-                    setTimeout(() => {
-                        this.canShow = true
-                    }, 200);
+                   
                 });
 
 
@@ -1452,6 +1582,7 @@
             },
             getType: function () {
                 fetch('get', '/bloggers/gettype').then(response => {
+                    
                     this.artistTypeArr = response.data
                 });
             },
@@ -1515,6 +1646,7 @@
             },
             ScheduleBox(value) {
                 this.showScheduleModal(value)
+                console.log(value)
             },
             addSchedule() {
                 let startTime = '';
@@ -1543,7 +1675,7 @@
                         }
                     }
                 }
-                this.isAddScheduleButtonDisable = true;
+                // this.isAddScheduleButtonDisable = true;
                 let data = {
                     title: this.scheduleName,
                     calendar_id: this.calendarId[0],
@@ -1583,7 +1715,7 @@
                 })
             },
             showScheduleModal(schedule) {
-                this.getResources();
+                
                 let data = {
                     include: 'calendar,participants,creator,material,affixes,project,task',
                 };
@@ -1642,7 +1774,8 @@
                     this.endTime = data.end_day;
                     $('#changeSchedule').modal('show')
                 } else {
-                    toastr.error('该艺人无对应艺人日历，请先创建艺人日历')
+                    // toastr.error('该艺人无对应艺人日历，请先创建艺人日历')
+                    $('#permissionPrompt').modal('show');
                 }
             },
             getResources(type) {
@@ -1823,7 +1956,7 @@
                 this.$refs.scheduleEndMinute.setValue('0');
                 this.$refs.scheduleResource.setValue('');
                 this.$refs.scheduleRepeat.setValue('0');
-                this.$refs.scheduleNotice.setValue('0');
+                // this.$refs.scheduleNotice.setValue('0');
                 this.$refs.scheduleRemind.setValue('0');
             },
             changeScheduleRepeat(value) {
@@ -1893,6 +2026,7 @@
                     this.total = response.meta.pagination.total;
                     this.total_pages = response.meta.pagination.total_pages;
                 })
+
             },
             taskcancel() {
                 this.$store.state.newParticipantsInfo = []
@@ -1984,7 +2118,7 @@
                     }
                 }
                 fetch('put', `/bloggers/${this.$route.params.id}/privacyUser`, sendData).then(function () {
-                    console.log(sendData)
+                   
                     toastr.success('隐私设置成功')
                     $('#addPrivacy').modal('hide')
                 })
@@ -2007,7 +2141,7 @@
             },
             // 类型
             changArtistType(value) {
-                console.log(value)
+              
                 this.artistInfo.type = value
             },
             // 沟通状态
@@ -2308,6 +2442,62 @@
                     this.formDate = response.data
                     $('#approval-great-module').modal('show')
                 });
+            },
+            getStars: function () {
+                fetch('get', '/starandblogger', {sign_contract_status: 2}).then(response => {
+                    for (let i = 0; i < response.data.length; i++) {
+                        if(response.data[i].name == this.artistInfo.nickname){
+                            this.starFlag = response.data[i].flag
+                            this.starId = response.data[i].id
+                        }
+                    }
+                })
+            },
+             changeCalendarActionType: function (value) {
+                this.calendarActionType = value
+                $('#addCalendar').modal('show')
+                $('#permissionPrompt').modal('hide')
+            },
+            changeCalendarColor(value) {
+                this.checkColor = value;
+            },
+             addCalendarVisible: function (value) {
+                this.calendarVisible = value
+            },
+            principalChange(value) {
+                if (value) {
+                    this.principal = value.id;
+                }
+            },
+            addCalendar: function () {
+                this.isAddCalendarButtonDisable = true;
+                let data = {
+                    title: this.scheduleName,
+                    color: this.checkColor,
+                    privacy: this.calendarVisible,
+                    principal_id: this.principal
+                };
+                if (this.starId) {
+                    data.star = {
+                        id: this.starId,
+                        flag: this.starFlag
+                    }
+                }
+                let participants = this.$store.state.newParticipantsInfo;
+                if (participants.length > 0) {
+                    data.participant_ids = [];
+                    for (let i = 0; i < participants.length; i++) {
+                        data.participant_ids.push(participants[i].id)
+                    }
+                }
+                fetch('post', '/calendars', data).then(response => {
+                    this.isAddCalendarButtonDisable = false;
+                    $('#addCalendar').modal('hide');
+                    this.calendarList.push(response.data);
+                    toastr.success('添加成功')
+                    this.initAddScheduleModal();
+                    this.getCalendar()
+                })
             },
         },
         filters: {

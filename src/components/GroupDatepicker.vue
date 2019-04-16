@@ -19,10 +19,7 @@
             }
         },
         mounted() {
-            if(this.default){
-                this.defaultDataHandler()
-                this.setValue(this.timeGroup[0],this.timeGroup[1])
-            }
+            
             let self = this;
             $(this.$el).datepicker({
                 format: "yyyy-mm-dd",
@@ -30,18 +27,22 @@
             }).on("changeDate", function () {
                 self.$emit('change', $('#start').val(), $('#end').val());
             });
-
+            if(this.default){
+                this.defaultDataHandler()
+                this.setValue(this.timeGroup[0],this.timeGroup[1])
+            }
         },
         methods: {
             defaultDataHandler(){
                 if(this.default){
-                    let timeGroupA = this.default.values.data.value.split('|')
-                    this.timeGroup = timeGroupA.map((params) => {
-                        let tempGroup = params.split('-')
-                        tempGroup.push(tempGroup.shift())
-                        let finalGroup = tempGroup.join('/')
-                        return finalGroup
-                        })
+                    this.timeGroup = this.default.values.data.value.split('|')
+                    // let timeGroupA = this.default.values.data.value.split('|')
+                    // this.timeGroup = timeGroupA.map((params) => {
+                    //     let tempGroup = params.split('-')
+                    //     tempGroup.push(tempGroup.shift())
+                    //     let finalGroup = tempGroup.join('/')
+                    //     return finalGroup
+                    //     })
                 }
             },
             setValue(start, end) {

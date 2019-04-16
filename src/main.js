@@ -5,6 +5,7 @@ import store from './store/index.js';
 import AddTask from './components/AddTask.vue';
 import LinkResource from './components/LinkResource.vue'
 import AddMember from './components/AddMember.vue';
+import InputSelectorsFashion from './components/InputSelectorsFashion.vue';
 import ApprovalGreatModule from './components/ApprovalGreatModule';
 import BuildProject from './components/BuildProject.vue';
 import Calendar from './components/Calendar.vue';
@@ -84,6 +85,7 @@ Vue.component('AppDetail', AppDetail);
 Vue.component('ApprovalGreatModule', ApprovalGreatModule);
 Vue.component('ApprovalProgress', ApprovalProgress);
 Vue.component('VueUeditorWrap', VueUeditorWrap);
+Vue.component('InputSelectorsFashion', InputSelectorsFashion);
 
 Vue.component('AddMember', AddMember);
 
@@ -163,6 +165,9 @@ Vue.prototype.globalClick = function (callback) {
         callback(event);
     });
 };
+
+// 设置toast展示时间
+toastr.options.timeOut = 2000
 
 new Vue({
     router,

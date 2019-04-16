@@ -19,10 +19,12 @@
             </div>
             <div class="fc-right">
                 <div class="fc-button-group">
-                    <button type="button" class="pointer-content fc-prev-button fc-button fc-state-default fc-corner-left"
+                    <button type="button"
+                            class="pointer-content fc-prev-button fc-button fc-state-default fc-corner-left"
                             @click="getBeforeDay"><span
                             class="fc-icon fc-icon-left-single-arrow"></span></button>
-                    <button type="button" class="pointer-content fc-next-button fc-button fc-state-default fc-corner-right"
+                    <button type="button"
+                            class="pointer-content fc-next-button fc-button fc-state-default fc-corner-right"
                             @click="getNextDay"><span
                             class="fc-icon fc-icon-right-single-arrow"></span></button>
                 </div>
@@ -40,7 +42,10 @@
                 <template v-if="material.events">
                     <h5 style="border-bottom: 1px solid #e3e3e3" class="pb-20">{{ material.name }}</h5>
                     <div v-for="event in material.events" class="example">
-                        <div class="col-md-2 float-left pl-0">{{ event.start }} - {{ event.end }}</div>
+                        <div class="col-md-2 float-left pl-0">
+                            <template v-if="event.allDay">全天</template>
+                            <template v-else>{{ event.start }} - {{ event.end }}</template>
+                        </div>
                         <div class="col-md-8 float-left">{{ event.title }}</div>
                         <div class="col-md-2 float-right text-right pr-0">{{ event.department }} - {{ event.creator }}
                         </div>

@@ -948,7 +948,6 @@
                 customizeCondition: {},
                 canShow:false,
                 isAddButtonDisable: false,
-                // currentStatus:'start'
             }
         },
         watch: {
@@ -971,7 +970,7 @@
             },
             rightChecker(value, params, type) {
                 if (this.$store.state.listPower[type].add !== 'true') {
-                    toastr.error('当前用户没有权限新增' + value)
+                    toastr.error('您没有新增' + value+'的权限')
                     return
                 }
                 $('#'+params).modal('show')       
@@ -992,6 +991,7 @@
                     _this.customizeInfoBloggers = params.data
                      $('.selectpicker').selectpicker('refresh') 
                 })
+               
             },
             dataFilter:function(value){
                 this.customizeContentType=value            
@@ -1014,19 +1014,44 @@
             //查询列表
             getArtists: function (page = 1, signStatus) {
                 let _this = this;
+                let url,fetchData,keyword,communication_status,sign_contract_status,pages
+                fetchData = this.customizeCondition
                 if (signStatus) {
                     this.listData.sign_contract_status = signStatus
                 }
-                this.currentpagestatus = this.listData.sign_contract_status
-                this.currentcommunicationstatus = this.listData.communication_status
-                this.currentpagename = this.listData.name
+                // this.currentpagestatus = this.listData.sign_contract_status
+                // this.currentcommunicationstatus = this.listData.communication_status
+                // this.currentpagename = this.listData.name
                 this.listData.page = page
+                if (this.listData.name) {
+                    keyword = '&name='+this.listData.name
+                } else {
+                    keyword = ''
+                }
+                if (this.listData.communication_status) {
+                    communication_status = '&communication_status='+this.listData.communication_status
+                } else {
+                    communication_status = ''
+                }
+                if(this.listData.sign_contract_status){
+                     sign_contract_status  = '&sign_contract_status='+this.listData.sign_contract_status 
+                }else{
+                    sign_contract_status = ''
+                }
+                if (this.listData.page) {
+                    pages = '&page='+page
+                } else {
+                    pages = ''
+                }
+                url ='/stars/list'+'?'+ keyword+communication_status+sign_contract_status+pages
                 this.exportParams = {
                     name: this.listData.name,
                     sign_contract_status: this.listData.sign_contract_status,//  签约状态
                     communication_status: this.listData.communication_status, //沟通状态
                 }
-                fetch('post', '/stars/list', this.listData).then(function (response) {
+                
+                fetch('post', url, fetchData).then(function (response) {
+                    console.log( response.data)
                     if (response.data) {
                         _this.artistsInfo = response.data;
                     }
@@ -1049,7 +1074,7 @@
             },
             getBlogger: function (page = 1, signStatus) {
                 let data = {
-                    include: 'type,creator,affixes,publicity,operatelogs,contracts',
+                    
                 }
                 let _this = this;
                 //博主状态
@@ -1076,7 +1101,7 @@
                     data.name = ''
                 }
                 data.page = '&page='+page
-                fetch('post', '/bloggers/list?include=type,creator,affixes,publicity,operatelogs,contracts'+data.sign_contract_status +data.communication_status +data.name +data.page ,this.customizeInfo).then(function (response) {
+                fetch('post', '/bloggers/list?'+data.sign_contract_status +data.communication_status +data.name +data.page ,this.customizeCondition).then(function (response) {
                     
                     if(response.data){
                         _this.bloggerInfo = response.data;
@@ -1142,19 +1167,19 @@
                     fetchData = this.fetchData,
                     newUrl
                 if(url == '/stars/list'){
-                     this.fetchData.include = 'include=broker,creator,contracts'
+                    //  this.fetchData.include = 'include=broker,creator,contracts'
                     if (type == 'filter') {
                         fetchData = this.customizeCondition
                         let keyword, sign_contract_status, communication_status,page
                         if (this.listData.name) {
                             keyword = '&name='+this.listData.name
                         } else {
-                            keyword = '&name='
+                            keyword = ''
                         }
                         if (this.listData.communication_status) {
                             communication_status = '&communication_status='+this.listData.communication_status
                         } else {
-                            communication_status = '&communication_status='
+                            communication_status = ''
                         }
                         if(this.listData.sign_contract_status){
                           sign_contract_status  = '&sign_contract_status='+this.listData.sign_contract_status 
@@ -1164,7 +1189,7 @@
                         } else {
                             page = ''
                         }
-                        newUrl = url + '?' + this.fetchData.include + keyword + sign_contract_status + communication_status+page
+                        newUrl = url + '?'  + keyword + sign_contract_status + communication_status+page
                     }    
                 }else if(url == '/bloggers/list'){
                     
@@ -1348,6 +1373,7 @@
                 this.platformType = [];
                 this.uploadUrl = ''
             },
+            
             selectArtists: function (value) {
                 if (value === 'all') {
                     this.selectedArtistsArr = [];

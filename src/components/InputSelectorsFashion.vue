@@ -1,12 +1,11 @@
 <template>
     <div class="addMember">
         <ul class="addMember-items">
-            <li class="addMember-item" v-for="(member,index) in selectMemberArr" :key="member.id" :style="otherslot?'display:flex':''">
-                <Avatar style="cursor:pointer;" :imgUrl="member.icon_url" :title='member.name'/>
-                <span class="addMember-remove" @click="removeMember(member.id)" :class="otherslot?'addmember-other':''">
+            <li class="addMember-item" :style="otherslot?'display:flex':''" v-if="selectMemberArr.icon_url">
+                <Avatar :imgUrl="selectMemberArr.icon_url" :title='selectMemberArr.name'/>
+                <span class="addMember-remove" @click="removeMember(selectMemberArr.id)" :class="otherslot?'addmember-other':''">
                     <i class="md-minus-circle"></i>
                 </span>
-                <div class="splicer" v-if="otherslot && (index < selectMemberArr.length-1)"></div>
             </li>
             <li class="addMember-item" v-show="!participantsSingle">
                 <div class="addMember-trigger" :class="isMemberShow ? 'addMember-active': ''"
@@ -15,7 +14,7 @@
                          :class="selectMemberArr.length > 0 ? 'addMember-trigger-left' : ''"
                          @click="showMember"><i class="iconfont icon-tianjia"></i></div>
                     <div class="addMember-trigger-dropdown" v-if="showStaff">
-                        <select-staff :multiple="true" :member-type="'participant'" :type="type"
+                        <select-staff :multiple="true" :member-type="'principal'" :type="type"
                                       @change="changeSelectedMember" :otherslot='otherslot'></select-staff>
                     </div>
                 </div>
@@ -27,7 +26,7 @@
 <script>
     export default {
         name: '',
-        props: ['type', 'otherslot', 'participantsSingle'],
+        props: ['type', 'otherslot', 'participantsSingle','singlemode'],
         data() {
             return {
                 isMemberShow: false,
@@ -36,6 +35,7 @@
         },
         mounted() {
             this.globalClick(this.removeSelect);
+            this.$store.dispatch('changeNewPrincipal','')
         },
 
         computed: {
@@ -49,6 +49,9 @@
                 if (this.type === 'change') {
 
                     return this.$store.state.participantsInfo
+                }
+                if(this.singlemode === true){
+                    return this.$store.state.newPrincipalInfo
                 }
                 if (this.type === 'collect') {
                     return this.$store.state.collectInfo

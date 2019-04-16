@@ -184,7 +184,6 @@
                 linkTotalPage: 1, // 关联资源总页数
                 linkCode: '', // 关联资源父数据的code
                 linkIndex: 0, //
-                canLoadMore: false, // 关联资源是否可以加载更多
                 searchDepartment: '', // 搜索部门
                 searchUser: '', // 搜索部门成员
                 canShow:false,

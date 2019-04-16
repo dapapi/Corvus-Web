@@ -50,7 +50,7 @@
                                     <th class="cell-300" scope="col">审批状态</th>
                                 </tr>
                                 <tbody>
-                                <tr v-for="project in projectsInfo" :key='project.project_number' @click="goDetail(project.form_instance_number)">
+                                <tr v-for="project in projectsInfo" :key='project.project_number' @click="goDetail(project.form_instance_number)" style='cursor:pointer'>
                                     <td>{{project.form_instance_number}}</td>                              
                                     <td>{{project.title}}</td>
                                     <td>{{project.name}}</td>
@@ -118,9 +118,9 @@
                 };
                 fetch('get', '/approvals_contract/my', data).then(response => {
                     _this.projectsInfo = response.data
-                   _this.total = response.meta.pagination.total;
-                    _this.current_page = response.meta.pagination.current_page;
-                    _this.total_pages = response.meta.pagination.total_pages;
+                 _this.total = Number(response.meta.pagination.total);
+        _this.current_page = Number(response.meta.pagination.current_page);
+        _this.total_pages = Number(response.meta.pagination.total_pages);
                 })
             },
             getList(params) {
@@ -134,9 +134,9 @@
                 this.pageType = currentStatus
                 fetch('get','/approvals_contract/my?status='+currentStatus+'&keywords='+this.keywords).then((params) => {
                     _this.projectsInfo = params.data
-                   _this.total = params.meta.pagination.total;
-                    _this.current_page = params.meta.pagination.current_page;
-                    _this.total_pages = params.meta.pagination.total_pages;
+                   _this.total = Number(params.meta.pagination.total);
+        _this.current_page = Number(params.meta.pagination.current_page);
+        _this.total_pages = Number(params.meta.pagination.total_pages);
                 })
             },
             goDetail (num) {

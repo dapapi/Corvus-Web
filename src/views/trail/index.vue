@@ -151,7 +151,7 @@
                             <div class="col-md-10 float-left pl-0">
                                 <input-selectors :placeholder="'请选择负责人'"
                                                  @change="changePrincipal" otherslot=true
-                                                 :propSelectMemberName='$store.state.newPrincipalInfo.name?$store.state.newPrincipalInfo.name:currentUser.name'></input-selectors>
+                                                 :propSelectMemberName='$store.state.newPrincipalInfo.name?$store.state.newPrincipalInfo.name:(currentUser.name || currentUser.nickname)'></input-selectors>
                             </div>
                         </div>
                         <div class="example">
@@ -735,7 +735,7 @@ export default {
             changeTrailType (value) {
                 this.getIndustries()
                 if(this.$store.state.listPower.trail.add !=='true'){
-                    toastr.error('当前用户没有权限新增销售线索')
+                    toastr.error('您没有新增销售线索的权限')
                     return
                 }
                 let organization_id = JSON.parse(Cookies.get('user')).organization_id
