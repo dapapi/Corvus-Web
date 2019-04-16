@@ -48,7 +48,7 @@
                     <div class="col-md-12 mx-40 pb-0">
                         <button v-if="!inputProgress" type="button" @click='inputProgress = true' class="btn btn-block btn-default waves-effect waves-light waves-round col-md-2 px-0" style='font-size:10px'>更新当前进度</button>
                         <input v-if="inputProgress" type="number" oninput="if(value>100)value=100;if(value<0)value=0;" v-model="currentProgress">
-                        <button type="button" class="btn btn-block btn-default waves-effect waves-light waves-round col-md-1 mx-10 my-0 px-0" style='font-size:10px;color:#00bcd4' @click="progressUpdate">更新</button>
+                        <button type="button" class="btn btn-block btn-default waves-effect waves-light waves-round col-md-1 mx-10 my-0 px-0" style='font-size:10px;color:#00bcd4' :disabled='submitDisable' @click="progressUpdate">{{submitDisable?'':'更新'}}<CircleLoading style="" v-if="submitDisable"/></button>
                     </div>
                     <div>
                         <div class="row px-20">
@@ -311,6 +311,7 @@ import addGoals from "./addGoals"
                 currentProgress:'',
                 inputProgress:false,
                 periods:[],
+                submitDisable:false,
             }
         },
         created(){
@@ -348,8 +349,11 @@ import addGoals from "./addGoals"
                 if(this.inputProgress==false){
                     return
                 }
+                this.submitDisable = true
+
                 this.inputProgress = false
                 fetch('put',`/aims/${this.$route.params.id}`,{percentage:this.currentProgress}).then((params) => {
+                    this.submitDisable = false
                     this.goalInfo = params.data
                 }).catch((params) => {
                     this.goalInfo = params.data
