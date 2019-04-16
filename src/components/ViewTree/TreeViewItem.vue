@@ -3,7 +3,7 @@
        <div class="level" :class="`level-${menu.level}`" v-for="menu in menus" :key="menu.id">
             <router-link class="link" v-bind:to="menu.url" @click.native="toggle(menu)">
                 <div class="list-group-item" v-if="menu.type ==='link'" :class="isSelected == menu.id?'selected':''"> 
-                        <span v-if="isShow" class="icon md-file-text font-size-18 mr-0 ml-15" style="vertical-align: middle;position:relative:left-10px"></span>
+                        <span v-if="isShow" class="icon md-file-text font-size-18 mr-0 ml-15" style="vertical-align: middle;position:relative;left:-10px"></span>
                         {{menu.name}}
                         <span v-if="menu.num>0&&unReadMsg>0" class="unRead" :class="menu.num>=100?'unReadLine':''">
                             <template v-if="menu.num>=100">...</template>
@@ -13,7 +13,7 @@
             </router-link>
             <div v-if="menu.type === 'button'">
                 <div class="list-group-item button heading" :class="{selected:isSelected == menu.id,expand:isExpanded.includes(menu.id)}" @click="toggle(menu)" >
-                    <i class="icon md-caret-right mr-0 font-size-20"  style="vertical-align: middle;position:relative:left-10px"></i>
+                    <i class="icon md-caret-right mr-0 font-size-20"  style="vertical-align: middle;position:relative;left:-10px"></i>
                     <span>{{menu.name}}
                     </span>
                     <span v-if="menu.name=='我的消息'&&unReadMsg>0" class="unRead first" :class="unReadMsg>=100?'unReadLine':''">
@@ -151,6 +151,7 @@ export default {
     }
     .button {
         position: relative;
+        left:-4px;
     }
     .link:hover,.button:hover {
         
@@ -206,7 +207,7 @@ export default {
         bottom:1px;
         position: absolute;
         top: 16px;
-        right: 44px;
+        right: 50px;
     }
     .unReadLine{
         line-height: 12px;
