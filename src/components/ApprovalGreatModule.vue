@@ -28,7 +28,7 @@
                                 data-dismiss="modal" @click='clearSignal'>取消
                         </button>
                         <button type="button" class="btn btn-primary waves-effect waves-light waves-round " :disabled="submitDisable"
-                                @click='approvalSubmit'>提交
+                                @click='approvalSubmit'>{{submitDisable?'':'提交'}}<CircleLoading style="" v-if="submitDisable"/>
                         </button>
                     </div>
                 </div>

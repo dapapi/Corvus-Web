@@ -68,6 +68,9 @@ export default {
     changeIsSelected(state, data) {
         state.isSelected = data
     },
+    changeselectId(state,data){
+        state.selectId = data
+    },
     changeIsExpanded(state, data) {
         state.isExpanded = data
     },
@@ -94,6 +97,9 @@ export default {
     setModule(state, data) {
         state.moduleList = data.moduleList
         state.unReadMsg = data.num
+    },
+    setDashboard(state, data) {
+        state.dashboardList = data.dashboardList
     },
     setApprovalNum(state, data){
         state.approvalNum = data

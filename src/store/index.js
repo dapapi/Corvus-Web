@@ -40,6 +40,9 @@ const state = {
     moduleList:[],
     unReadMsg: 0, //未读消息
 
+    //仪表盘列表
+    dashboardList:[],
+    selectId:'',
     // 个人信息
     avatar: '', // 用户头像
     supplierDetails:{},//供应商详情

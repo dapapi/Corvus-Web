@@ -36,13 +36,13 @@
         methods: {
             setData: function () {
                 this.leftData = [
-                    // {
-                    //     id: 1,
-                    //     name: '我的目标',
-                    //     url: '/my/goal',
-                    //     type: 'link',
-                    //     level: 1,
-                    // },
+                    {
+                        id: 2,
+                        name: '我的目标',
+                        url: '/my/goal',
+                        type: 'link',
+                        level: 1,
+                    },
                     {
                         id: 1,
                         name: '我的消息',

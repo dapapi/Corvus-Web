@@ -8,6 +8,7 @@
             <div class="page-header">
             </div>
             <div class="row py-5">
+              <CircleLoading style="margin-left:50%;margin-top:10%" v-if="indexData.length == 0" />
                 <div class="col-lg-4 approval-module" v-for="item in indexData" :key="item.id">
                     <div class="card">
                         <div class="card-block" style="display:flex" @click='pullUp(item)'>
@@ -39,7 +40,7 @@ export default {
     },
     data(){
         return{
-            indexData:{},
+            indexData:[],
             formData:{},
             isLoading:false,
             

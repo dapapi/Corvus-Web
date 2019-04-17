@@ -3,7 +3,7 @@
         <div class="page-header page-header-bordered mb-0">
             <h1 class="page-title ml-10">发起审批</h1>
         </div>
-    
+        <CircleLoading style="margin-left:50%;margin-top:10%" v-if="indexData.length == 0" />
         <div class="page-content py-0" v-for="(item,index) in indexData" :key="item.id">
             <div class="page-header" style="display:flex;vertical-item:middle">
                 <img :src="item.icon" style="width: 15px;height: 15px;" class="option-icon">
@@ -43,7 +43,7 @@ export default {
     },
     data(){
         return{
-            indexData:{},
+            indexData:[],
             formData:{},
             optionIcon:APPROVAL_CONFIG.imgIcon,
             isLoading:false,

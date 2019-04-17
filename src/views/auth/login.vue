@@ -404,6 +404,7 @@ export default {
             } else if (Cookies.get('user_account')) {
                                     Cookies.remove('user_account')
                                 }
+                                localStorage.getItem('userInfo')
             redirect('/my');
           });
         }, 100);

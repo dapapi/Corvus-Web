@@ -84,7 +84,8 @@
 <script>
     import fetch from '@/assets/utils/fetch.js'
     import config from '@/assets/js/config'
-    import {PROJECT_CONFIG} from '@/views/approval/project/projectConfig.js'
+import { PROJECT_CONFIG } from '@/views/approval/projectConfig';
+
     import common from '../../../assets/js/common'
     export default {
         name: "application",

@@ -80,7 +80,7 @@ import { mapState } from 'vuex';
 import fetch from '../assets/utils/fetch.js';
 
 export default {
-  props: ['multiple', 'member-type', 'type', 'otherslot', 'submit'],
+  props: ['multiple', 'memberType', 'type', 'otherslot', 'submit'],
   data() {
     return {
       normalUsers: {},
@@ -224,6 +224,11 @@ export default {
       if (this.memberType === 'principal') {
         this.params.data = user;
         this.$store.dispatch('changePrincipal', this.params);
+      } else if(this.memberType === 'single'){
+        this.$store.dispatch('changePrincipal',{data:{}});
+        this.$store.dispatch('changePrincipal', this.params);
+        this.$emit('change', false);
+
       } else if (this.memberType === 'participant') {
         let participantInfo = '';
         if (this.type === 'change') {

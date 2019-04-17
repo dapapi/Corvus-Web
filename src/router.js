@@ -135,7 +135,7 @@ const VueRouter = new Router({
             name:'dashboard',
             component:() => import('./views/dashboard/index.vue'),
             children:[{
-                path: '/dashboard/:id',
+                path: '/dashboard',
                 component: () => import('./views/dashboard/commerce.vue')
             }]
         },
@@ -181,22 +181,22 @@ const VueRouter = new Router({
                     path: '/approval/common/only',
                     component: () => import('./views/approval/common/only.vue')
                 },
-                {
-                    path: '/approval/common/general',
-                    component: () => import('./views/approval/general.vue')
-                },
-                {
-                    path: '/approval/common/currency',
-                    component: () => import('./views/approval/currency.vue')
-                },
-                {
-                    path: '/approval/common/cur',
-                    component: () => import('./views/approval/cur.vue')
-                },
-                {
-                    path: '/approval/common/account',
-                    component: () => import('./views/approval/account.vue')
-                },
+                // {
+                //     path: '/approval/common/general',
+                //     component: () => import('./views/approval/general.vue')
+                // },
+                // {
+                //     path: '/approval/common/currency',
+                //     component: () => import('./views/approval/currency.vue')
+                // },
+                // {
+                //     path: '/approval/common/cur',
+                //     component: () => import('./views/approval/cur.vue')
+                // },
+                // {
+                //     path: '/approval/common/account',
+                //     component: () => import('./views/approval/account.vue')
+                // },
                 {
                     path: '/approval/:id',
                     name: 'approval/detail',
@@ -430,8 +430,13 @@ const VueRouter = new Router({
                 },
                 {
                     path: '/my/goal',
-                    name: 'message',
+                    name: 'goal',
                     component: () => import('./views/goal/index.vue')
+                },
+                {
+                    path: '/my/goal/:id',
+                    name: 'goaldetail',
+                    component: () => import('./views/goal/detail.vue')
                 },
             ]
         }, {
