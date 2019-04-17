@@ -367,7 +367,7 @@
 
                     <div class="modal-footer">
                         <!-- <button class="btn btn-sm btn-white btn-pure waves-effect waves-classic" data-dismiss="modal"  @click="handleCancel">取消</button> -->
-                        <button class="btn btn-primary waves-effect waves-classic" v-if="!isLook" type="submit" @click="submit">提交</button>
+                        <button class="btn btn-primary waves-effect waves-classic" v-if="!isLook" type="submit" :disabled="disabled" @click="submit">{{ disabled ? '提交中...' : '提交'}}</button>
                     </div>
                 </div>
             </div>
@@ -381,7 +381,7 @@
 <script>
 import config from "../assets/js/config";
 const { genderArr, maritalStatusArr, nationalityArr, bloodTypeArr } = config;
-import fetch from "../assets/utils/fetch";
+import fetch from "./fetch";
 
 let tempArr = []
 for (let i = 0; i < nationalityArr.length; i++) {
@@ -396,6 +396,8 @@ export default {
     data () {
         return {
             isLook: false,
+            disabled: false,
+            token: '',
             userId: '',
             genderArr: genderArr,
             maritalStatusArr: maritalStatusArr,
@@ -587,7 +589,7 @@ export default {
 				this[n].tBody.push(JSON.parse(JSON.stringify(this[n+'Info'])))
 			}
         })
-        const route = this.$route
+        this.getToken()
     },
 
 	methods: {
@@ -652,11 +654,15 @@ export default {
 				record: _record,
 				family: _family
             }
-
-			fetch('post', '/personnel' ,params).then(result => {
-                toastr.success('添加成功')
-                this.$router.push({ path: '/staff' });
-			})
+            
+            this.disabled = true
+			fetch('post', '/personnel' ,params, this.token).then(result => {
+                toastr.success('提交成功')
+                this.disabled = false
+                // this.$router.push({ path: '/staff' });
+			}).catch(() => {
+                this.disabled = false
+            })
         },
         // 过滤有用数据
         filterData (data) {
@@ -670,6 +676,20 @@ export default {
                     }
                 })
                 return canPush
+            })
+        }, 
+        // getToken
+        getToken () {
+            const params = {
+                username: '张雷',
+                password: '123456',
+                grant_type: 'password',
+                client_id: 2,
+                client_secret: 'B7l68XEz38cHE8VqTZPzyYnSBgo17eaCRyuLtpul',
+                scope: '*'
+            }
+            fetch('post', '/oauth/token', params).then(res => {
+                this.token = res.token_type + ' ' + res.access_token
             })
         }
 	}
