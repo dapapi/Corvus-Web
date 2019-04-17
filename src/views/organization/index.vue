@@ -345,7 +345,7 @@ import { mapState, mapActions } from 'vuex'
     }
     .principal {
         position: absolute;
-        left: 300px;
+        left: 500px;
     }
     .nav {
         justify-content: flex-end;
