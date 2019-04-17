@@ -1010,7 +1010,12 @@
                     this.listData.sign_contract_status = value
                 }
                 // this.getArtists()
-                this.fetchHandler('post', '/stars/list','filter')
+                if(value ==2){
+                    this.fetchHandler('post', '/stars/list','filter')
+                }else if (value ==1){
+                    this.fetchHandler('post', '/signing/stars/list','filter')
+                }
+                
             },
             //查询列表
             getArtists: function (page = 1, signStatus) {
@@ -1044,7 +1049,12 @@
                 } else {
                     pages = ''
                 }
-                url ='/stars/list'+'?'+ keyword+communication_status+sign_contract_status+pages
+                if(this.listData.sign_contract_status == 2){
+                    url ='/stars/list'+'?'+ keyword+communication_status+sign_contract_status+pages
+                }else if (this.listData.sign_contract_status == 1){
+                    url ='/signing/stars/list'+'?'+ keyword+communication_status+sign_contract_status+pages
+                }
+               
                 this.exportParams = {
                     name: this.listData.name,
                     sign_contract_status: this.listData.sign_contract_status,//  签约状态
@@ -1077,6 +1087,7 @@
                 let data = {
                     
                 }
+                let url
                 let _this = this;
                 //博主状态
                 if (signStatus) {
@@ -1102,7 +1113,13 @@
                     data.name = ''
                 }
                 data.page = '&page='+page
-                fetch('post', '/bloggers/list?'+data.sign_contract_status +data.communication_status +data.name +data.page ,this.customizeCondition).then(function (response) {
+                if(this.blogStatus == 2){
+                    url = '/bloggers/list?'+data.sign_contract_status +data.communication_status +data.name +data.page
+                }else if(this.blogStatus == 1){
+                    url = '/signing/bloggers/list?'+data.sign_contract_status +data.communication_status +data.name +data.page
+                }
+               
+                fetch('post', url ,this.customizeCondition).then(function (response) {
                     
                     if(response.data){
                         _this.bloggerInfo = response.data;
@@ -1154,7 +1171,12 @@
             typeFilter(value) {
                 this.blogStatus = value
                 // this.getBlogger()
-                this.fetchHandler('post', '/bloggers/list','filter')
+                if(value ==2){
+                    this.fetchHandler('post', '/bloggers/list','filter')
+                }else if (value ==1){
+                    this.fetchHandler('post', '/signing/bloggers/list','filter')
+                }
+                
             },
             //沟通状态
             CommunicationStatus(value) {
@@ -1167,7 +1189,7 @@
                 let _this = this,
                     fetchData = this.fetchData,
                     newUrl
-                if(url == '/stars/list'){
+                if(url == '/stars/list'||url == '/signing/stars/list'){
                     //  this.fetchData.include = 'include=broker,creator,contracts'
                     if (type == 'filter') {
                         fetchData = this.customizeCondition
@@ -1192,7 +1214,7 @@
                         }
                         newUrl = url + '?'  + keyword + sign_contract_status + communication_status+page
                     }    
-                }else if(url == '/bloggers/list'){
+                }else if(url == '/bloggers/list'||url == '/signing/bloggers/list'){
                     
                     if (type == 'filter') {
                         fetchData = this.customizeCondition
@@ -1228,7 +1250,7 @@
                 // }
                 fetch(methods, newUrl || url, fetchData).then((response) => { 
                         this.canShow = true
-                         if (url == '/stars/list') {
+                         if (url == '/stars/list'||url == '/signing/stars/list') {
                          _this.isLoading = false;
                         _this.artistsInfo = response.data
                         
@@ -1236,7 +1258,7 @@
                         _this.total = response.meta.pagination.total;
                         _this.total_pages = response.meta.pagination.total_pages;
                         _this.cleanUp = true
-                    } else if (url == '/bloggers/list') {
+                    } else if (url == '/bloggers/list'||url == '/signing/bloggers/list') {
                          _this.isLoading = false;
                         _this.bloggerInfo = response.data;
                         _this.Bcurrent_page = response.meta.pagination.current_page;

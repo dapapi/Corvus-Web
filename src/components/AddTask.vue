@@ -143,7 +143,6 @@
             }
         },
         mounted() {
-            console.log(this.code)
             $('.modal-simple').on('mouseover',function(){
                 document.getElementsByTagName('body')[0].classList.add('modal-open');
             })

@@ -1153,6 +1153,7 @@
             },
 
             showAddScheduleModal: function (data) {
+                console.log(data)
                 $('#changeSchedule').modal('show');
                 this.newCalendarModal = true;
                 this.toastShow = false;

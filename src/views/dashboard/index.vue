@@ -18,17 +18,17 @@
                                         {{menu.name}}
                                         </router-link>     
                                     </div>
-                                    <div class="drop-parent" style="position: absolute; right:30px;top:5px;">
+                                    <!-- <div class="drop-parent" style="position: absolute; right:30px;top:5px;">
                                         <i class="iconfont icon-gengduo1 font-size-20 parent" aria-hidden="true"
-                                        data-toggle="dropdown" aria-expanded="false"
-                                        style="cursor: pointer; float: right;line-height: 40px;" @click="getMembers(menu.id)">
+                                        aria-expanded="false"
+                                        style="cursor: pointer; float: right;line-height: 40px;" @click="getMembers(menu.id)" data-toggle="modal" data-target="#Editor" >
                                         </i>
                                         <div class="dropdown-menu dropdown-menu-left" aria-labelledby="org-dropdown"
                                             role="menu" x-placement="bottom-start" style="min-width: 0;">
                                             <a class="dropdown-item" role="menuitem" data-toggle="modal"
                                             data-target="#Editor" @click="getDashboardid(menu.id)">查看</a>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                         </section>
                     </div>
@@ -91,12 +91,12 @@
              tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <!-- <div class="modal-header">
                         <button type="button" class="close" aria-hidden="true" data-dismiss="modal">
                             <i class="iconfont icon-guanbi" aria-hidden="true"></i>
                         </button>
                         <h4 class="modal-title">查看</h4>
-                    </div>
+                    </div> -->
                     <div class="modal-body">
                         <div class="example">
                             <div class="col-md-2 text-right float-left">部门</div>
@@ -124,8 +124,11 @@
                             <div class="col-md-2 text-right float-left">成员</div>
                             <div class="col-md-10 float-left pl-0">
                                 <a class="avatar" href="javascript:void(0)" v-for="item in MembersDate" :key="item.id">
+                
                                     <Avatar :imgUrl="item.icon_url" style="margin-right: 10px; "/>
+                                   
                                 </a>
+                              
                             </div>
                         </div>
                     </div>
@@ -178,7 +181,7 @@
                 Dashboardname:'',
                 Department_name:'',
                 dashboardId:'',
-                MembersDate:''
+                MembersDate:'',
             }
         },
         computed:{
@@ -199,14 +202,9 @@
             }
         },
         created(){
-            this.getList()
             this.getDashboard()
            
         },
-        // mounted(){
-
-           
-        // },
         methods:{
              ...mapActions([
                
@@ -236,39 +234,50 @@
             　　　　path: '/dashboard', query:{id:id,name:name}
 
             　　 });
+                this.user = JSON.parse(Cookies.get('user'))
+                // 负责人默认值的设置
+                this.$store.commit('changeNewPrincipal', {
+                    name: this.user.nickname,
+                    id: this.user.id
+                })
                 this.getid(id)
             },
-            getDashboardid:function(id){
-                this.urlData.forEach(item=>{
-                    if(item.id == id){
-                        this.Dashboardname = item.name
-                        this.Department_name = item.department_name
-                        console.log(item)
-                    }
+            // getDashboardid:function(id){
+               
+            //     this.urlData.forEach(item=>{
+                 
+            //         if(item.id == id){
+            //                console.log(id,  item.department_name)
+            //             this.Dashboardname = item.name
+            //             this.Department_name = item.department_name
+            //             console.log(item)
+            //         }
                     
-                }) 
-            },
+            //     }) 
+            // },
             getid:function(id){
                 
-                // let url = location.search.split('?')[1].split('&')[0].split('=')[1]
-                // console.log(url)
-                // if(url){
-                //    this.$store.dispatch('changeselectId',url) 
-                // }
-                this.urlData.forEach(item=>{
-                     if(item.id == id){
-                          this.$store.dispatch('changeselectId',item.id)
-                     }
-                    
-                 })
-                
+                let url = location.search.split('?')[1].split('&')[0].split('=')[1]
+                if(url){
+                   this.$store.dispatch('changeselectId',url) 
+                }
             },
-            getMembers:function(id){
-                let _this = this
-                 fetch('get', '/departments/'+id +'/users').then(function (response) { 
-                     _this.MembersDate = response.data 
-                })
-            }
+            // getMembers:function(id){
+            //     let _this = this
+            //      fetch('get', '/departments/'+id +'/users').then(function (response) { 
+            //          _this.MembersDate = response.data 
+            //     })
+            //     this.urlData.forEach(item=>{
+                 
+            //         if(item.id == id){
+            //                console.log(id,  item.department_name)
+            //             this.Dashboardname = item.name
+            //             this.Department_name = item.department_name
+            //             console.log(item)
+            //         }
+                    
+            //     }) 
+            // }
         }
     }
 </script>

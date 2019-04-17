@@ -69,7 +69,8 @@
                         <div class="example-wrap" style="width:200px">
                         
                         <div class="progress progress-sm mb-0">
-                          <div class="progress-bar progress-bar-indicating active" :style="{width:parseInt(this.Projectprogressing/this.ProjectTotal*100)+ '%'}" role="progressbar"></div>
+                          <div class="progress-bar progress-bar-indicating active" :style="{width:parseInt(this.Projectprogressing/this.ProjectTotal*100)+ '%'}" role="progressbar" v-if="ProjectTotal!=0"></div>
+                          <div class="progress-bar progress-bar-indicating active" style="width:0%" role="progressbar" v-else-if="ProjectTotal=0"></div>
                         </div>
                        
                         <h5 class="m-0"><font style="vertical-align: inherit;font-size:12px"><font style="vertical-align: inherit;">近7天跟进<span style="color:rgb(5, 169, 219);">{{Projectprogressing}}个</span>
@@ -119,20 +120,23 @@
                         <div class="example-wrap" style="width:200px">
                         
                         <div class="progress progress-sm mb-0">
-                          <div class="progress-bar progress-bar-indicating active" :style="{width:parseInt(this.Clientlatest_follow/this.ClientTotal*100)+ '%'}" role="progressbar"></div>
+                            <div class="progress-bar progress-bar-indicating active" :style="{width:parseInt(this.Clientlatest_follow/this.ClientTotal*100)+ '%'}" role="progressbar" v-if="ClientTotal!=0"></div>
+                            <div class="progress-bar progress-bar-indicating active" style="width:0%" role="progressbar" v-else-if="ClientTotal== 0"></div>
                         </div>
                        
                         <h5 class="m-0"><font style="vertical-align: inherit;font-size:12px"><font style="vertical-align: inherit;">近7天跟进<span style="color:rgb(5, 169, 219);">{{Clientlatest_follow}}个</span>
                            </font><i class="pl-60" style="font-style:normal">未跟进{{clientNot}}个</i></font>
                         </h5>
                         <div class="progress progress-sm mb-0 mt-40">
-                          <div class="progress-bar progress-bar-indicating active"  role="progressbar" :style="{width:parseInt(this.Clientwith_trail/this.ClientTotal*100)+ '%'}"></div>
+                            <div class="progress-bar progress-bar-indicating active"  role="progressbar" :style="{width:parseInt(this.Clientwith_trail/this.ClientTotal*100)+ '%'}" v-if="ClientTotal!=0"></div>
+                            <div class="progress-bar progress-bar-indicating active" style="width:0%" role="progressbar" v-else-if="ClientTotal== 0"></div>
                         </div>
                         <h5><font style="vertical-align: inherit;"><font style="vertical-align: inherit;font-size:12px">近7天关联线索<span style="color:rgb(5, 169, 219);">{{Clientwith_trail}}个</span>
                            </font></font>
                         </h5>
                         <div class="progress progress-sm mb-0 mt-40">
-                          <div class="progress-bar progress-bar-indicating active"  role="progressbar" :style="{width:parseInt(this.Clientwith_project/this.ClientTotal*100)+ '%'}"></div>
+                            <div class="progress-bar progress-bar-indicating active"  role="progressbar" :style="{width:parseInt(this.Clientwith_project/this.ClientTotal*100)+ '%'}" v-if="ClientTotal!=0"></div>
+                            <div class="progress-bar progress-bar-indicating active" style="width:0%" role="progressbar" v-else-if="ClientTotal== 0"></div>
                         </div>
                          <h5><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">近7天关联项目<span style="color:rgb(5, 169, 219);">{{Clientwith_project}}个</span>
                            </font></font>
@@ -169,20 +173,23 @@
                         <div class="example-wrap" style="width:200px">
                         
                         <div class="progress progress-sm mb-0">
-                          <div class="progress-bar progress-bar-indicating active" :style="{width:parseInt(this.Starlatest_follow/this.StarTotal*100)+ '%'}" role="progressbar"></div>
+                            <div class="progress-bar progress-bar-indicating active" :style="{width:parseInt(this.Starlatest_follow/this.StarTotal*100)+ '%'}" role="progressbar" v-if="StarTotal!=0"></div>
+                            <div class="progress-bar progress-bar-indicating active"  role="progressbar" style="width:0%" v-else-if="StarTotal=0"></div>
                         </div>
                        
                         <h5 class="m-0"><font style="vertical-align: inherit;font-size:12px"><font style="vertical-align: inherit;">近7天跟进<span style="color:rgb(5, 169, 219);">{{Starlatest_follow}}个</span>
                            </font><i class="pl-60" style="font-style:normal">未跟进{{starNot}}个</i></font>
                         </h5>
                         <div class="progress progress-sm mb-0 mt-40">
-                          <div class="progress-bar progress-bar-indicating active"  role="progressbar" :style="{width:parseInt(this.Starwith_trail/this.StarTotal*100)+ '%'}"></div>
+                            <div class="progress-bar progress-bar-indicating active"  role="progressbar" :style="{width:parseInt(this.Starwith_trail/this.StarTotal*100)+ '%'}" v-if="StarTotal!=0"></div>
+                            <div class="progress-bar progress-bar-indicating active"  role="progressbar" style="width:0%" v-else-if="StarTotal=0"></div>
                         </div>
                         <h5><font style="vertical-align: inherit;"><font style="vertical-align: inherit;font-size:12px">近7天关联线索<span style="color:rgb(5, 169, 219);">{{Starwith_trail}}个</span>
                            </font></font>
                         </h5>
                         <div class="progress progress-sm mb-0 mt-40">
-                          <div class="progress-bar progress-bar-indicating active"  role="progressbar" :style="{width:parseInt(this.Starwith_project/this.StarTotal*100)+ '%'}"></div>
+                            <div class="progress-bar progress-bar-indicating active"  role="progressbar" :style="{width:parseInt(this.Starwith_project/this.StarTotal*100)+ '%'}" v-if="StarTotal!=0"></div>
+                            <div class="progress-bar progress-bar-indicating active"  role="progressbar" style="width:0%" v-else-if="StarTotal=0"></div>
                         </div>
                          <h5><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">近7天关联项目<span style="color:rgb(5, 169, 219);">{{Starwith_project}}个</span>
                            </font></font>
@@ -219,20 +226,23 @@
                         <div class="example-wrap" style="width:200px">
                         
                         <div class="progress progress-sm mb-0">
-                          <div class="progress-bar progress-bar-indicating active" :style="{width:parseInt(this.Bloggerlatest_follow/this.BloggerTotal*100)+ '%'}" role="progressbar"></div>
+                            <div class="progress-bar progress-bar-indicating active" :style="{width:parseInt(this.Bloggerlatest_follow/this.BloggerTotal*100)+ '%'}" role="progressbar" v-if="BloggerTotal!=0"></div>
+                            <div class="progress-bar progress-bar-indicating active"  role="progressbar" style="width:0%" v-else-if="BloggerTotal=0"></div>
                         </div>
                        
                         <h5 class="m-0"><font style="vertical-align: inherit;font-size:12px"><font style="vertical-align: inherit;">近7天跟进<span style="color:rgb(5, 169, 219);">{{Bloggerlatest_follow}}个</span>
                            </font><i class="pl-60" style="font-style:normal">未跟进{{BloggerNot}}个</i></font>
                         </h5>
                         <div class="progress progress-sm mb-0 mt-40">
-                          <div class="progress-bar progress-bar-indicating active"  role="progressbar" :style="{width:parseInt(this.Bloggerwith_trail/this.BloggerTotal*100)+ '%'}"></div>
+                            <div class="progress-bar progress-bar-indicating active"  role="progressbar" :style="{width:parseInt(this.Bloggerwith_trail/this.BloggerTotal*100)+ '%'}" v-if="BloggerTotal!=0"></div>
+                            <div class="progress-bar progress-bar-indicating active"  role="progressbar" style="width:0%" v-else-if="BloggerTotal=0"></div>
                         </div>
                         <h5><font style="vertical-align: inherit;"><font style="vertical-align: inherit;font-size:12px">近7天关联线索<span style="color:rgb(5, 169, 219);">{{Bloggerwith_trail}}个</span>
                            </font></font>
                         </h5>
                         <div class="progress progress-sm mb-0 mt-40">
-                          <div class="progress-bar progress-bar-indicating active"  role="progressbar" :style="{width:parseInt(this.Bloggerwith_project/this.BloggerTotal*100)+ '%'}"></div>
+                            <div class="progress-bar progress-bar-indicating active"  role="progressbar" :style="{width:parseInt(this.Bloggerwith_project/this.BloggerTotal*100)+ '%'}" v-if="BloggerTotal!=0"></div>
+                            <div class="progress-bar progress-bar-indicating active"  role="progressbar" style="width:0%" v-else-if="BloggerTotal=0"></div>
                         </div>
                          <h5><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">近7天关联项目<span style="color:rgb(5, 169, 219);">{{Bloggerwith_project}}个</span>
                            </font></font>
@@ -379,21 +389,21 @@
                     </div>
                     <div class="modal-body">
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">标题</div>
+                            <div class="col-md-2 text-right float-left require">标题</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" title="" placeholder="请输入标题"
                                        v-model="scheduleName">
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">日历</div>
+                            <div class="col-md-2 text-right float-left require">日历</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors :options="calendarList" ref="calendarSelector"
                                            @change="selectScheduleCalendar"></selectors>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">开始时间</div>
+                            <div class="col-md-2 text-right float-left require">开始时间</div>
                             <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="changeStartTime" ref="scheduleStartDate"></datepicker>
                             </div>
@@ -402,7 +412,7 @@
                             </div>
                         </div>
                         <div class="clearfix">
-                            <div class="col-md-2 text-right float-left line-fixed-height">结束时间</div>
+                            <div class="col-md-2 text-right float-left line-fixed-height require">结束时间</div>
                             <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="changeEndTime" ref="scheduleEndDate"
                                             :startDate="startTime"></datepicker>
@@ -588,6 +598,7 @@
                 </div>
             </div>
         </div>
+        <!-- <AddTask /> -->
         <addGoals />
     </div>
 </template>
@@ -637,15 +648,13 @@
                 startTime: "",
                 startMinutes: "00:00",
                 endTime: "",
-                endMinutes: "00:00",
+                endMinutes: "",
                 taskIntroduce: "",
                 linkData: [],
                 scheduleType: 'add',
                 scheduleName: '',
                 calendarList: [],
                 scheduleCalendar: '',
-                startTime: '',
-                startMinutes: '00:00',
                 isScheduleAllday: 0,
                 linkageSelectedIds: {
                     projects: [],
@@ -687,6 +696,7 @@
                 name: this.user.nickname,
                 id: this.user.id
             })
+            this.principal = this.user.nickname;
             let _this = this;
             $('#changeSchedule').on('hidden.bs.modal', function () {
                 _this.initAddScheduleModal();
@@ -707,19 +717,35 @@
         },
         computed:{
             TaskPercentage:function(){
-                return parseInt(this.Taskcompleted/this.Tasktotal*100)+ '%'
+                if(this.Tasktotal!=0){
+                    return parseInt(this.Taskcompleted/this.Tasktotal*100)+ '%'
+                }else{
+                    return 0 + '%'
+                } 
             },
             TaskDelay:function(){
-                return parseInt(this.Taskdelayed/this.Tasktotal*100)+ '%'
+                if(this.Tasktotal!=0){
+                    return parseInt(this.Taskdelayed/this.Tasktotal*100)+ '%'
+                }else{
+                    return 0 + '%'
+                }  
             },
             projectNot:function(){
                 return this.ProjectTotal - this.Projectprogressing
             },
             ProjectSign:function(){
-                return parseInt(this.Projectsigned/this.ProjectTotal*100)+ '%'
+                if(this.ProjectTotal!=0){
+                    return parseInt(this.Projectsigned/this.ProjectTotal*100)+ '%'
+                }else{
+                    return 0 + '%'
+                } 
             },
             ProjectPercentage:function(){
-                return parseInt(this.Projectcompleted/this.ProjectTotal*100)+ '%'
+                if(this.ProjectTotal!=0){
+                    return parseInt(this.Projectcompleted/this.ProjectTotal*100)+ '%'
+                }else{
+                    return 0 + '%'
+                }     
             },
             clientNot:function(){
                 return this.ClientTotal - this.Clientlatest_follow
@@ -751,7 +777,7 @@
                     this.getProjects()
                     this.getTaskType()
                 }else{ 
-                  if(this.dashboardList.length>0){
+                  if(this.dashboardList.length>0){  
                       this.$router.push(`/dashboard?id=${this.dashboardList[0].id}&name=${this.dashboardList[0].name}`) }  
                 } 
             },
@@ -898,7 +924,12 @@
             },
 
             changeEndMinutes(value) {
-                this.endMinutes = value;
+                if(value){
+                     this.endMinutes = value;
+                }else{
+                    this.endMinutes = new Date().getHours()+':'+new Date().getMinutes()
+                }
+               
             },
             addLinkage: function (type, value, id, index) {
                 if (type === 'father') {
@@ -1032,7 +1063,7 @@
                 fetch('post', '/tasks', data).then(res => {
                     toastr.success("创建成功");
                     $("#addTask").modal("hide");
-                    this.$router.push({path: '/tasks/' + res.data.id});
+                    this.getTask()
                 })
             },
             closeAddTask() {
@@ -1161,6 +1192,7 @@
                 fetch('post', '/schedules', data).then(() => {
                     $('#changeSchedule').modal('hide');
                     toastr.success('添加成功')
+                    this.getTask()
                 })
             },
             getCalendarList: function () {
