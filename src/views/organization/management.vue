@@ -232,7 +232,7 @@ export default {
                 `/departments${!this.isEdit ? "" : "/" + this.departmentId}`,
                 params
             ).then(res => {
-                toastr.success(this.isEdit ? "添加成功" : "修改成功");
+                toastr.success(!this.isEdit ? "添加成功" : "修改成功");
                 $("#add-department").modal("hide");
                 setTimeout(() => {
                     this.getDepartment();
@@ -240,8 +240,12 @@ export default {
             });
         },
         selectDepartment(data) {
-            this.departmentId = data.id;
-            this.departmentPId = data.pId;
+            if (!this.isEdit) {
+                this.departmentId = data.id;
+                this.departmentPId = data.pId;
+            } else {
+                this.departmentPId = data.id;
+            }
         },
         // 负责人
         principalChange(val) {
