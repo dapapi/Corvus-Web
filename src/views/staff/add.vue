@@ -437,7 +437,7 @@ export default {
             maritalStatusArr: maritalStatusArr,
             nationalityArr: tempArr,
             bloodTypeArr: bloodTypeArr,
-            addUrl: window.location.origin + '/informationForm',
+            addUrl: window.location.origin + '/entry.html',
             nameCN: '',
             nameEN: '',
             realName: '', // 真实姓名
