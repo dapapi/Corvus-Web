@@ -657,7 +657,7 @@ export default {
             
             this.disabled = true
 			fetch('post', '/personnel' ,params, this.token).then(result => {
-                toastr.success('提交成功')
+                toastr.success('您已提交成功！')
                 this.disabled = false
                 // this.$router.push({ path: '/staff' });
 			}).catch(() => {

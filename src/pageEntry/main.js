@@ -17,7 +17,7 @@ Vue.component('SelectorsOptions', SelectorsOptions);
 
 Vue.config.productionTip = false;
 // 设置toast展示时间
-// toastr.options.timeOut = 2000
+toastr.options.timeOut = 2000
 
 new Vue({
     router,
