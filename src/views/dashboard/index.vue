@@ -194,26 +194,17 @@
         watch:{
             dashboardList:function(){
                 this.getList()
-                if(this.dashboardList){
-                    this.getid(this.dashboardList[0].id)
-                }
-            
-                
             }
         },
         created(){
-            this.getDashboard()
-           
+            this.getList()
+        },
+        mounted(){
+            this.getid()
         },
         methods:{
-             ...mapActions([
-               
-                'getDashboard'
-            ]),
-            department:function(value){
-                this.departmentDate = value
-            },
             getList:function(){
+                console.log(this.dashboardList)
                 let data={}
                 for (let t = 0; t < this.dashboardList.length; t++) {
                     data={
@@ -242,25 +233,19 @@
                 })
                 this.getid(id)
             },
-            // getDashboardid:function(id){
-               
-            //     this.urlData.forEach(item=>{
-                 
-            //         if(item.id == id){
-            //                console.log(id,  item.department_name)
-            //             this.Dashboardname = item.name
-            //             this.Department_name = item.department_name
-            //             console.log(item)
-            //         }
-                    
-            //     }) 
-            // },
             getid:function(id){
-                
-                let url = location.search.split('?')[1].split('&')[0].split('=')[1]
+                let url = location.search.split('?')[1].split('=')[1].split('&')[0]
+                console.log(url)
                 if(url){
                    this.$store.dispatch('changeselectId',url) 
                 }
+                this.urlData.forEach(item=>{
+                     if(item.id == id){
+                          this.$store.dispatch('changeselectId',item.id)
+                     }
+                    
+                 })
+                
             },
             // getMembers:function(id){
             //     let _this = this

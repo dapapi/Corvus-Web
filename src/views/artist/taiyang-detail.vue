@@ -685,7 +685,7 @@
                             </div>
                             <div class="card-block">
                                 <div class="col-md-12 pl-0">
-                                    <TaskFollowUp :follow-type="'艺人'" :trailId="$route.params.id"
+                                    <TaskFollowUp :follow-type="'艺人'" :trailId="$route.query.id"
                                                   trailType="stars"></TaskFollowUp>
                                 </div>
                             </div>
@@ -1322,7 +1322,7 @@
         </div>
             <!--附件预览-->
             <ApprovalGreatModule v-if="canShow" :formData='formDate' :detailpage='isDetail'
-                                 :default-value="{value:projectContractDefault,id:$route.params.id}"></ApprovalGreatModule>
+                                 :default-value="{value:projectContractDefault,id:$route.query.id}"></ApprovalGreatModule>
             <DocPreview :url='$store.state.previewurl' :givenFileName="previewName" :detailpage='isDetail'/>
         </div>
     </div>
@@ -1512,115 +1512,121 @@
   },
 
   methods: {
-      canAddWork(){
-        if (this.artistInfo.powers.add_work !== 'true') {
-            toastr.error('当前用户没有权限新增作品');
-            return;
-        }
-        $('#addWork').modal('show')
-      },
-    // 获取艺人信息
-    getArtist() {
-      this.artistId = this.$route.params.id;
-      fetch('get', `stars/detail/${this.artistId}`).then((response) => {
-        if (JSON.stringify(response.data ) === '[]') {
-            toastr.error('您没有查看艺人详情的权限')   
-        }else{ 
-             this.artistInfo = response.data; 
-        }
-        this.isLoading = false;
-        setTimeout(() => {
-            this.canShow = true
-        }, 200);
-        this.artistName = response.data.name;
-        if (response.data.star_risk_point == 'privacy') {
-          this.artistInfo.star_risk_point = '**';
-        } else {
-          this.artistInfo.star_risk_point = response.data.star_risk_point;
-        }
-        if (response.data.birthday == 'privacy') {
-          this.artistInfo.birthday = '**';
-        } else {
-          this.artistInfo.birthday = response.data.birthday;
-        }
-        if (response.data.phone == 'privacy') {
-          this.artistInfo.phone = '**';
-        } else {
-          this.artistInfo.phone = response.data.phone;
-        }
-        if (response.data.wechat == 'privacy') {
-          this.artistInfo.wechat = '**';
-        } else {
-          this.artistInfo.wechat = response.data.wechat;
-        }
-        if (response.data.email == 'privacy') {
-          this.artistInfo.email = '**';
-        } else {
-          this.artistInfo.email = response.data.email;
-        }
-        this.uploadUrl = this.artistInfo.avatar;
-        if(response.data.tasks){
-            this.artistTasksInfo = response.data.tasks;// 任务数据
-        }
-        
-        // this.artistWorksInfo = response.data.works.data;// 作品数据
-        if(response.data.affixes){
-            this.affixes = response.data.affixes.data;
-        }
-        if(this.artistInfo.creator){
-            if(this.user.nickname == this.artistInfo.creator.name){
-                this.PrivacyShow = true
-            }
-        }
-      });
-    },
-    getProject(page = 1) {
-      fetch('get', `/stars/${this.artistId}/project`, { page }).then((response) => {
-        this.artistProjectsInfo = response.data;
-        this.current_page = response.meta.pagination.current_page;
-        this.total = response.meta.pagination.total;
-        this.total_pages = response.meta.pagination.total_pages;
-      });
-    },
-    getWoks() {
-      fetch('get', `/stars/${this.artistId}/works`).then((response) => {
-        this.artistWorksInfo = response.data;
-        this.current_page = response.meta.pagination.current_page;
-        this.total = response.meta.pagination.total;
-        this.total_pages = response.meta.pagination.total_pages;
-      });
-    },
-    //隐私设置
-    setPrivacy:function(){
-            let data = {
-                    birthday: this.$store.state.birthdayInfo, //年龄
-                    star_risk_point: this.$store.state.star_risk_pointInfo,//潜在风险点
-                    phone: this.$store.state.phoneInfo,//手机号
-                    wechat: this.$store.state.wechatInfo,//微信
-                    email: this.$store.state.emailInfo,//邮箱
-                };
-                let sendData = {
-                    birthday: [],
-                    star_risk_point: [],
-                    phone: [],
-                    wechat: [],
-                    email: []
-                };
-                for (const key in data) {
-                    for (let i = 0; i < data[key].length; i++) {
-                        sendData[key].push(data[key][i].id)
-                    }
+            canAddWork(){
+                if (this.artistInfo.powers.add_work !== 'true') {
+                    toastr.error('当前用户没有权限新增作品');
+                    return;
                 }
-
-                fetch('post', `/stars/${this.$route.params.id}/privacyUser`, sendData).then(function () {
-                    toastr.success('隐私设置成功')
-                    $('#addPrivacy').modal('hide')
-                })
+                $('#addWork').modal('show')
             },
+            // 获取艺人信息
+            getArtist() {
+                let url
+                this.artistId = this.$route.query.id;
+                if( this.$route.query.sign_contract_status == 2){
+                    url =`stars/detail/${this.artistId}`
+                }else if (this.$route.query.sign_contract_status == 1){
+                    url =`/signing/stars/detail/${this.artistId}`
+                }
+                fetch('get', url).then((response) => {
+                    if (JSON.stringify(response.data ) === '[]') {
+                        toastr.error('您没有查看艺人详情的权限')   
+                    }else{ 
+                        this.artistInfo = response.data; 
+                    }
+                    this.isLoading = false;
+                    setTimeout(() => {
+                        this.canShow = true
+                    }, 200);
+                    this.artistName = response.data.name;
+                    if (response.data.star_risk_point == 'privacy') {
+                    this.artistInfo.star_risk_point = '**';
+                    } else {
+                    this.artistInfo.star_risk_point = response.data.star_risk_point;
+                    }
+                    if (response.data.birthday == 'privacy') {
+                    this.artistInfo.birthday = '**';
+                    } else {
+                    this.artistInfo.birthday = response.data.birthday;
+                    }
+                    if (response.data.phone == 'privacy') {
+                    this.artistInfo.phone = '**';
+                    } else {
+                    this.artistInfo.phone = response.data.phone;
+                    }
+                    if (response.data.wechat == 'privacy') {
+                    this.artistInfo.wechat = '**';
+                    } else {
+                    this.artistInfo.wechat = response.data.wechat;
+                    }
+                    if (response.data.email == 'privacy') {
+                    this.artistInfo.email = '**';
+                    } else {
+                    this.artistInfo.email = response.data.email;
+                    }
+                    this.uploadUrl = this.artistInfo.avatar;
+                    if(response.data.tasks){
+                        this.artistTasksInfo = response.data.tasks;// 任务数据
+                    }
+                    
+                    // this.artistWorksInfo = response.data.works.data;// 作品数据
+                    if(response.data.affixes){
+                        this.affixes = response.data.affixes.data;
+                    }
+                    if(this.artistInfo.creator){
+                        if(this.user.nickname == this.artistInfo.creator.name){
+                            this.PrivacyShow = true
+                        }
+                    }
+                });
+            },
+            getProject(page = 1) {
+            fetch('get', `/stars/${this.artistId}/project`, { page }).then((response) => {
+                this.artistProjectsInfo = response.data;
+                this.current_page = response.meta.pagination.current_page;
+                this.total = response.meta.pagination.total;
+                this.total_pages = response.meta.pagination.total_pages;
+            });
+            },
+            getWoks() {
+            fetch('get', `/stars/${this.artistId}/works`).then((response) => {
+                this.artistWorksInfo = response.data;
+                this.current_page = response.meta.pagination.current_page;
+                this.total = response.meta.pagination.total;
+                this.total_pages = response.meta.pagination.total_pages;
+            });
+            },
+            //隐私设置
+            setPrivacy:function(){
+                let data = {
+                        birthday: this.$store.state.birthdayInfo, //年龄
+                        star_risk_point: this.$store.state.star_risk_pointInfo,//潜在风险点
+                        phone: this.$store.state.phoneInfo,//手机号
+                        wechat: this.$store.state.wechatInfo,//微信
+                        email: this.$store.state.emailInfo,//邮箱
+                    };
+                    let sendData = {
+                        birthday: [],
+                        star_risk_point: [],
+                        phone: [],
+                        wechat: [],
+                        email: []
+                    };
+                    for (const key in data) {
+                        for (let i = 0; i < data[key].length; i++) {
+                            sendData[key].push(data[key][i].id)
+                        }
+                    }
+                    fetch('post', `/stars/${this.$route.query.id}/privacyUser`, sendData).then(function () {
+                        toastr.success('隐私设置成功')
+                        $('#addPrivacy').modal('hide')
+                    })
+                },
             getPrivacy() {
                 let data = {
-                    star_id: this.$route.params.id
+                    star_id: this.$route.query.id
                 };
+                
                 fetch('get', `/privacyUsers?include=creator`, data).then(response => {
                     let allPrivacyUsers = response.data;
                     this.$store.state.birthdayInfo = [];
@@ -1648,11 +1654,11 @@
                         }
                     }
                 })
-               
+                
             },
 
             getCalendar() {
-                this.artistId = this.$route.params.id;
+                this.artistId = this.$route.query.id;
 
 
                 const data = {
@@ -2064,7 +2070,7 @@
                 } else {
                     this.expense_type = 0;
                 }
-                fetch('get', `/stars/${this.$route.params.id}/bill`, {
+                fetch('get', `/stars/${this.$route.query.id}/bill`, {
                     page,
                     expense_type: this.expense_type,
                 }).then((response) => {
@@ -2094,7 +2100,7 @@
             // 获取任务列表
             getTaskList(page = 1) {
                 this.getTaskType();
-                fetch('get', `/stars/${this.$route.params.id}/tasks/`, {
+                fetch('get', `/stars/${this.$route.query.id}/tasks/`, {
                     page,
                 }).then((response) => {
                     this.allTaskList = response.data;
@@ -2111,7 +2117,7 @@
             },
             getTaskDate() {
                 this.doneTaskNum = 0;
-                fetch('get', `/stars/${this.$route.params.id}/tasks`).then((response) => {
+                fetch('get', `/stars/${this.$route.query.id}/tasks`).then((response) => {
                     this.allTaskList = response.data;
                     if (this.allTaskList.length > 0) {
                         for (let i = 0; i < this.allTaskList.length; i++) {
@@ -2251,7 +2257,7 @@
 
                 this.allTaskList.push(response.data);
 
-                fetch('get', `/stars/${this.$route.params.id}/tasks`).then((response) => {
+                fetch('get', `/stars/${this.$route.query.id}/tasks`).then((response) => {
                     this.allTaskList = response.data;
                     if (this.allTaskList.length > 0) {
                         for (let i = 0; i < this.allTaskList.length; i++) {
@@ -2303,7 +2309,7 @@
                     release_time: this.workReleaseTime,
                     works_type: this.workType,
                 };
-                fetch('post', `/stars/${this.$route.params.id}/works`, data).then((response) => {
+                fetch('post', `/stars/${this.$route.query.id}/works`, data).then((response) => {
                     toastr.success('新增成功');
                     $('#addWork').modal('hide');
                     this.isAddWorkButtonDisable = false;
@@ -2521,7 +2527,7 @@
             // 删除附件
             deleteAffix() {
                 const _this = this;
-                fetch('delete', `/star/${this.$route.params.id}/affixes/${this.affixId}`).then((response) => {
+                fetch('delete', `/star/${this.$route.query.id}/affixes/${this.affixId}`).then((response) => {
                     $('#affix').modal('hide');
                     toastr.success('删除成功');
                     _this.isEdit = false;

@@ -72,14 +72,12 @@
                 this.getDepartment()
                 this.getModuleRole()
                 this.getListPower()
-                //  this.getDashboard()
+                this.getDashboard()
             }
             // this.getApprovalNum()
            
         },
-        mounted(){
-          
-               
+        mounted(){               
         //      $('.modal-dialog').click(function(){
         //       console.log(1111);
         //         document.getElementsByTagName('body')[0].classList.add('modal-open');
@@ -92,7 +90,7 @@
                 'getModuleRole',
                 'getListPower',
                 'getApprovalNum',
-                // 'getDashboard'
+                'getDashboard'
             ])
         }
     };

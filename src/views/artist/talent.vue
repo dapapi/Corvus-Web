@@ -156,40 +156,40 @@
                                         <label :for="'artist-' + artist.id"></label>
                                     </span>
                                 </td>
-                                <td @click="redirectArtistDetail(artist.id)">{{ artist.name }}</td>
-                                <td @click="redirectArtistDetail(artist.id)"
+                                <td @click="redirectArtistDetail(artist.id,artist.sign_contract_status)">{{ artist.name }}</td>
+                                <td @click="redirectArtistDetail(artist.id,artist.sign_contract_status)"
                                     v-if="artistsInfo.find(item=>item.sign_contract_status==1)&&artist.birthday!=='privacy'">
                                     {{artist.birthday|jsGetAge}}
                                 </td>
-                                <td @click="redirectArtistDetail(artist.id)"
+                                <td @click="redirectArtistDetail(artist.id,artist.sign_contract_status)"
                                     v-if="artistsInfo.find(item=>item.sign_contract_status==1)&&artist.birthday=='privacy'">
                                     **
                                 </td>
-                                <td @click="redirectArtistDetail(artist.id)"
+                                <td @click="redirectArtistDetail(artist.id,artist.sign_contract_status)"
                                     v-if="artistsInfo.find(item=>item.sign_contract_status!==1)">暂无
                                 </td>
-                                <td @click="redirectArtistDetail(artist.id)">
+                                <td @click="redirectArtistDetail(artist.id,artist.sign_contract_status)">
                                     <template v-if="artist.source">
                                             <span :style="'color:' + artistSourceArr.find(item => item.value == artist.source).color">
                                                 {{ artistSourceArr.find(item => item.value == artist.source).name}}
                                             </span>
                                     </template>
                                 </td>
-                                <td @click="redirectArtistDetail(artist.id)"
+                                <td @click="redirectArtistDetail(artist.id,artist.sign_contract_status)"
                                     v-if="artistsInfo.find(item=>item.sign_contract_status==2)&&artist.sign_contract_at">{{
                                     common.timeProcessing(artist.sign_contract_at, 'day') }}
                                 </td>
-                                <td @click="redirectArtistDetail(artist.id)"
+                                <td @click="redirectArtistDetail(artist.id,artist.sign_contract_status)"
                                     v-if="artistsInfo.find(item=>item.sign_contract_status==3)&&artist.terminate_agreement_at">{{
                                     common.timeProcessing(artist.terminate_agreement_at, 'day')}}
                                 </td>
-                                 <td @click="redirectBolggerDetail(artist.id)"
+                                 <td @click="redirectArtistDetail(artist.id,artist.sign_contract_status)"
                                     v-if="artistsInfo.find(item=>item.sign_contract_status==2)&&!artist.sign_contract_at">
                                 </td>
-                                 <td @click="redirectBolggerDetail(artist.id)"
+                                 <td @click="redirectArtistDetail(artist.id,artist.sign_contract_status)"
                                     v-if="artistsInfo.find(item=>item.sign_contract_status==3)&&!artist.terminate_agreement_at">
                                 </td>
-                                <td @click="redirectArtistDetail(artist.id)"
+                                <td @click="redirectArtistDetail(artist.id,artist.sign_contract_status)"
                                     v-if="artist.communication_status&&artistsInfo.find(item=>item.sign_contract_status==1)">
                                     <template>
                                             <span :style="{color:taiyangCommunicationStatusArr.find(item => item.value ==
@@ -200,8 +200,8 @@
 
                                     </template>
                                 </td>
-                                <td @click="redirectArtistDetail(artist.id)">{{common.timeProcessing(artist.created_at)}}</td>
-                                <td @click="redirectArtistDetail(artist.id)">{{common.timeProcessing(artist.last_follow_up_at)}}</td>
+                                <td @click="redirectArtistDetail(artist.id,artist.sign_contract_status)">{{common.timeProcessing(artist.created_at)}}</td>
+                                <td @click="redirectArtistDetail(artist.id,artist.sign_contract_status)">{{common.timeProcessing(artist.last_follow_up_at)}}</td>
                             </tr>
                             </tbody>
 
@@ -291,26 +291,26 @@
                                         <label :for="'row-' + artist.id"></label>
                                     </span>
                                 </td>
-                                <td @click="redirectBolggerDetail(artist.id)">{{ artist.nickname }}</td>
-                                <td @click="redirectBolggerDetail(artist.id)"
+                                <td @click="redirectBolggerDetail(artist.id,artist.sign_contract_status)">{{ artist.nickname }}</td>
+                                <td @click="redirectBolggerDetail(artist.id,artist.sign_contract_status)"
                                     v-if="bloggerInfo.find(item=>item.sign_contract_status!==1)||!artist.type">暂无
                                 </td>
-                                <td @click="redirectBolggerDetail(artist.id)" v-if=" artist.type">{{ artist.type }}</td>
-                                <td @click="redirectBolggerDetail(artist.id)"
+                                <td @click="redirectBolggerDetail(artist.id,artist.sign_contract_status)" v-if=" artist.type">{{ artist.type }}</td>
+                                <td @click="redirectBolggerDetail(artist.id,artist.sign_contract_status)"
                                     v-if="bloggerInfo.find(item=>item.sign_contract_status==2)&&artist.sign_contract_at">{{
                                     common.timeProcessing(artist.sign_contract_at, 'day') }}
                                 </td>
-                                <td @click="redirectBolggerDetail(artist.id)"
+                                <td @click="redirectBolggerDetail(artist.id,artist.sign_contract_status)"
                                     v-if="bloggerInfo.find(item=>item.sign_contract_status==3)&&artist.terminate_agreement_at">{{
                                     common.timeProcessing(artist.terminate_agreement_at, 'day')}}
                                 </td>
-                                 <td @click="redirectBolggerDetail(artist.id)"
+                                 <td @click="redirectBolggerDetail(artist.id,artist.sign_contract_status)"
                                     v-if="bloggerInfo.find(item=>item.sign_contract_status==2)&&!artist.sign_contract_at">
                                 </td>
-                                 <td @click="redirectBolggerDetail(artist.id)"
+                                 <td @click="redirectBolggerDetail(artist.id,artist.sign_contract_status)"
                                     v-if="bloggerInfo.find(item=>item.sign_contract_status==3&&!artist.terminate_agreement_at)">
                                 </td>
-                                <td @click="redirectBolggerDetail(artist.id)"
+                                <td @click="redirectBolggerDetail(artist.id,artist.sign_contract_status)"
                                     v-if="artist.communication_status&&bloggerInfo.find(item=>item.sign_contract_status==1)">
                                     <template>
                                         <span :style="{color:papiCommunicationStatusArr.find(item => item.value ==
@@ -321,20 +321,20 @@
 
                                     </template>
                                 </td>
-                                 <td @click="redirectBolggerDetail(artist.id)"
+                                 <td @click="redirectBolggerDetail(artist.id,artist.sign_contract_status)"
                                     v-if="artist.communication_status&&bloggerInfo.find(item=>item.sign_contract_status==0)">
                                     <template>
                                     
                                     </template>
                                 </td>
-                                <td @click="redirectBolggerDetail(artist.id)"
+                                <td @click="redirectBolggerDetail(artist.id,artist.sign_contract_status)"
                                     v-if="bloggerInfo.find(item=>item.sign_contract_status==1) &&artist.publicity_user_names">
                                     <span v-for="(v,index) in artist.publicity_user_names" :key="index">
                                         {{v}}
                                     </span>
                                 </td>
-                                <td @click="redirectBolggerDetail(artist.id)">{{common.timeProcessing(artist.created_at)}}</td>
-                                <td @click="redirectBolggerDetail(artist.id)">{{common.timeProcessing(artist.last_follow_up_at)}}
+                                <td @click="redirectBolggerDetail(artist.id,artist.sign_contract_status)">{{common.timeProcessing(artist.created_at)}}</td>
+                                <td @click="redirectBolggerDetail(artist.id,artist.sign_contract_status)">{{common.timeProcessing(artist.last_follow_up_at)}}
                                 </td>
                             </tr>
 
@@ -1412,11 +1412,17 @@
                     }
                 }
             },
-            redirectArtistDetail: function (artistId) {
-                this.$router.push({path: 'artists/' + artistId})
+            redirectArtistDetail: function (artistId,sign_contract_statusId) {
+                 this.$router.push({
+            　　　　path: '/artists', query:{id:artistId,sign_contract_status:sign_contract_statusId}
+
+            　　 });
             },
-            redirectBolggerDetail: function (bolggerId) {
-                this.$router.push({path: 'blogger/' + bolggerId})
+            redirectBolggerDetail: function (bolggerId,sign_contract_statusId) {
+                this.$router.push({
+            　　　　path: '/blogger', query:{id:bolggerId,sign_contract_status:sign_contract_statusId}
+
+            　　 });
             },
             changeMember: function (type) {
                 this.giveType = type

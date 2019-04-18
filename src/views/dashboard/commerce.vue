@@ -5,12 +5,12 @@
             <h1 class="page-title">{{DashboardName}}</h1>
         </div>
         <div class="page-content container-fluid px-20">
-                <div class="tab  my-20 pl-10" style="display:flex">
+                <div class="tab  my-20 " style="display:flex">
                         <div class="task mx-20" data-plugin="actionBtn" data-toggle="modal" @click="addTask">创建任务</div>
                         <div class="target mx-20" @click="addGoal">创建目标</div>
                         <div class="schedule mx-20" data-plugin="actionBtn" data-toggle="modal" @click="addCalendar">创建日程</div>
                 </div>
-                <div class="clearfix  mt-30 pl-10">
+                <div class="clearfix  mt-30">
                     <div class="panel mb-0 ml-0 exhibition-panel" style="background:#fff;height:400px; position: relative;">
                         <div  class="circular m-30">
                                 <span>{{Tasktotal}}</span>
@@ -271,7 +271,7 @@
 
                 </div>
         </div>
-        <div class="modal fade"
+        <!-- <div class="modal fade"
              id="addTask"
              aria-hidden="true"
              aria-labelledby="addLabelForm"
@@ -367,7 +367,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
          <div class="modal fade line-center" id="changeSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
@@ -598,8 +598,8 @@
                 </div>
             </div>
         </div>
-        <!-- <AddTask /> -->
-        <addGoals />
+        <AddTask />
+        <addGoals :goalperiod='periods.data' @submitDone='submitDone'/>
     </div>
 </template>
 <script>
@@ -675,28 +675,31 @@
                 allProjectsInfo: '',
                 searchKeyWord: '',
                 isLoading: false,
+                periods:[]
             }
         },
         created(){
             this.getName()
-            this.getLinkData()
+            // this.getLinkData()
+            this.getPeriods()
             this.init()
         },
         mounted(){
             this.getResources();
             this.getCalendarList()
             this.selectProjectLinkage()
-            $('#addTask').on('hidden.bs.modal', () => {
-                // 清空state
-                this.closeAddTask()
-            })
+         
             this.user = JSON.parse(Cookies.get('user'))
-            // 负责人默认值的设置
+                // 负责人默认值的设置
             this.$store.commit('changeNewPrincipal', {
                 name: this.user.nickname,
                 id: this.user.id
             })
-            this.principal = this.user.nickname;
+            // $('#addTask').on('hidden.bs.modal', () => {
+            //     // 清空state
+            //     this.closeAddTask()
+            // })
+          
             let _this = this;
             $('#changeSchedule').on('hidden.bs.modal', function () {
                 _this.initAddScheduleModal();
@@ -931,168 +934,168 @@
                 }
                
             },
-            addLinkage: function (type, value, id, index) {
-                if (type === 'father') {
-                    this.getChildLinkData(value, index)
-                    this.resourceType = id
-                } else if (type === 'child') {
-                    this.resourceableId = value
-                }
-            },
-            getLinkData() {
-                fetch('get', '/resources').then(res => {
-                    this.linkData = res.data.map((n, i) => {
-                        return {
-                            name: n.title,
-                            id: n.type,
-                            value: n.code,
-                            child: []
-                        }
-                    })
-                    this.linkData.unshift({
-                            name: '暂不关联任何资源',
-                            id: '',
-                            value: '',
-                            child: []
-                        })
-                    if (this.linkData[0].child.length === 0) {
-                        this.getChildLinkData('', 0)
-                    }
-                })
-            },
-            // 获取关联子资源数据
-            getChildLinkData(url, index) {
-                if (url) {
-                    let data = {}
-                    this.linkCode = url
-                    this.linkIndex = index
+            // addLinkage: function (type, value, id, index) {
+            //     if (type === 'father') {
+            //         this.getChildLinkData(value, index)
+            //         this.resourceType = id
+            //     } else if (type === 'child') {
+            //         this.resourceableId = value
+            //     }
+            // },
+            // getLinkData() {
+            //     fetch('get', '/resources').then(res => {
+            //         this.linkData = res.data.map((n, i) => {
+            //             return {
+            //                 name: n.title,
+            //                 id: n.type,
+            //                 value: n.code,
+            //                 child: []
+            //             }
+            //         })
+            //         this.linkData.unshift({
+            //                 name: '暂不关联任何资源',
+            //                 id: '',
+            //                 value: '',
+            //                 child: []
+            //             })
+            //         if (this.linkData[0].child.length === 0) {
+            //             this.getChildLinkData('', 0)
+            //         }
+            //     })
+            // },
+            // // 获取关联子资源数据
+            // getChildLinkData(url, index) {
+            //     if (url) {
+            //         let data = {}
+            //         this.linkCode = url
+            //         this.linkIndex = index
 
-                    let _url = url.substr(0, url.length - 1) + '/related'
-                    if (url === 'bloggers') {
-                        _url = url + '/all'
-                        data.sign_contract_status = 2
-                    }
-                    fetch('get', _url, data).then(res => {
-                        const temp = this.linkData[index]
-                        if (res.meta && res.meta.pagination) {
-                            this.canLoadMore = true
-                            this.linkTotalPage = res.meta.pagination.total_pages
-                        } else {
-                            this.canLoadMore = false
-                        }
-                        temp.child = res.data.map(n => {
-                            return {
-                                name: n.name || n.nickname || n.title || n.company,
-                                id: n.id,
-                                value: n.id,
-                            }
-                        })
-                        this.resourceableId = temp.child[0].id
-                        this.$set(this.linkData, index, temp)
-                        setTimeout(() => {
-                            this.$refs.linkage.refresh()
-                        }, 100)
-                    })
-                } else {
-                    const temp = this.linkData[index]
-                    temp.child = [{
-                        name: '暂不关联任何资源',
-                        id: '',
-                        value: '',
-                    }]
-                    this.resourceableId = temp.child[0].id
-                    this.$set(this.linkData, index, temp)
-                    setTimeout(() => {
-                        this.$refs.linkage.refresh()
-                    }, 100)
-                }
-            },
-            addtask() {
+            //         let _url = url.substr(0, url.length - 1) + '/related'
+            //         if (url === 'bloggers') {
+            //             _url = url + '/all'
+            //             data.sign_contract_status = 2
+            //         }
+            //         fetch('get', _url, data).then(res => {
+            //             const temp = this.linkData[index]
+            //             if (res.meta && res.meta.pagination) {
+            //                 this.canLoadMore = true
+            //                 this.linkTotalPage = res.meta.pagination.total_pages
+            //             } else {
+            //                 this.canLoadMore = false
+            //             }
+            //             temp.child = res.data.map(n => {
+            //                 return {
+            //                     name: n.name || n.nickname || n.title || n.company,
+            //                     id: n.id,
+            //                     value: n.id,
+            //                 }
+            //             })
+            //             this.resourceableId = temp.child[0].id
+            //             this.$set(this.linkData, index, temp)
+            //             setTimeout(() => {
+            //                 this.$refs.linkage.refresh()
+            //             }, 100)
+            //         })
+            //     } else {
+            //         const temp = this.linkData[index]
+            //         temp.child = [{
+            //             name: '暂不关联任何资源',
+            //             id: '',
+            //             value: '',
+            //         }]
+            //         this.resourceableId = temp.child[0].id
+            //         this.$set(this.linkData, index, temp)
+            //         setTimeout(() => {
+            //             this.$refs.linkage.refresh()
+            //         }, 100)
+            //     }
+            // },
+            // addtask() {
               
-                // 校验
-                if (!this.taskName) {
-                    toastr.error('请填写任务名称！')
-                    return
-                }
-                if (!this.$store.state.newPrincipalInfo.id) {
-                    toastr.error('请选择负责人！')
-                    return
-                }
-                if (!this.taskType) {
-                    toastr.error('请选择任务类型！')
-                    return
-                }
-                if (!this.taskLevel) {
-                    toastr.error('请选择任务优先级！')
-                    return
-                }
-                if (!this.startTime || !this.endTime) {
-                    toastr.error('请选择时间!')
-                    return
-                }
-                if ((this.startTime + " " + this.startMinutes) > (this.endTime + " " + this.endMinutes)) {
-                    toastr.error('开始时间不能晚于截止时间');
-                    return
-                }
+            //     // 校验
+            //     if (!this.taskName) {
+            //         toastr.error('请填写任务名称！')
+            //         return
+            //     }
+            //     if (!this.$store.state.newPrincipalInfo.id) {
+            //         toastr.error('请选择负责人！')
+            //         return
+            //     }
+            //     if (!this.taskType) {
+            //         toastr.error('请选择任务类型！')
+            //         return
+            //     }
+            //     if (!this.taskLevel) {
+            //         toastr.error('请选择任务优先级！')
+            //         return
+            //     }
+            //     if (!this.startTime || !this.endTime) {
+            //         toastr.error('请选择时间!')
+            //         return
+            //     }
+            //     if ((this.startTime + " " + this.startMinutes) > (this.endTime + " " + this.endMinutes)) {
+            //         toastr.error('开始时间不能晚于截止时间');
+            //         return
+            //     }
 
-                let participant_ids = [];
-                for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
-                    participant_ids.push(this.$store.state.newParticipantsInfo[i].id);
-                }
+            //     let participant_ids = [];
+            //     for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
+            //         participant_ids.push(this.$store.state.newParticipantsInfo[i].id);
+            //     }
 
-                let data = {
-                    // resource_type: this.resourceType ,
-                    // resourceable_id: this.resourceableId,
-                    type: this.taskType,
-                    title: this.taskName,
-                    principal_id: this.$store.state.newPrincipalInfo.id,
-                    participant_ids: participant_ids,
-                    priority: this.taskLevel,
-                    start_at: this.startTime + " " + this.startMinutes,
-                    end_at: this.endTime + " " + this.endMinutes,
-                    desc: this.taskIntroduce
-                };
+            //     let data = {
+            //         // resource_type: this.resourceType ,
+            //         // resourceable_id: this.resourceableId,
+            //         type: this.taskType,
+            //         title: this.taskName,
+            //         principal_id: this.$store.state.newPrincipalInfo.id,
+            //         participant_ids: participant_ids,
+            //         priority: this.taskLevel,
+            //         start_at: this.startTime + " " + this.startMinutes,
+            //         end_at: this.endTime + " " + this.endMinutes,
+            //         desc: this.taskIntroduce
+            //     };
 
-                if (this.resourceType) {
-                    data.resource_type = this.resourceType
-                }
-                if (this.resourceableId) {
-                    data.resourceable_id = this.resourceableId
-                }
+            //     if (this.resourceType) {
+            //         data.resource_type = this.resourceType
+            //     }
+            //     if (this.resourceableId) {
+            //         data.resourceable_id = this.resourceableId
+            //     }
 
-                fetch('post', '/tasks', data).then(res => {
-                    toastr.success("创建成功");
-                    $("#addTask").modal("hide");
-                    this.getTask()
-                })
-            },
-            closeAddTask() {
-                this.taskName = ''
-                this.taskLevel = ''
-                this.$refs.taskLevel.setValue('')
-                this.taskType = ''
-                this.$refs.taskType.setValue('')
-                this.startTime = ''
-                this.endTime = ''
-                this.startMinutes = ''
-                this.endMinutes = ''
-                this.taskIntroduce = ''
-                this.$refs.startTime.setValue('')
-                this.$refs.startMinutes.setValue('0')
-                this.$refs.endTime.setValue('')
-                this.$refs.endMinutes.setValue('0')
-                this.linkData = []
-                this.getLinkData()
-                this.setDefaultPrincipal()
-            },
-            // 设置默认负责人
-            setDefaultPrincipal() {
-                this.$store.commit('changeNewPrincipal', {
-                    name: this.user.nickname,
-                    id: this.user.id
-                })
-                this.$store.commit('changeNewParticipantsInfo', [])
-            },
+            //     fetch('post', '/tasks', data).then(res => {
+            //         toastr.success("创建成功");
+            //         $("#addTask").modal("hide");
+            //         this.getTask()
+            //     })
+            // },
+            // closeAddTask() {
+            //     this.taskName = ''
+            //     this.taskLevel = ''
+            //     this.$refs.taskLevel.setValue('')
+            //     this.taskType = ''
+            //     this.$refs.taskType.setValue('')
+            //     this.startTime = ''
+            //     this.endTime = ''
+            //     this.startMinutes = ''
+            //     this.endMinutes = ''
+            //     this.taskIntroduce = ''
+            //     this.$refs.startTime.setValue('')
+            //     this.$refs.startMinutes.setValue('0')
+            //     this.$refs.endTime.setValue('')
+            //     this.$refs.endMinutes.setValue('0')
+            //     this.linkData = []
+            //     this.getLinkData()
+            //     this.setDefaultPrincipal()
+            // },
+            // // 设置默认负责人
+            // setDefaultPrincipal() {
+            //     this.$store.commit('changeNewPrincipal', {
+            //         name: this.user.nickname,
+            //         id: this.user.id
+            //     })
+            //     this.$store.commit('changeNewParticipantsInfo', [])
+            // },
             selectScheduleCalendar: function (value) {
                 this.scheduleCalendar = value
             },
@@ -1284,7 +1287,14 @@
                     this.linkageSelectedIds[type].push(value)
                 }
             },
-          
+            getPeriods(){
+                fetch('get','/periods/all').then((params) => {
+                    this.periods = params
+                })
+            },
+            submitDone(){
+                $('#goals-add').modal('hide')
+            },
         }
     }
 </script>

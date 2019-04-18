@@ -111,12 +111,12 @@ const VueRouter = new Router({
             component: () => import('./views/artist/talent.vue')
         },
         {
-            path: '/artists/:id',
+            path: '/artists',
             name: 'artists',
             component: () => import('./views/artist/taiyang-detail.vue')
         },
         {
-            path: '/blogger/:id',
+            path: '/blogger',
             name: 'blogger',
             component: () => import('./views/artist/papi-detail.vue')
         },

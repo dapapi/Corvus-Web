@@ -652,7 +652,7 @@
                             <div class="card-block">
                                 <div class="col-md-12 pl-0">
                                     <TaskFollowUp :follow-type="'博主'" trailType='blogger'
-                                                  :trailId="$route.params.id"></TaskFollowUp>
+                                                  :trailId="$route.query.id"></TaskFollowUp>
                                 </div>
                             </div>
                         </div>
@@ -785,7 +785,7 @@
             </div>
         </div>
         <ApprovalGreatModule v-if="canShow" :formData="formDate"
-                             :default-value="{value:projectContractDefault,id:$route.params.id}"></ApprovalGreatModule>
+                             :default-value="{value:projectContractDefault,id:$route.query.id}"></ApprovalGreatModule>
         <!-- 新建/修改 日程 -->
         <div v-if="canShow" class="modal fade line-center" id="changeSchedule" aria-hidden="true"
              aria-labelledby="addLabelForm"
@@ -1508,7 +1508,7 @@
             },
 
             getArtist() {
-                this.artistId = this.$route.params.id;
+                this.artistId = this.$route.query.id;
                 let _this = this;
                 // let data = {
                 //     include: 'creator,tasks,affixes,publicity,publicity.department',
@@ -1609,7 +1609,7 @@
                 this.$refs.meetingRoom.setDate(value)
             },
             getCalendar() {
-                this.artistId = this.$route.params.id;
+                this.artistId = this.$route.query.id;
 
                 let data = {
                     include: 'calendar,schedule,schedule.creator',
@@ -2117,7 +2117,7 @@
                         sendData[key].push(data[key][i].id)
                     }
                 }
-                fetch('put', `/bloggers/${this.$route.params.id}/privacyUser`, sendData).then(function () {
+                fetch('put', `/bloggers/${this.$route.query.id}/privacyUser`, sendData).then(function () {
                    
                     toastr.success('隐私设置成功')
                     $('#addPrivacy').modal('hide')
@@ -2125,7 +2125,7 @@
             },
             getPrivacy() {
                 let data = {
-                    blogger_id: this.$route.params.id
+                    blogger_id: this.$route.query.id
                 };
                 fetch('get', `/privacyUsers?include=creator`, data).then(response => {
                     let allPrivacyUsers = response.data;
@@ -2180,7 +2180,7 @@
 
                 this.isEdit = false;
                 this.isStatrtEdit = true;
-                this.artistId = this.$route.params.id;
+                this.artistId = this.$route.query.id;
                 if (this.artistInfo.intention == 1) {
                     this.artistInfo.intention = 1
                 } else {
@@ -2268,7 +2268,7 @@
                     read_proportion: this.artistWorkProportion,
                     link: this.videoUrl,
                     advertising: this.advertisingType,
-                    blogger_id: this.$route.params.id
+                    blogger_id: this.$route.query.id
                 }
                 fetch('post', '/bloggers/new/production', data).then(() => {
                     this.isAddWorkButtonDisable = false;
