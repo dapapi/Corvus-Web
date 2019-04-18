@@ -599,7 +599,7 @@
             </div>
         </div>
         <AddTask />
-        <addGoals />
+        <addGoals :goalperiod='periods.data' @submitDone='submitDone'/>
     </div>
 </template>
 <script>
@@ -675,11 +675,13 @@
                 allProjectsInfo: '',
                 searchKeyWord: '',
                 isLoading: false,
+                periods:[]
             }
         },
         created(){
             this.getName()
             // this.getLinkData()
+            this.getPeriods()
             this.init()
         },
         mounted(){
@@ -1285,7 +1287,14 @@
                     this.linkageSelectedIds[type].push(value)
                 }
             },
-          
+            getPeriods(){
+                fetch('get','/periods/all').then((params) => {
+                    this.periods = params
+                })
+            },
+            submitDone(){
+                $('#goals-add').modal('hide')
+            },
         }
     }
 </script>
