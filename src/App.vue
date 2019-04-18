@@ -72,7 +72,7 @@
                 this.getDepartment()
                 this.getModuleRole()
                 this.getListPower()
-               
+                this.getDashboard()
             }
             // this.getApprovalNum()
            
@@ -90,6 +90,7 @@
                 'getModuleRole',
                 'getListPower',
                 'getApprovalNum',
+                'getDashboard'
             ])
         }
     };

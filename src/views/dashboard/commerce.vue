@@ -5,12 +5,12 @@
             <h1 class="page-title">{{DashboardName}}</h1>
         </div>
         <div class="page-content container-fluid px-20">
-                <div class="tab  my-20 pl-10" style="display:flex">
+                <div class="tab  my-20 " style="display:flex">
                         <div class="task mx-20" data-plugin="actionBtn" data-toggle="modal" @click="addTask">创建任务</div>
                         <div class="target mx-20" @click="addGoal">创建目标</div>
                         <div class="schedule mx-20" data-plugin="actionBtn" data-toggle="modal" @click="addCalendar">创建日程</div>
                 </div>
-                <div class="clearfix  mt-30 pl-10">
+                <div class="clearfix  mt-30">
                     <div class="panel mb-0 ml-0 exhibition-panel" style="background:#fff;height:400px; position: relative;">
                         <div  class="circular m-30">
                                 <span>{{Tasktotal}}</span>
@@ -69,7 +69,8 @@
                         <div class="example-wrap" style="width:200px">
                         
                         <div class="progress progress-sm mb-0">
-                          <div class="progress-bar progress-bar-indicating active" :style="{width:parseInt(this.Projectprogressing/this.ProjectTotal*100)+ '%'}" role="progressbar"></div>
+                          <div class="progress-bar progress-bar-indicating active" :style="{width:parseInt(this.Projectprogressing/this.ProjectTotal*100)+ '%'}" role="progressbar" v-if="ProjectTotal!=0"></div>
+                          <div class="progress-bar progress-bar-indicating active" style="width:0%" role="progressbar" v-else-if="ProjectTotal=0"></div>
                         </div>
                        
                         <h5 class="m-0"><font style="vertical-align: inherit;font-size:12px"><font style="vertical-align: inherit;">近7天跟进<span style="color:rgb(5, 169, 219);">{{Projectprogressing}}个</span>
@@ -119,20 +120,23 @@
                         <div class="example-wrap" style="width:200px">
                         
                         <div class="progress progress-sm mb-0">
-                          <div class="progress-bar progress-bar-indicating active" :style="{width:parseInt(this.Clientlatest_follow/this.ClientTotal*100)+ '%'}" role="progressbar"></div>
+                            <div class="progress-bar progress-bar-indicating active" :style="{width:parseInt(this.Clientlatest_follow/this.ClientTotal*100)+ '%'}" role="progressbar" v-if="ClientTotal!=0"></div>
+                            <div class="progress-bar progress-bar-indicating active" style="width:0%" role="progressbar" v-else-if="ClientTotal== 0"></div>
                         </div>
                        
                         <h5 class="m-0"><font style="vertical-align: inherit;font-size:12px"><font style="vertical-align: inherit;">近7天跟进<span style="color:rgb(5, 169, 219);">{{Clientlatest_follow}}个</span>
                            </font><i class="pl-60" style="font-style:normal">未跟进{{clientNot}}个</i></font>
                         </h5>
                         <div class="progress progress-sm mb-0 mt-40">
-                          <div class="progress-bar progress-bar-indicating active"  role="progressbar" :style="{width:parseInt(this.Clientwith_trail/this.ClientTotal*100)+ '%'}"></div>
+                            <div class="progress-bar progress-bar-indicating active"  role="progressbar" :style="{width:parseInt(this.Clientwith_trail/this.ClientTotal*100)+ '%'}" v-if="ClientTotal!=0"></div>
+                            <div class="progress-bar progress-bar-indicating active" style="width:0%" role="progressbar" v-else-if="ClientTotal== 0"></div>
                         </div>
                         <h5><font style="vertical-align: inherit;"><font style="vertical-align: inherit;font-size:12px">近7天关联线索<span style="color:rgb(5, 169, 219);">{{Clientwith_trail}}个</span>
                            </font></font>
                         </h5>
                         <div class="progress progress-sm mb-0 mt-40">
-                          <div class="progress-bar progress-bar-indicating active"  role="progressbar" :style="{width:parseInt(this.Clientwith_project/this.ClientTotal*100)+ '%'}"></div>
+                            <div class="progress-bar progress-bar-indicating active"  role="progressbar" :style="{width:parseInt(this.Clientwith_project/this.ClientTotal*100)+ '%'}" v-if="ClientTotal!=0"></div>
+                            <div class="progress-bar progress-bar-indicating active" style="width:0%" role="progressbar" v-else-if="ClientTotal== 0"></div>
                         </div>
                          <h5><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">近7天关联项目<span style="color:rgb(5, 169, 219);">{{Clientwith_project}}个</span>
                            </font></font>
@@ -169,20 +173,23 @@
                         <div class="example-wrap" style="width:200px">
                         
                         <div class="progress progress-sm mb-0">
-                          <div class="progress-bar progress-bar-indicating active" :style="{width:parseInt(this.Starlatest_follow/this.StarTotal*100)+ '%'}" role="progressbar"></div>
+                            <div class="progress-bar progress-bar-indicating active" :style="{width:parseInt(this.Starlatest_follow/this.StarTotal*100)+ '%'}" role="progressbar" v-if="StarTotal!=0"></div>
+                            <div class="progress-bar progress-bar-indicating active"  role="progressbar" style="width:0%" v-else-if="StarTotal=0"></div>
                         </div>
                        
                         <h5 class="m-0"><font style="vertical-align: inherit;font-size:12px"><font style="vertical-align: inherit;">近7天跟进<span style="color:rgb(5, 169, 219);">{{Starlatest_follow}}个</span>
                            </font><i class="pl-60" style="font-style:normal">未跟进{{starNot}}个</i></font>
                         </h5>
                         <div class="progress progress-sm mb-0 mt-40">
-                          <div class="progress-bar progress-bar-indicating active"  role="progressbar" :style="{width:parseInt(this.Starwith_trail/this.StarTotal*100)+ '%'}"></div>
+                            <div class="progress-bar progress-bar-indicating active"  role="progressbar" :style="{width:parseInt(this.Starwith_trail/this.StarTotal*100)+ '%'}" v-if="StarTotal!=0"></div>
+                            <div class="progress-bar progress-bar-indicating active"  role="progressbar" style="width:0%" v-else-if="StarTotal=0"></div>
                         </div>
                         <h5><font style="vertical-align: inherit;"><font style="vertical-align: inherit;font-size:12px">近7天关联线索<span style="color:rgb(5, 169, 219);">{{Starwith_trail}}个</span>
                            </font></font>
                         </h5>
                         <div class="progress progress-sm mb-0 mt-40">
-                          <div class="progress-bar progress-bar-indicating active"  role="progressbar" :style="{width:parseInt(this.Starwith_project/this.StarTotal*100)+ '%'}"></div>
+                            <div class="progress-bar progress-bar-indicating active"  role="progressbar" :style="{width:parseInt(this.Starwith_project/this.StarTotal*100)+ '%'}" v-if="StarTotal!=0"></div>
+                            <div class="progress-bar progress-bar-indicating active"  role="progressbar" style="width:0%" v-else-if="StarTotal=0"></div>
                         </div>
                          <h5><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">近7天关联项目<span style="color:rgb(5, 169, 219);">{{Starwith_project}}个</span>
                            </font></font>
@@ -219,20 +226,23 @@
                         <div class="example-wrap" style="width:200px">
                         
                         <div class="progress progress-sm mb-0">
-                          <div class="progress-bar progress-bar-indicating active" :style="{width:parseInt(this.Bloggerlatest_follow/this.BloggerTotal*100)+ '%'}" role="progressbar"></div>
+                            <div class="progress-bar progress-bar-indicating active" :style="{width:parseInt(this.Bloggerlatest_follow/this.BloggerTotal*100)+ '%'}" role="progressbar" v-if="BloggerTotal!=0"></div>
+                            <div class="progress-bar progress-bar-indicating active"  role="progressbar" style="width:0%" v-else-if="BloggerTotal=0"></div>
                         </div>
                        
                         <h5 class="m-0"><font style="vertical-align: inherit;font-size:12px"><font style="vertical-align: inherit;">近7天跟进<span style="color:rgb(5, 169, 219);">{{Bloggerlatest_follow}}个</span>
                            </font><i class="pl-60" style="font-style:normal">未跟进{{BloggerNot}}个</i></font>
                         </h5>
                         <div class="progress progress-sm mb-0 mt-40">
-                          <div class="progress-bar progress-bar-indicating active"  role="progressbar" :style="{width:parseInt(this.Bloggerwith_trail/this.BloggerTotal*100)+ '%'}"></div>
+                            <div class="progress-bar progress-bar-indicating active"  role="progressbar" :style="{width:parseInt(this.Bloggerwith_trail/this.BloggerTotal*100)+ '%'}" v-if="BloggerTotal!=0"></div>
+                            <div class="progress-bar progress-bar-indicating active"  role="progressbar" style="width:0%" v-else-if="BloggerTotal=0"></div>
                         </div>
                         <h5><font style="vertical-align: inherit;"><font style="vertical-align: inherit;font-size:12px">近7天关联线索<span style="color:rgb(5, 169, 219);">{{Bloggerwith_trail}}个</span>
                            </font></font>
                         </h5>
                         <div class="progress progress-sm mb-0 mt-40">
-                          <div class="progress-bar progress-bar-indicating active"  role="progressbar" :style="{width:parseInt(this.Bloggerwith_project/this.BloggerTotal*100)+ '%'}"></div>
+                            <div class="progress-bar progress-bar-indicating active"  role="progressbar" :style="{width:parseInt(this.Bloggerwith_project/this.BloggerTotal*100)+ '%'}" v-if="BloggerTotal!=0"></div>
+                            <div class="progress-bar progress-bar-indicating active"  role="progressbar" style="width:0%" v-else-if="BloggerTotal=0"></div>
                         </div>
                          <h5><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">近7天关联项目<span style="color:rgb(5, 169, 219);">{{Bloggerwith_project}}个</span>
                            </font></font>
@@ -261,7 +271,7 @@
 
                 </div>
         </div>
-        <div class="modal fade"
+        <!-- <div class="modal fade"
              id="addTask"
              aria-hidden="true"
              aria-labelledby="addLabelForm"
@@ -357,7 +367,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
          <div class="modal fade line-center" id="changeSchedule" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
@@ -379,21 +389,21 @@
                     </div>
                     <div class="modal-body">
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">标题</div>
+                            <div class="col-md-2 text-right float-left require">标题</div>
                             <div class="col-md-10 float-left pl-0">
                                 <input type="text" class="form-control" title="" placeholder="请输入标题"
                                        v-model="scheduleName">
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">日历</div>
+                            <div class="col-md-2 text-right float-left require">日历</div>
                             <div class="col-md-10 float-left pl-0">
                                 <selectors :options="calendarList" ref="calendarSelector"
                                            @change="selectScheduleCalendar"></selectors>
                             </div>
                         </div>
                         <div class="example">
-                            <div class="col-md-2 text-right float-left">开始时间</div>
+                            <div class="col-md-2 text-right float-left require">开始时间</div>
                             <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="changeStartTime" ref="scheduleStartDate"></datepicker>
                             </div>
@@ -402,7 +412,7 @@
                             </div>
                         </div>
                         <div class="clearfix">
-                            <div class="col-md-2 text-right float-left line-fixed-height">结束时间</div>
+                            <div class="col-md-2 text-right float-left line-fixed-height require">结束时间</div>
                             <div class="col-md-5 float-left pl-0">
                                 <datepicker @change="changeEndTime" ref="scheduleEndDate"
                                             :startDate="startTime"></datepicker>
@@ -588,6 +598,7 @@
                 </div>
             </div>
         </div>
+        <AddTask />
         <addGoals />
     </div>
 </template>
@@ -637,15 +648,13 @@
                 startTime: "",
                 startMinutes: "00:00",
                 endTime: "",
-                endMinutes: "00:00",
+                endMinutes: "",
                 taskIntroduce: "",
                 linkData: [],
                 scheduleType: 'add',
                 scheduleName: '',
                 calendarList: [],
                 scheduleCalendar: '',
-                startTime: '',
-                startMinutes: '00:00',
                 isScheduleAllday: 0,
                 linkageSelectedIds: {
                     projects: [],
@@ -670,23 +679,25 @@
         },
         created(){
             this.getName()
-            this.getLinkData()
+            // this.getLinkData()
             this.init()
         },
         mounted(){
             this.getResources();
             this.getCalendarList()
             this.selectProjectLinkage()
-            $('#addTask').on('hidden.bs.modal', () => {
-                // 清空state
-                this.closeAddTask()
-            })
+         
             this.user = JSON.parse(Cookies.get('user'))
-            // 负责人默认值的设置
+                // 负责人默认值的设置
             this.$store.commit('changeNewPrincipal', {
                 name: this.user.nickname,
                 id: this.user.id
             })
+            // $('#addTask').on('hidden.bs.modal', () => {
+            //     // 清空state
+            //     this.closeAddTask()
+            // })
+          
             let _this = this;
             $('#changeSchedule').on('hidden.bs.modal', function () {
                 _this.initAddScheduleModal();
@@ -707,19 +718,35 @@
         },
         computed:{
             TaskPercentage:function(){
-                return parseInt(this.Taskcompleted/this.Tasktotal*100)+ '%'
+                if(this.Tasktotal!=0){
+                    return parseInt(this.Taskcompleted/this.Tasktotal*100)+ '%'
+                }else{
+                    return 0 + '%'
+                } 
             },
             TaskDelay:function(){
-                return parseInt(this.Taskdelayed/this.Tasktotal*100)+ '%'
+                if(this.Tasktotal!=0){
+                    return parseInt(this.Taskdelayed/this.Tasktotal*100)+ '%'
+                }else{
+                    return 0 + '%'
+                }  
             },
             projectNot:function(){
                 return this.ProjectTotal - this.Projectprogressing
             },
             ProjectSign:function(){
-                return parseInt(this.Projectsigned/this.ProjectTotal*100)+ '%'
+                if(this.ProjectTotal!=0){
+                    return parseInt(this.Projectsigned/this.ProjectTotal*100)+ '%'
+                }else{
+                    return 0 + '%'
+                } 
             },
             ProjectPercentage:function(){
-                return parseInt(this.Projectcompleted/this.ProjectTotal*100)+ '%'
+                if(this.ProjectTotal!=0){
+                    return parseInt(this.Projectcompleted/this.ProjectTotal*100)+ '%'
+                }else{
+                    return 0 + '%'
+                }     
             },
             clientNot:function(){
                 return this.ClientTotal - this.Clientlatest_follow
@@ -751,7 +778,7 @@
                     this.getProjects()
                     this.getTaskType()
                 }else{ 
-                  if(this.dashboardList.length>0){
+                  if(this.dashboardList.length>0){  
                       this.$router.push(`/dashboard?id=${this.dashboardList[0].id}&name=${this.dashboardList[0].name}`) }  
                 } 
             },
@@ -898,170 +925,175 @@
             },
 
             changeEndMinutes(value) {
-                this.endMinutes = value;
-            },
-            addLinkage: function (type, value, id, index) {
-                if (type === 'father') {
-                    this.getChildLinkData(value, index)
-                    this.resourceType = id
-                } else if (type === 'child') {
-                    this.resourceableId = value
+                if(value){
+                     this.endMinutes = value;
+                }else{
+                    this.endMinutes = new Date().getHours()+':'+new Date().getMinutes()
                 }
+               
             },
-            getLinkData() {
-                fetch('get', '/resources').then(res => {
-                    this.linkData = res.data.map((n, i) => {
-                        return {
-                            name: n.title,
-                            id: n.type,
-                            value: n.code,
-                            child: []
-                        }
-                    })
-                    this.linkData.unshift({
-                            name: '暂不关联任何资源',
-                            id: '',
-                            value: '',
-                            child: []
-                        })
-                    if (this.linkData[0].child.length === 0) {
-                        this.getChildLinkData('', 0)
-                    }
-                })
-            },
-            // 获取关联子资源数据
-            getChildLinkData(url, index) {
-                if (url) {
-                    let data = {}
-                    this.linkCode = url
-                    this.linkIndex = index
+            // addLinkage: function (type, value, id, index) {
+            //     if (type === 'father') {
+            //         this.getChildLinkData(value, index)
+            //         this.resourceType = id
+            //     } else if (type === 'child') {
+            //         this.resourceableId = value
+            //     }
+            // },
+            // getLinkData() {
+            //     fetch('get', '/resources').then(res => {
+            //         this.linkData = res.data.map((n, i) => {
+            //             return {
+            //                 name: n.title,
+            //                 id: n.type,
+            //                 value: n.code,
+            //                 child: []
+            //             }
+            //         })
+            //         this.linkData.unshift({
+            //                 name: '暂不关联任何资源',
+            //                 id: '',
+            //                 value: '',
+            //                 child: []
+            //             })
+            //         if (this.linkData[0].child.length === 0) {
+            //             this.getChildLinkData('', 0)
+            //         }
+            //     })
+            // },
+            // // 获取关联子资源数据
+            // getChildLinkData(url, index) {
+            //     if (url) {
+            //         let data = {}
+            //         this.linkCode = url
+            //         this.linkIndex = index
 
-                    let _url = url.substr(0, url.length - 1) + '/related'
-                    if (url === 'bloggers') {
-                        _url = url + '/all'
-                        data.sign_contract_status = 2
-                    }
-                    fetch('get', _url, data).then(res => {
-                        const temp = this.linkData[index]
-                        if (res.meta && res.meta.pagination) {
-                            this.canLoadMore = true
-                            this.linkTotalPage = res.meta.pagination.total_pages
-                        } else {
-                            this.canLoadMore = false
-                        }
-                        temp.child = res.data.map(n => {
-                            return {
-                                name: n.name || n.nickname || n.title || n.company,
-                                id: n.id,
-                                value: n.id,
-                            }
-                        })
-                        this.resourceableId = temp.child[0].id
-                        this.$set(this.linkData, index, temp)
-                        setTimeout(() => {
-                            this.$refs.linkage.refresh()
-                        }, 100)
-                    })
-                } else {
-                    const temp = this.linkData[index]
-                    temp.child = [{
-                        name: '暂不关联任何资源',
-                        id: '',
-                        value: '',
-                    }]
-                    this.resourceableId = temp.child[0].id
-                    this.$set(this.linkData, index, temp)
-                    setTimeout(() => {
-                        this.$refs.linkage.refresh()
-                    }, 100)
-                }
-            },
-            addtask() {
+            //         let _url = url.substr(0, url.length - 1) + '/related'
+            //         if (url === 'bloggers') {
+            //             _url = url + '/all'
+            //             data.sign_contract_status = 2
+            //         }
+            //         fetch('get', _url, data).then(res => {
+            //             const temp = this.linkData[index]
+            //             if (res.meta && res.meta.pagination) {
+            //                 this.canLoadMore = true
+            //                 this.linkTotalPage = res.meta.pagination.total_pages
+            //             } else {
+            //                 this.canLoadMore = false
+            //             }
+            //             temp.child = res.data.map(n => {
+            //                 return {
+            //                     name: n.name || n.nickname || n.title || n.company,
+            //                     id: n.id,
+            //                     value: n.id,
+            //                 }
+            //             })
+            //             this.resourceableId = temp.child[0].id
+            //             this.$set(this.linkData, index, temp)
+            //             setTimeout(() => {
+            //                 this.$refs.linkage.refresh()
+            //             }, 100)
+            //         })
+            //     } else {
+            //         const temp = this.linkData[index]
+            //         temp.child = [{
+            //             name: '暂不关联任何资源',
+            //             id: '',
+            //             value: '',
+            //         }]
+            //         this.resourceableId = temp.child[0].id
+            //         this.$set(this.linkData, index, temp)
+            //         setTimeout(() => {
+            //             this.$refs.linkage.refresh()
+            //         }, 100)
+            //     }
+            // },
+            // addtask() {
               
-                // 校验
-                if (!this.taskName) {
-                    toastr.error('请填写任务名称！')
-                    return
-                }
-                if (!this.$store.state.newPrincipalInfo.id) {
-                    toastr.error('请选择负责人！')
-                    return
-                }
-                if (!this.taskType) {
-                    toastr.error('请选择任务类型！')
-                    return
-                }
-                if (!this.taskLevel) {
-                    toastr.error('请选择任务优先级！')
-                    return
-                }
-                if (!this.startTime || !this.endTime) {
-                    toastr.error('请选择时间!')
-                    return
-                }
-                if ((this.startTime + " " + this.startMinutes) > (this.endTime + " " + this.endMinutes)) {
-                    toastr.error('开始时间不能晚于截止时间');
-                    return
-                }
+            //     // 校验
+            //     if (!this.taskName) {
+            //         toastr.error('请填写任务名称！')
+            //         return
+            //     }
+            //     if (!this.$store.state.newPrincipalInfo.id) {
+            //         toastr.error('请选择负责人！')
+            //         return
+            //     }
+            //     if (!this.taskType) {
+            //         toastr.error('请选择任务类型！')
+            //         return
+            //     }
+            //     if (!this.taskLevel) {
+            //         toastr.error('请选择任务优先级！')
+            //         return
+            //     }
+            //     if (!this.startTime || !this.endTime) {
+            //         toastr.error('请选择时间!')
+            //         return
+            //     }
+            //     if ((this.startTime + " " + this.startMinutes) > (this.endTime + " " + this.endMinutes)) {
+            //         toastr.error('开始时间不能晚于截止时间');
+            //         return
+            //     }
 
-                let participant_ids = [];
-                for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
-                    participant_ids.push(this.$store.state.newParticipantsInfo[i].id);
-                }
+            //     let participant_ids = [];
+            //     for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
+            //         participant_ids.push(this.$store.state.newParticipantsInfo[i].id);
+            //     }
 
-                let data = {
-                    // resource_type: this.resourceType ,
-                    // resourceable_id: this.resourceableId,
-                    type: this.taskType,
-                    title: this.taskName,
-                    principal_id: this.$store.state.newPrincipalInfo.id,
-                    participant_ids: participant_ids,
-                    priority: this.taskLevel,
-                    start_at: this.startTime + " " + this.startMinutes,
-                    end_at: this.endTime + " " + this.endMinutes,
-                    desc: this.taskIntroduce
-                };
+            //     let data = {
+            //         // resource_type: this.resourceType ,
+            //         // resourceable_id: this.resourceableId,
+            //         type: this.taskType,
+            //         title: this.taskName,
+            //         principal_id: this.$store.state.newPrincipalInfo.id,
+            //         participant_ids: participant_ids,
+            //         priority: this.taskLevel,
+            //         start_at: this.startTime + " " + this.startMinutes,
+            //         end_at: this.endTime + " " + this.endMinutes,
+            //         desc: this.taskIntroduce
+            //     };
 
-                if (this.resourceType) {
-                    data.resource_type = this.resourceType
-                }
-                if (this.resourceableId) {
-                    data.resourceable_id = this.resourceableId
-                }
+            //     if (this.resourceType) {
+            //         data.resource_type = this.resourceType
+            //     }
+            //     if (this.resourceableId) {
+            //         data.resourceable_id = this.resourceableId
+            //     }
 
-                fetch('post', '/tasks', data).then(res => {
-                    toastr.success("创建成功");
-                    $("#addTask").modal("hide");
-                    this.$router.push({path: '/tasks/' + res.data.id});
-                })
-            },
-            closeAddTask() {
-                this.taskName = ''
-                this.taskLevel = ''
-                this.$refs.taskLevel.setValue('')
-                this.taskType = ''
-                this.$refs.taskType.setValue('')
-                this.startTime = ''
-                this.endTime = ''
-                this.startMinutes = ''
-                this.endMinutes = ''
-                this.taskIntroduce = ''
-                this.$refs.startTime.setValue('')
-                this.$refs.startMinutes.setValue('0')
-                this.$refs.endTime.setValue('')
-                this.$refs.endMinutes.setValue('0')
-                this.linkData = []
-                this.getLinkData()
-                this.setDefaultPrincipal()
-            },
-            // 设置默认负责人
-            setDefaultPrincipal() {
-                this.$store.commit('changeNewPrincipal', {
-                    name: this.user.nickname,
-                    id: this.user.id
-                })
-                this.$store.commit('changeNewParticipantsInfo', [])
-            },
+            //     fetch('post', '/tasks', data).then(res => {
+            //         toastr.success("创建成功");
+            //         $("#addTask").modal("hide");
+            //         this.getTask()
+            //     })
+            // },
+            // closeAddTask() {
+            //     this.taskName = ''
+            //     this.taskLevel = ''
+            //     this.$refs.taskLevel.setValue('')
+            //     this.taskType = ''
+            //     this.$refs.taskType.setValue('')
+            //     this.startTime = ''
+            //     this.endTime = ''
+            //     this.startMinutes = ''
+            //     this.endMinutes = ''
+            //     this.taskIntroduce = ''
+            //     this.$refs.startTime.setValue('')
+            //     this.$refs.startMinutes.setValue('0')
+            //     this.$refs.endTime.setValue('')
+            //     this.$refs.endMinutes.setValue('0')
+            //     this.linkData = []
+            //     this.getLinkData()
+            //     this.setDefaultPrincipal()
+            // },
+            // // 设置默认负责人
+            // setDefaultPrincipal() {
+            //     this.$store.commit('changeNewPrincipal', {
+            //         name: this.user.nickname,
+            //         id: this.user.id
+            //     })
+            //     this.$store.commit('changeNewParticipantsInfo', [])
+            // },
             selectScheduleCalendar: function (value) {
                 this.scheduleCalendar = value
             },
@@ -1161,6 +1193,7 @@
                 fetch('post', '/schedules', data).then(() => {
                     $('#changeSchedule').modal('hide');
                     toastr.success('添加成功')
+                    this.getTask()
                 })
             },
             getCalendarList: function () {
