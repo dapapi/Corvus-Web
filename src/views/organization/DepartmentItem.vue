@@ -182,7 +182,7 @@ ul {
 }
 .principal {
     position: absolute;
-    left: 300px;
+    left: 500px;
 }
 
 </style>
