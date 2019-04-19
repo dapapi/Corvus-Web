@@ -15,7 +15,7 @@
                             <div class="col-md-2 text-right float-left px-0 require">目标范围</div>
                             <div class="col-md-10 float-left">
                                 <Selectors ref="trails" :options='selectorData.goalRanger' @change='(params)=>changeHandeler(params,"range")'
-                                        selectable="true"></Selectors>
+                                :default='defaultHandler("range")'       selectable="true"></Selectors>
                             </div>
                         </div>
                          <div class="col-md-12 example clearfix" v-if="goalRange == 2">
@@ -28,27 +28,27 @@
                             <div class="col-md-2 text-right float-left px-0 require">目标周期</div>
                             <div class="col-md-10 float-left">
                                 <Selectors ref="trails" :options='goalperiod' @change='(params)=>changeHandeler(params,"period_id")'
-                                        selectable="true"></Selectors>
+                                 :default='defaultHandler("period_id")'       selectable="true"></Selectors>
                             </div>
                         </div>
                          <div class="col-md-12 example clearfix">
                             <div class="col-md-2 text-right float-left px-0 require">目标名称</div>
                             <div class="col-md-10 float-left">
-                                <input ref="trails" class="form-control" @change='(params)=>changeHandeler(params.target.value,"title")'>
+                                <input ref="trails" class="form-control" :value='sendData.tile || defaultHandler("title")' @change='(params)=>changeHandeler(params.target.value,"title")'>
                             </div>
                         </div>
                          <div class="col-md-12 example clearfix">
                             <div class="col-md-2 text-right float-left px-0 require">目标类型</div>
                             <div class="col-md-10 float-left">
                                 <Selectors ref="trails" :options='selectorData.goalSort' @change='(params)=>changeHandeler(params,"type")'
-                                        selectable="true"></Selectors>
+                                 :default='defaultHandler("type")'       selectable="true"></Selectors>
                             </div>
                         </div>
                          <div class="col-md-12 example clearfix" v-if="goalSort == 1">
                             <div class="col-md-2 text-right float-left px-0 require">金额类型</div>
                             <div class="col-md-4 float-left">
                                   <Selectors ref="trails" :options='selectorData.countSort' @change='(params)=>changeHandeler(params,"amount_type")'
-                                        selectable="true"></Selectors>
+                                     :default='defaultHandler("amount_type")'     selectable="true"></Selectors>
                             </div>
                             <div class="col-md-2 text-right float-left px-0 require">目标金额/元</div>
                             <div class="col-md-4 float-left">
@@ -59,19 +59,19 @@
                             <div class="col-md-2 text-right float-left px-0 require">维度</div>
                             <div class="col-md-4 float-left">
                                   <Selectors ref="trails" :options='selectorData.Dimensions' @change='(params)=>changeHandeler(params,"position")'
-                                        selectable="true"></Selectors>
+                                    :default='defaultHandler("position")'     selectable="true"></Selectors>
                             </div>
                             <div class="col-md-2 text-right float-left px-0 require" v-if="Dimensions == 2">艺人级别</div>
                             <div class="col-md-4 float-left" v-if="Dimensions == 2">
                                   <Selectors ref="trails" :options='selectorData.levelArr' @change='(params)=>changeHandeler(params,"talent_level")'
-                                        selectable="true"></Selectors>
+                                     :default='defaultHandler("talent_level")' selectable="true"></Selectors>
                             </div>
                         </div>
                         <div class="col-md-12 example clearfix">
                             <div class="col-md-2 text-right float-left px-0 require">目标级别</div>
                             <div class="col-md-10 float-left">
                                 <Selectors ref="trails" :options='selectorData.levelArr' @change='(params)=>changeHandeler(params,"aim_level")'
-                                        selectable="true"></Selectors>
+                                 :default='defaultHandler("aim_level")'       selectable="true"></Selectors>
                             </div>
                         </div>
                        
@@ -79,14 +79,14 @@
                             <div class="col-md-2 text-right float-left px-0 require">负责人</div>
                             <div class="col-md-10 float-left">
                                 <InputSelectors @change='(params)=>changeHandeler(params,"principal")'
-                                        ></InputSelectors>
+                                 :propSelectMemberName='(defaultdata && defaultdata.principal_name)|| ""' :propSelectMemberId='(defaultdata && defaultdata.principal_id) || ""'       ></InputSelectors>
                             </div>
                         </div>
                         <div class="col-md-12 example clearfix">
                             <div class="col-md-2 text-right float-left px-0">目标描述</div>
                             <div class="col-md-10 float-left">
                                 <textarea class="form-control" @change='(params)=>changeHandeler(params.target.value,"desc")'
-                                        ></textarea>
+                                 :value="sendData.desc || defaultHandler('desc')"       ></textarea>
                             </div>
                         </div>
                         <div class="col-md-12 example clearfix">
@@ -145,7 +145,6 @@ export default {
         }
     },
     created(){
-        this.defaultHandler()
     },
     computed:{
          ...mapState([
@@ -153,12 +152,37 @@ export default {
         ]),
         _department () {
             return this.department
+        },
+        defaultHandler(){
+            return (params)=>{
+                if(!this.defaultdata){
+                    return ''
+                }else{
+                    return this.defaultdata[params]
+                }
+            }
+            
         }
     },
-    methods:{
-        defaultHandler(){
+    watch: {
+        defaultdata:function(){
+            // this.sendData =  this.defaultdata
+            let key = ['title','range','department_id','period_id','type','amount_type','amount','position','aim_level','talent_level','desc']
+            for (const iterator of key) {
+                if(this.defaultdata[iterator]){
+                    this.sendData[iterator] = this.defaultdata[iterator]
+                }
                 
-        },
+            }
+            this.sendData.principal={
+                id:this.defaultdata.principal_id,
+                name:this.defaultdata.principal_name
+            }
+        }
+    },
+    mounted() {   
+    },
+    methods:{
         goalSubmit(){
             this.submitLoading = true
             fetch('post','aims',this.sendData).then((params) => {

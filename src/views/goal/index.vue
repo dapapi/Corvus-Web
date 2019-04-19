@@ -29,12 +29,6 @@
                     </tr>
                     </table>
                     </div>
-                    <!-- <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(3)" v-show="oldInfo.status == 1">终止</a>
-                    <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(1)" v-show="oldInfo.status != 1">激活</a>
-                    <a class="dropdown-item" role="menuitem" @click="changeTaskStatus(2)" v-show="oldInfo.status == 1">完成</a>
-                    <a class="dropdown-item" role="menuitem" @click="privacyTask(oldInfo.privacy ? 0 : 1)">
-                        {{oldInfo.privacy ? '转公开':'转私密'}}</a> -->
-                    <!-- <a class="dropdown-item" role="menuitem" @click>删除</a> -->
                 </div>
             </div>
             <div class="float-right goals-add mr-50"  data-toggle="modal" 
@@ -78,8 +72,8 @@
                                 <div class="progress-bar progress-bar-info progress-bar-indicating active" :style="'width:'+finishedNumber" role="progressbar"></div>
                             </div>
                             <div>
-                                <span>已完成<span style="color:#00bcd4"> 1个</span></span>
-                                <span class="float-right">待完成800个</span>
+                                <span>已完成<span style="color:#00bcd4"> {{finishedGoalNum}}</span></span>
+                                <span class="float-right">待完成{{totalNumber}}个</span>
                             </div>
                         </div>
                         <div class="py-10 progress-bar-test">
@@ -87,7 +81,7 @@
                                 <div class="progress-bar progress-bar-info progress-bar-indicating active" :style="'width:'+sevenDaysNumber" role="progressbar"></div>
                             </div>
                             <div>
-                                <span>近七天更新<span style="color:#00bcd4"> 100个</span></span>
+                                <span>近七天更新<span style="color:#00bcd4"> {{recentUpdateNum}}个</span></span>
                             </div>
                         </div>
                         <div class="py-10 progress-bar-test">
@@ -95,7 +89,7 @@
                                 <div class="progress-bar progress-bar-info progress-bar-indicating active" :style="'width:'+averageNumber" role="progressbar"></div>
                             </div>
                             <div>
-                                <span>平均完成度<span style="color:#00bcd4;">23%</span></span>
+                                <span>平均完成度<span style="color:#00bcd4;">{{finishedGoalAve}}%</span></span>
                             </div>
                         </div>
                     </div>
@@ -105,7 +99,7 @@
                 <div class="panel px-30" style="height:183px;font-size:18px;">
                     <div class="py-20"><span style="color:#ff9800;">你真棒！</span>请继续努力～</div>
                     <div class="mx-5 row " style="width:100%;height:100px;border-radius:50px;background-color:rgba(7,17,27,0.04);">
-                        <div class="goals-percent-logo">74%</div>
+                        <div class="goals-percent-logo">{{finishedGoalAve}}%</div>
                         <span class="ml-20" style="line-height:100px">{{goalTypeHandler[0]}}<span><strong> 23%</strong></span> {{goalTypeHandler[1]}}</span></div>
                 </div>
             </div>
@@ -153,51 +147,22 @@
                                 <!-- <th class="cell-300" scope="col">父/子</th> -->
                                 <th class="cell-300" scope="col">负责人</th>
                                 <th class="cell-300" scope="col">进度</th>
-                                <!-- <th class="cell-300" scope="col">负责人</th> -->
                                 <th class="cell-300" scope="col">截止时间</th>
                             </tr>
                             <tbody>
                             <tr v-for="(item, index) in goalList" :key="index" @click="goDetail(item.id)">
                                 <td class="pointer-content">
                                     {{item.title}}
-                                    <!-- <router-link :to="{name:'tasks/detail', params: {id: task.id}}">{{ task.title }}
-                                    </router-link> -->
                                 </td>
                                 <td>
                                     {{item.principal_name}}
-                                    <!-- {{task.resource ? task.resource.data.resource.data.title : ''}}
-                                    <template v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.name">
-                                        -  {{ task.resource.data.resourceable.data.name }}
-                                    </template>
-                                    <template v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.nickname">
-                                        -  {{ task.resource.data.resourceable.data.nickname }}
-                                    </template>
-                                    <template v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.title">
-                                        - {{ task.resource.data.resourceable.data.title }}
-                                    </template>
-                                    <template v-if="task.resource && task.resource.data.resourceable && task.resource.data.resourceable.data.company">
-                                        - {{ task.resource.data.resourceable.data.company }}
-                                    </template> -->
                                 </td>
-                                    <!-- 韩鹏吃橘子 -->
-                                <!-- <td>暂无</td> -->
-                                <!-- <td>{{ task.type ? task.type.data ? task.type.data.title : '' : '' }}</td> -->
                                 <td>
-                                    {{item.percentage}}
-                                    <!-- <template v-if="task.status === 1"><span style="color:#FF9800">进行中</span> </template>
-                                    <template v-if="task.status === 2"><span style="color:#4CAF50">已完成</span></template>
-                                    <template v-if="task.status === 3"><span style="color:#9E9E9E">已停止</span></template>
-                                    <template v-if="task.status === 4"><span style="color:#F44336">延期</span></template> -->
+                                    {{item.percentage}}%
                                 </td>
-                                
-                                <!-- <td>
-                                    <template v-if="task.principal">{{ task.principal.data.name }}</template>
-                                </td> -->
-                                <!-- <td>{{ task.end_at }}</td> -->
                                 <td>
                                     {{item.deadline}}
                                 </td>
-                                <!-- <td>123</td> -->
                             </tr>
                             </tbody>
                         </table>
@@ -215,6 +180,8 @@
             </div>
         </div>
         <addGoals :goalperiod='periods.data' @submitDone='submitDone'/>
+       
+
     </div>
 </template>
 <script>
@@ -263,7 +230,7 @@
                 my:'',
                 tabNumber:Number(localStorage.getItem('tabNumber')) || 1 ,
                 periods:[],
-                totalNumber:456,
+                totalNumber:undefined,
                 totalNumberCurrent:0,
                 finishedNumber:0,
                 sevenDaysNumber:0,
@@ -274,35 +241,20 @@
                 goalRange:'',
                 departmentId:'',
                 keyword:'',
-                periodSelected:''
+                periodSelected:'',
+                finishedGoalNum:undefined,
+                recentUpdateNum:undefined,
+                finishedGoalAve:undefined,
+                submitLoading:false,
             };
         },
         created() {
-            // this.getLinkData()
-             this.periodSelected = Number(localStorage.getItem('periodSelected'))
-            // if(localStorage.getItem('tabNumber')){
-            //     this.tabNumber = localStorage.getItem('tabNumber')
-            // }else{
-            //     this.tabNumber = 1
-            // }
+            this.periodSelected = Number(localStorage.getItem('periodSelected'))
             this.getPeriods()
             this.getGoal()
         },
         mounted() {
-            this.$nextTick((params) => {
-                this.totalHandler()
-                
-            })
-            // this.user = JSON.parse(Cookies.get('user'))
-            // // 负责人默认值的设置
-            // this.$store.commit('changeNewPrincipal', {
-            //     name: this.user.nickname,
-            //     id: this.user.id
-            // })
-            // $('#addTask').on('hidden.bs.modal', () => {
-            //     // 清空state
-            //     this.closeAddTask()
-            // })
+
         },
         computed:{
             goalTypeHandler(){
@@ -325,6 +277,16 @@
         }
         },
         methods: {
+          
+            getGoalNum(){
+                fetch('get',`/aims/count?period_id=${this.periodSelected}&tab=${this.tabNumber}`).then((params) => {
+                    this.totalNumber = params.data.total
+                    this.finishedGoalNum = params.data.complete_count
+                    this.finishedGoalAve = params.data.percentage_avg
+                    this.recentUpdateNum = params.data.latest_count
+                    this.totalHandler()
+                })
+            },
             filterHandler(params,type){
                 if(type === 'periodSelected'){
                     localStorage.setItem('periodSelected',params)
@@ -363,6 +325,7 @@
                     keyword : this.keyword,
                     period_id:this.periodSelected
                 }
+                this.getGoalNum()
                 fetch('get','aims',data).then((params) => {
                     this.goalList = params.data
                     this.total = Number(params.meta.pagination.total);
@@ -374,7 +337,6 @@
                 $('#goals-add').modal('hide')
             },
             totalHandler(){
-                // let interTime = 0.1 / this.totalNumber
                 this.totalNumberCurrent += 7
                 if(this.totalNumberCurrent+7 < this.totalNumber){
                     setTimeout(() => {
@@ -384,15 +346,15 @@
                     this.totalNumberCurrent = this.totalNumber
                 }
                 setTimeout(() => {
-                    this.finishedNumber = '50%'
-                    this.sevenDaysNumber = 40 +'%'
-                    this.averageNumber = 23 + '%'
+                    if(this.totalNumber > 0){
+                        this.finishedNumber = (this.finishedGoalNum/this.totalNumber)*100 + '%'
+                        this.sevenDaysNumber = (this.recentUpdateNum/this.totalNumber)*100 +'%'
+                    }else{
+                        this.finishedNumber = 0
+                        this.sevenDaysNumber = 0
+                    }
+                    this.averageNumber = this.finishedGoalAve + '%'
                 }, 500);
-                // for(let i = 0; i<this.totalNumber;i++){
-
-                //     // setTimeout(this.totalNumberCurrent++,1000)
-                // }
-
             },
             tabHandler(params){
                 localStorage.setItem('tabNumber',params)
@@ -401,201 +363,10 @@
 
             },
             getPeriods(){
-                fetch('get','/periods/all').then((params) => {
+                fetch('getperiods/all').then((params) => {
                     this.periods = params
                 })
             },
-            // getTasks(pageNum = 1) {
-            //     let params = {
-            //         page: pageNum,
-            //         my:this.my,
-            //         include:
-            //             "principal,pTask,tasks,resource.resourceable,resource.resource,participants"
-            //     };
-            //     let url = "/tasks";
-
-            //     if (this.taskNameSearch) {
-            //         params.keyword = this.taskNameSearch;
-            //     }
-            //     if (this.taskStatusSearch) {
-            //         params.status = this.taskStatusSearch;
-            //     }
-            //     if (this.taskTypeSearch) {
-            //         params.type_id = this.taskTypeSearch;
-            //     }
-
-            //     if (this.taskNameSearch || this.taskStatusSearch || this.taskTypeSearch) {
-            //         url = "/tasks/filter";
-            //     }
-
-            //     fetch("get", url, params).then(response => {
-            //         this.tasksInfo = response.data;
-            //         this.isLoading = false;
-            //         this.current_page = response.meta.pagination.current_page;
-            //         this.total = response.meta.pagination.total;
-            //         this.total_pages = response.meta.pagination.total_pages;
-            //     });
-            // },
-
-            // getMyTasks(my) {
-            //     this.my = my
-            //     this.getTasks(1)
-                
-            // },
-
-            // addTask() {
-            //     // 校验
-            //     if (!this.taskName) {
-            //         toastr.error('请填写任务名称！')
-            //         return
-            //     }
-            //     if (!this.$store.state.newPrincipalInfo.id) {
-            //         toastr.error('请选择负责人！')
-            //         return
-            //     }
-            //     if (!this.taskType) {
-            //         toastr.error('请选择任务类型！')
-            //         return
-            //     }
-            //     if (!this.taskLevel) {
-            //         toastr.error('请选择任务优先级！')
-            //         return
-            //     }
-            //     if (!this.startTime || !this.endTime) {
-            //         toastr.error('请选择时间!')
-            //         return
-            //     }
-            //     if ((this.startTime + " " + this.startMinutes) > (this.endTime + " " + this.endMinutes)) {
-            //         toastr.error('开始时间不能晚于截止时间');
-            //         return
-            //     }
-
-            //     let participant_ids = [];
-            //     for (let i = 0; i < this.$store.state.newParticipantsInfo.length; i++) {
-            //         participant_ids.push(this.$store.state.newParticipantsInfo[i].id);
-            //     }
-
-            //     let data = {
-            //         // resource_type: this.resourceType ,
-            //         // resourceable_id: this.resourceableId,
-            //         type: this.taskType,
-            //         title: this.taskName,
-            //         principal_id: this.$store.state.newPrincipalInfo.id,
-            //         participant_ids: participant_ids,
-            //         priority: this.taskLevel,
-            //         start_at: this.startTime + " " + this.startMinutes,
-            //         end_at: this.endTime + " " + this.endMinutes,
-            //         desc: this.taskIntroduce
-            //     };
-
-            //     if (this.resourceType) {
-            //         data.resource_type = this.resourceType
-            //     }
-            //     if (this.resourceableId) {
-            //         data.resourceable_id = this.resourceableId
-            //     }
-
-            //     fetch('post', '/tasks', data).then(res => {
-            //         toastr.success("创建成功");
-            //         $("#addTask").modal("hide");
-            //         this.$router.push({path: '/tasks/' + res.data.id});
-            //     })
-            // },
-
-            // customize(value) {
-            //     console.log(value);
-            // },
-
-            // changeLinkage(value) {
-            //     console.log(value);
-            // },
-
-            // changeTaskType(value) {
-            //     this.taskType = value;
-            // },
-
-            // principalChange(value) {
-            //     this.principal = value;
-            // },
-
-            // participantChange(value) {
-            //     let flagArr = [];
-            //     for (let i = 0; i < value.length; i++) {
-            //         flagArr.push(value[i].id);
-            //     }
-            //     this.participants = flagArr;
-            // },
-
-            // changeTaskLevel(value) {
-            //     this.taskLevel = value;
-            // },
-
-            // changeStartTime(value) {
-            //     this.startTime = value;
-            // },
-
-            // changeStartMinutes(value) {
-            //     this.startMinutes = value;
-            // },
-
-            // changeEndTime(value) {
-            //     this.endTime = value;
-            // },
-
-            // changeEndMinutes(value) {
-            //     this.endMinutes = value;
-            // },
-            // changeTaskName() {
-            //     this.getTasks();
-            // },
-            // changeTaskTypeSearch(value) {
-            //     this.taskTypeSearch = value;
-            //     this.getTasks();
-            // },
-            // changeTaskStatusSearch(value) {
-            //     this.taskStatusSearch = value;
-            //     this.getTasks();
-            // },
-            // addLinkage: function (type, value, id, index) {
-            //     if (type === 'father') {
-            //         this.getChildLinkData(value, index)
-            //         this.resourceType = id
-            //     } else if (type === 'child') {
-            //         this.resourceableId = value
-            //     }
-            // },
-            // // 关闭新增任务
-            // closeAddTask() {
-            //     this.taskName = ''
-            //     this.taskLevel = ''
-            //     this.$refs.taskLevel.setValue('')
-            //     this.taskType = ''
-            //     this.$refs.taskType.setValue('')
-            //     this.startTime = ''
-            //     this.endTime = ''
-            //     this.startMinutes = ''
-            //     this.endMinutes = ''
-            //     this.taskIntroduce = ''
-            //     this.$refs.startTime.setValue('')
-            //     this.$refs.startMinutes.setValue('0')
-            //     this.$refs.endTime.setValue('')
-            //     this.$refs.endMinutes.setValue('0')
-            //     this.linkData = []
-            //     this.getLinkData()
-            //     this.setDefaultPrincipal()
-            // },
-            // // 设置默认负责人
-            // setDefaultPrincipal() {
-            //     this.$store.commit('changeNewPrincipal', {
-            //         name: this.user.nickname,
-            //         id: this.user.id
-            //     })
-            //     this.$store.commit('changeNewParticipantsInfo', [])
-            // },
-            // // 跳转
-            // taskDetail(taskId){
-            //     this.$router.push({path: '/tasks/' + taskId})
-            // },
         }
     };
 </script>

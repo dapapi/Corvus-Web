@@ -8,7 +8,7 @@
             <div class="dropdown-menu" aria-labelledby="taskDropdown" role="menu" >
                 <a class="dropdown-item" role="menuitem" data-plugin="actionBtn" 
                     data-toggle="modal" 
-                    data-target="#confirmFlag"
+                    data-target="#link-project"
                     aria-hidden="true"
                     data-backdrop="static"
                     >关联项目</a>
@@ -26,7 +26,7 @@
                      <a class="dropdown-item" role="menuitem" data-plugin="actionBtn" 
                     data-toggle="modal" 
                     aria-hidden="true"
-                    data-backdrop="static"
+                    data-backdrop="static"  @click="deleteGoal"
                     >删除</a>
             </div>
         </div>
@@ -48,7 +48,7 @@
                     <div class="col-md-12 mx-40 pb-0">
                         <button v-if="!inputProgress" type="button" @click='inputProgress = true' class="btn btn-block btn-default waves-effect waves-light waves-round col-md-2 px-0" style='font-size:10px'>更新当前进度</button>
                         <input v-if="inputProgress" type="number" oninput="if(value>100)value=100;if(value<0)value=0;" v-model="currentProgress">
-                        <button type="button" class="btn btn-block btn-default waves-effect waves-light waves-round col-md-1 mx-10 my-0 px-0" style='font-size:10px;color:#00bcd4' :disabled='submitDisable' @click="progressUpdate">{{submitDisable?'':'更新'}}<CircleLoading style="" v-if="submitDisable"/></button>
+                        <button type="button" class="btn btn-block btn-default waves-effect waves-light waves-round col-md-1 mx-10 my-0 px-0" style='font-size:10px;color:#00bcd4' :disabled='submitDisable' @click="progressUpdate">{{submitDisable?'':'更新'}}<CircleLoading style="margin:0 auto;width:20px;height:20px;" v-if="submitDisable"/></button>
                     </div>
                     <div>
                         <div class="row px-20">
@@ -57,7 +57,7 @@
                                     <div class="col-md-4 float-left text-right detail-key mx-0 noselect">
                                         目标类型
                                     </div>
-                                    <div class="col-md-8 float-left detail-value">
+                                    <div class="col-md-8 float-left detail-value" v-if="goalInfo.type">
                                         {{selectorData.goalSort.find(item=>item.value === goalInfo.type).name}}                                        
                                     </div>
                                 </div>
@@ -81,7 +81,7 @@
                                     <div class="col-md-4 float-left text-right detail-key mx-0 noselect">
                                         维度
                                     </div>
-                                    <div class="col-md-8 float-left detail-value">
+                                    <div class="col-md-8 float-left detail-value" v-if=" goalInfo.position">
                                         {{selectorData.Dimensions.find(item=>item.value === goalInfo.position).name}}                                        
                                     </div>
                                 </div>
@@ -97,7 +97,7 @@
                                     <div class="col-md-4 float-left text-right detail-key mx-0 noselect">
                                         目标级别
                                     </div>
-                                    <div class="col-md-8 float-left detail-value">
+                                    <div class="col-md-8 float-left detail-value" v-if="goalInfo.aim_level">
                                         {{selectorData.levelArr.find(item=>item.value === goalInfo.aim_level).name}}
                                     </div>
                                 </div>
@@ -145,8 +145,8 @@
                                     <div class="col-md-2 float-left text-right detail-key mx-0 noselect">
                                         关联项目
                                     </div>
-                                    <div class="col-md-10 float-left detail-value">
-                                        
+                                    <div class="col-md-10 float-left detail-value" v-if="goalInfo.relate_projects">
+                                        {{goalInfo.relate_projects.data.flatMap((x)=>[x.title]).join(',')}}
                                     </div>
                                 </div>
                             </div>
@@ -158,6 +158,9 @@
                                             父目标
                                         </div>
                                         <div class="col-md-8 float-left detail-value">
+                                             <p v-for="(item, index) in goalInfo.parents" :key="index">
+                                            {{...item}}
+                                        </p>
                                     </div>
                                 </div>
                                 <div class="col-md-6 my-5 px-0 float-left" >
@@ -165,7 +168,9 @@
                                         子目标
                                     </div>
                                     <div class="col-md-8 float-left detail-value">
-
+                                        <p v-for="(item, index) in goalInfo.children" :key="index">
+                                            {{...item}}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -277,7 +282,33 @@
         </div>
         <!-- <Flag v-if="canShow" :typeText="changeProjectStatusText" @confirmFlag='changeProjectStatus'/> -->
         <addGoals :goalperiod='periods.data' @submitDone='submitDone' :defaultdata='goalInfo'/>
-
+           <div class="modal fade" id="link-project" aria-labelledby="approval-great-module" role="dialog"
+             tabindex="-1" data-backdrop="static">
+            <div class="modal-dialog modal-simple">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title" id="exampleModalTitle">关联项目</h4>
+                    </div>
+                    <div class="example px-50">
+                         <Selectors ref="trails" :options='projectList' @change='linkProjectChanged' :multiple='true'
+                                        selectable="true"></Selectors>
+                    </div>
+                    <div class="modal-footer">
+                         <button type="button" class="btn btn-primary waves-effect waves-light waves-round" style="overflow:hidden" 
+                         :disabled='submitLoading' @click="linkProjectSubmit"
+                                >{{submitLoading?'':'确定'}}<CircleLoading style="" v-if="submitLoading"/>
+                        </button>
+                        <button type="button" class="btn btn-default btn-pure waves-effect waves-light waves-round"
+                                data-dismiss="modal" >取消
+                        </button>
+                       
+                    </div>
+                </div>
+            </div>
+        </div>       
     </div>
 </template>
 
@@ -312,12 +343,15 @@ import addGoals from "./addGoals"
                 inputProgress:false,
                 periods:[],
                 submitDisable:false,
+                submitLoading:false,
+                projectList:[],
+                linkProject:''
             }
         },
         created(){
             this.getGoalDeatail()
             this.getPeriods()
-
+            this.getProjectList()
         },
         mounted() {
             this.projectId = this.$route.params.id;
@@ -331,10 +365,31 @@ import addGoals from "./addGoals"
         },
 
         methods: {
-            
+            linkProjectChanged(params){
+                this.linkProject = params
+            },
+            linkProjectSubmit(){
+                fetch('post',`/aims/${this.$route.params.id}/project`,{project_ids:this.linkProject}).then((params) => {
+                    toastr.success('项目关联成功')
+                    $('#link-project').modal('hide')
+                    
+                })
+            },
+            getProjectList(){
+                fetch('get','/projects').then((params) => {
+                    console.log(params);
+                    this.projectList = params.data
+                })
+            },
+            deleteGoal(){
+                fetch('delete',`/aims/${this.$route.params.id}`).then((params) => {
+                    toastr.success('删除成功')
+                    this.$router.push('/my/goal')
+                })
+            },
             finishGoal(){
                 fetch('put',`/aims/${this.$route.params.id}/status`,{status:1}).then((params) => {
-
+                    toastr.success('标记完成成功')
                 })
             },
             submitDone(){
@@ -353,6 +408,7 @@ import addGoals from "./addGoals"
 
                 this.inputProgress = false
                 fetch('put',`/aims/${this.$route.params.id}`,{percentage:this.currentProgress}).then((params) => {
+                    toastr.success('进度更新成功');
                     this.submitDisable = false
                     this.goalInfo = params.data
                 }).catch((params) => {
@@ -361,110 +417,11 @@ import addGoals from "./addGoals"
                 })
             },
             getGoalDeatail(){
-                fetch('get',`/aims/${this.$route.params.id}`).then((params) => {
+                fetch('get',`/aims/${this.$route.params.id}?include=parents,children,relate_projects`).then((params) => {
                     this.goalInfo = params.data
                 })
             },
-            // canAddBill() {
-            //     if (this.projectBillMetaInfo.divide && this.projectInfo.powers.edit_bill !== 'true') {
-            //         // $('#addPaybackTime').modal('')
-            //         toastr.error('当前用户没有编辑结算单权限')
-            //         return
-            //     } else if (!this.projectBillMetaInfo.divide && this.projectInfo.powers.add_bill !== 'true') {
-            //         toastr.error('当前用户没有新增结算单权限')
-            //         return
-            //     } else {
-            //         $('#addBill').modal('show')
-            //     }
-            // },
-            // getProjectTasks() {
-            //     fetch('get', '/projects/' + this.projectId + '/tasks').then(response => {
-            //         this.projectTasksInfo = response.data;
-            //         this.total = response.meta.pagination.total;
-            //         this.current_page = response.meta.pagination.current_page;
-            //         this.total_pages = response.meta.pagination.total_pages;
-            //     })
-            // },
-
-            // getProjectTasking() {
-            //     let data = {
-            //         status: 1,
-            //     };
-            //     fetch('get', '/projects/' + this.projectId + '/tasks', data).then(response => {
-            //         this.projectTaskingInfo = response.data.slice(0, 5)
-            //     })
-            // },
-
-            // getProjectBill() {
-            //     fetch('get', '/projects/' + this.projectId + '/bill').then(response => {
-            //         this.projectBillsInfo = response.data;
-            //         this.projectBillMetaInfo = JSON.parse(JSON.stringify(response.meta));
-            //         this.total = response.meta.pagination.total;
-            //         this.current_page = response.meta.pagination.current_page;
-            //         this.total_pages = response.meta.pagination.total_pages;
-            //         this.myDivide = response.meta.my_divide;
-            //         this.billExpenses = response.meta.expenses;
-            //         if (response.meta.divide) {
-            //             this.divideArrInfo = JSON.parse(JSON.stringify(response.meta.divide));
-            //         } else {
-            //             this.divideArrInfo = [];
-            //         }
-            //         for (let i = 0; i < response.meta.datatitle.length; i++) {
-            //             if (!this.divideArrInfo.find(item => item.moduleable_title === response.meta.datatitle[i])) {
-            //                 this.divideArrInfo.push({
-            //                     money: 0,
-            //                     moduleable_title: response.meta.datatitle[i]
-            //                 })
-            //             }
-            //         }
-            //     });
-            // },
-
-            // addProjectBill: function () {
-            //     this.isBillButtonDisable = true;
-            //     let data = {
-            //         expenses: this.billExpenses,
-            //         my_divide: this.myDivide,
-            //         star: this.divideArrInfo,
-            //     };
-            //     fetch('post', '/projects/' + this.projectId + '/store/bill', data).then(() => {
-            //         this.isBillButtonDisable = false;
-            //         this.getProjectBill();
-            //         toastr.success('添加成功');
-            //         $('#addBill').modal('hide');
-            //     })
-            // },
-
-            // changeProjectBill() {
-            //     let data = {
-            //         expenses: this.billExpenses,
-            //         my_divide: this.myDivide,
-            //         star: this.divideArrInfo,
-            //     };
-            //     fetch('put', '/projects/' + this.projectId + '/edit/bill', data).then(() => {
-            //         this.getProjectBill();
-            //         toastr.success('修改成功');
-            //         $('#addBill').modal('hide');
-            //     })
-            // },
-
-            // cancelChangeBill() {
-            //     this.myDivide = this.projectBillMetaInfo.my_divide;
-            //     this.billExpenses = this.projectBillMetaInfo.expenses;
-            //     if (this.projectBillMetaInfo.divide) {
-            //         this.divideArrInfo = JSON.parse(JSON.stringify(this.projectBillMetaInfo.divide));
-            //     } else {
-            //         this.divideArrInfo = [];
-            //     }
-            //     for (let i = 0; i < this.projectBillMetaInfo.datatitle.length; i++) {
-            //         if (!this.divideArrInfo.find(item => item.moduleable_title === this.projectBillMetaInfo.datatitle[i])) {
-            //             this.divideArrInfo.push({
-            //                 money: 0,
-            //                 moduleable_title: this.projectBillMetaInfo.datatitle[i]
-            //             })
-            //         }
-            //     }
-            // },
+           
 
             getProjectContract(callback) {
                 fetch('get', '/approvals_contract/projectList', {project_id: this.projectId}).then(response => {
@@ -478,22 +435,6 @@ import addGoals from "./addGoals"
                 });
             },
 
-            getProjectReturned(contractId) {
-                this.contractId = contractId;
-                let data = {
-                    include: 'money.type,practicalsum,invoicesum',
-                    contract_id: contractId
-                };
-                fetch('get', '/projects/' + this.projectId + '/returned/money', data).then(response => {
-                    this.projectReturnInfo = response;
-                    for (let i = 0; i < response.data.length; i++) {
-                        let length = Number(response.data[i].issue_name.slice(1, -1));
-                        if (length >= this.paybackLength) {
-                            this.paybackLength = length + 1
-                        }
-                    }
-                });
-            },
 
             getProjectsReturned() {
                 if (!this.projectContractInfo) {
@@ -537,7 +478,6 @@ import addGoals from "./addGoals"
                     flagInfo['finish_at'] = response.data.updated_at;
                     flagInfo['isFinish'] = 1;
                     this.coursesLength += 1;
-                    toastr.success('进度更新成功');
                     this.getProjectProgress();
                     this.$refs.projectFollow.getTrail();
                 })
