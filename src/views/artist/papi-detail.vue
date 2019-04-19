@@ -651,7 +651,7 @@
                             </div>
                             <div class="card-block">
                                 <div class="col-md-12 pl-0">
-                                    <TaskFollowUp :follow-type="'博主'" trailType='blogger'
+                                    <TaskFollowUp :follow-type="'博主'"  :trailType="$route.query.sign_contract_status==2?'blogger':'signing/blogger'"
                                                   :trailId="$route.query.id"></TaskFollowUp>
                                 </div>
                             </div>
@@ -1510,10 +1510,13 @@
             getArtist() {
                 this.artistId = this.$route.query.id;
                 let _this = this;
-                // let data = {
-                //     include: 'creator,tasks,affixes,publicity,publicity.department',
-                // };
-                fetch('get', '/bloggers/detail/' + this.artistId).then(response => {
+                let url
+                if( this.$route.query.sign_contract_status == 2){
+                    url ='/bloggers/detail/' + this.artistId
+                }else if (this.$route.query.sign_contract_status == 1){
+                    url ='/signing/bloggers/detail/' + this.artistId
+                }
+                fetch('get', url).then(response => {
                     if (JSON.stringify(response.data) === '[]') {
                         toastr.error('您没有查看博主详情的权限')   
                     }else{ 
@@ -2018,7 +2021,13 @@
                         }
                     })
                 });
-                fetch('get', '/bloggers/' + this.artistId + '/tasks', {
+                let url
+                if( this.$route.query.sign_contract_status == 2){
+                    url ='/bloggers/' + this.artistId + '/tasks'
+                }else if (this.$route.query.sign_contract_status == 1){
+                    url ='/signing/bloggers/' + this.artistId + '/tasks'
+                }
+                fetch('get',url , {
                     page: page
                 }).then(response => {
                     this.alltaskshow = response.data;
@@ -2270,7 +2279,13 @@
                     advertising: this.advertisingType,
                     blogger_id: this.$route.query.id
                 }
-                fetch('post', '/bloggers/new/production', data).then(() => {
+                let url
+                if( this.$route.query.sign_contract_status == 2){
+                    url ='/bloggers/new/production'
+                }else if (this.$route.query.sign_contract_status == 1){
+                    url ='/signing/bloggers/new/production'
+                }
+                fetch('post', url, data).then(() => {
                     this.isAddWorkButtonDisable = false;
                     toastr.success('创建成功');
                     $('#addWork').modal('hide');

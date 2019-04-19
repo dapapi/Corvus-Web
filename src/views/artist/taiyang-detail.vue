@@ -686,7 +686,7 @@
                             <div class="card-block">
                                 <div class="col-md-12 pl-0">
                                     <TaskFollowUp :follow-type="'艺人'" :trailId="$route.query.id"
-                                                  trailType="stars"></TaskFollowUp>
+                                                  :trailType="$route.query.sign_contract_status==2?'starts':'signing/stars'"></TaskFollowUp>
                                 </div>
                             </div>
                         </div>
@@ -2070,7 +2070,13 @@
                 } else {
                     this.expense_type = 0;
                 }
-                fetch('get', `/stars/${this.$route.query.id}/bill`, {
+                let url
+                if( this.$route.query.sign_contract_status == 2){
+                    url =`/stars/${this.$route.query.id}/bill`
+                }else if (this.$route.query.sign_contract_status == 1){
+                    url =`/signing/stars/${this.$route.query.id}/bill`
+                }
+                fetch('get', url, {
                     page,
                     expense_type: this.expense_type,
                 }).then((response) => {
@@ -2100,7 +2106,13 @@
             // 获取任务列表
             getTaskList(page = 1) {
                 this.getTaskType();
-                fetch('get', `/stars/${this.$route.query.id}/tasks/`, {
+                let url
+                if( this.$route.query.sign_contract_status == 2){
+                    url =`/stars/${this.$route.query.id}/tasks/`
+                }else if (this.$route.query.sign_contract_status == 1){
+                    url =`/signing/stars/${this.$route.query.id}/tasks/`
+                }
+                fetch('get', url, {
                     page,
                 }).then((response) => {
                     this.allTaskList = response.data;
@@ -2117,7 +2129,13 @@
             },
             getTaskDate() {
                 this.doneTaskNum = 0;
-                fetch('get', `/stars/${this.$route.query.id}/tasks`).then((response) => {
+                let url
+                if( this.$route.query.sign_contract_status == 2){
+                    url =`/stars/${this.$route.query.id}/tasks`
+                }else if (this.$route.query.sign_contract_status == 1){
+                    url =`/signing/stars/${this.$route.query.id}/tasks`
+                }
+                fetch('get', url).then((response) => {
                     this.allTaskList = response.data;
                     if (this.allTaskList.length > 0) {
                         for (let i = 0; i < this.allTaskList.length; i++) {
@@ -2256,8 +2274,13 @@
             addTask(response) {
 
                 this.allTaskList.push(response.data);
-
-                fetch('get', `/stars/${this.$route.query.id}/tasks`).then((response) => {
+                let url
+                if( this.$route.query.sign_contract_status == 2){
+                    url =`/stars/${this.$route.query.id}/tasks`
+                }else if (this.$route.query.sign_contract_status == 1){
+                    url =`/signing/stars/${this.$route.query.id}/tasks`
+                }
+                fetch('get', url).then((response) => {
                     this.allTaskList = response.data;
                     if (this.allTaskList.length > 0) {
                         for (let i = 0; i < this.allTaskList.length; i++) {
@@ -2309,7 +2332,13 @@
                     release_time: this.workReleaseTime,
                     works_type: this.workType,
                 };
-                fetch('post', `/stars/${this.$route.query.id}/works`, data).then((response) => {
+                let url
+                if( this.$route.query.sign_contract_status == 2){
+                    url =`/stars/${this.$route.query.id}/works`
+                }else if (this.$route.query.sign_contract_status == 1){
+                    url =`/signing/stars/${this.$route.query.id}/works`
+                }
+                fetch('post', url, data).then((response) => {
                     toastr.success('新增成功');
                     $('#addWork').modal('hide');
                     this.isAddWorkButtonDisable = false;
@@ -2473,12 +2502,22 @@
 
                 if (this.distributionType === 'broker') {
                     // data.type = 3
-                    toast = '分配经理人成功',
-                        url = `stars/${this.artistId}/broker`;
+                    toast = '分配经理人成功';
+                    if(this.$route.query.sign_contract_status == 2){
+                        url = `stars/${this.artistId}/broker`
+                    }else if(this.$route.query.sign_contract_status == 1){
+                        url = `signing/stars/${this.artistId}/broker`
+                    }
+                    ;
                 } else {
                     // data.type = 2
                     toast = '分配宣传人成功';
-                    url = `stars/${this.artistId}/publicity`;
+                    if(this.$route.query.sign_contract_status == 2){
+                        url = `stars/${this.artistId}/publicity`;
+                    }else if(this.$route.query.sign_contract_status == 1){
+                        url = `signing/stars/${this.artistId}/publicity`
+                    }
+                  
                 }
                 const _this = this;
                 fetch('post', url, data).then((response) => {

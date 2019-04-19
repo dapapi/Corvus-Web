@@ -204,7 +204,6 @@
         },
         methods:{
             getList:function(){
-                console.log(this.dashboardList)
                 let data={}
                 for (let t = 0; t < this.dashboardList.length; t++) {
                     data={
@@ -235,7 +234,6 @@
             },
             getid:function(id){
                 let url = location.search.split('?')[1].split('=')[1].split('&')[0]
-                console.log(url)
                 if(url){
                    this.$store.dispatch('changeselectId',url) 
                 }
