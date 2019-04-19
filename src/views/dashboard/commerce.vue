@@ -777,7 +777,7 @@
                     this.getName()
                     this.getTask()
                     this.getStars()
-                    // this.getBloggers()
+                    this.getBloggers()
                     this.getClients()
                     this.getProjects()
                     this.getTaskType()
