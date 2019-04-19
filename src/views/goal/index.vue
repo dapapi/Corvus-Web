@@ -363,7 +363,7 @@
 
             },
             getPeriods(){
-                fetch('getperiods/all').then((params) => {
+                fetch('get','/periods/all').then((params) => {
                     this.periods = params
                 })
             },

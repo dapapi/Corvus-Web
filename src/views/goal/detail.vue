@@ -158,9 +158,9 @@
                                             父目标
                                         </div>
                                         <div class="col-md-8 float-left detail-value">
-                                             <p v-for="(item, index) in goalInfo.parents" :key="index">
-                                            {{...item}}
-                                        </p>
+                                             <p v-for="(item, index) in goalInfo.parents.data" :key="index">
+                                                {{item.name}}
+                                             </p>
                                     </div>
                                 </div>
                                 <div class="col-md-6 my-5 px-0 float-left" >
@@ -168,8 +168,8 @@
                                         子目标
                                     </div>
                                     <div class="col-md-8 float-left detail-value">
-                                        <p v-for="(item, index) in goalInfo.children" :key="index">
-                                            {{...item}}
+                                        <p v-for="(item, index) in goalInfo.children.data" :key="index">
+                                            {{item.name}}
                                         </p>
                                     </div>
                                 </div>

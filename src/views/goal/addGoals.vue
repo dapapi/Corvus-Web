@@ -93,7 +93,7 @@
                             <div class="col-md-2 text-right float-left px-0">父目标</div>
                             <div class="col-md-10 float-left">
                                 <Selectors ref="trails" @change='(params)=>changeHandeler(params,"parents_ids")'
-                                        selectable="true"></Selectors>
+                                :options='allGoals' :default='defaultHandler("parents")' :multiple='true'   selectable="true"></Selectors>
                             </div>
                         </div>
                         <!-- <div v-for="(item, index) in moduleInfo" :key="index" class="great-option example ">
@@ -142,6 +142,7 @@ export default {
             goalRange:'',
             Dimensions:'',
             submitLoading:false,
+            allGoals:[],
         }
     },
     created(){
@@ -157,7 +158,10 @@ export default {
             return (params)=>{
                 if(!this.defaultdata){
                     return ''
-                }else{
+                }else if(params === 'parents'){
+                    return this.defaultdata.parents.data.flatMap((x)=>[String(x.id)])
+                }
+                else{
                     return this.defaultdata[params]
                 }
             }
@@ -181,8 +185,15 @@ export default {
         }
     },
     mounted() {   
+        this.getAllGoals()
     },
     methods:{
+        getAllGoals(){
+            fetch('get','/aims/all').then((params) => {
+                this.allGoals = params.data
+            })
+
+        },
         goalSubmit(){
             this.submitLoading = true
             fetch('post','aims',this.sendData).then((params) => {
