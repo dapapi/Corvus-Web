@@ -1352,6 +1352,16 @@ let config = {
               name: '外币',
               value: 2
             }
+        ],
+        // 公司性质
+        natureArr: [
+            {
+                name: '平台',
+                value: 1
+            }, {
+                name: '制作公司',
+                value: 2
+            }
         ]
 
     }

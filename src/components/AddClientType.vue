@@ -32,7 +32,7 @@
         },
         mounted () {
             if (this.type === 'project') {
-                this.clientTypeArr = [...config.clientTypeArr, {name: '基础客户', value: 5}]
+                this.clientTypeArr = [...config.clientTypeArr, {name: '基础客户', value: 4}]
             } else {
                 this.clientTypeArr = config.clientTypeArr
             }

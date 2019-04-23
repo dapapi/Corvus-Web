@@ -10,16 +10,17 @@
         <div class="page-content container-fluid">
             <div class="modal-body">
                 <div class="col-md-12 px-0">
-                    <select id="provinceSelector" class="col-md-4 show-menu-arrow selectpicker pl-0"
+                    <select id="provinceSelector" :class="hideArea ? 'col-md-6':'col-md-4' " class="show-menu-arrow selectpicker pl-0"
                             v-model="provinceSelected" data-live-search='true' title="省/直辖市">
                         <option v-for="value in province" :key="value.id">{{value.name}}</option>
                     </select>
-                    <select id="citySelector" class="col-md-4 selectpicker show-menu-arrow pl-0"
+                    <select id="citySelector" :class="hideArea ? 'col-md-6':'col-md-4'" class="selectpicker show-menu-arrow pl-0"
                             :disabled='JSON.stringify(city)=="{}"' v-model="citySelected" data-live-search='true'
                             title="市/县">
                         <option v-for="value in city" :key="value.id">{{value.name}}</option>
                     </select>
-                    <select id="areaSelector" class="col-md-4 selectpicker show-menu-arrow px-0"
+
+                    <select v-if="!hideArea" id="areaSelector" class="col-md-4 selectpicker show-menu-arrow px-0"
                             :disabled='!citySelectedId' v-model="areaSelected" data-live-search='true' title="区">
                         <option v-for="value in area" :key="value.id">{{value.name}}</option>
                     </select>
@@ -35,7 +36,7 @@
     import areaData from '@/assets/utils/regionsdata/area.json'
 
     export default {
-        props: ['provinceVal', 'cityVal', 'areaVal'], // 默认选中的省、市、区
+        props: ['provinceVal', 'cityVal', 'areaVal', 'hideArea'], // 默认选中的省、市、区
         data() {
             return {
                 province: {},                //省级数据
@@ -114,8 +115,10 @@
                     'city': {
                         name: this.citySelected,
                         id: this.citySelectedId
-                    },
-                    'area': {
+                    }
+                }
+                if (!this.hideArea) {
+                    setAreaData.area = {
                         name: this.areaSelected,
                         id: this.areaSelectedId
                     }

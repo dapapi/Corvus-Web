@@ -423,6 +423,7 @@ export default {
           avatar: userData.icon_url,
           nickname: userData.name,
           organization_id: userData.organization_id,
+          departmentId: userData.department ? userData.department.id : ''
           // role_user:userData.roleUser
         };
         callback(json, userData.company);
