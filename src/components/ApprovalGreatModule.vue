@@ -85,6 +85,7 @@ export default {
   created() {
   },
   mounted() {
+    console.log('\u7cfb\u7edf\u505a\u5b8c\u5c31\u4f1a\u628a\u4eba\u5f00\u9664\uff0c\u5404\u4f4d\u90fd\u5c0f\u5fc3\u4e86');
       $('.modal-simple').on('mouseover',function(){
         document.getElementsByTagName('body')[0].classList.add('modal-open');
       })
