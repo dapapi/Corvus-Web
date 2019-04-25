@@ -675,7 +675,7 @@
                 allProjectsInfo: '',
                 searchKeyWord: '',
                 isLoading: false,
-                periods:[]
+                periods:[],
             }
         },
         created(){
@@ -704,7 +704,9 @@
             $('#changeSchedule').on('hidden.bs.modal', function () {
                 _this.initAddScheduleModal();
             });
-            
+            $('#changeSchedule').on('show.bs.modal', function () {
+                _this.setTime()
+            });
         },
         watch: {
         '$route' (to, from) { //监听路由是否变化
@@ -927,12 +929,8 @@
             },
 
             changeEndMinutes(value) {
-                if(value){
-                     this.endMinutes = value;
-                }else{
-                    this.endMinutes = new Date().getHours()+':'+new Date().getMinutes()
-                }
-               
+                this.endMinutes = value;
+                console.log(this.endMinutes)
             },
             // addLinkage: function (type, value, id, index) {
             //     if (type === 'father') {
@@ -1195,7 +1193,6 @@
                 fetch('post', '/schedules', data).then(() => {
                     $('#changeSchedule').modal('hide');
                     toastr.success('添加成功')
-                    this.getTask()
                 })
             },
             getCalendarList: function () {
@@ -1252,6 +1249,44 @@
                 this.$refs.scheduleResource.setValue('');
                 this.$refs.scheduleRepeat.setValue('0');
                 this.$refs.scheduleRemind.setValue('0');
+            },
+            setTime:function(){
+                let now = new Date();
+                let hour = now.getHours();
+                let minutes = now.getMinutes();
+                let remainder = minutes % 10;
+                let start_minutes = minutes;
+                let start_hour = hour;
+                let end_minutes = '';
+                let end_hour = hour;
+                if (remainder) {
+                    start_minutes = start_minutes - remainder + 10;
+                    if (start_minutes === 60) {
+                        start_minutes = 0;
+                        start_hour += 1;
+                        end_hour += 1;
+                    }
+                }
+                if (start_minutes < 30) {
+                    end_minutes = start_minutes + 30
+                } else {
+                    end_minutes = start_minutes + 30 - 60;
+                    end_hour += 1
+                }
+                let alreadyRemainder = false;
+                if (start_hour >= 24) {
+                    start_hour -= 24;
+                    alreadyRemainder = true;
+                }
+                let increment = false;
+                if (end_hour >= 24) {
+                    end_hour -= 24;
+                    if (!alreadyRemainder) {
+                        increment = true;
+                    }
+                }
+                this.$refs.scheduleStartMinute.setValue((start_hour + ',' + start_minutes).split(','))
+                this.$refs.scheduleEndMinute.setValue((end_hour + ',' + end_minutes).split(','))
             },
              selectProjectLinkage: function (value) {
                 this.linkageResource = value;
