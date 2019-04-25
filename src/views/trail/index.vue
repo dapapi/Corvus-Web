@@ -50,9 +50,9 @@
                         <tr class="animation-fade"
                             style="animation-fill-mode: backwards; animation-duration: 250ms; animation-delay: 0ms;">
                             <th class="cell-300" scope="col">线索名称</th>
-                            <th class="cell-300" scope="col">公司名称</th>
-                            <th class="cell-300" scope="col">目标艺人</th>
-                            <th class="cell-300" scope="col">预计订单收入</th>
+                            <th class="cell-300" scope="col">品牌名称</th>
+                            <th class="cell-300" scope="col">目标艺人/博主</th>
+                            <th class="cell-300" scope="col">线索状态</th>
                             <th class="cell-300" scope="col">负责人</th>
                             <th class="cell-300" scope="col">跟进时间</th>
                         </tr>
@@ -63,19 +63,21 @@
                                 {{ trail.title }}
                             </td>
 
-                            <td>{{ trail.client.data.company }}</td>
+                            <td>{{ trail.brand }}</td>
                             <td>
-                                <span class="overflowsp" v-for="(item , index) in trail.expectations.data" :key="index"
-                                      v-if="index < 2">{{item.name || item.nickname}}&nbsp;&nbsp;</span>
+                                {{trail.stars_name}}
+                                <!-- <span class="overflowsp" v-for="(item , index) in trail.expectations.data" :key="index"
+                                      v-if="index < 2">{{item.name || item.nickname}}&nbsp;&nbsp;</span> -->
                             </td>
-                            <td class="">{{ trail.fee }}元</td>
+                            <td class="" v-if="trailStatusArr.find(x=>x.value === Number(trail.status))">{{trailStatusArr.find(x=>x.value === Number(trail.status)).name}}</td>
+                            <td v-else></td>
                             <td>
                                 <template v-if="trail.principal_name">
-                                    {{ trail.principal_name.name }}
+                                    {{ trail.principal_name }}
                                 </template>
                             </td>
                             <td>
-                                <template>{{ common.timeProcessing(trail.last_follow_up_at) }}</template>
+                                <template>{{ trail.last_follow_up_at_or_created_at }}</template>
                             </td>
                         </tr>
                         </tbody>
@@ -89,13 +91,14 @@
                 </div>
             </div>
         </div>
+            <addTrail1 />
 
 
         <customize-filter v-if="canShow" ref='customize'  :data="customizeInfo" :stararr='starsArr' @change="customize"
         ></customize-filter>
         <AddClientType v-if="canShow" @change="changeTrailType" ></AddClientType>
 
-        <div v-if="canShow" class="modal fade" id="addTrail" aria-hidden="true" aria-labelledby="addLabelForm"
+        <!-- <div v-if="canShow" class="modal fade" id="addTrail" aria-hidden="true" aria-labelledby="addLabelForm"
              role="dialog" tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
                 <div class="modal-content">
@@ -245,13 +248,15 @@
 
                 </div>
             </div>
-        </div>
+        </div> -->
 
     </div>
 
 </template>
 
 <script>
+    import addTrail1 from './addTrail1'
+
 import fetch from '../../assets/utils/fetch.js';
 import config from '../../assets/js/config';
 import { mapState } from 'vuex';
@@ -261,7 +266,7 @@ import common from '../../assets/js/common';
 
 export default {
   components: {
-    ImportAndExport,
+    ImportAndExport,addTrail1
   },
   data () {
             return {
@@ -273,15 +278,13 @@ export default {
                 trailOrigin: '',
                 trailType: '',
                 trailTypeArr: config.trailTypeArr,
-                companyType: config.companyType,
                 companyArr: [],
                 starsArr: [],
                 customizeInfo: {},
-                clientLevelArr: config.clientLevelArr,
                 trailOriginArr: config.trailOrigin,
                 salesProgressText: '未确定合作',
                 cooperationTypeArr: config.cooperationTypeArr,
-                trailStatusArr: config.trailStatusArr,
+                trailStatusArr: config.trailStatusArrA,
                 selectCompany: '',
                 trailName: '',
                 targetStars: '',
@@ -388,6 +391,7 @@ export default {
             },
   },
   methods: {
+      
     // getField() {
     //   const _this = this;
     //   fetch('get', '/trails/filter_fields').then((params) => {
@@ -486,7 +490,7 @@ export default {
         fetchData = this.fetchData,
         newUrl;
     if(methods === 'get'){
-        this.fetchData.include = 'include=client,expectations';
+        // this.fetchData.include = 'include=client,expectations';
     }else{
         this.fetchData.include = 'include=principal,client,contact,recommendations,expectations';
     }
@@ -545,7 +549,7 @@ export default {
     // },
             getSales (pageNum = 1) {
                 let _this = this;
-                this.fetchHandler('get', '/trails', 'filter', pageNum)
+                this.fetchHandler('get', '/trailsOne', 'filter', pageNum)
                 // let data = {
                 //     page: pageNum,
                 //     include: 'principal,client,expectations',
@@ -561,7 +565,7 @@ export default {
             },            
             getIndustries () {
                 let _this = this;
-                fetch('get', '/industries/all').then(function (response) {
+                fetch('get', '/data_dictionary/585').then(function (response) {
                     for (let i = 0; i < response.data.length; i++) {
                         _this.industriesArr.push({
                             id: response.data[i].id,
@@ -733,6 +737,7 @@ export default {
                 this.priority = value
             },            
             changeTrailType (value) {
+                console.log(value);
                 this.getIndustries()
                 if(this.$store.state.listPower.trail.add !=='true'){
                     toastr.error('您没有新增销售线索的权限')
@@ -747,10 +752,11 @@ export default {
                     }
                 }
                 this.trailType = value
-                $('#addTrail').modal('show')
-                setTimeout(() => {
-                    $('.selectpicker').selectpicker('refresh');
-                }, 500);
+                console.log('addTrail1');
+                $('#addTrail1').modal('show')
+                // setTimeout(() => {
+                //     $('.selectpicker').selectpicker('refresh');
+                // }, 500);
             },            
             changeTrailStatus (value) {
                 this.trailStatus = value

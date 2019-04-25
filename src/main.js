@@ -7,6 +7,7 @@ import LinkResource from './components/LinkResource.vue'
 import AddMember from './components/AddMember.vue';
 import InputSelectorsFashion from './components/InputSelectorsFashion.vue';
 import ApprovalGreatModule from './components/ApprovalGreatModule';
+import Ge from './components/Ge';
 import BuildProject from './components/BuildProject.vue';
 import Calendar from './components/Calendar.vue';
 import Selectors from './components/Selectors.vue';
@@ -80,6 +81,7 @@ import NetError from '@/components/NetError'
 import CircleLoading from '@/components/CircleLoading'
 Vue.config.productionTip = false;
 Vue.component('AddTask', AddTask);
+Vue.component('Ge', Ge);
 Vue.component('ApprovalGoModal', ApprovalGoModal);
 Vue.component('AppDetail', AppDetail);
 Vue.component('ApprovalGreatModule', ApprovalGreatModule);

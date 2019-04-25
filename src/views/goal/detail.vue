@@ -281,7 +281,7 @@
             </div>
         </div>
         <!-- <Flag v-if="canShow" :typeText="changeProjectStatusText" @confirmFlag='changeProjectStatus'/> -->
-        <addGoals :goalperiod='periods.data' @submitDone='submitDone' :defaultdata='goalInfo'/>
+        <addGoals :goalperiod='periods.data' @submitDone='submitDone' mode='modify' :defaultdata='goalInfo'/>
            <div class="modal fade" id="link-project" aria-labelledby="approval-great-module" role="dialog"
              tabindex="-1" data-backdrop="static">
             <div class="modal-dialog modal-simple">
@@ -407,9 +407,10 @@ import addGoals from "./addGoals"
                 this.submitDisable = true
 
                 this.inputProgress = false
-                fetch('put',`/aims/${this.$route.params.id}`,{percentage:this.currentProgress}).then((params) => {
+                fetch('put',`/aims/${this.$route.params.id}?include=parents,children,relate_projects`,{percentage:this.currentProgress}).then((params) => {
                     toastr.success('进度更新成功');
                     this.submitDisable = false
+                    console.log(params);
                     this.goalInfo = params.data
                 }).catch((params) => {
                     this.goalInfo = params.data

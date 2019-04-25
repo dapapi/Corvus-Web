@@ -544,6 +544,38 @@ let config = {
             }
         ],
         //销售线索状态
+        trailStatusArrA:[
+            {
+                name: '开始接洽',
+                value: 1,
+                color: '#00b0ff'
+            },
+            {
+                name: '主动拒绝',
+                value: 2,
+                color: '#9e9e9e'
+            },
+            {
+                name: '客户拒绝',
+                value: 3,
+                color: '#f44336'
+            },
+            {
+                name: '进入谈判',
+                value: 4,
+                color: '#00bcd4'
+            },
+            {
+                name: '意向合作',
+                value: 5,
+                color: '#f44336'
+            },
+            {
+                name: '完成立项',
+                value: 6,
+                color: '#ff9800'
+            },
+        ],
         trailStatusArr: [
             {
                 name: '开始接洽',

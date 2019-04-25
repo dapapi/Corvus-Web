@@ -63,7 +63,7 @@
             <div class="col-md-5 pl-25 mr-0 pr-0">
                 <div class="panel row float-left  " style="width:100%">
                     <dir class="col-md-4" style="justify-content:center;">
-                        <div class="total-goals-logo" style="color:#00bcd4;">{{totalNumberCurrent}}</div>
+                        <div class="total-goals-logo" style="color:#00bcd4;"><CircleLoading style="display:inline-block;width:40px;height:40px;margin-top:30px;" v-if="countLoading"/><span v-if="!countLoading"> {{totalNumberCurrent}}</span></div>
                         <div class="total-goals-title">目标总数</div>
                     </dir>
                     <div class="col-md-8 py-20">
@@ -81,6 +81,7 @@
                                 <div class="progress-bar progress-bar-info progress-bar-indicating active" :style="'width:'+sevenDaysNumber" role="progressbar"></div>
                             </div>
                             <div>
+                                
                                 <span>近七天更新<span style="color:#00bcd4"> {{recentUpdateNum}}个</span></span>
                             </div>
                         </div>
@@ -99,8 +100,8 @@
                 <div class="panel px-30" style="height:183px;font-size:18px;">
                     <div class="py-20"><span style="color:#ff9800;">你真棒！</span>请继续努力～</div>
                     <div class="mx-5 row " style="width:100%;height:100px;border-radius:50px;background-color:rgba(7,17,27,0.04);">
-                        <div class="goals-percent-logo">{{finishedGoalAve}}%</div>
-                        <span class="ml-20" style="line-height:100px">{{goalTypeHandler[0]}}<span><strong> 23%</strong></span> {{goalTypeHandler[1]}}</span></div>
+                        <div class="goals-percent-logo"><CircleLoading style="display:inline-block;width:30px;height:30px;margin-top:20px;" v-if="countLoading"/><span v-if="!countLoading"> {{finishedGoalAve}}</span>%</div>
+                        <span class="ml-20" style="line-height:100px">{{goalTypeHandler[0]}}<span><strong><CircleLoading style="display:inline-block;width:20px;height:20px" v-if="countLoading"/><span v-if="!countLoading">  {{percent}}</span>%</strong></span> {{goalTypeHandler[1]}}</span></div>
                 </div>
             </div>
         </div>
@@ -245,7 +246,9 @@
                 finishedGoalNum:undefined,
                 recentUpdateNum:undefined,
                 finishedGoalAve:undefined,
+                percent:undefined,
                 submitLoading:false,
+                countLoading:false,
             };
         },
         created() {
@@ -260,12 +263,21 @@
             goalTypeHandler(){
                 switch(this.tabNumber){
                     case 1:
-                        return ['你已打败本部门','你得加油']
+                        if(this.percent > 50){
+                            return ['你已打败本部门','你真棒']
+                        }else{
+                            return ['你已打败本部门','你得加油']
+                        }
                         break
                     case 2:
-                        return ['本部门已打败','的其他部门,你得加油']
+                    if(this.percent > 50){
+                            return ['本部门已打败','的其他部门,你真棒']
+                        }else{
+                            return ['本部门已打败','的其他部门,你得加油']
+                        }
                         break;
                     case 3:
+                    
                         return ['今年较去年目标完成度同期增长']
                 }
             },
@@ -279,12 +291,15 @@
         methods: {
           
             getGoalNum(){
+                this.countLoading = true
                 fetch('get',`/aims/count?period_id=${this.periodSelected}&tab=${this.tabNumber}`).then((params) => {
                     this.totalNumber = params.data.total
                     this.finishedGoalNum = params.data.complete_count
                     this.finishedGoalAve = params.data.percentage_avg
                     this.recentUpdateNum = params.data.latest_count
+                    this.percent = params.data.percent
                     this.totalHandler()
+                    this.countLoading = false
                 })
             },
             filterHandler(params,type){

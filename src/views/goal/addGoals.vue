@@ -8,7 +8,7 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
-                        <h4 class="modal-title" id="exampleModalTitle">新建目标</h4>
+                        <h4 class="modal-title" id="exampleModalTitle">{{mode==='modify'?'修改':'新建'}}目标</h4>
                     </div>
                     <div class="modal-body modal-greater ">
                         <div class="col-md-12 example clearfix">
@@ -34,7 +34,7 @@
                          <div class="col-md-12 example clearfix">
                             <div class="col-md-2 text-right float-left px-0 require">目标名称</div>
                             <div class="col-md-10 float-left">
-                                <input ref="trails" class="form-control" :value='sendData.tile || defaultHandler("title")' @change='(params)=>changeHandeler(params.target.value,"title")'>
+                                <input ref="trails" class="form-control" :value='sendData.title || defaultHandler("title")' @change='(params)=>changeHandeler(params.target.value,"title")'>
                             </div>
                         </div>
                          <div class="col-md-12 example clearfix">
@@ -127,7 +127,7 @@ import config from '../../assets/js/config'
 
 export default {
     
-    props:['goalperiod','defaultdata'],
+    props:['goalperiod','defaultdata','mode'],
     data(){
         return {
             selectorData:{
@@ -159,7 +159,10 @@ export default {
                 if(!this.defaultdata){
                     return ''
                 }else if(params === 'parents'){
-                    return this.defaultdata.parents.data.flatMap((x)=>[String(x.id)])
+                    this.$nextTick((params) => {
+                        return this.defaultdata.parents.data.flatMap((x)=>[{id:x.id,value:x.name}])
+                        
+                    })
                 }
                 else{
                     return this.defaultdata[params]
@@ -169,9 +172,19 @@ export default {
         }
     },
     watch: {
-        defaultdata:function(){
-            // this.sendData =  this.defaultdata
-            let key = ['title','range','department_id','period_id','type','amount_type','amount','position','aim_level','talent_level','desc']
+        defaultdata:function(value){
+            if(value){
+                this.defaultSetter()
+            }
+        }
+    },
+    mounted() {   
+        this.getAllGoals()
+        this.defaultSetter()
+    },
+    methods:{
+        defaultSetter(){
+             let key = ['title','range','department_id','period_id','type','amount_type','amount','position','aim_level','talent_level','desc']
             for (const iterator of key) {
                 if(this.defaultdata[iterator]){
                     this.sendData[iterator] = this.defaultdata[iterator]
@@ -182,12 +195,7 @@ export default {
                 id:this.defaultdata.principal_id,
                 name:this.defaultdata.principal_name
             }
-        }
-    },
-    mounted() {   
-        this.getAllGoals()
-    },
-    methods:{
+        },
         getAllGoals(){
             fetch('get','/aims/all').then((params) => {
                 this.allGoals = params.data
@@ -196,17 +204,26 @@ export default {
         },
         goalSubmit(){
             this.submitLoading = true
-            fetch('post','aims',this.sendData).then((params) => {
-                this.submitLoading = false
-                toastr.success('提交成功')
-                this.$emit('submitDone')
-            }).catch((params) => {
-                this.submitLoading = false                
-            })
+            if(this.mode === 'modify'){
+                fetch('put',`aims/${this.$route.params.id}`,this.sendData).then((params) => {
+                    this.submitLoading = false
+                    toastr.success('修改成功')
+                    this.$emit('submitDone')
+                }).catch((params) => {
+                    this.submitLoading = false                
+                })
+            }else{
+                fetch('post','aims',this.sendData).then((params) => {
+                    this.submitLoading = false
+                    toastr.success('提交成功')
+                    this.$emit('submitDone')
+                }).catch((params) => {
+                    this.submitLoading = false                
+                })
+            }
         },
         changeHandeler(params,value){
             if(params){
-                console.log(params,value);
                 if(value==='range'){
                     this.goalRange = params
                 }else if(value === 'type'){
